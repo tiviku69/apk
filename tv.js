@@ -1,5 +1,5 @@
 // Array of M3U URLs
-const m3uUrls = [ 'https://filmovie.github.io/96/p.m3u8','https://filmovie.github.io/96/new/p2.m3u8','https://filmovie.github.io/new/p3.m3u8','https://filmovie.github.io/96/new/p4.m3u8','https://filmovie.github.io/new/p5.m3u8','https://filmovie.github.io/96/new/p6.m3u8','https://filmovie.github.io/new/p7.m3u8','https://filmovie.github.io/96/new/p8.m3u8','https://filmovie.github.io/new/p9.m3u8','https://filmovie.github.io/96/new/p10.m3u8', ];
+const m3uUrls = [ 'm3u8/1.m3u8','m3u8/2.m3u8','m3u8/3.m3u8','m3u8/4.m3u8','m3u8/5.m3u8','m3u8/6.m3u8','m3u8/7.m3u8','m3u8/8.m3u8','m3u8/9.m3u8','m3u8/10.m3u8', ];
 
 // Function to fetch and process M3U files
 function fetchM3UData(url) {
