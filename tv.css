@@ -40,7 +40,7 @@ body {
 				text-align: center;
 				font-size: 16px;
 				color: red;
-				font-weight: bold;
+				font-weight: bold;				
 }
 #tt {
 				width: 210px;
@@ -58,6 +58,7 @@ body {
 				color: whitesmoke;
 				padding: 0px;
 				left: 30px;
+				text-align: center;
 }
 #channel-list {
 				overflow: scroll;
