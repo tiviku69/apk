@@ -1,5 +1,5 @@
 // Array of M3U URLs
-const m3uUrls = [ 'm3u8/1.m3u8','m3u8/2.m3u8','m3u8/3.m3u8','m3u8/4.m3u8','m3u8/5.m3u8','m3u8/6.m3u8','m3u8/7.m3u8','m3u8/8.m3u8','m3u8/9.m3u8','m3u8/10.m3u8', ];
+const m3uUrls = [ 'm3u8/tiviku1.m3u8','m3u8/tiviku2.m3u8','m3u8/tiviku3.m3u8','m3u8/tiviku4.m3u8','m3u8/tiviku5.m3u8','m3u8/tiviku6.m3u8','m3u8/tiviku7.m3u8','m3u8/tiviku8.m3u8','m3u8/tiviku9.m3u8','m3u8/tiviku10.m3u8','m3u8/tiviku11.m3u8','m3u8/tiviku12.m3u8','m3u8/tiviku13.m3u8','m3u8/tiviku14.m3u8','m3u8/tiviku15.m3u8','m3u8/tiviku16.m3u8','m3u8/tiviku17.m3u8','m3u8/tiviku18.m3u8','m3u8/tiviku19.m3u8','m3u8/tiviku20.m3u8', ];
 
 // Function to fetch and process M3U files
 function fetchM3UData(url) {
