@@ -1,6 +1,7 @@
 body {
 				background-color: black;
 				padding: 0px;
+				margin: 0px;
 }
 .video-container {
 				position: sticky;
@@ -21,7 +22,7 @@ body {
 				border-radius: 4px;
 				width: 30px;
 				height: 10px;
-				bottom: 300px;
+				bottom: 295px;
 				position: relative;
 				left: 3px;
 }
@@ -30,7 +31,7 @@ body {
 				height: 90px;
 				position: relative;
 				left: 210px;
-				top: 0;
+				top: 18px;
 				border-radius: 5px;
 				border: 1px solid red;
 }
@@ -40,7 +41,6 @@ body {
 				font-size: 16px;
 				color: red;
 				font-weight: bold;
-				
 }
 #tt {
 				width: 210px;
@@ -49,6 +49,8 @@ body {
 				left: 20px;
 				bottom: 115px;
 				padding: 0px;
+				margin: 0px;
+				bottom: 90px;
 }
 #search {
 				position: relative;
