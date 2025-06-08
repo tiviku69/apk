@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>M3U Channel List</title>
+    <script type="text/javascript">
+        var m3uUrls = [
+            'm3u8/tiviku1.m3u8', 'm3u8/tiviku2.m3u8', 'm3u8/tiviku3.m3u8',
+            'm3u8/tiviku4.m3u8', 'm3u8/tiviku5.m3u8', 'm3u8/tiviku6.m3u8',
+            'm3u8/tiviku7.m3u8', 'm3u8/tiviku8.m3u8', 'm3u8/tiviku9.m3u8',
+            'm3u8/tiviku10.m3u8', 'm3u8/tiviku11.m3u8', 'm3u8/tiviku12.m3u8',
+            'm3u8/tiviku13.m3u8', 'm3u8/tiviku14.m3u8', 'm3u8/tiviku15.m3u8',
+            'm3u8/tiviku16.m3u8', 'm3u8/tiviku17.m3u8', 'm3u8/tiviku18.m3u8',
+            'm3u8/tiviku19.m3u8', 'm3u8/tiviku20.m3u8'
+        ];
+
+        function fetchM3UData(url) {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", url, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var data = xhr.responseText;
+                    var lines = data.split('\n');
+                    var channelList = document.getElementById('channel-list');
+                    for (var i = 0; i < lines.length; i++) {
+                        if (lines[i].startsWith('#EXTINF:')) {
+                            var channelInfo = lines[i].split(',');
+                            var title = channelInfo[1].trim();
+                            var logoMatch = channelInfo[0].match(/tvg-logo="([^"]+)"/);
+                            var logo = logoMatch ? logoMatch[1] : '';
+                            var streamUrl = lines[i + 1] ? lines[i + 1].trim() : '';
+
+                            if (streamUrl) {
+                                var listItem = document.createElement('li');
+                                listItem.id = 'list';
+                                listItem.innerHTML = '<img id="ilt" src="' + logo + '" alt="' + title + ' Logo"> <a id="klk" href="#" onclick="changeSource(\'' + streamUrl + '\', \'' + logo + '\')">' + title + '</a>';
+                                channelList.appendChild(listItem);
+                            }
+                        }
+                    }
+                }
+            };
+            xhr.send();
+        }
+
+        function changeSource(streamUrl, logo) {
+            var player = document.getElementById('player');
+            player.src = streamUrl;
+            var imgee = document.getElementById('imgee');
+            imgee.src = logo;
+        }
+
+        window.onload = function() {
+            for (var i = 0; i < m3uUrls.length; i++) {
+                fetchM3UData(m3uUrls[i]);
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1>M3U Channel List</h1>
+    <ul id="channel-list"></ul>
+    <video id="player" width="640" height="360" controls></video>
+    <img id="imgee" src="" alt="Channel Logo" />
+</body>
+</html>
