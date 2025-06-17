@@ -10,6 +10,12 @@ https://m.facebook.com/groups/1520520245453160/?ref=share&mibextid=K8Wfd2
 ./m3u/cpts1.m3u8
 #EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w220_and_h330_face/mFQYzHQr6IpzjR3bxFYE2pHBBny.jpg" group-title="Captain Tsubasa: Road to (2002)", eps2 Captain Tsubasa: Road to (2002) dubbing
 ./m3u/cpts2.m3u8
+#EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w220_and_h330_face/mFQYzHQr6IpzjR3bxFYE2pHBBny.jpg" group-title="Captain Tsubasa: Road to (2002)", eps3 Captain Tsubasa: Road to (2002) dubbing
+./m3u/cpts3.m3u8
+#EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w220_and_h330_face/mFQYzHQr6IpzjR3bxFYE2pHBBny.jpg" group-title="Captain Tsubasa: Road to (2002)", eps4 Captain Tsubasa: Road to (2002) dubbing
+./m3u/cpts4.m3u8
+#EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w220_and_h330_face/mFQYzHQr6IpzjR3bxFYE2pHBBny.jpg" group-title="Captain Tsubasa: Road to (2002)", eps5 Captain Tsubasa: Road to (2002) dubbing
+./m3u/cpts5.m3u8
 
 
 
