@@ -10,6 +10,11 @@ https://m.facebook.com/groups/1520520245453160/?ref=share&mibextid=K8Wfd2
 https://filmovie.github.io/oq90jy/fmtvonytq996/fm.m3u8
 #EXTINF: -1 tvg-logo="https://filmovie.github.io/oq90jy/fmlogo/avatar_dub.jpg" group-title="Avatar: The Last Airbender (2024) dubbing", eps2 Avatar: The Last Airbender (2024) dubbing
 https://filmovie.github.io/oq90jy/fmtvonytq996/fm0.m3u8
+#EXTINF: -1 tvg-logo="https://filmovie.github.io/oq90jy/fmlogo/avatar_dub.jpg" group-title="Avatar: The Last Airbender (2024) dubbing", eps3 Avatar: The Last Airbender (2024) dubbing
+./m3u/avtng3.m3u8
+
+
+
 #EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w220_and_h330_face/81D5xBlnTAdJs19dbkfw8eK0oWA.jpg" group-title="filmovie", Thunderbolt (1995) jackie chan
 https://filmovie.github.io/oq90jy/i85FtikK9rZ/ilp63.m3u8
 #EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w220_and_h330_face/gh4cZbhZxyTbgxQPxD0dOudNPTn.jpg" group-title="filmovie", Spider-Man (2002)
