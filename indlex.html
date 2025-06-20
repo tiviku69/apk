@@ -3,39 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status Online</title>
+    <title>Hitung Pengunjung Online</title>
     <style>
         body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
             font-family: Arial, sans-serif;
-        }
-        .status {
-            padding: 20px;
-            border-radius: 8px;
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             text-align: center;
+            margin-top: 50px;
         }
-        .online {
+        #onlineCount {
+            font-size: 24px;
             color: green;
-            font-weight: bold;
         }
     </style>
 </head>
 <body>
-    <div class="status">
-        <h1>Status Pengguna</h1>
-        <p>Pengguna saat ini: <span class="online">Online</span></p>
-    </div>
+    <h1>Pengunjung Online</h1>
+    <div id="onlineCount">0</div>
+
     <script>
-        // Menyimpan status online ke local storage saat halaman dibuka
-        window.onload = function() {
-            localStorage.setItem('status', 'online');
-        };
+        // Menghitung jumlah pengunjung yang "online"
+        let onlineCount = localStorage.getItem('onlineCount') ? parseInt(localStorage.getItem('onlineCount')) : 0;
+        onlineCount++;
+        localStorage.setItem('onlineCount', onlineCount);
+        document.getElementById('onlineCount').innerText = onlineCount;
+
+        // Menambahkan event listener untuk mengurangi jumlah ketika tab ditutup
+        window.addEventListener('beforeunload', () => {
+            onlineCount--;
+            localStorage.setItem('onlineCount', onlineCount);
+        });
     </script>
 </body>
 </html>
