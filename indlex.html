@@ -63,7 +63,7 @@ var cval = GetCookie (name);
 document.cookie = name + "=" + cval + "; expires=" + exp.toGMTString();
 }
 
-var expDays = 0;
+var expDays = 30;
 var exp = new Date(); 
 exp.setTime(exp.getTime() + (expDays*24*60*60*1000));
 
