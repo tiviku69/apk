@@ -8,15 +8,38 @@
 <body>
 				<div class="video-container">
 								<video id="player" controls poster="tiviku.png"></video>
+
 								<img id="tiviku" src="https://filmovie.github.io/tiviku/gambar/tiviku.png" alt="">
 								<img id="imgee" src="tiviku.png" alt="">
 								<span id="carii">
 												<input type="text" id="search" placeholder="cari saluran...">
-								</span>
+								</span><h1><span id="onlineCount">0</span></h1>
 								<div id="tt"> <p id="txtt">tiviku</p></div>
 				</div>
 				</div>
 				<ul id="channel-list"></ul>
+
+<script>
+        let onlineUsers = 0;
+
+        function updateOnlineCount() {
+            // Kirim permintaan ke server untuk memperbarui jumlah online
+            fetch('/updateOnlineCount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userId: 'unique_user_id' })
+            });
+        }
+
+        window.onload = updateOnlineCount;
+
+        window.onbeforeunload = function () {
+            // Kirim request untuk mengurangi jumlah online saat pengguna meninggalkan halaman
+            navigator.sendBeacon('/removeOnlineCount', JSON.stringify({ userId: 'unique_user_id' }));
+        };
+    </script>
 				<script src="tv.js"></script>
 </body>
 </html>
