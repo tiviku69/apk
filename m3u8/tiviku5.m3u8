@@ -16,6 +16,8 @@ https://filmovie.github.io/oq90jy/fmtvonytq996/fm0.m3u8
 ./m3u/av44ts.m3u8
 #EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w116_and_h174_face/dHVBAhJ7jfD4S16ZEJmZbjotAD0.jpg" group-title="Avatar: The Last Airbender (2024)", eps5 Avatar: The Last Airbender (2024) dubbing
 ./m3u/18.m3u8
+#EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w116_and_h174_face/dHVBAhJ7jfD4S16ZEJmZbjotAD0.jpg" group-title="Avatar: The Last Airbender (2024)", eps6 Avatar: The Last Airbender (2024) dubbing
+./m3u/25.m3u8
 
 
 
