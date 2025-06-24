@@ -3,11 +3,29 @@
 <head>
 				<meta charset="UTF-8">
 				<title>Page title</title>
+<style>
+        #offline-message {
+            display: none;
+            color: red;
+            font-size: 24px;
+        }
+    </style>
+<script type='text/javascript'>
+$(document).ready(function() {$(&#39;img#closed&#39;).click(function(){$(&#39;#bl_banner&#39;).hide(90);});});
+</script>
+
+<div id='fixedban' style='width:100%;margin:auto; text-align:center;float:none;overflow:hidden; display:scroll;position:fixed; bottom:0;z-index:9999'>.
+<div><a id='close-fixedban' onclick='document.getElementById(&apos;fixedban&apos;).style.display = &apos;none&apos;;' style='cursor:pointer;'><img alt='close' src='close.gif' title='close button' style='vertical-align:middle;'/></a></div>
+<div style='text-align:center;display:block;max-width:728px;height:auto;overflow:hidden;margin:auto'>
+<a href="#"><img style='max-width:100%;height:auto;vertical-align:middle;' alt='Banner iklan disini' src='ikl.png'/></a>
+</div>
+</div>
 				<link rel="stylesheet" href="tv.css"></link>
 </head>
 <body>
 				<div class="video-container">
 								<video id="player" controls poster="tiviku.png"></video>
+<div id="offline-message">Koneksi internet terputus. Silakan periksa sambungan Anda.</div>
 								<img id="tiviku" src="https://filmovie.github.io/tiviku/gambar/tiviku.png" alt="">
 								<img id="imgee" src="tiviku.png" alt="">
 								<span id="carii">
@@ -17,6 +35,23 @@
 				</div>
 				</div>
 				<ul id="channel-list"></ul>
+<script>
+    function updateOnlineStatus() {
+        const offlineMessage = document.getElementById('offline-message');
+        if (navigator.onLine) {
+            offlineMessage.style.display = 'none';
+        } else {
+            offlineMessage.style.display = 'block';
+        }
+    }
+
+    // Periksa status saat halaman dimuat
+    updateOnlineStatus();
+
+    // Tambahkan event listener untuk mendeteksi perubahan status koneksi
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+</script>
 				<script src="tv.js"></script>
 </body>
 </html>
