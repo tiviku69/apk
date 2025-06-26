@@ -14,3 +14,5 @@ https://m.facebook.com/groups/1520520245453160/?ref=share&mibextid=K8Wfd2
 ./m3u/26.m3u8
 #EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w440_and_h660_face/p0nMfVsd1M1tnXLdGrVQw2OKUcK.jpg" group-title="Journey to the West (1996)", eps4 Journey to the West (1996) dubbing
 ./m3u/31.m3u8
+#EXTINF: -1 tvg-logo="https://media.themoviedb.org/t/p/w440_and_h660_face/p0nMfVsd1M1tnXLdGrVQw2OKUcK.jpg" group-title="Journey to the West (1996)", eps5 Journey to the West (1996) dubbing
+./m3u/36.m3u8
