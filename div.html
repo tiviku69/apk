@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Div Tetap Ada</title>
+    <style>
+        #sticky-div {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background-color: #f1c40f;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body>
+
+<button onclick="location.href='new.html'" style="padding: 10px 20px; font-size: 16px;">
+        Pergi ke Halaman Lain
+    </button>
+
+<div id="sticky-div">
+    Saya adalah div yang tetap ada!
+    <button onclick="removeDiv()">Tutup</button>
+</div>
+
+<script>
+    function removeDiv() {
+        document.getElementById('sticky-div').style.display = 'none';
+        localStorage.setItem('divVisible', 'false');
+    }
+
+    window.onload = function() {
+        const divVisible = localStorage.getItem('divVisible');
+        if (divVisible === 'false') {
+            document.getElementById('sticky-div').style.display = 'none';
+        }
+    };
+</script>
+
+</body>
+</html>
