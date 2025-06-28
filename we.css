@@ -23,12 +23,6 @@ html {
     width: 100% !important;
     height: 400 !important;
   }
-#player {
-				width: 100%;
-				height: 210px;
-				position: relative;
-				object-fit: fill;
-}
 
 /* Skin Netflix CSS */
 .jwplayer.jw-skin-netflix .jw-title-primary {
