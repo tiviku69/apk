@@ -41,7 +41,6 @@ function scrub(e) {
   const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
   video.currentTime = scrubTime;
 }
-
 function handleSliderUpdate() {
   video[this.name] = this.value;
 }
@@ -66,3 +65,7 @@ sliders.forEach((slider) => {
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space") togglePlay();
 });
+
+window.onpopstate = function(event) {
+    window.history.back();
+};
