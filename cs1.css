@@ -6,7 +6,7 @@ h1 {color: yellowgreen;}
 
 button {border: 3px transparent solid;border-radius: 13px ;color: red;background-color: transparent;padding: 15px;}
 
-.gfilm {border: 3px solid red; border-radius: 13px ;width: 150px;}
+.gfilm {border: 3px solid red; border-radius: 13px ; width: 150px; height: 200px;}
 
 div.scrollmenu {height: 550px;
   background-color: black;
