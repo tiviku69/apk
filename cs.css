@@ -50,7 +50,7 @@ button {
 #clock {
 				text-align: center;
 				position: relative;
-				bottom: 670px;
+				bottom: 690px;
 				color: whitesmoke;
 }
 .time {
@@ -63,10 +63,10 @@ button {
 }
 #clock .time {
 				letter-spacing: 0.01em;
-				font-size: 11px;
+				font-size: 15px;
 				padding: 2px 0;
 }
 #clock .date {
 				letter-spacing: 0.1em;
-				font-size: 11px;
+				font-size: 15px;
 }
