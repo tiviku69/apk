@@ -1,0 +1,49 @@
+body {
+				background-color: black;
+				margin: 0;
+				padding: 0;
+}
+
+.smcss {
+				padding: 
+}
+
+#butt {
+				font-size: 25px;
+				position: relative;
+				bottom: 20px;
+}
+.judul {
+				font-size: 30px;
+				color: red;
+				text-align: center;
+				margin: 20px;
+}
+.kl1 {
+				color: white;
+				font-size: 30px;
+}
+.kl2 {
+				width: 80%;
+				height: auto;
+				font-size: 20px;
+				color: yellow;
+}
+#div1 {
+				position: relative;
+				bottom: 16px;
+}
+.gambar {
+				border: 3px solid yellow;
+				border-radius: 13px ;
+				width: 17%;
+}
+button {
+				position: relative;
+				bottom: 3px;
+				border: 8px transparent solid;
+				border-radius: 13px ;
+				color: red;
+				background-color: transparent;
+				font-size: 10px;
+}
