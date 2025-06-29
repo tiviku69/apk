@@ -5,7 +5,7 @@ body {
 }
 .vdi1 {
 				width: 100%;
-				height: auto;
+				height: 500px;
 				position: absolute;
 				left: 50%;
 				top: 50%;
@@ -15,7 +15,7 @@ body {
 				position: relative;
 				bottom: 0px;
 				width: 100%;
-				height: auto;
+				height: 500px;
 				object-fit: fill;
 }
 .controls {
@@ -40,7 +40,7 @@ button {
 }
 .tiviku {
 				position: relative;
-				bottom: 380px;
+				bottom: 480px;
 				left: 12px;
 				border-radius: 8px ;
 				width: 110px;

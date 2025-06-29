@@ -1,7 +1,7 @@
 var vdi1 = document.getElementById("vdi1");
 
 var vide = document.getElementById("myvideo");
-vide.poster = "https://media.themoviedb.org/t/p/w220_and_h330_face/mFQYzHQr6IpzjR3bxFYE2pHBBny.jpg";
+vide.poster = "g.jpg";
 vide.src ='https://tiviku69.github.io/apk/m3u/cpts1.m3u8';
 vide.preload = "metadata";
 
