@@ -5,7 +5,7 @@ vide.src ='https://tiviku69.github.io/apk/m3u/cpts1.m3u8';
 vide.preload = "metadata";
 
 let tiviku = document.createElement('img');
-tiviku.src="https://github.com/filmovie/tiviku/blob/main/gambar/tiviku.png?raw=true";
+tiviku.src="tiviku.png";
 tiviku.className="tiviku";
 vdi1.appendChild(tiviku);
 
