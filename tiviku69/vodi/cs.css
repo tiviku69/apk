@@ -1,0 +1,72 @@
+body {
+				background-color: black;
+				margin: 0px;
+				padding: 0px;
+}
+.vdi1 {
+				width: 100%;
+				height: 548px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%,-50%);
+}
+#myvideo {
+				position: relative;
+				bottom: 0px;
+				width: 100%;
+				height: 548px;
+				object-fit: fill;
+}
+.controls {
+				text-align: center;
+}
+video::-webkit-media-controls-panel {
+				position: relative;
+				top: 16px;
+}
+video::-webkit-media-controls-fullscreen-button {
+				opacity: 0;
+}
+video::-webkit-media-controls-mute-button {
+				opacity: 0;
+}
+button {
+				border-radius: 13px ;				
+				color: red;
+				background-color: transparent;
+				font-size: 8px;
+				border: 8px transparent solid;
+}
+.tiviku {
+				position: relative;
+				bottom: 568px;
+				left: 12px;
+				border-radius: 8px ;
+				width: 110px;
+				height: 35px;
+}
+
+#clock {
+				text-align: center;
+				position: relative;
+				bottom: 616px;
+				color: whitesmoke;
+}
+.time {
+				margin: 0;
+				padding: 0;
+}
+.date {
+				margin: 0;
+				padding: 0;
+}
+#clock .time {
+				letter-spacing: 0.01em;
+				font-size: 11px;
+				padding: 2px 0;
+}
+#clock .date {
+				letter-spacing: 0.1em;
+				font-size: 11px;
+}
