@@ -1,0 +1,18 @@
+body {background-color: black; text-align: center;}
+
+h1 {color: yellowgreen;}
+
+#marquee {color: red;font-size: 30px;}
+
+button {border: 3px transparent solid;border-radius: 13px ;color: red;background-color: transparent;padding: 15px;}
+
+.gfilm {border: 3px solid red; border-radius: 13px ;width: 150px;}
+
+div.scrollmenu {height: 550px;
+  background-color: black;
+  overflow: auto;
+  
+}
+
+div.scrollmenu a {
+  padding: 7px;
