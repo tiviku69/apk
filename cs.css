@@ -40,7 +40,7 @@ button {
 }
 .tiviku {
 				position: relative;
-				bottom: 640px;
+				bottom: 650px;
 				left: 12px;
 				border-radius: 8px ;
 				width: 110px;
@@ -50,7 +50,7 @@ button {
 #clock {
 				text-align: center;
 				position: relative;
-				bottom: 710px;
+				bottom: 700px;
 				color: whitesmoke;
 }
 .time {

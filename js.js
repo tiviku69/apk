@@ -20,19 +20,6 @@ const toggleButton = document.querySelector(".toggleButton");
 const progress = document.querySelector(".progress");
 const progressBar = document.querySelector(".progress__filled");
 const sliders = document.querySelectorAll(".controls__slider");
-const videt = document.getElementById('myvideo');
-    const buttn = document.getElementById('ppk');
-videt.addEventListener('play', function() {
-            buttn.style.display = 'none'; // Menghilangkan tombol saat video diputar
-        });
-    videt.addEventListener('touchstart', () => {
-        setTimeout(() => {
-            buttn.style.display = 'block'; // Tampilkan tombol setelah 2 detik
-            setTimeout(() => {
-                buttn.style.display = 'none'; // Sembunyikan tombol setelah 3 detik
-            }, 2540); // 2540 ms = 3 detik
-        }, 430); // 430 ms = 2 detik untuk delay sebelum menampilkan tombol
-    });
 const skipBtns = document.querySelectorAll("[data-skip]");
 
 function togglePlay() {
