@@ -13,22 +13,7 @@
 								
 				</div>
 </body>
-<script>
-				
-				var myvid = document.getElementById('myvideo');
-var myvids = [""," # "," end " ];
-var activeVideo = 0;
 
-myvid.poster =' https://media.themoviedb.org/t/p/w220_and_h330_face/mFQYzHQr6IpzjR3bxFYE2pHBBny.jpg ';
-
-myvid.addEventListener('ended', function(e) {
-  // update the new active video index
-  activeVideo = (++activeVideo) % myvids.length;
-
-  // update the video source and play
-  myvid.src = myvids[activeVideo];
-  myvid.play();
-});</script>
 <script src="js.js"></script>
 <script src="time.js"></script>
 </html>

@@ -1,6 +1,7 @@
 var vdi1 = document.getElementById("vdi1");
 
 var vide = document.getElementById("myvideo");
+vide.poster = "g.jpg";
 vide.src ='https://tiviku69.github.io/apk/m3u/cpts1.m3u8';
 vide.preload = "metadata";
 
