@@ -4,7 +4,7 @@ scrollmenu.className = "scrollmenu";
 document.body.appendChild(scrollmenu);
 
 let a1 = document.createElement('span');
-a1.innerHTML = "<a class='film' href=' https://tiviku69.github.io/apk/m3u/ghost20.m3u8 '><button><img class='gfilm' src=' https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg ' alt=' eps.1 '></button></a>";
+a1.innerHTML = "<a class='film' href='../m3up/1.html '><button><img class='gfilm' src=' https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg ' alt=' eps.1 '></button></a>";
 scrollmenu.appendChild(a1);
 
 let a2 = document.createElement('span');
