@@ -74,12 +74,12 @@ padding: 0px;
 				font-size: 15px;
 }
 #ppk {
-            display: none;
-            position: absolute;
-            bottom: 10px;
+            dispay: none;
+            position: relative;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.7);
-            
+            z-index: 1000;
             border-radius: 5px;
         }
