@@ -1,94 +1,85 @@
 body {
 				background-color: black;
-				padding: 0px;
 				margin: 0px;
-}
-.video-container {
-				position: sticky;
-				top: 0px;
 				padding: 0px;
-				z-index: 1000;
-				width: 100%;
-				height: 350px;
-				background: #111;
 }
-#player {
+.vdi1 {
 				width: 100%;
-				height: 210px;
+				height: 700px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%,-50%);
+padding: 0px;
+}
+#myvideo {
 				position: relative;
+				bottom: 0px;
+				width: 100%;
+				height: 700px;
 				object-fit: fill;
+padding: 0px;
 }
-#tiviku {
-				border-radius: 4px;
-				width: 30px;
-				height: 10px;
-				bottom: 292px;
-				position: relative;
-				left: 3px;
-}
-#imgee {
-				width: 80px;
-				height: 90px;
-				position: relative;
-				left: 210px;
-				top: 18px;
-				border-radius: 5px;
-				border: 1px solid red;
-}
-#txtt {
-				color: whitesmoke;
+.controls {
 				text-align: center;
-				font-size: 16px;
+}
+video::-webkit-media-controls-panel {
+				position: relative;
+				top: 16px;
+}
+video::-webkit-media-controls-fullscreen-button {
+				opacity: 0;
+}
+video::-webkit-media-controls-mute-button {
+				opacity: 0;
+}
+button {
+				border-radius: 13px ;				
 				color: red;
-				font-weight: bold;				
+				background-color: transparent;
+				font-size: 18px;
+				border: 8px transparent solid;
+padding: 0px;
 }
-#tt {
-				width: 210px;
-				height: 100px;
+.tiviku {
 				position: relative;
-				left: 20px;
-				bottom: 115px;
-				padding: 0px;
-				margin: 0px;
-				bottom: 90px;
+				bottom: 680px;
+				left: 12px;
+				border-radius: 8px ;
+				width: 110px;
+				height: 35px;
 }
-#search {
-				border-radius: 8px;
-				background: whitesmoke;
-				margin: 0px;
-}
-#carii {
+
+#clock {
+				text-align: center;
 				position: relative;
-				top: 30px;
-				padding: 0px;
-				right: 90px;
-				z-index: 1000;
+				bottom: 720px;
+				color: whitesmoke;
 }
-#channel-list {
-				overflow: scroll;
-				padding: 5px;
-				position: relative;
-				background-color: #111;
-				border-radius: 8px;
+.time {
+				margin: 0;
+				padding: 0;
 }
-#ilt {
-				width: 160px;
-				height: 110px;
-				border-radius: 5px;
-				margin-right: 10px;
+.date {
+				margin: 0;
+				padding: 0;
 }
-#list {
-				align-items: center;
-				margin-bottom: 10px;
-				display: flex;
+#clock .time {
+				letter-spacing: 0.01em;
+				font-size: 15px;
+				padding: 2px 0;
 }
-#klk {
-				color: #fff;
-				background-color: #333;
-				border-radius: 5px;
-				flex: 1;
-				padding: 5px;
-				text-decoration: none;
-				display: block;
-				font-size: 16px;
+#clock .date {
+				letter-spacing: 0.1em;
+				font-size: 15px;
 }
+#ppk {
+            display: none;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            
+            border-radius: 5px;
+        }
