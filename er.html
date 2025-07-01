@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+
+        #videoContainer {
+            width: 100%;
+				height: 700px;
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%,-50%);
+        }
+        #myVideo {
+            position: relative;
+				bottom: 0px;
+				width: 100%;
+				height: 700px;
+				object-fit: fill;
+        }
+        #infoDiv {
+            display: none;
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="videoContainer">
+    <video id="myVideo" controls>
+        <source src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div id="infoDiv">Informasi Tambahan</div>
+</div>
+
+<script>
+    document.addEventListener('keydown', function(event) {
+        // Key code untuk 'Down' pada remote TV biasanya 40
+        if (event.keyCode === 40) {
+            const infoDiv = document.getElementById('infoDiv');
+            // Toggle visibilitas div
+            infoDiv.style.display = (infoDiv.style.display === 'none' || infoDiv.style.display === '') ? 'block' : 'none';
+        }
+    });
+</script>
+
+</body>
+</html>
