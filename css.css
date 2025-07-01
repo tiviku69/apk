@@ -74,9 +74,9 @@ padding: 0px;
 				font-size: 15px;
 }
 #ppk {
-            dispay: none;
-            position: relative;
-            bottom: 100px;
+            display: none;
+            position: absolute;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.7);
