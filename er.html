@@ -1,34 +1,68 @@
 <!DOCTYPE html>
-<html lang="in">
+<html lang="en">
 <head>
-				<meta charset="UTF-8">
-				<title>Page title</title>
-				<link rel="stylesheet" href="css.css"></link>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        #controls {
+            display: none;
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 5px;
+        }
+        button {
+            margin: 5px;
+            padding: 10px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+#videoPlayer {
+				width: 100%;
+				height: 700px;
+        }
+    </style>
 </head>
 <body>
-				<div class="vdi1" id="vdi1">
-								
-								<video  class='video' id='myvideo' ></video>
-								<div id="ppk" class='controls'> <div class='progress'> <div class='progress__filled'></div> </div> <button class='controls__button' data-skip='-10'><b>« 10s</b></button> <button class='controls__button toggleButton' title='Toggle Play'><b>▶</b></button> <button class='controls__button' data-skip='25'><b>10s »</b></button> </div> </div>
-				</div>
-</body>
-<script>
-document.addEventListener('keydown', function(event) {
-    // Key code untuk 'Down' pada remote TV biasanya 40
-    if (event.keyCode === 40) {
-        const infoDiv = document.getElementById('ppk');
-        // Toggle visibilitas div infoDiv
-        infoDiv.style.display = (infoDiv.style.display === 'none' || infoDiv.style.display === '') ? 'block' : 'none';
 
-        // Jika infoDiv ditampilkan, atur untuk menghilang setelah beberapa detik
-        if (infoDiv.style.display === 'block') {
-            setTimeout(function() {
-                infoDiv.style.display = 'none';
-            }, 3000); // Menghilang setelah 3000 milidetik (3 detik)
-        }
-    }
-});
-</script>
-<script src="jj.js"></script>
-<script src="time.js"></script>
+    <video id="videoPlayer" controls>
+        <source src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div id="controls">
+        <button id="playBtn">Play</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="prefBtn">Prefer</button>
+        <button id="ffBtn">Fast Forward</button>
+    </div>
+
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const controls = document.getElementById('controls');
+
+        document.addEventListener('keydown', function(event) {
+            // Check if the down arrow key is pressed
+            if (event.key === 'ArrowDown') {
+                controls.style.display = controls.style.display === 'none' || controls.style.display === '' ? 'block' : 'none';
+            }
+        });
+
+        // Add event listeners to buttons
+        document.getElementById('playBtn').onclick = () => video.play();
+        document.getElementById('pauseBtn').onclick = () => video.pause();
+        document.getElementById('prefBtn').onclick = () => alert('Prefer function not implemented.');
+        document.getElementById('ffBtn').onclick = () => {
+            video.currentTime += 10; // Fast forward by 10 seconds
+        };
+    </script>
+
+</body>
 </html>
