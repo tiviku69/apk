@@ -3,113 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
-<link rel="stylesheet" href="css.css"></link>
+    <title>Simple Video Player</title>
     <style>
-        #controls {
-            display: none;
-            position: absolute;
-            top: 400px;
-            left: 50%;
-            transform: translateX(-50%);
-            
-            padding: 0px;
-            border-radius: 5px;
-width: 100%;
-				height: 50%;
-text-align: center;
-}
-background: rgba(0, 0, 0, 0.7);
-#co {
-            width: 97%;
-				height: 700px;
-
-position: absolute;
-            top: 10px;
-
+        body {
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        
-#videoPlayer {
-				width: 100%;
-				height: 700px;
-
+        video {
+            width: 100%;
+            max-width: 800px;
+            border: 2px solid #fff;
         }
     </style>
 </head>
 <body>
 
-    <video class='video' id="videoPlayer" controls>
-        <source src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-<div id="co"></div>
-    <div id="controls">
-        <div class='progress'> <div class='progress__filled'></div> </div> <button class='controls__button' data-skip='-10'><b>« 10s</b></button> <button class='controls__button toggleButton' title='Toggle Play'><b>▶</b></button> <button class='controls__button' data-skip='25'><b>10s »</b></button> </div>
-    </div>
+<video id="myVideo" controls>
+    <source src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+    Browser Anda tidak mendukung elemen video.
+</video>
 
-    <script>
-        
+<script>
+    const video = document.getElementById('myVideo');
 
-        document.addEventListener('keydown', function(event) {
-            // Check if the down arrow key is pressed
-            if (event.key === 'ArrowDown') {
-                controls.style.display = controls.style.display === 'none' || controls.style.display === '' ? 'block' : 'none';
-            }
-        });
-
-        // Add event listeners to buttons
-        const video = document.querySelector(".video");
-const toggleButton = document.querySelector(".toggleButton");
-const progress = document.querySelector(".progress");
-const progressBar = document.querySelector(".progress__filled");
-const sliders = document.querySelectorAll(".controls__slider");
-const skipBtns = document.querySelectorAll("[data-skip]");
-
-function togglePlay() {
-  if (video.paused || video.ended) {
-    video.play();
-  } else {
-    video.pause();
-  }
-}
-function updateToggleButton() {
-  toggleButton.innerHTML = video.paused ? "<b>▶</b>" : "❚ ❚";
-}
-
-function handleProgress() {
-  const progressPercentage = (video.currentTime / video.duration) * 100;
-  progressBar.style.flexBasis = `${progressPercentage}%`;
-}
-function scrub(e) {
-  const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
-  video.currentTime = scrubTime;
-}
-
-function handleSliderUpdate() {
-  video[this.name] = this.value;
-}
-function handleSkip() {
-  video.currentTime += +this.dataset.skip;
-}
-toggleButton.addEventListener("click", togglePlay);
-video.addEventListener("click", togglePlay);
-video.addEventListener("play", updateToggleButton);
-video.addEventListener("pause", updateToggleButton);
-video.addEventListener("timeupdate", handleProgress);
-sliders.forEach((slider) => {
-  slider.addEventListener("change", handleSliderUpdate);
-});
-skipBtns.forEach((btn) => {
-  btn.addEventListener("click", handleSkip);
-});
-
-sliders.forEach((slider) => {
-  slider.addEventListener("change", handleSliderUpdate);
-});
-document.addEventListener("keydown", (e) => {
-  if (e.code === "Space") togglePlay();
-});
-    </script>
+    // Event listener for keydown (remote control support)
+    document.addEventListener('keydown', function(event) {
+        switch (event.key) {
+            case 'ArrowRight':
+                video.currentTime += 5; // Maju 5 detik
+                break;
+            case 'ArrowLeft':
+                video.currentTime -= 5; // Mundur 5 detik
+                break;
+            case ' ':
+                if (video.paused) {
+                    video.play(); // Putar video
+                } else {
+                    video.pause(); // Jeda video
+                }
+                break;
+            case 'ArrowUp':
+                video.volume = Math.min(video.volume + 0.1, 1); // Naikkan volume
+                break;
+            case 'ArrowDown':
+                video.volume = Math.max(video.volume - 0.1, 0); // Turunkan volume
+                break;
+        }
+    });
+</script>
 
 </body>
 </html>
