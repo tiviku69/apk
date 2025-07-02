@@ -1,70 +1,80 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Film</title>
+    <title>Video Player</title>
     <style>
-        .movie {
-            display: flex;
-            align-items: center;
-            margin: 15px 0;
+        #controls {
+            diplay: none;
+            position: absolute;
+            top: 300px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 0px;
+            border-radius: 5px;
+width: 100%;
+				height: 50%;
+text-align: center;
+}
+#co {
+            width: 97%;
+				height: 700px;
+
+position: absolute;
+            top: 10px;
+
         }
-        .movie img {
-            width: 100px;
-            height: auto;
+        button {
+            margin: 5px;
+            padding: 10px;
+            color: white;
+            background: #007BFF;
+            border: none;
+            border-radius: 5px;
             cursor: pointer;
+        }
+#videoPlayer {
+				width: 100%;
+				height: 700px;
+
         }
     </style>
 </head>
 <body>
 
-<h1>Daftar Film</h1>
-<div id="movieList"></div>
+    <video id="videoPlayer" controls>
+        <source src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+<div id="co"></div>
+    <div id="controls">
+        <button id="playBtn">Play</button>
+        <button id="pauseBtn">Pause</button>
+        <button id="prefBtn">Prefer</button>
+        <button id="ffBtn">Fast Forward</button>
+    </div>
 
-<video id="videoPlayer" width="600" controls style="display:none;">
-    <source id="videoSource" src="" type="video/mp4">
-    Your browser does not support the video tag.
-</video>
+    <script>
+        const video = document.getElementById('videoPlayer');
+        const controls = document.getElementById('controls');
 
-<script>
-    // Fungsi untuk memuat daftar film
-    async function loadMovies() {
-        const response = await fetch('daftar.json');
-        const movies = await response.json();
-        const movieList = document.getElementById('movieList');
-
-        movies.forEach(movie => {
-            const movieDiv = document.createElement('div');
-            movieDiv.classList.add('movie');
-
-            const logo = document.createElement('img');
-            logo.src = movie.logo;
-            logo.alt = movie.title;
-            logo.onclick = () => playVideo(movie.video);
-
-            const title = document.createElement('p');
-            title.innerText = movie.title;
-
-            movieDiv.appendChild(logo);
-            movieDiv.appendChild(title);
-            movieList.appendChild(movieDiv);
+        document.addEventListener('keydown', function(event) {
+            // Check if the down arrow key is pressed
+            if (event.key === 'ArrowDown') {
+                controls.style.display = controls.style.display === 'none' || controls.style.display === '' ? 'block' : 'none';
+            }
         });
-    }
 
-    // Fungsi untuk memutar video
-    function playVideo(videoUrl) {
-        const videoPlayer = document.getElementById('videoPlayer');
-        const videoSource = document.getElementById('videoSource');
-        videoSource.src = videoUrl;
-        videoPlayer.load();
-        videoPlayer.style.display = 'block';
-        videoPlayer.play();
-    }
-
-    // Memuat film saat halaman siap
-    document.addEventListener('DOMContentLoaded', loadMovies);
-</script>
+        // Add event listeners to buttons
+        document.getElementById('playBtn').onclick = () => video.play();
+        document.getElementById('pauseBtn').onclick = () => video.pause();
+        document.getElementById('prefBtn').onclick = () => alert('Prefer function not implemented.');
+        document.getElementById('ffBtn').onclick = () => {
+            video.currentTime += 10; // Fast forward by 10 seconds
+        };
+    </script>
 
 </body>
 </html>
