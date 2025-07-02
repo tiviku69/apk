@@ -86,32 +86,50 @@ color: white;
     <script>
         const video = document.getElementById('videoPlayer');
 const controls = document.getElementById('controls');
-let timeoutId;
+let timeoutId; // Variabel untuk menyimpan ID timeout
 
+// Fungsi untuk menampilkan kontrol dan mengatur timeout
+function showControls() {
+    controls.style.display = 'block'; // Tampilkan kontrol
+    resetTimeout(); // Reset timer
+}
+
+// Fungsi untuk menyembunyikan kontrol
 function hideControls() {
-    controls.style.display = 'none';
+    controls.style.display = 'none'; // Sembunyikan kontrol
 }
 
-// Set timer to hide controls after 5 seconds
-function resetTimer() {
+// Fungsi untuk mereset timer
+function resetTimeout() {
+    // Jika ada timeout yang sudah ada, hapus
     if (timeoutId) {
-        clearTimeout(timeoutId); // Clear previous timer
+        clearTimeout(timeoutId);
     }
-    controls.style.display = 'block'; // Show controls
-    timeoutId = setTimeout(hideControls, 5000); // Set new timer
+    // Atur timeout baru
+    timeoutId = setTimeout(hideControls, 5000);
 }
 
-// Event listener for keydown
+// Event listener untuk keydown
 document.addEventListener('keydown', function(event) {
-    // Check if the down arrow key is pressed
     if (event.key === 'ArrowDown') {
-        resetTimer(); // Call resetTimer on ArrowDown
+        showControls(); // Tampilkan kontrol saat ArrowDown ditekan
     }
 });
 
-// Event listeners for mouse movement and touch events
-document.addEventListener('mousemove', resetTimer);
-document.addEventListener('touchstart', resetTimer);
+// Event listener untuk klik di video
+video.addEventListener('click', function() {
+    showControls(); // Tampilkan kontrol saat video di-klik
+});
+
+// Event listener untuk klik di dokumen (untuk mendeteksi interaksi di luar elemen)
+document.addEventListener('click', function(event) {
+    if (!controls.contains(event.target) && event.target !== video) {
+        showControls(); // Tampilkan kontrol jika area luar di-klik
+    }
+});
+
+// Atur timeout awal jika diperlukan (opsional)
+resetTimeout();
 
         // Add event listeners to buttons
         document.getElementById('playBtn').onclick = () => video.play();
