@@ -83,22 +83,23 @@ color: white;
 const controls = document.getElementById('controls');
 
 document.addEventListener('keydown', function(event) {
-    // Periksa jika tombol panah bawah ditekan
+    // Check if the down arrow key is pressed
     if (event.key === 'ArrowDown') {
-        controls.style.display = controls.style.display === 'none' || controls.style.display === '' ? 'block' : 'none';
+        controls.style.display = 'block'; // Always show controls on ArrowDown
     }
-
-    // Periksa jika tombol remote back ditekan (misalnya, menggunakan 'Backspace' sebagai contoh)
-    if (event.key === 'Backspace') {
-        controls.style.display = 'none';
+    // Check if the back button is pressed (e.g., Escape key)
+    else if (event.key === 'Escape' || event.key === 'ArrowUp') {
+        controls.style.display = 'none'; // Hide controls on Escape or ArrowUp
     }
 });
 
-// Tambahkan event listener untuk tombol
-document.getElementById('playBtn').onclick = () => video.play();
-document.getElementById('pauseBtn').onclick = () => video.pause();
-document.getElementById('prefBtn').onclick = () => alert('Fungsi prefer belum diterapkan.');
-document.getElementById('ffBtn').onclick = () => { video.currentTime += 10; // Maju cepat 10 detik };
+        // Add event listeners to buttons
+        document.getElementById('playBtn').onclick = () => video.play();
+        document.getElementById('pauseBtn').onclick = () => video.pause();
+        document.getElementById('prefBtn').onclick = () => alert('Prefer function not implemented.');
+        document.getElementById('ffBtn').onclick = () => {
+            video.currentTime += 10; // Fast forward by 10 seconds
+        };
   
     // Fungsi untuk memuat daftar film
     async function loadMovies() {
