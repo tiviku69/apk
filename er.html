@@ -90,11 +90,12 @@ const controls = document.getElementById('controls');
 document.addEventListener('keydown', function(event) {
     // Check if the down arrow key is pressed
     if (event.key === 'ArrowDown') {
-        controls.style.display = 'block'; // Always show controls on ArrowDown
-    }
-    // Check if the back button is pressed (e.g., Escape key)
-    else if (event.key === 'Escape' || event.key === 'Back') {
-        controls.style.display = 'none'; // Hide controls on Escape or ArrowUp
+        controls.style.display = 'block'; // Show controls on ArrowDown
+        
+        // Hide controls after 5 seconds
+        setTimeout(function() {
+            controls.style.display = 'none';
+        }, 5000);
     }
 });
 
