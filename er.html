@@ -1,181 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
+    <title>Video Player Remote</title>
     <style>
-body {
-				background-color: black;
-				margin: 0px;
-				padding: 0px;
-}
-        #controls {
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            text-align: center;
+        }
+        #videoPlayer {
+            width: 80%;
+            max-width: 600px;
+        }
+        .video-list {
             display: none;
-            position: absolute;
-            top: 300px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.7);
-            padding: 0px;
-            border-radius: 5px;
-            width: 100%;
-            height: 50%;
-            overflow: scroll;
-z-index: 100;
-}
-#co {
-            width: 97%;
-            height: 700px;
-            position: absolute;
-            top: 10px;
-}
-        button {
-            margin: 5px;
+            margin-top: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        .video-item {
             padding: 10px;
-            color: white;
-            background: #007BFF;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
         }
-#videoPlayer {
-				width: 100%;
-				height: 700px;
-z-index: 0;
-        }
-#movieList {
-            display: flex; /* Ensures all children are laid out in a row */
-            flex-wrap: wrap; /* Allows wrapping to a new line if there are too many items */
-            justify-content: flex-start; /* Aligns items to the start */
-        }
-        .movie {
-            display: flex;
-            flex-direction: column; /* Stack children vertically */
-            align-items: center; /* Centers items horizontally */
-            margin: 15px;
-        }
-        .movie img {
-            width: 200px;
-border-radius: 5px;
-margin: 5px;
-            height: 150px;
-            cursor: pointer;
-        }
-        .movie p {
-            margin-top: 5px; /* Adds some space between the image and title */
-            text-align: center; /* Centers the title */
-color: white;
+        .video-item:hover {
+            background-color: rgba(255, 255, 255, 0.3);
         }
     </style>
 </head>
 <body>
 
-    <video id="videoPlayer" controls>
-        <source id="videoSource" src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-<div id="co"></div>
-    <div id="controls">
-        <button id="playBtn">Play</button>
-        <button id="pauseBtn">Pause</button>
-        <button id="prefBtn">Prefer</button>
-        <button id="ffBtn">Fast Forward</button>
-<div id="movieList"></div>
-    </div>
+<video id="videoPlayer" controls>
+    <source id="videoSource" src="" type="video/mp4">
+    Your browser does not support the video tag.
+</video>
 
-    <script>
-        const video = document.getElementById('videoPlayer');
-const controls = document.getElementById('controls');
-let timeoutId; // Variabel untuk menyimpan ID timeout
+<div id="videoList" class="video-list">
+    <div class="video-item" data-src="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 1</div>
+    <div class="video-item" data-src="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 2</div>
+    <div class="video-item" data-src="https://tiviku69.github.io/apk/m3u/cpts3.m3u8">Video 3</div>
+</div>
 
-// Fungsi untuk menampilkan kontrol dan mengatur timeout
-function showControls() {
-    controls.style.display = 'block'; // Tampilkan kontrol
-    resetTimeout(); // Reset timer
-}
+<script>
+    const videoPlayer = document.getElementById('videoPlayer');
+    const videoSource = document.getElementById('videoSource');
+    const videoList = document.getElementById('videoList');
+    const videoItems = document.querySelectorAll('.video-item');
 
-// Fungsi untuk menyembunyikan kontrol
-function hideControls() {
-    controls.style.display = 'none'; // Sembunyikan kontrol
-}
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            videoList.style.display = 'block';
+        }
+        if (event.key === 'ArrowUp') {
+            videoList.style.display = 'none';
+        }
+    });
 
-// Fungsi untuk mereset timer
-function resetTimeout() {
-    // Jika ada timeout yang sudah ada, hapus
-    if (timeoutId) {
-        clearTimeout(timeoutId);
-    }
-    // Atur timeout baru
-    timeoutId = setTimeout(hideControls, 5000);
-}
-
-// Event listener untuk keydown
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowDown') {
-        showControls(); // Tampilkan kontrol saat ArrowDown ditekan
-    }
-});
-
-// Event listener untuk klik di video
-video.addEventListener('click', function() {
-    showControls(); // Tampilkan kontrol saat video di-klik
-});
-
-// Event listener untuk klik di dokumen (untuk mendeteksi interaksi di luar elemen)
-document.addEventListener('click', function(event) {
-    if (!controls.contains(event.target) && event.target !== video) {
-        showControls(); // Tampilkan kontrol jika area luar di-klik
-    }
-});
-
-// Atur timeout awal jika diperlukan (opsional)
-resetTimeout();
-
-        // Add event listeners to buttons
-        document.getElementById('playBtn').onclick = () => video.play();
-        document.getElementById('pauseBtn').onclick = () => video.pause();
-        document.getElementById('prefBtn').onclick = () => alert('Prefer function not implemented.');
-        document.getElementById('ffBtn').onclick = () => {
-            video.currentTime += 10; // Fast forward by 10 seconds
-        };
-  
-    // Fungsi untuk memuat daftar film
-    async function loadMovies() {
-        const response = await fetch('daftar.json');
-        const movies = await response.json();
-        const movieList = document.getElementById('movieList');
-
-        movies.forEach(movie => {
-            const movieDiv = document.createElement('span');
-            movieDiv.classList.add('movie');
-
-            const logo = document.createElement('img');
-            logo.src = movie.logo;
-            logo.alt = movie.title;
-            logo.onclick = () => playVideo(movie.video);
-
-            const title = document.createElement('p');
-            title.innerText = movie.title;
-
-            movieDiv.appendChild(logo);
-            movieDiv.appendChild(title);
-            movieList.appendChild(movieDiv);
+    videoItems.forEach(item => {
+        item.addEventListener('click', () => {
+            videoSource.src = item.getAttribute('data-src');
+            videoPlayer.load();
+            videoPlayer.play();
+            videoList.style.display = 'none';
         });
-    }
-
-    // Fungsi untuk memutar video
-    function playVideo(videoUrl) {
-        const videoPlayer = document.getElementById('videoPlayer');
-        const videoSource = document.getElementById('videoSource');
-        videoSource.src = videoUrl;
-        videoPlayer.load();
-        videoPlayer.style.display = 'block';
-        videoPlayer.play();
-    }
-
-    // Memuat film saat halaman siap
-    document.addEventListener('DOMContentLoaded', loadMovies);
+    });
 </script>
 
 </body>
