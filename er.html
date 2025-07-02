@@ -1,32 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player Remote</title>
+    <title>Video Player Remote Support</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: #fff;
-            text-align: center;
-        }
-        #videoPlayer {
-            width: 80%;
-            max-width: 600px;
-        }
-        .video-list {
-            display: none;
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-        .video-item {
-            padding: 10px;
-            cursor: pointer;
-        }
-        .video-item:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
+        body { text-align: center; background: #000; color: #fff; }
+        #videoPlayer { width: 80%; }
+        #thumbnails { display: flex; overflow-x: auto; padding: 20px; }
+        .thumbnail { margin: 0 10px; cursor: pointer; }
+        .selected { border: 2px solid #fff; }
     </style>
 </head>
 <body>
@@ -36,34 +19,57 @@
     Your browser does not support the video tag.
 </video>
 
-<div id="videoList" class="video-list">
-    <div class="video-item" data-src="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 1</div>
-    <div class="video-item" data-src="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 2</div>
-    <div class="video-item" data-src="https://tiviku69.github.io/apk/m3u/cpts3.m3u8">Video 3</div>
+<div id="thumbnails">
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 1</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 2</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8">Video 3</div>
+<div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 4</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 5</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8">Video 6</div>
+<div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 7</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 8</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8">Video 9</div>
+<div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 10</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 11</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8">Video 12</div>
 </div>
 
 <script>
+    const thumbnails = document.querySelectorAll('.thumbnail');
     const videoPlayer = document.getElementById('videoPlayer');
-    const videoSource = document.getElementById('videoSource');
-    const videoList = document.getElementById('videoList');
-    const videoItems = document.querySelectorAll('.video-item');
+    let currentIndex = 0;
+
+    function selectVideo(index) {
+        const videoSrc = thumbnails[index].getAttribute('data-video');
+        document.getElementById('videoSource').src = videoSrc;
+        videoPlayer.load();
+        videoPlayer.play();
+    }
+
+    thumbnails[currentIndex].classList.add('selected');
 
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowDown') {
-            videoList.style.display = 'block';
+        if (event.key === 'ArrowRight') {
+            thumbnails[currentIndex].classList.remove('selected');
+            currentIndex = (currentIndex + 1) % thumbnails.length;
+            thumbnails[currentIndex].classList.add('selected');
         }
-        if (event.key === 'ArrowUp') {
-            videoList.style.display = 'none';
+        if (event.key === 'ArrowLeft') {
+            thumbnails[currentIndex].classList.remove('selected');
+            currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+            thumbnails[currentIndex].classList.add('selected');
         }
-    });
-
-    videoItems.forEach(item => {
-        item.addEventListener('click', () => {
-            videoSource.src = item.getAttribute('data-src');
+        if (event.key === 'Enter') {
+            selectVideo(currentIndex);
+        }
+        if (event.key === 'Backspace') {
+            videoPlayer.pause();
+            videoPlayer.src = '';
             videoPlayer.load();
-            videoPlayer.play();
-            videoList.style.display = 'none';
-        });
+            currentIndex = 0;
+            thumbnails.forEach(thumb => thumb.classList.remove('selected'));
+            thumbnails[currentIndex].classList.add('selected');
+        }
     });
 </script>
 
