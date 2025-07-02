@@ -86,18 +86,32 @@ color: white;
     <script>
         const video = document.getElementById('videoPlayer');
 const controls = document.getElementById('controls');
+let timeoutId;
 
+function hideControls() {
+    controls.style.display = 'none';
+}
+
+// Set timer to hide controls after 5 seconds
+function resetTimer() {
+    if (timeoutId) {
+        clearTimeout(timeoutId); // Clear previous timer
+    }
+    controls.style.display = 'block'; // Show controls
+    timeoutId = setTimeout(hideControls, 5000); // Set new timer
+}
+
+// Event listener for keydown
 document.addEventListener('keydown', function(event) {
     // Check if the down arrow key is pressed
     if (event.key === 'ArrowDown') {
-        controls.style.display = 'block'; // Show controls on ArrowDown
-        
-        // Hide controls after 5 seconds
-        setTimeout(function() {
-            controls.style.display = 'none';
-        }, 5000);
+        resetTimer(); // Call resetTimer on ArrowDown
     }
 });
+
+// Event listeners for mouse movement and touch events
+document.addEventListener('mousemove', resetTimer);
+document.addEventListener('touchstart', resetTimer);
 
         // Add event listeners to buttons
         document.getElementById('playBtn').onclick = () => video.play();
