@@ -6,7 +6,7 @@
     <title>Video Player</title>
     <style>
         #controls {
-            dsplay: none;
+            display: none;
             position: absolute;
             top: 300px;
             left: 50%;
@@ -88,7 +88,7 @@ document.addEventListener('keydown', function(event) {
         controls.style.display = 'block'; // Always show controls on ArrowDown
     }
     // Check if the back button is pressed (e.g., Escape key)
-    else if (event.key === 'Escape' || event.key === 'ArrowUp') {
+    else if (event.key === 'Escape' || event.key === 'Backspace') {
         controls.style.display = 'none'; // Hide controls on Escape or ArrowUp
     }
 });
