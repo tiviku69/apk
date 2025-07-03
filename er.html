@@ -10,8 +10,8 @@
 				margin: 0px;
 				padding: 0px;
 }
-#thum { diplay: none;position: relative;bottom: 200px; }
-#thumbnails { display: flex; overflow: scroll; padding: 20px;background: rgba(0, 0, 0, 0.7); }
+#thum { display: none;position: relative;bottom: 200px; }
+#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
         .thumbnail { margin: 0 10px; cursor: pointer; }
         .selected { border: 5px solid #fff;border-radius:8px; }
 #videoPlayer {
@@ -58,41 +58,59 @@ img {width: 200px;
     });
 
         const thumbnails = document.querySelectorAll('.thumbnail');
-    const videoPlayer = document.getElementById('videoPlayer');
-    let currentIndex = 0;
+const videoPlayer = document.getElementById('videoPlayer');
+let currentIndex = 0;
 
-    function selectVideo(index) {
-        const videoSrc = thumbnails[index].getAttribute('data-video');
-        document.getElementById('videoSource').src = videoSrc;
-        videoPlayer.load();
-        videoPlayer.play();
+function selectVideo(index) {
+    const videoSrc = thumbnails[index].getAttribute('data-video');
+    document.getElementById('videoSource').src = videoSrc;
+    videoPlayer.load();
+    videoPlayer.play();
+}
+
+// Highlight the first thumbnail
+thumbnails[currentIndex].classList.add('selected');
+
+// Function to scroll into view
+function scrollToThumbnail(index) {
+    const thumbnailContainer = document.querySelector('.thumbnail-container'); // Update selector as necessary
+    const selectedThumbnail = thumbnails[index];
+    const containerRect = thumbnailContainer.getBoundingClientRect();
+    const thumbnailRect = selectedThumbnail.getBoundingClientRect();
+    
+    // Check if the thumbnail is outside of the visible area
+    if (thumbnailRect.right > containerRect.right) {
+        thumbnailContainer.scrollLeft += (thumbnailRect.right - containerRect.right);
+    } else if (thumbnailRect.left < containerRect.left) {
+        thumbnailContainer.scrollLeft -= (containerRect.left - thumbnailRect.left);
     }
+}
 
-    thumbnails[currentIndex].classList.add('selected');
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowRight') {
-            thumbnails[currentIndex].classList.remove('selected');
-            currentIndex = (currentIndex + 1) % thumbnails.length;
-            thumbnails[currentIndex].classList.add('selected');
-        }
-        if (event.key === 'ArrowLeft') {
-            thumbnails[currentIndex].classList.remove('selected');
-            currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
-            thumbnails[currentIndex].classList.add('selected');
-        }
-        if (event.key === 'Enter') {
-            selectVideo(currentIndex);
-        }
-        if (event.key === 'Backspace') {
-            videoPlayer.pause();
-            videoPlayer.src = '';
-            videoPlayer.load();
-            currentIndex = 0;
-            thumbnails.forEach(thumb => thumb.classList.remove('selected'));
-            thumbnails[currentIndex].classList.add('selected');
-        }
-    });
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+        thumbnails[currentIndex].classList.remove('selected');
+        currentIndex = (currentIndex + 1) % thumbnails.length;
+        thumbnails[currentIndex].classList.add('selected');
+        scrollToThumbnail(currentIndex); // Scroll to the selected thumbnail
+    } 
+    if (event.key === 'ArrowLeft') {
+        thumbnails[currentIndex].classList.remove('selected');
+        currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+        thumbnails[currentIndex].classList.add('selected');
+        scrollToThumbnail(currentIndex); // Scroll to the selected thumbnail
+    } 
+    if (event.key === 'Enter') {
+        selectVideo(currentIndex);
+    } 
+    if (event.key === 'Backspace') {
+        videoPlayer.pause();
+        videoPlayer.src = '';
+        videoPlayer.load();
+        currentIndex = 0;
+        thumbnails.forEach(thumb => thumb.classList.remove('selected'));
+        thumbnails[currentIndex].classList.add('selected');
+    }
+});
     </script>
 
 </body>
