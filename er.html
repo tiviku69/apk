@@ -59,10 +59,7 @@ width: 100%;
 </div>
 
     <script>
-const videoPlayer = document.getElementById('videoPlayer');
-    const videoSource = document.getElementById('videoSource');
     const videoList = document.getElementById('thumbnails');
-    const videoItems = document.querySelectorAll('.thumbnail');
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown') {
@@ -73,14 +70,6 @@ const videoPlayer = document.getElementById('videoPlayer');
         }
     });
 
-    videoItems.forEach(item => {
-        item.addEventListener('click', () => {
-            videoSource.src = item.getAttribute('data-src');
-            videoPlayer.load();
-            videoPlayer.play();
-            videoList.style.display = 'none';
-        });
-    });
         const thumbnails = document.querySelectorAll('.thumbnail');
     const videoPlayer = document.getElementById('videoPlayer');
     let currentIndex = 0;
