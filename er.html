@@ -46,53 +46,61 @@ img {width: 200px;
 </div></div>
 
     <script>
-    const videoList = document.getElementById('thum');
+    const thumbnails = document.querySelectorAll('.thumbnail');
+const videoPlayer = document.getElementById('videoPlayer');
+const thumbnailContainer = document.getElementById('thumbnailContainer'); // Assuming you have a container for thumbnails
+let currentIndex = 0;
 
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowDown') {
-            videoList.style.display = 'block';
-        }
-        if (event.key === 'ArrowUp') {
-            videoList.style.display = 'none';
-        }
-    });
+function selectVideo(index) {
+    const videoSrc = thumbnails[index].getAttribute('data-video');
+    document.getElementById('videoSource').src = videoSrc;
+    videoPlayer.load();
+    videoPlayer.play();
+}
 
-        const thumbnails = document.querySelectorAll('.thumbnail');
-    const videoPlayer = document.getElementById('videoPlayer');
-    let currentIndex = 0;
+thumbnails[currentIndex].classList.add('selected');
 
-    function selectVideo(index) {
-        const videoSrc = thumbnails[index].getAttribute('data-video');
-        document.getElementById('videoSource').src = videoSrc;
-        videoPlayer.load();
-        videoPlayer.play();
+function updateThumbnailPosition() {
+    const selectedThumbnail = thumbnails[currentIndex];
+    const containerRect = thumbnailContainer.getBoundingClientRect();
+    const thumbnailRect = selectedThumbnail.getBoundingClientRect();
+
+    if (thumbnailRect.right > containerRect.right) {
+        thumbnailContainer.scrollLeft += thumbnailRect.right - containerRect.right;
+    } else if (thumbnailRect.left < containerRect.left) {
+        thumbnailContainer.scrollLeft -= containerRect.left - thumbnailRect.left;
     }
+}
 
-    thumbnails[currentIndex].classList.add('selected');
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowRight') {
-            thumbnails[currentIndex].classList.remove('selected');
-            currentIndex = (currentIndex + 1) % thumbnails.length;
-            thumbnails[currentIndex].classList.add('selected');
-        }
-        if (event.key === 'ArrowLeft') {
-            thumbnails[currentIndex].classList.remove('selected');
-            currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
-            thumbnails[currentIndex].classList.add('selected');
-        }
-        if (event.key === 'Enter') {
-            selectVideo(currentIndex);
-        }
-        if (event.key === 'Backspace') {
-            videoPlayer.pause();
-            videoPlayer.src = '';
-            videoPlayer.load();
-            currentIndex = 0;
-            thumbnails.forEach(thumb => thumb.classList.remove('selected'));
-            thumbnails[currentIndex].classList.add('selected');
-        }
-    });
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+        thumbnails[currentIndex].classList.remove('selected');
+        currentIndex = (currentIndex + 1) % thumbnails.length;
+        thumbnails[currentIndex].classList.add('selected');
+        updateThumbnailPosition();
+    }
+    
+    if (event.key === 'ArrowLeft') {
+        thumbnails[currentIndex].classList.remove('selected');
+        currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+        thumbnails[currentIndex].classList.add('selected');
+        updateThumbnailPosition();
+    }
+    
+    if (event.key === 'Enter') {
+        selectVideo(currentIndex);
+    }
+    
+    if (event.key === 'Backspace') {
+        videoPlayer.pause();
+        videoPlayer.src = '';
+        videoPlayer.load();
+        currentIndex = 0;
+        thumbnails.forEach(thumb => thumb.classList.remove('selected'));
+        thumbnails[currentIndex].classList.add('selected');
+        thumbnailContainer.scrollLeft = 0; // Reset scroll to the start
+    }
+});
     </script>
 
 </body>
