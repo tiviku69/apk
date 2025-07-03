@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+    				body {
+				background-color: black;
+				margin: 0px;
+				padding: 0px;
+}
+#thum { diplay: none;overflow: scroll;position: relative;bottom: 200px; }
+#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
+        .thumbnail { margin: 0 10px; cursor: pointer; }
+        .selected { border: 5px solid #fff;border-radius:8px; }
+#videoPlayer {
+				width: 100%;
+				height: 700px
+				}
+img {width: 200px;
+				height: 150px;
+				border-radius:8px;}	
+.thumbnail-container {
+    overflow-x: auto; /* Menambahkan scroll horizontal jika diperlukan */
+    white-space: nowrap; /* Menjaga thumbnail tetap dalam satu baris */
+}
+
+.thumbnail {
+    display: inline-block; /* Thumbnail berjajar */
+    margin: 0 10px; /* Jarak antar thumbnail */
+    cursor: pointer; /* Menunjukkan bahwa thumbnail bisa diklik */
+}
+.thumbnail.selected {
+    border: 2px solid blue; /* Gaya untuk thumbnail terpilih */
+}
+
+    </style>
+</head>
+<body>
+
+    <video id="videoPlayer" controls>
+        <source id="videoSource" src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+<div id="thum">
+<div id="thumbnails">
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8"><img src="g.jpg" alt="">Video 1</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8"><img src="g.jpg" alt="">Video 2</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8"><img src="g.jpg" alt="">Video 3</div>
+<div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8"><img src="g.jpg" alt="">Video 4</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8"><img src="g.jpg" alt="">Video 5</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8"><img src="g.jpg" alt="">Video 6</div>
+<div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8"><img src="g.jpg" alt="">Video 7</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8"><img src="g.jpg" alt="">Video 8</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8"><img src="g.jpg" alt="">Video 9</div>
+<div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8"><img src="g.jpg" alt="">Video 10</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8"><img src="g.jpg" alt="">Video 11</div>
+    <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8"><img src="g.jpg" alt="">Video 12</div>
+</div></div>
+
+    <script>
+    const videoList = document.getElementById('thum');
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            videoList.style.display = 'block';
+        }
+        if (event.key === 'ArrowUp') {
+            videoList.style.display = 'none';
+        }
+    });
+
+        
+    const videoPlayer = document.getElementById('videoPlayer');
+    let currentIndex = 0;
+
+    function selectVideo(index) {
+        const videoSrc = thumbnails[index].getAttribute('data-video');
+        document.getElementById('videoSource').src = videoSrc;
+        videoPlayer.load();
+        videoPlayer.play();
+    }
+
+    let currentIndex = 0;
+const thumbnails = document.querySelectorAll('.thumbnail'); // Sesuaikan dengan selektor thumbnail
+const container = document.querySelector('.thumbnail-container'); // Sesuaikan dengan selektor container
+
+thumbnails[currentIndex].classList.add('selected');
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+        thumbnails[currentIndex].classList.remove('selected');
+        currentIndex = (currentIndex + 1) % thumbnails.length;
+        thumbnails[currentIndex].classList.add('selected');
+
+        // Geser gambar jika perlu
+        checkScroll();
+    }
+    if (event.key === 'ArrowLeft') {
+        thumbnails[currentIndex].classList.remove('selected');
+        currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+        thumbnails[currentIndex].classList.add('selected');
+
+        // Geser gambar jika perlu
+        checkScroll();
+    }
+});
+
+function checkScroll() {
+    const selectedThumbnail = thumbnails[currentIndex];
+    const thumbnailContainerRect = container.getBoundingClientRect();
+    const selectedRect = selectedThumbnail.getBoundingClientRect();
+
+    if (selectedRect.right > thumbnailContainerRect.right) {
+        // Geser ke kanan
+        container.scrollLeft += selectedRect.right - thumbnailContainerRect.right;
+    } else if (selectedRect.left < thumbnailContainerRect.left) {
+        // Geser ke kiri
+        container.scrollLeft -= thumbnailContainerRect.left - selectedRect.left;
+    }
+}
+        if (event.key === 'Enter') {
+            selectVideo(currentIndex);
+        }
+        if (event.key === 'Backspace') {
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            videoPlayer.load();
+            currentIndex = 0;
+            thumbnails.forEach(thumb => thumb.classList.remove('selected'));
+            thumbnails[currentIndex].classList.add('selected');
+        }
+    });
+    </script>
+
+</body>
+</html>
