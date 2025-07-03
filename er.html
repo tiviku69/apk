@@ -17,18 +17,10 @@
 width: 100%;
 				height: 50%;
 }
-#thumbnails { display: none; overflow-x: auto; padding: 20px;position: relative;bottom: 200px;background: rgba(0, 0, 0, 0.7); }
+#thum { dislay: none;position: relative;bottom: 200px; }
+#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
         .thumbnail { margin: 0 10px; cursor: pointer; }
         .selected { border: 2px solid #fff; }
-        button {
-            margin: 5px;
-            padding: 10px;
-            color: white;
-            background: #007BFF;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
 #videoPlayer {
 				width: 100%;
 				height: 700px;
@@ -42,7 +34,7 @@ width: 100%;
         <source id="videoSource" src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
         Your browser does not support the video tag.
     </video>
-
+<div id="thum">
 <div id="thumbnails">
     <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 1</div>
     <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 2</div>
@@ -56,10 +48,10 @@ width: 100%;
 <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts1.m3u8">Video 10</div>
     <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts2.m3u8">Video 11</div>
     <div class="thumbnail" data-video="https://tiviku69.github.io/apk/m3u/cpts3.m3u8">Video 12</div>
-</div>
+</div></div>
 
     <script>
-    const videoList = document.getElementById('thumbnails');
+    const videoList = document.getElementById('thumb');
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown') {
