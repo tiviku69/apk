@@ -10,8 +10,8 @@
 				margin: 0px;
 				padding: 0px;
 }
-#thum { display: none;position: relative;bottom: 200px; }
-#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
+#thum { diplay: none;position: relative;bottom: 200px; }
+#thumbnails { width: 500px;display: flex; overflow-x: scroll; padding: 20px;background: rgba(0, 0, 0, 0.7); }
         .thumbnail { margin: 0 10px; cursor: pointer; }
         .selected { border: 5px solid #fff;border-radius:8px; }
 #videoPlayer {
@@ -58,64 +58,41 @@ img {width: 200px;
     });
 
         const thumbnails = document.querySelectorAll('.thumbnail');
-const videoPlayer = document.getElementById('videoPlayer');
-const thumbnailContainer = document.getElementById('thumbnailContainer'); // Assume this is the container for thumbnails
-let currentIndex = 0;
+    const videoPlayer = document.getElementById('videoPlayer');
+    let currentIndex = 0;
 
-function selectVideo(index) {
-    const videoSrc = thumbnails[index].getAttribute('data-video');
-    document.getElementById('videoSource').src = videoSrc;
-    videoPlayer.load();
-    videoPlayer.play();
-}
-
-function updateThumbnailPosition() {
-    const thumbnailWidth = thumbnails[currentIndex].clientWidth;
-    const containerWidth = thumbnailContainer.clientWidth;
-    const maxIndex = thumbnails.length;
-
-    // Calculate the position based on current index
-    const position = currentIndex * thumbnailWidth;
-
-    // If the selected thumbnail exceeds the container's width, adjust scroll
-    if (position >= containerWidth) {
-        thumbnailContainer.scrollLeft = position - containerWidth + thumbnailWidth;
-    } else if (position < 0) {
-        thumbnailContainer.scrollLeft = position;
-    }
-}
-
-thumbnails[currentIndex].classList.add('selected');
-updateThumbnailPosition();
-
-document.addEventListener('keydown', (event) => {
-    thumbnails[currentIndex].classList.remove('selected');
-    
-    if (event.key === 'ArrowRight') {
-        currentIndex = (currentIndex + 1) % thumbnails.length;
-    }
-    
-    if (event.key === 'ArrowLeft') {
-        currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
-    }
-    
-    thumbnails[currentIndex].classList.add('selected');
-    updateThumbnailPosition(); // Update thumbnail position after changing index
-
-    if (event.key === 'Enter') {
-        selectVideo(currentIndex);
-    }
-
-    if (event.key === 'Backspace') {
-        videoPlayer.pause();
-        videoPlayer.src = '';
+    function selectVideo(index) {
+        const videoSrc = thumbnails[index].getAttribute('data-video');
+        document.getElementById('videoSource').src = videoSrc;
         videoPlayer.load();
-        currentIndex = 0;
-        thumbnails.forEach(thumb => thumb.classList.remove('selected'));
-        thumbnails[currentIndex].classList.add('selected');
-        updateThumbnailPosition(); // Reset position
+        videoPlayer.play();
     }
-});
+
+    thumbnails[currentIndex].classList.add('selected');
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight') {
+            thumbnails[currentIndex].classList.remove('selected');
+            currentIndex = (currentIndex + 1) % thumbnails.length;
+            thumbnails[currentIndex].classList.add('selected');
+        }
+        if (event.key === 'ArrowLeft') {
+            thumbnails[currentIndex].classList.remove('selected');
+            currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
+            thumbnails[currentIndex].classList.add('selected');
+        }
+        if (event.key === 'Enter') {
+            selectVideo(currentIndex);
+        }
+        if (event.key === 'Backspace') {
+            videoPlayer.pause();
+            videoPlayer.src = '';
+            videoPlayer.load();
+            currentIndex = 0;
+            thumbnails.forEach(thumb => thumb.classList.remove('selected'));
+            thumbnails[currentIndex].classList.add('selected');
+        }
+    });
     </script>
 
 </body>
