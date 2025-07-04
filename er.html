@@ -1,101 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
+    <title>Button Navigation</title>
     <style>
-    				body {
-				background-color: black;
-				margin: 0px;
-				padding: 0px;
-}
-#thum { display: none;position: relative;bottom: 200px; }
-#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
-        .thumbnail { margin: 0 10px; cursor: pointer; }
-        .selected { border: 5px solid blue;border-radius:8px; }
-#videoPlayer {
-				width: 100%;
-				height: 700px
-				}
-img {width: 200px;
-				height: 150px;
-				border-radius:8px;}	
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .button {
+            background-color: #008CBA;
+            color: white;
+            padding: 15px 32px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+        .button:focus {
+            background-color: #005f75;
+        }
+        .button:hover {
+            background-color: #005f75;
+        }
     </style>
 </head>
 <body>
-
-    <video id="videoPlayer" controls>
-        <source id="videoSource" src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
-        Your browser does not support the video tag.
-    </video>
-<div id="thum">
-<div id="thumbnails">
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-<button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-<button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-<button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-    <button class="thumbnail" ><img src="g.jpg" alt="">Video 1</button>
-</div></div>
+    <button class="button" onclick="location.href='https://link1.com'" tabindex="1">Button 1</button>
+    <button class="button" onclick="location.href='https://link2.com'" tabindex="2">Button 2</button>
+    <button class="button" onclick="location.href='https://link3.com'" tabindex="3">Button 3</button>
+    <button class="button" onclick="location.href='https://link4.com'" tabindex="4">Button 4</button>
 
     <script>
-    const videoList = document.getElementById('thum');
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowDown') {
-            videoList.style.display = 'block';
-        }
-        if (event.key === 'ArrowUp') {
-            videoList.style.display = 'none';
-        }
-    });
-
-        const thumbnails = document.querySelectorAll('.thumbnail');
-    const videoPlayer = document.getElementById('videoPlayer');
-    let currentIndex = 0;
-
-    function selectVideo(index) {
-        const videoSrc = thumbnails[index].getAttribute('data-video');
-        document.getElementById('videoSource').src = videoSrc;
-        videoPlayer.load();
-        videoPlayer.play();
-    }
-
-    thumbnails[currentIndex].classList.add('selected');
-
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowRight') {
-            thumbnails[currentIndex].classList.remove('selected');
-            currentIndex = (currentIndex + 1) % thumbnails.length;
-            thumbnails[currentIndex].classList.add('selected');
-        }
-        if (event.key === 'ArrowLeft') {
-            thumbnails[currentIndex].classList.remove('selected');
-            currentIndex = (currentIndex - 1 + thumbnails.length) % thumbnails.length;
-            thumbnails[currentIndex].classList.add('selected');
-        }
-        if (event.key === 'Enter') {
-            selectVideo(currentIndex);
-        }
-        if (event.key === 'Backspace') {
-            videoPlayer.pause();
-            videoPlayer.src = '';
-            videoPlayer.load();
-            currentIndex = 0;
-            thumbnails.forEach(thumb => thumb.classList.remove('selected'));
-            thumbnails[currentIndex].classList.add('selected');
-        }
-    });
+        // Menangani navigasi dengan tombol remote
+        document.addEventListener('keydown', function(event) {
+            const buttons = document.querySelectorAll('.button');
+            let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
+            
+            if (event.key === "ArrowDown") {
+                currentIndex = (currentIndex + 1) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "ArrowUp") {
+                currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "Enter") {
+                buttons[currentIndex].click();
+            }
+        });
     </script>
-
 </body>
 </html>
