@@ -3,53 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Remote Android TV</title>
+    <title>Website Movie</title>
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             height: 100vh;
-            background-color: #f0f0f0;
+            margin: 0;
         }
         .button {
-            background-color: #008CBA;
-            border: none;
+            background-color: #6200ea;
             color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
+            border: none;
+            padding: 15px 30px;
             margin: 10px;
             cursor: pointer;
+            font-size: 18px;
             border-radius: 5px;
             transition: background-color 0.3s;
         }
         .button:hover {
-            background-color: #005f73;
+            background-color: #3700b3;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin: 10px;
         }
     </style>
 </head>
 <body>
-
-    <button class="button" onclick="sendCommand('UP')">↑</button>
-    <button class="button" onclick="sendCommand('DOWN')">↓</button>
-    <button class="button" onclick="sendCommand('LEFT')">←</button>
-    <button class="button" onclick="sendCommand('RIGHT')">→</button>
-    <button class="button" onclick="sendCommand('OK')">OK</button>
-    <button class="button" onclick="sendCommand('BACK')">Kembali</button>
-    <button class="button" onclick="sendCommand('HOME')">Home</button>
-    <button class="button" onclick="sendCommand('MENU')">Menu</button>
+    <h1>Film Favorit Saya</h1>
+    <img src="g.jpg" alt="Movie 1" id="movie-image">
+    
+    <div>
+        <button class="button" onclick="changeMovie('g.jpg')">Film 1</button>
+        <button class="button" onclick="changeMovie('g.jpg')">Film 2</button>
+        <button class="button" onclick="changeMovie('g.jpg')">Film 3</button>
+    </div>
 
     <script>
-        function sendCommand(command) {
-            // Fungsi untuk mengirim perintah ke Android TV
-            console.log('Mengirim perintah:', command);
-            // Implementasi pengiriman sinyal ke Android TV bisa ditambahkan di sini
+        function changeMovie(imagePath) {
+            document.getElementById('movie-image').src = imagePath;
         }
     </script>
-
 </body>
 </html>
