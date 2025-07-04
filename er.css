@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #181818;
+    color: white;
+}
+
+#app {
+    text-align: center;
+}
+
+header {
+    padding: 20px;
+}
+
+video {
+    width: 80%;
+    max-width: 640px;
+    margin: 20px auto;
+}
+
+#controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.control {
+    background: #f00;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.control:hover {
+    background: #c00;
+}

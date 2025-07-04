@@ -1,71 +1,30 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Website</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #ffffff;
-            text-align: center;
-        }
-        .button {
-            background-color: #6200ea;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            margin: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-        .button:hover, .button:focus {
-            background-color: #3700b3;
-            outline: none;
-            transform: scale(1.05);
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            border: 2px solid white;
-            margin: 10px 0;
-        }
-        .highlight {
-            border: 2px solid white;
-        }
-    </style>
+    <link rel="stylesheet" href="er.css">
+    <title>YouTube TV Clone</title>
 </head>
 <body>
-    <h1>Film Favorit</h1>
-    <img src="g.jpg" alt="Movie Poster" class="highlight">
-    
-    <div>
-        <button class="button">Tonton Sekarang</button>
-        <button class="button">Tambah ke Favorit</button>
-        <button class="button">Lihat Trailer</button>
+    <div id="app">
+        <header>
+            <h1>YouTube TV Clone</h1>
+        </header>
+        <main>
+            <div id="video-player">
+                <video id="video" controls>
+                    <source src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div id="controls">
+                <button class="control" id="play">Play</button>
+                <button class="control" id="pause">Pause</button>
+                <button class="control" id="stop">Stop</button>
+            </div>
+        </main>
     </div>
-    
-    <script>
-        // Kontrol untuk mendukung remote Android TV
-        document.addEventListener('keydown', function(event) {
-            const buttons = document.querySelectorAll('.button');
-            let focusedIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
-
-            if (event.key === 'ArrowRight' && focusedIndex < buttons.length - 1) {
-                buttons[focusedIndex + 1].focus();
-            } else if (event.key === 'ArrowLeft' && focusedIndex > 0) {
-                buttons[focusedIndex - 1].focus();
-            } else if (event.key === 'Enter') {
-                buttons[focusedIndex].click();
-            }
-        });
-
-        // Set focus on the first button
-        document.querySelector('.button').focus();
-    </script>
+    <script src="er.js"></script>
 </body>
 </html>
