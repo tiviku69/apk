@@ -3,41 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Button Highlight</title>
+    <title>Remote Android TV</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
         }
         .button {
-            padding: 15px 30px;
-            margin: 10px;
-            font-size: 16px;
+            background-color: #008CBA;
             border: none;
-            border-radius: 5px;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 10px;
             cursor: pointer;
+            border-radius: 5px;
             transition: background-color 0.3s;
         }
-        .highlight {
-            background-color: #4CAF50;  /* Warna hijau untuk di-highlight */
-            color: white;
-        }
         .button:hover {
-            background-color: #ddd;  /* Warna saat hover */
+            background-color: #005f73;
         }
     </style>
 </head>
 <body>
 
-    <button class="button highlight">Tombol Support 1</button>
-    <button class="button">Tombol Biasa 1</button>
-    <button class="button highlight">Tombol Support 2</button>
-    <button class="button">Tombol Biasa 2</button>
-    <button class="button highlight">Tombol Support 3</button>
+    <button class="button" onclick="sendCommand('UP')">↑</button>
+    <button class="button" onclick="sendCommand('DOWN')">↓</button>
+    <button class="button" onclick="sendCommand('LEFT')">←</button>
+    <button class="button" onclick="sendCommand('RIGHT')">→</button>
+    <button class="button" onclick="sendCommand('OK')">OK</button>
+    <button class="button" onclick="sendCommand('BACK')">Kembali</button>
+    <button class="button" onclick="sendCommand('HOME')">Home</button>
+    <button class="button" onclick="sendCommand('MENU')">Menu</button>
+
+    <script>
+        function sendCommand(command) {
+            // Fungsi untuk mengirim perintah ke Android TV
+            console.log('Mengirim perintah:', command);
+            // Implementasi pengiriman sinyal ke Android TV bisa ditambahkan di sini
+        }
+    </script>
 
 </body>
 </html>
