@@ -1,18 +1,18 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Button Navigation</title>
+    <title>Video Player</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-        }
-        .button {
+    				body {
+				background-color: black;
+				margin: 0px;
+				padding: 0px;
+}
+#thum { diplay: none;position: relative;bottom: 200px; }
+#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
+button {
             background-color: transparent;
             color: white;
             padding: 5px 5px;
@@ -23,55 +23,72 @@
             transition: background-color 0.3s;
             outline: none;
         }
-        .button:focus {
-            background-color: #005f75;
-        }
-        .button:hover {
+        
+        button:hover {
             border-radius:8px;background-color: #005f75;
         }
-        img {width: 200px;
+#videoPlayer {
+				width: 100%;
+				height: 700px
+				}
+img {width: 200px;
 				height: 150px;
 				border-radius:8px;}	
-#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
     </style>
 </head>
 <body>
+
+    <video id="videoPlayer" controls>
+        <source id="videoSource" src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+<div id="thum">
 <div id="thumbnails">
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
-    <button class="button" onclick="location.href='https://link2.com'" tabindex="2"><img src="g.jpg" alt="">Button 2</button>
-</div>
+</div></div>
+
     <script>
-        // Menangani navigasi dengan tombol remote
-        document.addEventListener('keydown', function(event) {
-            const buttons = document.querySelectorAll('.button');
-            let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
-            
-            if (event.key === "ArrowDown") {
-                currentIndex = (currentIndex + 1) % buttons.length;
-                buttons[currentIndex].focus();
-            } else if (event.key === "ArrowUp") {
-                currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-                buttons[currentIndex].focus();
-            } else if (event.key === "Enter") {
-                buttons[currentIndex].click();
-            }
-        });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            videoList.style.display = 'block';
+        }
+        if (event.key === 'ArrowUp') {
+            videoList.style.display = 'none';
+        }
+    });
+const files = [ 'jsn1.json', 'jsn1.json', 'jsn1.json', 'jsn2.json' ]; // Array file JSON
+           const container = document.getElementById('thumbnails');
+
+           files.forEach(file => {
+               fetch(file)
+                   .then(response => response.json())
+                   .then(data => {
+                       data.forEach(item => {
+                           const button = document.createElement('button');
+                           button.innerText = item.buttonText;
+
+                           const img = document.createElement('img');
+                           img.src = item.img;
+                           img.alt = item.buttonText;
+
+                           const link = document.createElement('a');
+                           link.href = item.link;
+                           link.target = "_blank"; // Buka di tab baru
+                           link.appendChild(button);
+                           container.appendChild(link);
+                           button.appendChild(img);
+link.onclick = (event) => {
+                            event.preventDefault();
+                            const player = document.getElementById('videoPlayer');
+                            player.src = item.link;
+                            player.play();};
+                       });
+                   })
+                   .catch(error => console.error('Error loading JSON:', error));
+           });
+
+        
     </script>
+
 </body>
 </html>

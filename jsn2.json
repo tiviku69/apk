@@ -1,0 +1,12 @@
+   [
+     {
+       "img": "g.jpg",
+       "link": "url_to_link1",
+       "buttonText": "Button 1"
+     },
+     {
+       "img": "g.jpg",
+       "link": "url_to_link2",
+       "buttonText": "Button 2"
+     }
+   ]
