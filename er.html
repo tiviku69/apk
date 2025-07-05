@@ -10,7 +10,7 @@
 				margin: 0px;
 				padding: 0px;
 }
-#thum { dsplay: none;position: relative;bottom: 200px; }
+#thum { display: none;position: relative;bottom: 300px; }
 #thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
 button {
             background-color: transparent;
@@ -33,8 +33,8 @@ button:focus {
 				width: 100%;
 				height: 700px
 				}
-img {width: 200px;
-				height: 150px;
+img {width: 250px;
+				height: 200px;
 				border-radius:8px;}	
     </style>
 </head>
@@ -49,6 +49,16 @@ img {width: 200px;
 </div></div>
 
     <script>
+const videoList = document.getElementById('thum');
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            videoList.style.display = 'block';
+        }
+        if (event.key === 'ArrowUp') {
+            videoList.style.display = 'none';
+        }
+    });
  // Menangani navigasi dengan tombol remote
         document.addEventListener('keydown', function(event) {
             const buttons = document.querySelectorAll('.button');
