@@ -37,7 +37,7 @@ button {
             border: 10px ;background-color: #005f75;
         }
         button:hover {
-            border: 10px ;border-radius:8px;background-color: #005f75;
+            border: 5px solid #fff;border-radius:8px;
         }
 
 .gfilm {
