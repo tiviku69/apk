@@ -1,17 +1,19 @@
-const videoPlayer = document.getElementById('videoPlayer');
-const menu = document.getElementById('menu');
-let menuVisible = false;
+const buttons = document.querySelectorAll('.nav-button');
+let currentIndex = 0;
 
-document.body.addEventListener('keydown', function(event) {
+function updateFocus() {
+    buttons[currentIndex].focus();
+}
+
+document.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown') {
-        menu.style.display = menuVisible ? 'none' : 'flex';
-        menuVisible = !menuVisible;
+        currentIndex = (currentIndex + 1) % buttons.length;
+        updateFocus();
+    } else if (event.key === 'ArrowUp') {
+        currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+        updateFocus();
     }
 });
 
-function playVideo(videoSrc) {
-    videoPlayer.src = videoSrc;
-    videoPlayer.play();
-    menu.style.display = 'none';
-    menuVisible = false;
-}
+// Initialize focus
+updateFocus();

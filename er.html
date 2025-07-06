@@ -4,29 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="m1.css">
-    <title>Video Player</title>
+    <title>TV Remote Navigation</title>
 </head>
 <body>
-    <div class="video-container">
-        <video id="videoPlayer" controls>
-            <source src="path-to-your-video.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="menu" id="menu">
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 1</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 2</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 1</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 2</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 1</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 2</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 1</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 2</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 1</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 2</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 1</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 2</button>
-            <button class="menu-item" onclick="playVideo('m3u/1.m3u8')">Video 3</button>
-        </div>
+    <div class="container">
+        <button class="nav-button" tabindex="0">Button 1</button>
+        <button class="nav-button" tabindex="1">Button 2</button>
+        <button class="nav-button" tabindex="2">Button 3</button>
+        <img src="g.jpg" class="nav-button" tabindex="3" alt="Image 1">
+        <img src="g.jpg" class="nav-button" tabindex="4" alt="Image 2">
     </div>
     <script src="m1.js"></script>
 </body>
