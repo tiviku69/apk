@@ -10,7 +10,7 @@
 				margin: 0px;
 				padding: 0px;
 }
-#thum { dsplay: none;position: relative;bottom: 300px; }
+#thum { display: none;position: relative;bottom: 300px; }
 #thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
 button {
             background-color: transparent;
@@ -54,7 +54,21 @@ const videoList = document.getElementById('thum');
             videoList.style.display = 'none';
         }
     });
-
+ // Menangani navigasi dengan tombol remote
+        document.addEventListener('keydown', function(event) {
+            const buttons = document.querySelectorAll('.button');
+            let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
+            
+            if (event.key === "ArrowDown") {
+                currentIndex = (currentIndex + 1) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "ArrowUp") {
+                currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "Enter") {
+                buttons[currentIndex].click();
+            }
+        });
 const files = [ 'jsn1.json', 'jsn1.json' ]; // Array file JSON
            const container = document.getElementById('thumbnails');
 
