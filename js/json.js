@@ -31,7 +31,7 @@ link.target = "_blank"; // Buka di tab baru
 
 // Menangani navigasi dengan tombol remote
         document.addEventListener('keydown', function(event) {
-            const buttons = document.querySelectorAll('button');
+            const buttons = document.querySelectorAll('.button');
             let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
             
             if (event.key === "ArrowDown") {
