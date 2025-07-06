@@ -23,6 +23,9 @@ link.target = "_blank"; // Buka di tab baru
                            link.appendChild(button);
                            scrollmenu.appendChild(link);
                            button.appendChild(img);
+                           button.onclick = () => {
+                        window.location.href = `ply.html?url=${encodeURIComponent(item.lnk)}`;
+                    };
                            });
                        })
                    
