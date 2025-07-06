@@ -1,73 +1,111 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player dengan Overlay</title>
+    <title>Video Player</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-ll        }
-        .video-container {
-            position: relative;
-            width: 100%;
-            height: 700px;
-            overflow: hidden;
-        }
-        video {
-            width: 100%;
-            height: 700px;
-        }
-img {
-            width: 100px;
-            height: 150;
-        }
-        .overlay {
-            position: absolute;
-            width: 30px;
-            top: 300px;
-            
-            right: 60px;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.7);
+    				body {
+				background-color: black;
+				margin: 0px;
+				padding: 0px;
+}
+#thum { dsplay: none;position: relative;bottom: 300px; }
+#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
+button {
+            background-color: transparent;
             color: white;
-            display: flex;
-height: 200px;
-            justify-content: center;
-            align-items: center;
-            font-size: 15px;
+            padding: 5px 5px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            outline: none;
         }
+button:focus {
+            background-color: #005f75;
+        }
+        button:hover {
+            border-radius:8px;background-color: #005f75;
+        }
+#videoPlayer {
+				width: 100%;
+				height: 700px
+				}
+img {width: 220px;
+				height: 180px;
+				border-radius:8px;}	
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <video id="videoPlayer" controls>
-            <source src="1.m3u8" type="video/mp4">
-            Browser Anda tidak mendukung video.
-        </video>
-        <div class="overlay" id="overlay"><img src="g.jpg" alt="">captain tsubasa</div>
-    </div>
+
+    <video tabindex="-1" id="videoPlayer" controls>
+        <source id="videoSource" src="https://tiviku69.github.io/apk/m3u/19.m3u8" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+<div id="thum">
+<div id="thumbnails">
+</div></div>
 
     <script>
-        const video = document.getElementById('videoPlayer');
-        const overlay = document.getElementById('overlay');
+const videoList = document.getElementById('thum');
 
-        video.addEventListener('play', function() {
-            overlay.style.display = 'none';
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            videoList.style.display = 'grid';
+        }
+        if (event.key === 'ArrowUp') {
+            videoList.style.display = 'none';
+        }
+    });
+ // Menangani navigasi dengan tombol remote
+        document.addEventListener('keydown', function(event) {
+            const buttons = document.querySelectorAll('.button');
+            let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
+            
+            if (event.key === "ArrowDown") {
+                currentIndex = (currentIndex + 1) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "ArrowUp") {
+                currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "Enter") {
+                buttons[currentIndex].click();
+            }
         });
+const files = [ 'jsn1.json', 'jsn1.json' ]; // Array file JSON
+           const container = document.getElementById('thumbnails');
 
-        video.addEventListener('pause', function() {
-            overlay.style.display = 'flex'; // Tampilkan kembali overlay jika video dijeda
-        });
+           files.forEach(file => {
+               fetch(file)
+                   .then(response => response.json())
+                   .then(data => {
+                       data.forEach(item => {
+                           const button = document.createElement('button');
+                           button.innerText = item.buttonText;
 
-        video.addEventListener('ended', function() {
-            overlay.style.display = 'flex'; // Tampilkan kembali overlay setelah video selesai
-        });
+                           const img = document.createElement('img');
+                           img.src = item.img;
+                           img.alt = item.buttonText;
+
+                           const link = document.createElement('a');
+                           
+                           link.appendChild(button);
+                           container.appendChild(link);
+                           button.appendChild(img);
+link.onclick = (event) => {
+                            event.preventDefault();
+                            const player = document.getElementById('videoPlayer');
+                            player.src = item.link;
+                            player.play();};
+                       });
+                   })
+                   .catch(error => console.error('Error loading JSON:', error));
+           });
+
+        
     </script>
+
 </body>
 </html>
