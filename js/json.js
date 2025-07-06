@@ -18,20 +18,20 @@ img.alt = item.ttl;
 
 const link = document.createElement('a');
 link.className = "film";
-link.href = item.htm;
+link.href = item.lnk;
 link.target = "_blank"; // Buka di tab baru
                            link.appendChild(button);
                            scrollmenu.appendChild(link);
                            button.appendChild(img);
-                       });
-                   })
+                           });
+                       })
                    
 .catch(error => console.error('Error loading JSON:', error));
            });
 
 // Menangani navigasi dengan tombol remote
         document.addEventListener('keydown', function(event) {
-            const buttons = document.querySelectorAll('.button');
+            const buttons = document.querySelectorAll('button');
             let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
             
             if (event.key === "ArrowDown") {
