@@ -23,7 +23,12 @@ button {
             transition: background-color 0.3s;
             outline: none;
         }
-
+button:focus {
+            background-color: #005f75;
+        }
+        button:hover {
+            border-radius:8px;background-color: #005f75;
+        }
 #videoPlayer {
 				width: 100%;
 				height: 700px
@@ -48,7 +53,7 @@ const videoList = document.getElementById('thum');
 
     document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown') {
-            videoList.style.display = 'grid';
+            videoList.style.display = 'block';
         }
         if (event.key === 'ArrowUp') {
             videoList.style.display = 'none';
