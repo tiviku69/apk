@@ -23,12 +23,7 @@ button {
             transition: background-color 0.3s;
             outline: none;
         }
-button:focus {
-            background-color: #005f75;
-        }
-        button:hover {
-            border-radius:8px;background-color: #005f75;
-        }
+
 #videoPlayer {
 				width: 100%;
 				height: 700px
@@ -59,21 +54,7 @@ const videoList = document.getElementById('thum');
             videoList.style.display = 'none';
         }
     });
- // Menangani navigasi dengan tombol remote
-        document.addEventListener('keydown', function(event) {
-            const buttons = document.querySelectorAll('.button');
-            let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
-            
-            if (event.key === "ArrowDown") {
-                currentIndex = (currentIndex + 1) % buttons.length;
-                buttons[currentIndex].focus();
-            } else if (event.key === "ArrowUp") {
-                currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
-                buttons[currentIndex].focus();
-            } else if (event.key === "Enter") {
-                buttons[currentIndex].click();
-            }
-        });
+
 const files = [ 'jsn1.json', 'jsn1.json' ]; // Array file JSON
            const container = document.getElementById('thumbnails');
 
