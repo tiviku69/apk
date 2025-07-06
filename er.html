@@ -1,33 +1,73 @@
 <!DOCTYPE html>
-<html lang="in">
+<html lang="id">
 <head>
-				<meta charset="UTF-8">
-
-				<title>tiviku69</title>
-				
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+        #video-container {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+        }
+        .button-div {
+            display: inline-block;
+            cursor: pointer;
+            margin: 10px;
+        }
+    </style>
 </head>
 <body>
-				
-				<link rel="stylesheet" href="css/film.css"></link>
-				
-</head>
 
-<body>
-				<center>
-				<br>
-				<h1>tiviku</h1>
-				<marquee id="marquee" direction="left" scrollamount="5"></marquee>
-				<hr>
-				<form>
-								<div id="container" class="container">
-												<div id="search">
-																<input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="search">
-																</div></div></form>
-																<br>
-															
-																<script src="js/film.js"></script>
-<script src="js/json.js"></script>
-																
-</center>
+<div id="video-container" class="hidden">
+    <video id="video-player" width="100%" controls>
+        <source src="m3u/1.m3u8" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+</div>
+
+<div id="buttons">
+    <div class="button-div" onclick="playVideo('m3u/1.m3u8')">
+        <img src="button1.png" alt="Play Video 1" width="100">
+    </div>
+    <div class="button-div" onclick="playVideo('m3u/1.m3u8')">
+        <img src="button2.png" alt="Play Video 2" width="100">
+    </div>
+    <div class="button-div" onclick="playVideo('m3u/1.m3u8')">
+        <img src="button3.png" alt="Play Video 3" width="100">
+    </div>
+</div>
+
+<script>
+    const videoContainer = document.getElementById('video-container');
+    const videoPlayer = document.getElementById('video-player');
+    const buttons = document.getElementById('buttons');
+
+    function playVideo(videoSrc) {
+        buttons.classList.add('hidden');
+        videoContainer.classList.remove('hidden');
+        videoPlayer.src = videoSrc;
+        videoPlayer.play();
+    }
+
+    videoPlayer.addEventListener('ended', () => {
+        videoContainer.classList.add('hidden');
+        buttons.classList.remove('hidden');
+        videoPlayer.src = '';
+    });
+
+    // Untuk menangani tombol back di Android
+    window.onpopstate = function(event) {
+        if (videoContainer.classList.contains('hidden') === false) {
+            videoContainer.classList.add('hidden');
+            buttons.classList.remove('hidden');
+            videoPlayer.src = '';
+        }
+    };
+</script>
+
 </body>
 </html>
