@@ -1,0 +1,35 @@
+   <!DOCTYPE html>
+   <html lang="id">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Index Page</title>
+   </head>
+   <body>
+       <div id="content"></div>
+
+       <script>
+           fetch('m1.json') // Path ke file JSON
+               .then(response => response.json())
+               .then(data => {
+                   const contentDiv = document.getElementById('content');
+                   data.forEach(item => {
+                       const img = document.createElement('img');
+                       img.src = item.img;
+                       img.alt = 'Image';
+                       
+                       const button = document.createElement('button');
+                       button.textContent = item.buttonText;
+                       button.onclick = () => {
+                           localStorage.setItem('videoUrl', item.videoUrl);
+                           window.location.href = 'jv.html';
+                       };
+
+                       contentDiv.appendChild(img);
+                       contentDiv.appendChild(button);
+                   });
+               })
+               .catch(error => console.error('Error:', error));
+       </script>
+   </body>
+   </html>
