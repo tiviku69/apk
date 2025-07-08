@@ -1,8 +1,10 @@
    [
      {
-       "img": "g.jpg",
-       "link": "https://tiviku69.github.io/apk/m3u/cpts1.m3u8",
-       "buttonText": "eps 1"
+       "logo": "logo/2.jpg",
+       "lnk": "m3u/1.m3u8",
+       "htm": "ply/1.html",
+       "ttl": "Captain Tsubasa: Road to (2002)",
+       "eps": "eps 1"
      },
      {
        "img": "g.jpg",
@@ -35,7 +37,7 @@
        "buttonText": "eps 7"
      },
      {
-       "img": "g.jpg",
+       "img": "logo/2.jpg",
        "link": "https://tiviku69.github.io/apk/m3u/cpts8.m3u8",
        "buttonText": "eps 8"
      },
@@ -50,7 +52,7 @@
        "buttonText": "eps 10"
      },
     {
-       "img": "g.jpg",
+       "img": "logo/2.jpg",
        "link": "https://tiviku69.github.io/apk/m3u/cpts11.m3u8",
        "buttonText": "eps 11"
      },

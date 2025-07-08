@@ -1,31 +1,48 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Film</title>
-</head>
-<body>
-    <h1>Daftar Film</h1>
-    <div>
-        <div>
-            <img src="https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg" alt="Film 1" width="100">
-            <button onclick="playVideo('m3u/1.m3u8')">Film 1</button>
-        </div>
-        <div>
-            <img src="https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg" alt="Film 2" width="100">
-            <button onclick="playVideo('m3u/1.m3u8')">Film 2</button>
-        </div>
-        <div>
-            <img src="https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg" alt="Film 3" width="100">
-            <button onclick="playVideo('m3u/1.m3u8')">Film 3</button>
-        </div>
-    </div>
-    
-    <script>
-        function playVideo(videoFile) {
+   <!DOCTYPE html>
+   <html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Load JSON Files</title>
+   </head>
+   <body>
+       <div id="container"></div>
+       
+       
+
+       <script>
+           const files = [ 'jsn1.json' ]; // Array file JSON
+
+files.forEach(file => {
+               fetch(file)
+                   .then(response => response.json())
+                   .then(data => {
+                       data.forEach(item => {
+
+const container = document.getElementById('container');
+
+const button = document.createElement('button');
+button.addEventListener('click', function playVideo(videoFile) {
             window.location.href = `g1.html?video=${videoFile}`;
-        }
-    </script>
-</body>
-</html>
+        });
+
+const link = document.createElement('a');
+link.href = item.link;
+                           
+const img = document.createElement('img');
+img.src = item.img;
+img.alt = item.buttonText;
+                           link.appendChild(button);
+             
+container.appendChild(link);              
+                           button.appendChild(img);
+                         
+                           
+                       });
+                   })
+                   
+                   .catch(error => console.error('Error loading JSON:', error));
+           });
+       </script>
+   </body>
+   </html>
