@@ -1,15 +1,17 @@
 const files = [ 'captain.json','ghost.json' ]; // Array file JSON
 
-const scrollmenu = document.createElement('div');
-scrollmenu.align ="center";
-scrollmenu.className = "scrollmenu";
-document.body.appendChild(scrollmenu);
-
 files.forEach(file => { fetch(file)
 .then(response => response.json())
 .then(data => { data.forEach(item => {
-                           
+
+const scrollmenu = document.getElementById('scrollmenu');
+scrollmenu.align ="center";
+             
 const button = document.createElement('button');
+button.onclick = () => playVideo(item.lnk);
+function playVideo(videoFile) {
+            window.location.href = `g1.html?video=${videoFile}`;
+        }
 
 const img = document.createElement('img');
 img.className = "gfilm";
@@ -18,14 +20,10 @@ img.alt = item.ttl;
 
 const link = document.createElement('a');
 link.className = "film";
-link.href = item.lnk;
-link.target = "_blank"; // Buka di tab baru
-                           link.appendChild(button);
-                           scrollmenu.appendChild(link);
+                           
+                           scrollmenu.appendChild(button);
                            button.appendChild(img);
-                           button.onclick = () => {
-                        window.location.href = `ply.html?url=${encodeURIComponent(item.lnk)}`;
-                    };
+                           
                            });
                        })
                    
