@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemutar Video</title>
+</head>
+<body>
+    <h1>Pemutar Video</h1>
+    <video id="videoPlayer" width="640" height="360" controls>
+        <source id="videoSource" src="" type="video/mp4">
+        Browser Anda tidak mendukung pemutar video.
+    </video>
+    <script>
+        // Mendapatkan parameter dari URL
+        const params = new URLSearchParams(window.location.search);
+        const videoUrl = params.get('video');
+
+        if (videoUrl) {
+            document.getElementById('videoSource').src = videoUrl;
+            document.getElementById('videoPlayer').load();
+        }
+    </script>
+</body>
+</html>

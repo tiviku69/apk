@@ -1,35 +1,31 @@
-   <!DOCTYPE html>
-   <html lang="id">
-   <head>
-       <meta charset="UTF-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>Index Page</title>
-   </head>
-   <body>
-       <div id="content"></div>
-
-       <script>
-           fetch('m1.json') // Path ke file JSON
-               .then(response => response.json())
-               .then(data => {
-                   const contentDiv = document.getElementById('content');
-                   data.forEach(item => {
-                       const img = document.createElement('img');
-                       img.src = item.img;
-                       img.alt = 'Image';
-                       
-                       const button = document.createElement('button');
-                       button.textContent = item.buttonText;
-                       button.onclick = () => {
-                           localStorage.setItem('videoUrl', item.videoUrl);
-                           window.location.href = 'jv.html';
-                       };
-
-                       contentDiv.appendChild(img);
-                       contentDiv.appendChild(button);
-                   });
-               })
-               .catch(error => console.error('Error:', error));
-       </script>
-   </body>
-   </html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Film</title>
+</head>
+<body>
+    <h1>Daftar Film</h1>
+    <div>
+        <div>
+            <img src="https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg" alt="Film 1" width="100">
+            <button onclick="playVideo('m3u/1.m3u8')">Film 1</button>
+        </div>
+        <div>
+            <img src="https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg" alt="Film 2" width="100">
+            <button onclick="playVideo('m3u/1.m3u8')">Film 2</button>
+        </div>
+        <div>
+            <img src="https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg" alt="Film 3" width="100">
+            <button onclick="playVideo('m3u/1.m3u8')">Film 3</button>
+        </div>
+    </div>
+    
+    <script>
+        function playVideo(videoFile) {
+            window.location.href = `g1.html?video=${videoFile}`;
+        }
+    </script>
+</body>
+</html>
