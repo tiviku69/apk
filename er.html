@@ -28,15 +28,12 @@ function playVideo(videoFile) {
             window.location.href = `g1.html?video=${videoFile}`;
         }
 
-const link = document.createElement('a');
-link.href = item.link;
+
                            
 const img = document.createElement('img');
 img.src = item.img;
 img.alt = item.buttonText;
-                           link.appendChild(button);
-             
-container.appendChild(link);              
+                           container.appendChild(button);
                            button.appendChild(img);
                          
                            
