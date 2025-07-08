@@ -22,9 +22,11 @@ files.forEach(file => {
 const container = document.getElementById('container');
 
 const button = document.createElement('button');
-button.addEventListener('click', function playVideo(videoFile) {
+button.onclick = () => playVideo(item.link);
+
+function playVideo(videoFile) {
             window.location.href = `g1.html?video=${videoFile}`;
-        });
+        }
 
 const link = document.createElement('a');
 link.href = item.link;
