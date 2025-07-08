@@ -1,18 +1,54 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pemutar Video</title>
+    <title>Video Player</title>
+<link rel="stylesheet" href="css.css"></link>
+    <style>
+        #controls {
+            display: none;
+            position: absolute;
+            top: 400px;
+            left: 50%;
+            transform: translateX(-50%);
+            
+            padding: 0px;
+            border-radius: 5px;
+width: 100%;
+				height: 50%;
+text-align: center;
+}
+background: rgba(0, 0, 0, 0.7);
+#co {
+            width: 97%;
+				height: 700px;
+
+position: absolute;
+            top: 10px;
+
+        }
+        
+#videoPlayer {
+				width: 100%;
+				height: 700px;
+
+        }
+    </style>
 </head>
 <body>
-    <h1>Pemutar Video</h1>
-    <video id="videoPlayer" width="640" height="360" controls>
+
+    <video tabindex="-1" class='video' id="videoPlayer" controls>
         <source id="videoSource" src="" type="video/mp4">
         Browser Anda tidak mendukung pemutar video.
     </video>
-    <script>
-        // Mendapatkan parameter dari URL
+<div id="co"></div>
+    <div id="controls">
+        <div class='progress'> <div class='progress__filled'></div> </div> <button class='controls__button' data-skip='-10'><b>« 10s</b></button> <button class='controls__button toggleButton' title='Toggle Play'><b>▶</b></button> <button class='controls__button' data-skip='25'><b>10s »</b></button> </div>
+    </div>
+
+    <script>  
+// Mendapatkan parameter dari URL
         const params = new URLSearchParams(window.location.search);
         const videoUrl = params.get('video');
 
@@ -20,6 +56,69 @@
             document.getElementById('videoSource').src = videoUrl;
             document.getElementById('videoPlayer').load();
         }
+
+        document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            controls.style.display = 'block';
+        }
+        if (event.key === 'ArrowUp') {
+            controls.style.display = 'none';
+        }
+    });
+
+        // Add event listeners to buttons
+        const video = document.querySelector(".video");
+const toggleButton = document.querySelector(".toggleButton");
+const progress = document.querySelector(".progress");
+const progressBar = document.querySelector(".progress__filled");
+const sliders = document.querySelectorAll(".controls__slider");
+const skipBtns = document.querySelectorAll("[data-skip]");
+
+function togglePlay() {
+  if (video.paused || video.ended) {
+    video.play();
+  } else {
+    video.pause();
+  }
+}
+function updateToggleButton() {
+  toggleButton.innerHTML = video.paused ? "<b>▶</b>" : "❚ ❚";
+}
+
+function handleProgress() {
+  const progressPercentage = (video.currentTime / video.duration) * 100;
+  progressBar.style.flexBasis = `${progressPercentage}%`;
+}
+function scrub(e) {
+  const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration;
+  video.currentTime = scrubTime;
+}
+
+function handleSliderUpdate() {
+  video[this.name] = this.value;
+}
+function handleSkip() {
+  video.currentTime += +this.dataset.skip;
+}
+toggleButton.addEventListener("click", togglePlay);
+video.addEventListener("click", togglePlay);
+video.addEventListener("play", updateToggleButton);
+video.addEventListener("pause", updateToggleButton);
+video.addEventListener("timeupdate", handleProgress);
+sliders.forEach((slider) => {
+  slider.addEventListener("change", handleSliderUpdate);
+});
+skipBtns.forEach((btn) => {
+  btn.addEventListener("click", handleSkip);
+});
+
+sliders.forEach((slider) => {
+  slider.addEventListener("change", handleSliderUpdate);
+});
+document.addEventListener("keydown", (e) => {
+  if (e.code === "Space") togglePlay();
+});
     </script>
+
 </body>
 </html>
