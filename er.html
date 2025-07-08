@@ -1,47 +1,35 @@
-   <!DOCTYPE html>
-   <html lang="en">
-   <head>
-       <meta charset="UTF-8">
-       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>Load JSON Files</title>
-   </head>
-   <body>
-       <div id="container"></div>
-       
-       
+<!DOCTYPE html>
+<html lang="in">
+<head>
+				<meta charset="UTF-8">
 
-       <script>
-           const files = [ 'jsn1.json' ]; // Array file JSON
+				<title>Page title</title>
+				
+</head>
+<body>
+				
+				<link rel="stylesheet" href="css/film.css"></link>
+				
+</head>
 
-files.forEach(file => {
-               fetch(file)
-                   .then(response => response.json())
-                   .then(data => {
-                       data.forEach(item => {
-
-const container = document.getElementById('container');
-
-const button = document.createElement('button');
-button.onclick = () => playVideo(item.link);
-
-function playVideo(videoFile) {
-            window.location.href = `g1.html?video=${videoFile}`;
-        }
-
-
-                           
-const img = document.createElement('img');
-img.src = item.img;
-img.alt = item.buttonText;
-                           container.appendChild(button);
-                           button.appendChild(img);
-                         
-                           
-                       });
-                   })
-                   
-                   .catch(error => console.error('Error loading JSON:', error));
-           });
-       </script>
-   </body>
-   </html>
+<body>
+				<center>
+				<br>
+				<h1>tiviku</h1>
+				<marquee id="marquee" direction="left" scrollamount="5"></marquee>
+				<hr>
+				<form>
+								<div class="container">
+												<div class="left">
+																<input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="search">
+																<div id="scrollmenu" class="scrollmenu"></div>
+																</div></div></form>
+																<br>
+																							
+																<script src="js/json.js"></script>
+																
+																<script src="js/film.js"></script>
+																
+</center>
+</body>
+</html>
