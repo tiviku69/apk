@@ -11,16 +11,14 @@ const button = document.createElement('button');
 button.onclick = () => playVideo(item.lnk);
 function playVideo(videoFile) {
             window.location.href = `g1.html?video=${videoFile}`;
-        }
+            }
 
 const img = document.createElement('img');
 img.className = "gfilm";
 img.src = item.logo;
 img.alt = item.ttl;
 
-const link = document.createElement('a');
-link.className = "film";
-                           
+
                            scrollmenu.appendChild(button);
                            button.appendChild(img);
                            
