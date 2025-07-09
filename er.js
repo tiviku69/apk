@@ -1,30 +1,48 @@
-const video = document.getElementById('video');
-const playButton = document.getElementById('play');
-const pauseButton = document.getElementById('pause');
-const stopButton = document.getElementById('stop');
+const files = [ 'jsn1.json' ]; // Array file JSON
 
-playButton.onclick = () => video.play();
-pauseButton.onclick = () => video.pause();
-stopButton.onclick = () => {
-    video.pause();
-    video.currentTime = 0;
-};
+files.forEach(file => {
+               fetch(file)
+                   .then(response => response.json())
+                   .then(data => {
+                       data.forEach(item => {
 
-// Handle remote control events for Android TV
-document.addEventListener('keydown', (event) => {
-    switch (event.key) {
-        case 'ArrowRight':
-            video.currentTime += 10; // Fast forward
-            break;
-        case 'ArrowLeft':
-            video.currentTime -= 10; // Rewind
-            break;
-        case 'Enter':
-            video.paused ? video.play() : video.pause();
-            break;
-        case 'Esc':
-            video.pause();
-            video.currentTime = 0;
-            break;
+const container = document.getElementById('container');
+
+const button = document.createElement('button');
+button.className = 'film';
+button.onclick = () => playVideo(item.link);
+
+function playVideo(videoFile) {
+            window.location.href = `g1.html?video=${videoFile}`;
+        }
+                          
+const img = document.createElement('img');
+img.id = 'imgv';
+img.src = item.img;
+img.alt = item.buttonText;
+                           container.appendChild(button);
+                           button.appendChild(img);
+                                                   
+                       });
+                   })
+                   
+                   .catch(error => console.error('Error loading JSON:', error));
+           });
+
+function prosesMenu() {
+    var input = document.getElementById("cari");
+    var filter = input.value.toLowerCase();
+    var li = document.querySelectorAll('.film');
+
+    for (var i = 0; i < li.length; i++) {
+        // Menggunakan innerHTML dari button
+        if (li[i].innerHTML.toLowerCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
     }
-});
+}
+
+// Tambahkan event listener untuk memanggil prosesMenu saat input berubah
+document.getElementById("cari").addEventListener("input", prosesMenu);
