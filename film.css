@@ -1,0 +1,76 @@
+body {
+				background-color: black;
+				text-align: center;
+				margin: 0;
+				padding: 0;
+}
+
+h1 {
+				color: yellowgreen;
+}
+
+#marquee {
+				color: red;
+				font-size: 30px;
+}
+
+button {
+            background-color: transparent;
+            color: white;
+            padding: 5px 5px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+        button:focus {
+            border: 5px solid #fff;border-radius:8px;
+        }
+        button:hover {
+            border: 5px solid #fff;border-radius:8px;
+        }
+
+.gfilm {
+				border: 3px solid red;
+				border-radius: 13px ;
+				width: 150px;
+				height: 200px;
+				object-fit: fill;
+}
+
+div.scrollmenu {
+				height: 550px;
+				background-color: black;
+				overflow: auto;
+}
+
+div.scrollmenu a {
+				padding: 7px;
+}
+#cari {
+				border-radius: 8px;
+				height: 25px;
+				background: whitesmoke;
+				margin: 0px;
+				font-size: 20px;
+}
+#search {
+				position: relative;
+				padding: 0px;
+				z-index: 1000;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
