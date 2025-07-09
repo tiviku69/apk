@@ -41,16 +41,13 @@ button {
 }
 
 #container {
-				height: 465px;
+				height: 475px;
 				background-color: black;
 				position: relative;
-				top: 10px;
+				top: 15px;
 				overflow: auto;
 }
 
-div.scrollmenu a {
-				padding: 7px;
-}
 #cari {
 				border-radius: 8px;
 				height: 25px;
