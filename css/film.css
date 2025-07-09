@@ -14,14 +14,6 @@ h1 {
 				font-size: 30px;
 }
 
-bu {
-				border: 3px transparent solid;
-				border-radius: 13px;
-				color: red;
-				background-color: transparent;
-				padding: 15px;
-}
-
 button {
             background-color: transparent;
             color: white;
