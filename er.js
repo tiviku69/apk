@@ -1,4 +1,4 @@
-const files = [ 'jsn1.json','jsn1.json' ]; // Array file JSON
+const files = [ 'jsn1.json','jsn1.json','jsn1.json' ]; // Array file JSON
 
 files.forEach(file => {
                fetch(file)

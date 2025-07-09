@@ -40,9 +40,11 @@ button {
 				object-fit: fill;
 }
 
-div.scrollmenu {
-				height: 550px;
+#container {
+				height: 475px;
 				background-color: black;
+				position: relative;
+				top: 10px;
 				overflow: auto;
 }
 
@@ -59,7 +61,6 @@ div.scrollmenu a {
 #search {
 				position: relative;
 				padding: 0px;
-				z-index: 1000;
 }
 
 
