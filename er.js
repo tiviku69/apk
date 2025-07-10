@@ -15,12 +15,17 @@ button.onclick = () => playVideo(item.link);
 function playVideo(videoFile) {
             window.location.href = `g1.html?video=${videoFile}`;
         }
-                          
+
+const span = document.createElement('span');
+span.innerText = item.buttonText;
+           
 const img = document.createElement('img');
 img.id = 'imgv';
 img.src = item.img;
-img.alt = item.buttonText;
-                           container.appendChild(button);
+
+button.appendChild(span);
+
+container.appendChild(button);
                            button.appendChild(img);
                                                    
                        });
