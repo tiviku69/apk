@@ -1,4 +1,4 @@
-const files = [ 'jsn1.json','jsn1.json','jsn1.json' ]; // Array file JSON
+const files = [ 'captain.json' ]; // Array file JSON
 
 files.forEach(file => {
                fetch(file)
@@ -8,20 +8,28 @@ files.forEach(file => {
 
 const container = document.getElementById('container');
 
+
 const button = document.createElement('button');
 button.className = 'film';
-button.onclick = () => playVideo(item.link);
+button.title = item.ttl;
+button.onclick = () => playVideo(item.lnk);
 
 function playVideo(videoFile) {
             window.location.href = `g1.html?video=${videoFile}`;
         }
 
 const span = document.createElement('span');
-span.innerText = item.buttonText;
+span.innerText = item.ttl;
            
 const img = document.createElement('img');
 img.id = 'imgv';
-img.src = item.img;
+img.src = item.logo;
+img.onclick = () => viewImage(item.logo);
+
+function viewImage(imageSrc) {
+            // Arahkan ke view.html dengan parameter gambar
+            window.location.href = 'g1.html?img=' + encodeURIComponent(imageSrc);
+        }
 
 button.appendChild(span);
 
