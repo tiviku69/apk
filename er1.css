@@ -4,7 +4,7 @@ body {
 				padding: 0px;
 }
 #controls {
-            diplay: none;
+            display: none;
             position: absolute;
             top: 400px;
             left: 50%;
@@ -27,7 +27,7 @@ position: absolute;
 
 .vdi1 {
 				width: 100%;
-				height: 660px;
+				height: 710px;
 				position: absolute;
 				left: 50%;
 				top: 50%;
@@ -35,14 +35,11 @@ position: absolute;
 }
 #videoPlayer {
 				position: relative;
-				bottom: 0px;
 				width: 100%;
-				height: 660px;
+				height: 710px;
 				object-fit: fill;
 }
-.controls {
-				text-align: center;
-}
+
 video::-webkit-media-controls-panel {
 				position: relative;
 				top: 16px;
@@ -53,16 +50,25 @@ video::-webkit-media-controls-fullscreen-button {
 video::-webkit-media-controls-mute-button {
 				opacity: 0;
 }
-button {
-				border-radius: 13px ;				
+button {						
 				color: red;
 				background-color: transparent;
 				font-size: 20px;
 				border: 8px transparent solid;
 }
+button:focus {
+				border: 3px solid #fff;
+				border-radius:8px;
+}
+
+button:hover {
+				border: 3px solid #fff;
+				border-radius:8px;
+}
+
 .tiviku {
 				position: relative;
-				bottom: 640px;
+				bottom: 700px;
 				left: 12px;
 				border-radius: 8px ;
 				width: 110px;
