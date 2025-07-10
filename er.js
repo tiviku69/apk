@@ -15,7 +15,7 @@ button.title = item.ttl;
 button.onclick = () => playVideo(item.lnk);
 
 function playVideo(videoFile) {
-            window.location.href = `g1.html?video=${videoFile}`;
+            window.location.href = `ply.html?video=${videoFile}`;
         }
 
 const span = document.createElement('span');

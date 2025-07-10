@@ -1,47 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="in">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Player Page</title>
-<style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-ll        }
-        video {
-            width: 100%;
-            height: 700px;
-        }
-    </style>
+				<meta charset="UTF-8">
+				<title>Page title</title>
+				<link rel="stylesheet" href="er1.css"></link>
 </head>
 <body>
-    <video id="videoPlayer" width="600" controls>
+				<div class="vdi1" id="vdi1">
+								
+								<video tabindex="-1" class='video' id="videoPlayer" controls>
         <source id="videoSource" src="" type="video/mp4">
-        Your browser does not support HTML5 video.
+        Browser Anda tidak mendukung pemutar video.
     </video>
-
-    <script>
-        // Fungsi untuk mendapatkan parameter dari URL
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        // Ambil sumber video dari URL
-        const videoSrc = getQueryParam('src');
-        if (videoSrc) {
-            const videoSource = document.getElementById('videoSource');
-            videoSource.src = videoSrc;
-
-            const videoPlayer = document.getElementById('videoPlayer');
-            videoPlayer.load(); // Muat video baru
-            videoPlayer.play(); // Mulai pemutaran
-        }
-    </script>
+								<div id="co"></div>
+    <div id="controls">
+        <div class='progress'> <div class='progress__filled'></div> </div> <button class='controls__button' data-skip='-10'><b>« 10s</b></button> <button class='controls__button toggleButton' title='Toggle Play'><b>▶</b></button> <button class='controls__button' data-skip='25'><b>10s »</b></button> </div>
+    </div>
+								
+				</div>
 </body>
+
+<script src="er1.js"></script>
+<script src="time.js"></script>
 </html>
