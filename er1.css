@@ -55,6 +55,7 @@ button {
 				background-color: transparent;
 				font-size: 20px;
 				border: 8px transparent solid;
+outline: none;
 }
 button:focus {
 				border: 3px solid #fff;
@@ -78,7 +79,7 @@ button:hover {
 #clock {
 				text-align: center;
 				position: relative;
-				bottom: 710px;
+				bottom: 742px;
 				color: whitesmoke;
 }
 .time {
