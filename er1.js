@@ -1,24 +1,7 @@
-const files = [ 'captain.json' ]; // Array file JSON
-
-files.forEach(file => {
-               fetch(file)
-                   .then(response => response.json())
-                   .then(data => {
-                       data.forEach(item => {
-           
-const vide = document.getElementById('videoPlayer');
-vide.poster = "item.logo";
-                                                   
-                       });
-                   })
-                   
-                   .catch(error => console.error('Error loading JSON:', error));
-           });
-
-
 var vdi1 = document.getElementById("vdi1");
 
-
+var vide = document.getElementById("videoPlayer");
+vide.poster = "tiviku1.png";
 
 let tiviku = document.createElement('img');
 tiviku.src="tiviku.png";
