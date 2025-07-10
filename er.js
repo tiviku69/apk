@@ -24,16 +24,6 @@ span.innerText = item.ttl;
 const img = document.createElement('img');
 img.id = 'imgv';
 img.src = item.logo;
-if (img.src) {
-    img.onclick = () => viewImage(item.logo);
-} else {
-    console.error('Gambar tidak ditemukan.');
-}
-
-function viewImage(imageSrc) {
-    // Arahkan ke view.html dengan parameter gambar
-    window.location.href = 'g1.html?img=' + encodeURIComponent(imageSrc);
-}
 
 button.appendChild(span);
 

@@ -46,20 +46,8 @@ position: absolute;
     <div id="controls">
         <div class='progress'> <div class='progress__filled'></div> </div> <button class='controls__button' data-skip='-10'><b>« 10s</b></button> <button class='controls__button toggleButton' title='Toggle Play'><b>▶</b></button> <button class='controls__button' data-skip='25'><b>10s »</b></button> </div>
     </div>
-<img id="displayImage" alt="Gambar">
-    <script>  
-    				// Fungsi untuk mendapatkan parameter URL
-        function getQueryParameter(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
 
-        // Ambil parameter gambar dari URL
-        const imageSrc = getQueryParameter('img');
-        if (imageSrc) {
-            // Set gambar yang dipilih ke elemen img
-            document.getElementById('displayImage').src = imageSrc;
-        }
+    <script>  
 // Mendapatkan parameter dari URL
         const params = new URLSearchParams(window.location.search);
         const videoUrl = params.get('video');
