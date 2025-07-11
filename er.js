@@ -1,4 +1,4 @@
-const files = [ 'captain.json' ]; // Array file JSON
+const files = [ 'captain.json','cmpr.json' ]; // Array file JSON
 
 files.forEach(file => {
                fetch(file)
