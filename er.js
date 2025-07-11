@@ -28,7 +28,8 @@ img.src = item.logo;
 button.appendChild(span);
 
 container.appendChild(button);
-                           button.appendChild(img);
+
+button.appendChild(img);
                                                    
                        });
                    })

@@ -24,9 +24,6 @@ button {
 				font-size: 16px;
 				transition: background-color 0.3s;
 				outline: none;
-				width: 150px;
-				height: 200px;
-				overflow: hidden;
 }
         
 button:focus {
@@ -44,30 +41,19 @@ span {
 				background: rgba(0, 0, 0, 0.7);
 				color: white;
 				position: relative;
-				top: 80px;
 				z-index: 1000;
 }
 
-button:focus span,
-button:hover span{
+ybutton:focus span,
+ybutton:hover span{
     display: inline;
 }
 
 #imgv {
 				border: 3px solid red;
 				border-radius: 13px ;
-				width: 120px;
-				height: 170px;
-				position: relative;
-				bottom: 10px;
-}
-
-button:focus #imgv,
-button:hover #imgv{
-				width: 120px;
-				height: 170px;
-				position: relative;
-				bottom: 53px;
+				width: 150px;
+				height: 200px;
 }
 
 #container {
@@ -89,16 +75,3 @@ button:hover #imgv{
 				position: relative;
 				padding: 0px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
