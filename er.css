@@ -24,6 +24,9 @@ button {
 				font-size: 16px;
 				transition: background-color 0.3s;
 				outline: none;
+				overflow: hidden;
+				width: 200px;
+				height: 250px;
 }
         
 button:focus {
@@ -41,12 +44,11 @@ span {
 				background: rgba(0, 0, 0, 0.7);
 				color: white;
 				position: relative;
-				z-index: 1000;
 }
 
-ybutton:focus span,
-ybutton:hover span{
-    display: inline;
+button:focus span,
+button:hover span{
+    display: block;
 }
 
 #imgv {
@@ -62,6 +64,7 @@ ybutton:hover span{
 				position: relative;
 				top: 15px;
 				overflow: auto;
+				display: block;
 }
 
 #cari {
