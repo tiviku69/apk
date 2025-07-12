@@ -8,11 +8,13 @@ files.forEach(file => {
 
 const container = document.getElementById('container');
 
-
 const button = document.createElement('button');
 button.className = 'film';
 button.title = item.ttl;
 button.onclick = () => playVideo(item.lnk);
+
+const gj = document.createElement('div');
+gj.className = 'bungkus';
 
 function playVideo(videoFile) {
             window.location.href = `ply.html?video=${videoFile}`;
@@ -24,13 +26,16 @@ span.innerText = item.ttl;
 const img = document.createElement('img');
 img.id = 'imgv';
 img.src = item.logo;
+img.alt = item.ttl;
 
-button.appendChild(span);
+gj.appendChild(span);
 
-container.appendChild(button);
+gj.appendChild(button);
 
 button.appendChild(img);
-                                                   
+
+container.appendChild(gj);
+                                  
                        });
                    })
                    
