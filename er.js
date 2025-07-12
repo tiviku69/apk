@@ -13,28 +13,23 @@ button.className = 'film';
 button.title = item.ttl;
 button.onclick = () => playVideo(item.lnk);
 
-const gj = document.createElement('div');
-gj.className = 'bungkus';
-
 function playVideo(videoFile) {
             window.location.href = `ply.html?video=${videoFile}`;
         }
 
-const span = document.createElement('span');
-span.innerText = item.ttl;
+const sp = document.createElement('p');
+sp.className = 'bu';
+sp.innerText = item.ttl;
            
 const img = document.createElement('img');
 img.id = 'imgv';
 img.src = item.logo;
 img.alt = item.ttl;
 
-gj.appendChild(span);
-
-gj.appendChild(button);
 
 button.appendChild(img);
 
-container.appendChild(gj);
+container.appendChild(button);
                                   
                        });
                    })
