@@ -9,7 +9,7 @@ files.forEach(file => {
 const container = document.getElementById('container');
 
 const button = document.createElement('button');
-button.setAttribute("tabindex", "0");
+button.setAttribute("tabindex", "1");
 button.className = 'film';
 button.title = item.ttl;
 button.onclick = () => playVideo(item.lnk);
@@ -23,6 +23,7 @@ sp.className = 'bu';
 sp.innerText = item.ttl;
            
 const img = document.createElement('img');
+img.setAttribute("tabindex", "-1");
 img.id = 'imgv';
 img.src = item.logo;
 img.alt = item.ttl;
