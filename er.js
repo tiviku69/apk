@@ -19,7 +19,7 @@ function playVideo(videoFile) {
         }
 
 const sp = document.createElement('p');
-sp.className = 'bu';
+sp.className = 'sp';
 sp.innerText = item.ttl;
            
 const img = document.createElement('img');
@@ -29,6 +29,8 @@ img.src = item.logo;
 img.alt = item.ttl;
 
 button.appendChild(img);
+
+button.appendChild(sp);
 
 container.appendChild(button);
                                   

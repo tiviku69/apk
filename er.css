@@ -36,7 +36,7 @@ button:hover {
 				border-radius:20px;
 }
 
-u {
+.sp {
 				display: none;
 				
 				color: white;
@@ -50,8 +50,8 @@ u {
 				height: 200px;
 }
 
-ubutton:focus p,
-ubutton:hover p{
+button:focus .sp,
+button:hover .sp{
     display: block;
 }
 
