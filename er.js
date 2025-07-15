@@ -1,22 +1,56 @@
-document.addEventListener('keydown', function(event) {
-    const activeElement = document.activeElement;
-    const videoItems = document.querySelectorAll('.video-item');
+const files = [ 'captain.json','cmpr.json' ]; // Array file JSON
 
-    if (event.key === 'ArrowRight') {
-        const next = activeElement.nextElementSibling;
-        if (next && next.classList.contains('video-item')) {
-            next.focus();
+files.forEach(file => {
+               fetch(file)
+                   .then(response => response.json())
+                   .then(data => {
+                       data.forEach(item => {
+
+const container = document.getElementById('container');
+
+const button = document.createElement('button');
+button.setAttribute("tabindex", "0");
+button.className = 'film';
+button.title = item.ttl;
+button.onclick = () => playVideo(item.lnk);
+
+function playVideo(videoFile) {
+            window.location.href = `ply.html?video=${videoFile}`;
+        }
+
+const sp = document.createElement('p');
+sp.className = 'bu';
+sp.innerText = item.ttl;
+           
+const img = document.createElement('img');
+img.id = 'imgv';
+img.src = item.logo;
+img.alt = item.ttl;
+
+button.appendChild(img);
+
+container.appendChild(button);
+                                  
+                       });
+                   })
+                   
+                   .catch(error => console.error('Error loading JSON:', error));
+           });
+
+function prosesMenu() {
+    var input = document.getElementById("cari");
+    var filter = input.value.toLowerCase();
+    var li = document.querySelectorAll('.film');
+
+    for (var i = 0; i < li.length; i++) {
+        // Menggunakan innerHTML dari button
+        if (li[i].innerHTML.toLowerCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
         }
     }
+}
 
-    if (event.key === 'ArrowLeft') {
-        const previous = activeElement.previousElementSibling;
-        if (previous && previous.classList.contains('video-item')) {
-            previous.focus();
-        }
-    }
-
-    if (event.key === 'Enter') {
-        alert(`You selected: ${activeElement.querySelector('h2').innerText}`);
-    }
-});
+// Tambahkan event listener untuk memanggil prosesMenu saat input berubah
+document.getElementById("cari").addEventListener("input", prosesMenu);
