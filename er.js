@@ -8,11 +8,11 @@ files.forEach(file => {
 
 const container = document.getElementById('container');
 
-const button = document.createElement('button');
-button.setAttribute("tabindex", "1");
-button.className = 'film';
-button.title = item.ttl;
-button.onclick = () => playVideo(item.lnk);
+const dv = document.createElement('div');
+dv.setAttribute("tabindex", "1");
+dv.className = 'film';
+dv.title = item.ttl;
+dv.onclick = () => playVideo(item.lnk);
 
 function playVideo(videoFile) {
             window.location.href = `ply.html?video=${videoFile}`;
@@ -28,11 +28,11 @@ img.id = 'imgv';
 img.src = item.logo;
 img.alt = item.ttl;
 
-button.appendChild(img);
+dv.appendChild(img);
 
-button.appendChild(sp);
+dv.appendChild(sp);
 
-container.appendChild(button);
+container.appendChild(dv);
                                   
                        });
                    })
