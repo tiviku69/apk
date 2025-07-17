@@ -18,6 +18,7 @@ h1 {
 				color: rgba(255, 255, 255, 0.8);
 				border-radius: 5px;
 				font-weight: 900;
+				font-style: italic;
 				position: relative;
 				top: 50%;
 				left: 50%;
@@ -46,12 +47,13 @@ h1 {
 }
 
 #imgv {				
-				border-radius: 13px ;
+				border-radius: 11px ;
 				width: 160px;
 				height: 210px;
 				position: absolute;
-      top: 0;
-      left: 0;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
 }
 
 #container {
