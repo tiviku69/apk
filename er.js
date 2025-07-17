@@ -18,7 +18,7 @@ pp.innerText = item.ttl;
 
 const dv = document.createElement('div');
 dv.className = 'responsive-div';
-dv.onclick = () => playVideo(item.link);
+dv.onclick = () => playVideo(item.lnk);
 
 function playVideo(videoFile) {
             window.location.href = `ply.html?video=${videoFile}`;
