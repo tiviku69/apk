@@ -15,19 +15,20 @@ h1 {
 }
 
 .re {
-				color: white;
+				color: rgba(255, 255, 255, 0.6);
 				border-radius: 5px;
 				font-weight: 900;
 				position: relative;
 				padding: 5px;
 				font-size: 13px;
-				background-color: rgba(0, 0, 0, 0.7);
+				background-color: rgba(0, 0, 0, 0.6);
 				z-index: 1;
 }
         
 .responsive-div:focus .re,
 .responsive-div:hover .re {
 				font-size: 18px;
+				color: white;
 				background-color: rgba(0, 0, 0, 0.8);
 }
 
