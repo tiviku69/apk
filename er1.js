@@ -16,11 +16,16 @@ vdi1.appendChild(time);
 // Mendapatkan parameter dari URL
         const params = new URLSearchParams(window.location.search);
         const videoUrl = params.get('video');
+        
+if (videoUrl) {
+const videoSource = document.getElementById('videoSource');
 
-        if (videoUrl) {
-            document.getElementById('videoSource').src = videoUrl;
-            document.getElementById('videoPlayer').play();
-        }
+const videoPlayer = document.getElementById('videoPlayer');
+
+videoSource.src = videoUrl;
+videoPlayer.load();
+videoPlayer.play();
+}
 
         document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown') {
