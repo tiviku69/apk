@@ -7,33 +7,29 @@ files.forEach(file => {
                        data.forEach(item => {
 
 const container = document.getElementById('container');
+                          
+const img = document.createElement('img');
+img.id = 'imgv';
+img.src = item.logo;
+
+const pp = document.createElement('p');
+pp.className = 're';
+pp.innerText = item.ttl;
 
 const dv = document.createElement('div');
-dv.setAttribute("tabindex", "1");
-dv.className = 'film';
-dv.title = item.ttl;
-dv.onclick = () => playVideo(item.lnk);
+dv.className = 'responsive-div';
+dv.onclick = () => playVideo(item.link);
 
 function playVideo(videoFile) {
             window.location.href = `ply.html?video=${videoFile}`;
         }
 
-const sp = document.createElement('p');
-sp.className = 'sp';
-sp.innerText = item.ttl;
-           
-const img = document.createElement('img');
-img.setAttribute("tabindex", "-1");
-img.id = 'imgv';
-img.src = item.logo;
-img.alt = item.ttl;
-
 dv.appendChild(img);
 
-dv.appendChild(sp);
+dv.appendChild(pp);
 
 container.appendChild(dv);
-                                  
+                                                   
                        });
                    })
                    
@@ -43,7 +39,7 @@ container.appendChild(dv);
 function prosesMenu() {
     var input = document.getElementById("cari");
     var filter = input.value.toLowerCase();
-    var li = document.querySelectorAll('.film');
+    var li = document.querySelectorAll('.responsive-div');
 
     for (var i = 0; i < li.length; i++) {
         // Menggunakan innerHTML dari button

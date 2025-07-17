@@ -14,72 +14,50 @@ h1 {
 				font-size: 30px;
 }
 
-.film {
+.re {
+				color: whitesmoke;
+				position: relative;
+				font-size: 1em;
+				text-align: center;
+				background-color: black;
+				z-index: 1;
+}
+
+button {
 				background-color: transparent;
 				color: white;
-				padding: 5px 5px;
-				margin: 10px;
+				
 				border: none;
 				border-radius: 8px;
 				font-size: 16px;
 				transition: background-color 0.3s;
 				outline: none;
-				width: 150px;
-				height: 200px;
-				display: inline-block;
 }
         
-.film:focus {
-				border: 4px solid #fff;
-				border-radius:20px;
+.responsive-div:focus {
+				border: 3px solid #fff;
+				border-radius:8px;
 }
 
-.film:hover {
-				border: 4px solid #fff;
-				border-radius:20px;
+.responsive-div:hover {
+				border: 3px solid #fff;
+				border-radius:8px;
 }
 
-.mrq {
-				width: 400px;
-				height: 200px;
-				background: blue;
-				align-items: center;
-}
-
-.sp {
-				display: none;
-				position: relative;
-				bottom: 140px;
-				color: white;
-				background: black;
-}
-
-u {
-				background: rgba(0, 0, 0, 0.7);
-				overflow: hidden;
-				width: 150px;
-				height: 200px;
-}
-
-.film:focus .sp,
-.film:hover .sp{
-    display: block;
-}
-
-#imgv {
-				border: 3px solid red;
-				border-radius: 13px ;
-				width: 150px;
-				height: 200px;
+#imgv {				
+				border-radius: 8px ;
+				width: 160px;
+				height: 210px;
+				position: absolute;
+      top: 0;
+      left: 0;
 }
 
 #container {
 				height: 475px;
-				background-color: black;
 				position: relative;
 				top: 15px;
 				overflow: auto;
-				display: block;
 }
 
 #cari {
@@ -93,3 +71,19 @@ u {
 				position: relative;
 				padding: 0px;
 }
+
+
+.responsive-div {
+            width: 150px;
+            height: 200px;
+            display: inline-block;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            padding: 5px 5px;
+            margin: 10px;
+            border: 3px solid red;
+        }
