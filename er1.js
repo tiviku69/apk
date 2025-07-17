@@ -19,7 +19,7 @@ vdi1.appendChild(time);
 
         if (videoUrl) {
             document.getElementById('videoSource').src = videoUrl;
-            document.getElementById('videoPlayer').load();
+            document.getElementById('videoPlayer').play();
         }
 
         document.addEventListener('keydown', (event) => {
