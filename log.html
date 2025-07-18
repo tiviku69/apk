@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Halaman Login</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .hidden { display: none; }
+        .container { max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="login-container">
+    <h2>Login</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="password" id="password" placeholder="Password" required>
+    <button onclick="login()">Login</button>
+    <p id="error" style="color:red;" class="hidden"></p>
+</div>
+
+<div class="container hidden" id="content-container">
+    <h2>Selamat datang!</h2>
+    <p>Ini adalah halaman yang dilindungi. Anda telah berhasil login!</p>
+    <button onclick="logout()">Logout</button>
+</div>
+
+<script>
+    function login() {
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        
+        // Cek username dan password (sederhana, seharusnya menggunakan metode yang lebih aman)
+        if (username === "user" && password === "pass") {
+            localStorage.setItem('isLoggedIn', 'true'); 
+            showContent();
+        } else {
+            document.getElementById('error').innerText = 'Username atau password salah!';
+            document.getElementById('error').classList.remove('hidden');
+        }
+    }
+
+    function showContent() {
+        document.getElementById('login-container').classList.add('hidden');
+        document.getElementById('content-container').classList.remove('hidden');
+    }
+
+    function logout() {
+        localStorage.removeItem('isLoggedIn');
+        window.location.reload();
+    }
+
+    window.onload = function() {
+        const isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (isLoggedIn === 'true') {
+            showContent();
+        }
+    }
+</script>
+
+</body>
+</html>
