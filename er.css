@@ -1,92 +1,35 @@
 body {
-				background-color: black;
-				text-align: center;
-				margin: 0;
-				padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #000;
 }
 
-h1 {
-				color: yellowgreen;
+.container {
+    position: relative;
+    width: 600px;
+    overflow: hidden;
 }
 
-#marquee {
-				color: red;
-				font-size: 30px;
+.image-container {
+    display: flex;
+    transition: transform 0.3s;
 }
 
-.re {
-				color: rgba(255, 255, 255, 0.8);
-				border-radius: 5px;
-				font-weight: 900;
-				font-style: italic;
-				position: relative;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%,-50%);
-				padding: 5px;
-				font-size: 13px;
-				background-color: rgba(0, 0, 0, 0.6);
-				z-index: 1;
-}
-        
-.responsive-div:focus .re,
-.responsive-div:hover .re {
-				font-size: 18px;
-				color: white;
-				background-color: rgba(0, 0, 0, 0.8);
+.image {
+    width: 150px;
+    height: auto;
+    margin: 0 10px;
 }
 
-.responsive-div:focus {
-				border: 3px solid #fff;
-				border-radius:13px;
+.highlight {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 150px;
+    border: 3px solid yellow;
+    pointer-events: none;
 }
-
-.responsive-div:hover {
-				border: 3px solid #fff;
-				border-radius:13px;
-}
-
-#imgv {				
-				border-radius: 11px ;
-				width: 190px;
-				height: 240px;
-				position: absolute;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%,-50%);
-}
-
-#container {
-				height: 530px;
-				position: relative;
-				top: 15px;
-				padding: 0px;
-				overflow: auto;
-}
-
-#cari {
-				border-radius: 8px;
-				height: 25px;
-				background: whitesmoke;
-				margin: 0px;
-				font-size: 20px;
-}
-#search {
-				position: relative;
-				padding: 0px;
-}
-
-.responsive-div {
-            width: 180px;
-            height: 230px;
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            border-radius: 13px;
-            overflow: hidden;
-            position: relative;
-            padding: 8px 8px;
-            margin: 15px;
-            border: 3px solid red;
-        }
