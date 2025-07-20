@@ -28,6 +28,19 @@ h1 {
 				background-color: rgba(0, 0, 0, 0.6);
 				z-index: 1;
 }
+
+.dur {
+				color: rgba(255, 255, 255, 0.9);
+				font-weight: 900;
+				font-style: italic;
+				position: absolute;
+				border-radius: 3px;
+				bottom: 200px;
+				padding: 3px;
+				background-color: rgba(0, 0, 0, 0.6);
+				font-size: 10px;
+				z-index: 1;
+}
         
 .responsive-div:focus .re,
 .responsive-div:hover .re {

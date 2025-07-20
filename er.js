@@ -16,6 +16,10 @@ const pp = document.createElement('p');
 pp.className = 're';
 pp.innerText = item.ttl;
 
+const dur = document.createElement('p');
+dur.className = 'dur';
+dur.innerText = item.dur;
+
 const dv = document.createElement('div');
 dv.className = 'responsive-div';
 dv.onclick = () => playVideo(item.lnk);
@@ -27,6 +31,8 @@ function playVideo(videoFile) {
 dv.appendChild(img);
 
 dv.appendChild(pp);
+
+dv.appendChild(dur);
 
 container.appendChild(dv);
                                                    
