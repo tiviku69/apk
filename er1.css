@@ -92,10 +92,10 @@ button:hover {
 }
 #clock .time {
 				letter-spacing: 0.01em;
-				font-size: 15px;
+				font-size: 20px;
 				padding: 2px 0;
 }
 #clock .date {
 				letter-spacing: 0.1em;
-				font-size: 15px;
+				font-size: 20px;
 }
