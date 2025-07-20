@@ -24,13 +24,13 @@ h1 {
 				left: 50%;
 				transform: translate(-50%,-50%);
 				padding: 5px;
-				font-size: 13px;
+				font-size: 15px;
 				background-color: rgba(0, 0, 0, 0.6);
 				z-index: 1;
 }
 
 .dur {
-				color: rgba(255, 255, 255, 0.9);
+				color: white;
 				font-weight: 900;
 				font-style: italic;
 				position: absolute;
@@ -38,31 +38,31 @@ h1 {
 				bottom: 180px;
 				padding: 3px;
 				background-color: rgba(0, 0, 0, 0.6);
-				font-size: 10px;
+				font-size: 15px;
 				z-index: 1;
 }
         
 .responsive-div:focus .re,
 .responsive-div:hover .re {
-				font-size: 18px;
+				font-size: 19px;
 				color: white;
 				background-color: rgba(0, 0, 0, 0.8);
 }
 
 .responsive-div:focus {
-				border: 3px solid #fff;
+				border: 5px solid #fff;
 				border-radius:13px;
 }
 
 .responsive-div:hover {
-				border: 3px solid #fff;
+				border: 5px solid #fff;
 				border-radius:13px;
 }
 
 #imgv {				
 				border-radius: 11px ;
-				width: 260px;
-				height: 210px;
+				width: 270px;
+				height: 220px;
 				position: absolute;
 				top: 50%;
 				left: 50%;
@@ -90,8 +90,8 @@ h1 {
 }
 
 .responsive-div {
-            width: 250px;
-            height: 200px;
+            width: 260px;
+            height: 210px;
             display: inline-block;
             justify-content: center;
             align-items: center;
@@ -101,5 +101,5 @@ h1 {
             position: relative;
             padding: 8px 8px;
             margin: 15px;
-            border: 3px solid red;
+            border: 5px solid red;
         }
