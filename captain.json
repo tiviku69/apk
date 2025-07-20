@@ -42,36 +42,41 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/cpts6.m3u8",
-    "htm": "ply/1.html",
-    "ttl": "Captain Tsubasa: Road to (2002) dubbing",
-    "eps": "eps 6"
+    "ttl": "eps6 Captain Tsubasa: Road to (2002) dubbing",
+    "dur": "24:11",
+    "z": "z",
+    "tiviku": "apk"
    },
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/cpts7.m3u8",
-    "htm": "ply/1.html",
-    "ttl": "Captain Tsubasa: Road to (2002) dubbing",
-    "eps": "eps 7"
+    "ttl": "eps7 Captain Tsubasa: Road to (2002) dubbing",
+    "dur": "24:11",
+    "z": "z",
+    "tiviku": "apk"
    },
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/cpts8.m3u8",
-    "htm": "ply/1.html",
-    "ttl": "Captain Tsubasa: Road to (2002) dubbing",
-    "eps": "eps 8"
+    "ttl": "eps8 Captain Tsubasa: Road to (2002) dubbing",
+    "dur": "24:11",
+    "z": "z",
+    "tiviku": "apk"
    },
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/cpts9.m3u8",
-    "htm": "ply/1.html",
-    "ttl": "Captain Tsubasa: Road to (2002) dubbing",
-    "eps": "eps 9"
+    "ttl": "eps9 Captain Tsubasa: Road to (2002) dubbing",
+    "dur": "24:10",
+    "z": "z",
+    "tiviku": "apk"
    },
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/cpts10.m3u8",
-    "htm": "ply/1.html",
-    "ttl": "Captain Tsubasa: Road to (2002) dubbing",
-    "eps": "eps 10"
+    "ttl": "eps10 Captain Tsubasa: Road to (2002) dubbing",
+    "dur": "23:57",
+    "z": "z",
+    "tiviku": "apk"
    }
 ]
