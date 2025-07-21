@@ -17,15 +17,19 @@ vdi1.appendChild(time);
         const params = new URLSearchParams(window.location.search);
         const videoUrl = params.get('video');
         
-if (videoUrl) {
-const videoSource = document.getElementById('videoSource');
+window.onload = function() {
+            const videoFile = sessionStorage.getItem('videoFile');
+            const logoFile = sessionStorage.getItem('logoFile');
+            
+            const videoPlayer = document.getElementById('videoPlayer');
+            const videoSource = document.getElementById('videoSource');
 
-const videoPlayer = document.getElementById('videoPlayer');
-
-videoSource.src = videoUrl;
-videoPlayer.load();
-videoPlayer.play();
-}
+            if (videoFile) {
+                videoSource.src = videoFile;
+                videoPlayer.setAttribute('poster', logoFile); // Set poster as logo
+                videoPlayer.load();
+            }
+        };
 
         document.addEventListener('keydown', (event) => {
         if (event.key === 'ArrowDown') {

@@ -22,11 +22,14 @@ dur.innerText = item.dur;
 
 const dv = document.createElement('div');
 dv.className = 'responsive-div';
-dv.onclick = () => playVideo(item.lnk);
+dv.onclick = () => playVideo(item.lnk,item.logo);
 
-function playVideo(videoFile) {
-            window.location.href = `ply.html?video=${videoFile}`;
-        }
+function playVideo(videoFile, logoFile) {
+    // Simpan link video dan logo dalam sessionStorage atau URL
+    sessionStorage.setItem('videoFile', videoFile);
+    sessionStorage.setItem('logoFile', logoFile);
+    window.location.href = 'ply.html';
+}
 
 dv.appendChild(img);
 
