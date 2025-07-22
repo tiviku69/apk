@@ -20,13 +20,21 @@ vdi1.appendChild(time);
 window.onload = function() {
             const videoFile = sessionStorage.getItem('videoFile');
             const logoFile = sessionStorage.getItem('logoFile');
+            const textFile = sessionStorage.getItem('textFile');
             
             const videoPlayer = document.getElementById('videoPlayer');
             const videoSource = document.getElementById('videoSource');
+            const co = document.getElementById('txe');
+            
+if (videoFile) {
 
-            if (videoFile) {
-                videoSource.src = videoFile;
-                videoPlayer.setAttribute('poster', logoFile); // Set poster as logo
+videoSource.src = videoFile;
+
+videoPlayer.setAttribute('poster', logoFile);
+
+co.innerText =  textFile; 
+
+
                 videoPlayer.load();
             }
         };

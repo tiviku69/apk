@@ -27,16 +27,17 @@ position: absolute;
 
 .vdi1 {
 				width: 100%;
-				height: 710px;
+				height: 685px;
 				position: absolute;
 				left: 50%;
 				top: 50%;
 				transform: translate(-50%,-50%);
+				overflow: hidden;
 }
 #videoPlayer {
 				position: relative;
 				width: 100%;
-				height: 710px;
+				height: 685px;
 				object-fit: fill;
 }
 
@@ -69,7 +70,7 @@ button:hover {
 
 .tiviku {
 				position: relative;
-				bottom: 700px;
+				bottom: 810px;
 				left: 12px;
 				border-radius: 8px ;
 				width: 110px;
@@ -79,7 +80,7 @@ button:hover {
 #clock {
 				text-align: center;
 				position: relative;
-				bottom: 744px;
+				bottom: 855px;
 				color: whitesmoke;
 }
 .time {
@@ -101,4 +102,19 @@ button:hover {
 #clock .date {
 				letter-spacing: 0.1em;
 				font-size: 17px;
+}
+
+#txe {
+				color: whitesmoke;
+				position: relative;
+				text-align: center;
+				font-weight: 900;
+				height: 100px;
+				width: 200px;
+}
+
+#co {
+				position: relative;
+				bottom: 700px;
+				left: 155px;
 }
