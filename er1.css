@@ -61,7 +61,7 @@ button:hover {
 
 .tiviku {
 				position: relative;
-				bottom: 818px;
+				bottom: 820px;
 				left: 12px;
 				border-radius: 8px ;
 				width: 110px;
@@ -71,7 +71,7 @@ button:hover {
 #clock {
 				text-align: center;
 				position: relative;
-				bottom: 865px;
+				bottom: 867px;
 				color: whitesmoke;
 }
 .time {
@@ -106,6 +106,6 @@ button:hover {
 
 #co {
 				position: relative;
-				bottom: 713px;
+				bottom: 715px;
 				left: 155px;
 }
