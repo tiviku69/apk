@@ -1,0 +1,106 @@
+body {
+				background-color: black;
+				text-align: center;
+				margin: 0;
+				padding: 0;
+}
+
+h1 {
+				color: yellowgreen;
+}
+
+#marquee {
+				color: red;
+				font-size: 30px;
+}
+
+.re {
+				color: rgba(255, 255, 255, 0.8);
+				border-radius: 5px;
+				font-weight: 1000;
+				font-style: italic;
+				position: relative;
+				letter-spacing: 1px;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+				padding: 5px;
+				font-size: 15px;
+				background-color: rgba(0, 0, 0, 0.6);
+				z-index: 1;
+}
+
+.dur {
+				color: white;
+				font-weight: 900;
+				font-style: italic;
+				position: absolute;
+				border-radius: 3px;
+				bottom: 180px;
+				padding: 3px;
+				background-color: rgba(0, 0, 0, 0.6);
+				font-size: 15px;
+				z-index: 1;
+}
+
+.responsive-div:focus .re,
+.responsive-div:hover .re {
+				font-size: 19px;
+				color: white;
+				background-color: rgba(0, 0, 0, 0.8);
+}
+
+.responsive-div:focus {
+				border: 5px solid #fff;
+				border-radius:13px;
+}
+
+.responsive-div:hover {
+				border: 5px solid #fff;
+				border-radius:13px;
+}
+
+#imgv {				
+				border-radius: 11px ;
+				width: 270px;
+				height: 220px;
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%,-50%);
+}
+
+#container {
+				height: 530px;
+				position: relative;
+				top: 15px;
+				padding: 0px;
+				overflow: auto;
+}
+
+#cari {
+				border-radius: 8px;
+				height: 25px;
+				background: whitesmoke;
+				margin: 0px;
+				font-size: 20px;
+}
+#search {
+				position: relative;
+				padding: 0px;
+}
+
+.responsive-div {
+				width: 260px;
+				height: 210px;
+				display: inline-block;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				border-radius: 13px;
+				overflow: hidden;
+				position: relative;
+				padding: 8px 8px;
+				margin: 15px;
+				border: 5px solid red;
+}
