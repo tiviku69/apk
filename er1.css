@@ -100,9 +100,9 @@ button:hover {
 				position: relative;
 				text-align: center;
 				font-weight: 900;
-				height: 180px;
-				width: 200px;
-				font-size: 30px;
+				height: auto;
+				width: 300px;
+				font-size: 28px;
 				bottom: 260px;
 				left: 50px;
 }
