@@ -98,7 +98,7 @@ button:hover {
 #txe {
 				color: whitesmoke;
 				position: relative;
-				text-align: center;
+				text-align: right;
 				font-weight: 900;
 				height: 100px;
 				width: 200px;
@@ -107,5 +107,5 @@ button:hover {
 #co {
 				position: relative;
 				bottom: 715px;
-				left: 165px;
+				left: 153px;
 }
