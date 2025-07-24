@@ -1,19 +1,36 @@
 <!DOCTYPE html>
-<html lang="in">
+<html lang="en">
 <head>
-				<meta charset="UTF-8">
-				<title>Page title</title>
-				<link rel="stylesheet" href="er.css"></link>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Remote Android TV</title>
+    <script>
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case 'ArrowUp':
+                    console.log('Tombol Panah Atas Ditekan');
+                    break;
+                case 'ArrowDown':
+                    console.log('Tombol Panah Bawah Ditekan');
+                    break;
+                case 'ArrowLeft':
+                    console.log('Tombol Panah Kiri Ditekan');
+                    break;
+                case 'ArrowRight':
+                    console.log('Tombol Panah Kanan Ditekan');
+                    break;
+                case 'Enter':
+                    console.log('Tombol OK Ditekan');
+                    break;
+                // Tambah case lainnya sesuai kebutuhan
+                default:
+                    console.log(`Tombol Ditekan: ${event.key}`);
+            }
+        });
+    </script>
 </head>
 <body>
-				<div id="atas">
-								<h1>tiviku</h1>
-								<marquee id="marquee" direction="left" scrollamount="5"><b>uji coba</b></marquee>
-								<input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari...">
-				</div>
-				
-				<div id="container"></div>
-				
+    <h1>Deteksi Input Remote Android TV</h1>
+    <p>Coba tekan tombol pada remote Anda.</p>
 </body>
-<script src="er.js"></script>
 </html>
