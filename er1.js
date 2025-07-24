@@ -110,13 +110,15 @@ const videoPlayer = document.getElementById('videoPlayer');
     const txe = document.getElementById('txe');
 
     videoPlayer.addEventListener('play', function() {
-      coDiv.style.backgroundColor = '0,0,0,0'; // Sembunyikan div id "co"
+      coDiv.style.backgroundColor = '0,0,0,0';
+      imgg.style.display = 'none';
+      txe.style.display = 'none'; // Sembunyikan div id "co"
     });
 
     videoPlayer.addEventListener('pause', function() {
-      coDiv.style.display = 'block';
-      imgg.style.display = 'none';
-      txe.style.display = 'none'; // Tampilkan kembali ketika video dipause
+      coDiv.style.backgroundColor = '0,0,0,0.6';
+      imgg.style.display = 'block';
+       txe.style.display = 'block'; // Tampilkan kembali ketika video dipause
     });
 
     videoPlayer.addEventListener('ended', function() {
