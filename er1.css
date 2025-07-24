@@ -100,11 +100,11 @@ button:hover {
 				position: relative;
 				text-align: center;
 				font-weight: 900;
-				height: 100px;
+				height: 180px;
 				width: 200px;
-				font-size: 27px;
+				font-size: 30px;
 				bottom: 260px;
-				left: 40px;
+				left: 50px;
 }
 
 #co {
@@ -115,7 +115,7 @@ button:hover {
 #imgg {
 				top: 150px;
 				position: relative;
-				left: 945px;
+				left: 940px;
 				width: 295px;
 				height: 350px;
 				border-radius: 8px;

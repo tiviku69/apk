@@ -31,7 +31,7 @@ if (videoFile) {
 
 videoSource.src = videoFile;
 
-videoPlayer.setAttribute('poster', logoFile);
+
 
 imgg.src = logoFile;
 
