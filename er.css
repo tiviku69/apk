@@ -42,7 +42,7 @@ h1 {
 				font-size: 15px;
 				z-index: 1;
 }
-        
+
 .responsive-div:focus .re,
 .responsive-div:hover .re {
 				font-size: 19px;
@@ -91,16 +91,16 @@ h1 {
 }
 
 .responsive-div {
-            width: 260px;
-            height: 210px;
-            display: inline-block;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            border-radius: 13px;
-            overflow: hidden;
-            position: relative;
-            padding: 8px 8px;
-            margin: 15px;
-            border: 5px solid red;
-        }
+				width: 260px;
+				height: 210px;
+				display: inline-block;
+				justify-content: center;
+				align-items: center;
+				flex-direction: column;
+				border-radius: 13px;
+				overflow: hidden;
+				position: relative;
+				padding: 8px 8px;
+				margin: 15px;
+				border: 5px solid red;
+}
