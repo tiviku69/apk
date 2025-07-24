@@ -25,12 +25,15 @@ window.onload = function() {
             const videoPlayer = document.getElementById('videoPlayer');
             const videoSource = document.getElementById('videoSource');
             const co = document.getElementById('txe');
+            const imgg = document.getElementById('imgg');
             
 if (videoFile) {
 
 videoSource.src = videoFile;
 
 videoPlayer.setAttribute('poster', logoFile);
+
+imgg.src = logoFile;
 
 co.innerText =  textFile; 
 

@@ -108,5 +108,12 @@ button:hover {
 #co {
 				position: relative;
 				bottom: 715px;
-				left: 980px;
+				left: 0px;
+}
+#imgg {
+				top: 50px;
+				position: relative;
+				left: 910px;
+				width: 150px;
+				height: 200px;
 }
