@@ -46,7 +46,7 @@ co.innerText =  textFile;
         if (event.key === 'ArrowDown') {
             controls.style.display = 'block';
         }
-        if (event.key === 'Backspace') {
+        if (event.key === 'ArrowBackspace') {
             controls.style.display = 'none';
         }
     });
