@@ -71,7 +71,7 @@ button:hover {
 #clock {
 				text-align: center;
 				position: relative;
-				bottom: 1238px;
+				bottom: 1240px;
 				color: whitesmoke;
 }
 .time {
@@ -113,8 +113,8 @@ button:hover {
 #imgg {
 				top: 150px;
 				position: relative;
-				left: 955px;
-				width: 300px;
+				left: 950px;
+				width: 295px;
 				height: 350px;
 				border-radius: 8px;
 }
