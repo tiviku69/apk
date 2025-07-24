@@ -98,11 +98,13 @@ button:hover {
 #txe {
 				color: whitesmoke;
 				position: relative;
-				text-align: right;
+				text-align: center;
 				font-weight: 900;
 				height: 100px;
 				width: 200px;
-				font-size: 25px;
+				font-size: 27px;
+				bottom: 260px;
+				left: 40px;
 }
 
 #co {
@@ -113,7 +115,7 @@ button:hover {
 #imgg {
 				top: 150px;
 				position: relative;
-				left: 950px;
+				left: 945px;
 				width: 295px;
 				height: 350px;
 				border-radius: 8px;
