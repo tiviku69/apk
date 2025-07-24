@@ -102,11 +102,11 @@ button:hover {
 				font-weight: 900;
 				height: 100px;
 				width: 200px;
-				font-size: 80px;
+				font-size: 30px;
 }
 
 #co {
 				position: relative;
 				bottom: 715px;
-				left: 1000px;
+				left: 900px;
 }
