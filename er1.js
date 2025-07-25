@@ -46,7 +46,7 @@ co.innerText =  textFile;
         if (event.key === 'ArrowDown') {
             controls.style.display = 'block';
         }
-        if (event.key === '*') {
+        if (event.key === 'ArrowUp') {
             controls.style.display = 'none';
         }
     });
@@ -116,13 +116,13 @@ const videoPlayer = document.getElementById('videoPlayer');
     });
 
     videoPlayer.addEventListener('pause', function() {
-      coDiv.style.backgroundColor = 'rgb(0,0,0,0.6)';
+      coDiv.style.backgroundColor = 'rgb(0,0,0,0.8)';
       imgg.style.display = 'block';
       txe.style.display = 'block'; // Tampilkan kembali ketika video dipause
     });
 
     videoPlayer.addEventListener('ended', function() {
-      coDiv.style.backgroundColor = 'rgb(0,0,0,0.6)';
+      coDiv.style.backgroundColor = 'rgb(0,0,0,0.8)';
        imgg.style.display = 'block';
        txe.style.display = 'block';// Tampilkan kembali setelah video selesai
     });
