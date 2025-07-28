@@ -10,6 +10,7 @@ window.onload = function() {
             const videoPlayer = document.getElementById('videoPlayer');
             const videoSource = document.getElementById('videoSource');
             const jdl = document.getElementById('jdl');
+            const imgg = document.getElementById('imgg');
             
 if (videoFile) {
 
@@ -18,6 +19,8 @@ videoSource.src = videoFile;
 videoPlayer.setAttribute('poster', logoFile);
 
 jdl.innerText =  textFile;
+
+imgg.src = logoFile;
 
 
                 videoPlayer.load();

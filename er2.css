@@ -63,7 +63,7 @@ button:hover {
 				color: white;
 				background-color: transparent;
 				position: relative;
-				top: 40px;
+				top: 0px;
 				font-weight: 800;
 				font-size: 28px;
 				text-align: center;
@@ -71,10 +71,10 @@ button:hover {
 				left: 5%;
 }
 
-img {
+#tiviku {
 				position: relative;
 				top: 27px;
-				left: 15px;
+				left: 17px;
 				border-radius: 8px ;
 				width: 110px;
 				height: 35px;
@@ -94,7 +94,7 @@ img {
 #clock {
 				text-align: center;
 				position: relative;
-				bottom: 25px;
+				bottom: 27px;
 				color: whitesmoke;
 }
 .time {
@@ -116,4 +116,13 @@ img {
 #clock .date {
 				letter-spacing: 0.1em;
 				font-size: 17px;
+}
+#imgg {
+				bottom: 30%;
+				position: relative;
+				float: right;
+				right: 8%;
+				width: 295px;
+				height: 350px;
+				border-radius: 8px;
 }
