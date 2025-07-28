@@ -119,7 +119,7 @@ button:hover {
 }
 #imgg {
 				bottom: 200px;
-				position: relative;
+				position: absolute;
 				float: right;
 				right: 8%;
 				width: 295px;
