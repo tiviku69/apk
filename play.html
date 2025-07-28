@@ -8,7 +8,9 @@
 <body>
 				<div id="vidcon">
 								<video tabindex="-1" class='video' id="videoPlayer" controls><source id="videoSource" src="" type="video/mp4"></video>
-								<div id="co"><img src="tiviku.png" alt=""></img><p id="jdl"></p>
+								<div id="co"><img src="tiviku.png" alt=""></img>
+								<p id="jdl"></p>
+								<div id="clock"><p class='date'>{{ date }}</p><p class='time'>{{ time }}</p></div>
 								<div id="controls">
         <div class='progress'> <div class='progress__filled'></div> </div> <button class='controls__button' data-skip='-10'><b>« 10s</b></button> <button class='controls__button toggleButton' title='Toggle Play'><b>▶</b></button> <button class='controls__button' data-skip='25'><b>10s »</b></button> </div>
     </div>
@@ -16,4 +18,5 @@
 				</div>
 </body>
 <script src="er2.js"></script>
+<script src="time.js"></script>
 </html>
