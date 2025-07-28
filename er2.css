@@ -25,11 +25,6 @@ body {
 				margin: 0;
 }
 
-#videoPlayer::-webkit-media-controls-play-pause-button {
-				position: relative;
-				top: 200px;
-}
-
 #controls {
 				position: absolute;
 				top: 315px;
@@ -97,14 +92,17 @@ button:hover {
 				bottom: 27px;
 				color: whitesmoke;
 }
+
 .time {
 				margin: 0;
 				padding: 0;
 }
+
 .date {
 				margin: 0;
 				padding: 0;
 }
+
 #clock .time {
 				letter-spacing: 0.1em;
 				position: relative;
@@ -113,10 +111,12 @@ button:hover {
 				font-size: 20px;
 				padding: 2px 0;
 }
+
 #clock .date {
 				letter-spacing: 0.1em;
 				font-size: 17px;
 }
+
 #imgg {
 				bottom: 200px;
 				position: absolute;

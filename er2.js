@@ -27,6 +27,15 @@ imgg.src = logoFile;
             }
         };
         
+document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+            controls.style.display = 'block';
+        }
+        if (event.key === 'ArrowUp') {
+            controls.style.display = 'none';
+        }
+    });
+        
 // Add event listeners to buttons
         const video = document.querySelector(".video");
 const toggleButton = document.querySelector(".toggleButton");
@@ -79,3 +88,26 @@ sliders.forEach((slider) => {
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space") togglePlay();
 });
+
+const videoPlayer = document.getElementById('videoPlayer');
+    const coDiv = document.getElementById('co');
+    const imgg = document.getElementById('imgg');
+    const jdl = document.getElementById('jdl');
+
+    videoPlayer.addEventListener('play', function() {
+      coDiv.style.backgroundColor = 'rgb(0,0,0,0.0)';
+      imgg.style.display = 'none';
+      jdl.style.display = 'none'; // Sembunyikan div id "co"
+    });
+
+    videoPlayer.addEventListener('pause', function() {
+      coDiv.style.backgroundColor = 'rgb(0,0,0,0.5)';
+      imgg.style.display = 'block';
+      jdl.style.display = 'block'; // Tampilkan kembali ketika video dipause
+    });
+
+    videoPlayer.addEventListener('ended', function() {
+      coDiv.style.backgroundColor = 'rgb(0,0,0,0.5)';
+       imgg.style.display = 'block';
+       jdl.style.display = 'block';// Tampilkan kembali setelah video selesai
+    });
