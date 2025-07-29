@@ -1,4 +1,4 @@
-const files = [ 'captain.json','cmpr.json','ghost.json' ]; // Array file JSON
+const files = [ 'captain.json','cmpr.json','ghost.json','avatar.json' ]; // Array file JSON
 
 files.forEach(file => {
                fetch(file)
@@ -29,7 +29,7 @@ function playVideo(videoFile, logoFile, textFile) {
     sessionStorage.setItem('videoFile', videoFile);
     sessionStorage.setItem('logoFile', logoFile);
     sessionStorage.setItem('textFile', textFile);
-    window.location.href = 'ply.html';
+    window.location.href = 'play.html';
 }
 
 dv.appendChild(img);
