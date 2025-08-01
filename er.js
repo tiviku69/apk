@@ -1,4 +1,4 @@
-const files = [ 'cmpr.json','captain.json','avat.json','ghost.json','avatar.json' ]; // Array file JSON
+const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','captain.json','avat.json','ghost.json','avatar.json' ]; // Array file JSON
 
 files.forEach(file => {
                fetch(file)
