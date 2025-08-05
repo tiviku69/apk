@@ -28,7 +28,7 @@ imgg.src = logoFile;
         };
         
 document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowDown') {
+        if (event.key === 'ArrowDown' || event.key === 'Enter') {
             controls.style.display = 'block';
         }
         if (event.key === 'ArrowUp') {
