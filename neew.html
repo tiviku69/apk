@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery with Highlight</title>
+    <title>Centered Highlight Images</title>
     <style>
         body {
             display: flex;
@@ -11,58 +11,71 @@
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
+            margin: 0;
         }
         .gallery {
             display: flex;
-            overflow: hidden;
             position: relative;
+            overflow: hidden;
+            width: 80%;
+            max-width: 600px;
         }
         .gallery img {
-            width: 200px; /* ukuran gambar */
-            margin: 0 15px;
-            transition: transform 0.3s ease;
-            border: 2px solid transparent;
+            width: 100%;
+            transition: transform 0.3s;
+            cursor: pointer;
         }
-        .highlight img {
-            transform: scale(1.1);
-            border-color: blue; /* warna highlight */
+        .highlight {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 5px solid #ff0000;
+            border-radius: 10px;
+            width: 80%;
+            height: auto;
+            pointer-events: none;
+            opacity: 0.7;
         }
     </style>
 </head>
 <body>
 
-<div class="gallery" id="gallery">
-    <img src="g.jpg" alt="Image 1">
-    <img src="g.jpg" alt="Image 2">
-    <img src="g.jpg" alt="Image 3">
-    <img src="g.jpg" alt="Image 4">
-    <img src="g.jpg" alt="Image 5">
+<div class="gallery">
+    <img src="g.jpg" alt="Image 1" id="img1">
+    <img src="g.jpg" alt="Image 2" id="img2">
+    <img src="g.jpg" alt="Image 3" id="img3">
+    <img src="g.jpg" alt="Image 1" id="img1">
+    <img src="g.jpg" alt="Image 2" id="img2">
+    <img src="g.jpg" alt="Image 3" id="img3">
+    <div class="highlight" id="highlight"></div>
 </div>
 
 <script>
-    const gallery = document.getElementById('gallery');
-    const images = gallery.getElementsByTagName('img');
+    const images = document.querySelectorAll('.gallery img');
+    const highlight = document.getElementById('highlight');
     let currentIndex = 0;
 
     function updateHighlight(index) {
-        for (let i = 0; i < images.length; i++) {
-            images[i].parentNode.classList.remove('highlight');
-        }
-        images[index].parentNode.classList.add('highlight');
-        
-        gallery.style.transform = `translateX(-${index * (220)}px)`; // 220 = width + margin
+        const offset = index * -100; // Shift based on the selected index
+        images.forEach((img, i) => {
+            img.style.transform = `translateX(${offset}%)`;
+        });
     }
 
-    document.addEventListener('keydown', (event) => {
-        if (event.key === 'ArrowRight') {
+    function handleKey(e) {
+        if (e.key === 'ArrowRight') {
             currentIndex = (currentIndex + 1) % images.length;
-        } else if (event.key === 'ArrowLeft') {
+            updateHighlight(currentIndex);
+        } else if (e.key === 'ArrowLeft') {
             currentIndex = (currentIndex - 1 + images.length) % images.length;
+            updateHighlight(currentIndex);
         }
-        updateHighlight(currentIndex);
-    });
+    }
 
-    updateHighlight(currentIndex); // set initial highlight
+    document.addEventListener('keydown', handleKey);
+
+    updateHighlight(currentIndex); // Initial highlight
 </script>
 
 </body>
