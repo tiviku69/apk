@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Navigation</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        button {
+            background-color: transparent;
+            color: white;
+            padding: 5px 5px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            outline: none;
+        }
+        button:focus {
+            background-color: #005f75;
+        }
+        button:hover {
+            border-radius:8px;background-color: #005f75;
+        }
+        img {width: 200px;
+				height: 150px;
+				border-radius:8px;}	
+#thumbnails { display: flex; overflow-x: auto; padding: 20px;background: rgba(0, 0, 0, 0.7); }
+    </style>
+</head>
+<body>
+<div id="thumbnails">
+    <button class="button" onclick="location.href='https://link1.com'" tabindex="1"><img src="g.jpg" alt="">Button 1</button>
+</div>
+    <script>
+const files = [ 'cmpr.json', 'jsn1.json', 'jsn1.json', 'jsn2.json' ]; // Array file JSON
+           const container = document.getElementById('thumbnails');
+
+           files.forEach(file => {
+               fetch(file)
+                   .then(response => response.json())
+                   .then(data => {
+                       data.forEach(item => {
+                           const button = document.createElement('button');
+                           button.innerText = item.buttonText;
+
+                           const img = document.createElement('img');
+                           img.src = item.img;
+                           img.alt = item.buttonText;
+
+                           const link = document.createElement('a');
+                           link.href = item.link;
+                           link.target = "_blank"; // Buka di tab baru
+                           link.appendChild(button);
+                           container.appendChild(link);
+                           button.appendChild(img);
+                       });
+                   })
+                   .catch(error => console.error('Error loading JSON:', error));
+           });
+
+        // Menangani navigasi dengan tombol remote
+        document.addEventListener('keydown', function(event) {
+            const buttons = document.querySelectorAll('.button');
+            let currentIndex = Array.from(buttons).findIndex(button => document.activeElement === button);
+            
+            if (event.key === "ArrowDown") {
+                currentIndex = (currentIndex + 1) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "ArrowUp") {
+                currentIndex = (currentIndex - 1 + buttons.length) % buttons.length;
+                buttons[currentIndex].focus();
+            } else if (event.key === "Enter") {
+                buttons[currentIndex].click();
+            }
+        });
+    </script>
+</body>
+</html>
