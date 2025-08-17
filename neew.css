@@ -1,0 +1,22 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f0f0;
+}
+
+#gallery {
+    display: flex;
+    flex-direction: column;
+}
+
+.nav-item {
+    margin: 10px;
+    transition: transform 0.2s;
+}
+
+.nav-item:hover, .nav-item:focus {
+    transform: scale(1.1);
+    outline: 2px solid blue;
+}

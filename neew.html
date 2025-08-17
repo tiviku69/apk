@@ -1,85 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centered Highlight Images</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
-        .gallery {
-            display: flex;
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            max-width: 600px;
-        }
-        img {
-            width: 270px;
-				height: 220px;
-            transition: transform 0.3s;
-            cursor: pointer;
-            margin: 3px;
-				padding: 3px;
-        }
-        .highlight {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border: 5px solid #ff0000;
-            border-radius: 10px;
-            width: 260px;
-				height: 210px;
-            pointer-events: none;
-            opacity: 0.7;
-        }
-    </style>
+    <title>Gambar Navigasi Remote Android TV</title>
+    <link rel="stylesheet" href="neew.css">
 </head>
 <body>
+    <div id="gallery">
+        <a href="link1.html" class="nav-item" tabindex="0">
+            <img src="g.jpg" alt="Gambar 1">
+        </a>
+        <a href="link2.html" class="nav-item" tabindex="0">
+            <img src="g.jpg" alt="Gambar 2">
+        </a>
+        <a href="link3.html" class="nav-item" tabindex="0">
+            <img src="g.jpg" alt="Gambar 3">
+        </a>
+    </div>
 
-<div class="gallery">
-    <img src="g.jpg" alt="Image 1" id="img1">
-    <img src="g.jpg" alt="Image 2" id="img2">
-    <img src="g.jpg" alt="Image 3" id="img3">
-    <img src="g.jpg" alt="Image 1" id="img1">
-    <img src="g.jpg" alt="Image 2" id="img2">
-    <img src="g.jpg" alt="Image 3" id="img3">
-    <div class="highlight" id="highlight"></div>
-</div>
-
-<script>
-    const images = document.querySelectorAll('.gallery img');
-    const highlight = document.getElementById('highlight');
-    let currentIndex = 0;
-
-    function updateHighlight(index) {
-        const offset = index * -100; // Shift based on the selected index
-        images.forEach((img, i) => {
-            img.style.transform = `translateX(${offset}%)`;
-        });
-    }
-
-    function handleKey(e) {
-        if (e.key === 'ArrowRight') {
-            currentIndex = (currentIndex + 1) % images.length;
-            updateHighlight(currentIndex);
-        } else if (e.key === 'ArrowLeft') {
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            updateHighlight(currentIndex);
-        }
-    }
-
-    document.addEventListener('keydown', handleKey);
-
-    updateHighlight(currentIndex); // Initial highlight
-</script>
-
+    <script src="neew.js"></script>
 </body>
 </html>
