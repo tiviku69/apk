@@ -3,22 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gambar Navigasi Remote Android TV</title>
-    <link rel="stylesheet" href="neew.css">
+    <title>Navigasi Gambar</title>
+    <style>
+        .image-container {
+            display: flex;
+            overflow: hidden;
+            justify-content: center;
+            margin: 20px;
+        }
+        .image-item {
+            width: 200px;
+            height: 150px;
+            margin: 10px;
+            transition: transform 0.3s;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .image-item.selected {
+            border: 2px solid blue;
+            transform: scale(1.1);
+        }
+    </style>
 </head>
 <body>
-    <div id="gallery">
-        <a href="link1.html" class="nav-item" tabindex="0">
-            <img src="g.jpg" alt="Gambar 1">
-        </a>
-        <a href="link2.html" class="nav-item" tabindex="0">
-            <img src="g.jpg" alt="Gambar 2">
-        </a>
-        <a href="link3.html" class="nav-item" tabindex="0">
-            <img src="g.jpg" alt="Gambar 3">
-        </a>
-    </div>
 
-    <script src="neew.js"></script>
+<div class="image-container" id="imageContainer">
+    <div class="image-item" tabindex="0" data-link="https://link1.com">
+        <img src="g.jpg" alt="Gambar 1" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link2.com">
+        <img src="g.jpg" alt="Gambar 2" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link3.com">
+        <img src="g.jpg" alt="Gambar 3" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link1.com">
+        <img src="g.jpg" alt="Gambar 1" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link2.com">
+        <img src="g.jpg" alt="Gambar 2" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link3.com">
+        <img src="g.jpg" alt="Gambar 3" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link1.com">
+        <img src="g.jpg" alt="Gambar 1" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link2.com">
+        <img src="g.jpg" alt="Gambar 2" width="200" height="150">
+    </div>
+    <div class="image-item" tabindex="0" data-link="https://link3.com">
+        <img src="g.jpg" alt="Gambar 3" width="200" height="150">
+    </div>
+</div>
+
+<script>
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.image-item');
+
+    function updateSelection() {
+        items.forEach((item, index) => {
+            item.classList.toggle('selected', index === currentIndex);
+        });
+    }
+
+    function handleKeyDown(event) {
+        if (event.key === 'ArrowRight') {
+            currentIndex = (currentIndex + 1) % items.length;
+            updateSelection();
+        } else if (event.key === 'ArrowLeft') {
+            currentIndex = (currentIndex - 1 + items.length) % items.length;
+            updateSelection();
+        } else if (event.key === 'Enter') {
+            const selectedLink = items[currentIndex].getAttribute('data-link');
+            window.location.href = selectedLink;
+        }
+    }
+
+    document.addEventListener('keydown', handleKeyDown);
+    updateSelection();
+</script>
+
 </body>
 </html>
