@@ -2,7 +2,7 @@
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/tiviku/squid.game.(2021).dubb/squid.game.(2021).dubb.e1.m3u8",
-    "ttl": "eps1 s1 Squid Game (2021) dubbing",
+    "ttl": "eps1 Squid Game (2021) dubbing",
     "dur": "59:42",
     "z": "z",
     "tiviku": "apk"
@@ -10,7 +10,7 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/by/vods/squid.game.2021/squid2.m3u8",
-    "ttl": "eps2 s1 Squid Game (2021) dubbing",
+    "ttl": "eps2 Squid Game (2021) dubbing",
     "dur": "1:02:30",
     "z": "z",
     "tiviku": "apk"
@@ -18,7 +18,7 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/by/vods/squid.game.2021/epso3.m3u8",
-    "ttl": "eps3 s1 Squid Game (2021) dubbing",
+    "ttl": "eps3 Squid Game (2021) dubbing",
     "dur": "54:03",
     "z": "z",
     "tiviku": "apk"
@@ -26,7 +26,7 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/by/vods/squid.game.2021/eps4.m3u8",
-    "ttl": "eps4 s1 Squid Game (2021) dubbing",
+    "ttl": "eps4 Squid Game (2021) dubbing",
     "dur": "54:53",
     "z": "z",
     "tiviku": "apk"
@@ -34,7 +34,7 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/by/vods/squid.game.2021/e411.m3u8",
-    "ttl": "eps5 s1 Squid Game (2021) dubbing",
+    "ttl": "eps5 Squid Game (2021) dubbing",
     "dur": "51:34",
     "z": "z",
     "tiviku": "apk"
@@ -42,7 +42,7 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/57ocC.m3u8",
-    "ttl": "eps6 s1 Squid Game (2021) dubbing",
+    "ttl": "eps6 Squid Game (2021) dubbing",
     "dur": "1:01:37",
     "z": "z",
     "tiviku": "apk"
@@ -50,7 +50,7 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/k7Zxt.m3u8",
-    "ttl": "eps7 s1 Squid Game (2021) dubbing",
+    "ttl": "eps7 Squid Game (2021) dubbing",
     "dur": "57:57",
     "z": "z",
     "tiviku": "apk"
@@ -58,7 +58,7 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/57icC.m3u8",
-    "ttl": "eps8 s1 Squid Game (2021) dubbing",
+    "ttl": "eps8 Squid Game (2021) dubbing",
     "dur": "32:13",
     "z": "z",
     "tiviku": "apk"
@@ -66,8 +66,16 @@
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/5u4cC.m3u8",
-    "ttl": "eps9 s1 Squid Game (2021) dubbing",
+    "ttl": "eps9 Squid Game (2021) dubbing",
     "dur": "55:28",
+    "z": "z",
+    "tiviku": "apk"
+   },
+   {
+    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/39.jpg",
+    "lnk": "https://tiviku69.github.io/apk/m3u/t5.m3u8",
+    "ttl": "eps1 Squid Game 2 (2024) dubbing",
+    "dur": "1:05:22",
     "z": "z",
     "tiviku": "apk"
    }
