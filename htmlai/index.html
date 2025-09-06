@@ -3,36 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Film Android TV</title>
-    <link rel="stylesheet" href="2.css">
+    <title>YouTube TV Klon</title>
+    <link rel="stylesheet" href="3.css">
 </head>
 <body>
 
-    <div class="app-container">
-        
+    <div class="yt-container">
         <div class="sidebar">
-            <h2 class="sidebar-title">Menu</h2>
-            <ul class="sidebar-menu">
-                <li class="menu-item focused">Cari Film</li>
-                <li class="menu-item">Beranda</li>
-                <li class="menu-item">Kategori</li>
-                <li class="menu-item">Pengaturan</li>
+            <ul id="nav-menu">
+                <li class="nav-item focusable" data-row="0" data-col="0"><a href="#">🔍 <br>Penelusuran</a></li>
+                <li class="nav-item focusable" data-row="1" data-col="0"><a href="#">🏠 <br>Beranda</a></li>
+                <li class="nav-item focusable" data-row="2" data-col="0"><a href="#">🎞️ <br>Shorts</a></li>
+                <li class="nav-item focusable" data-row="3" data-col="0"><a href="#">➕ <br>Langganan</a></li>
+                <li class="nav-item focusable" data-row="4" data-col="0"><a href="#">📂 <br>Koleksi</a></li>
             </ul>
         </div>
-
+        
         <div class="main-content">
-            
-            <div class="search-container focused-search">
-                <input type="text" id="searchInput" class="search-input" placeholder="Cari film...">
+            <div class="search-bar focusable" data-row="0" data-col="1">
+                <input type="text" placeholder="Telusuri YouTube">
             </div>
 
-            <div id="movieList" class="movie-list">
+            <h2>Direkomendasikan</h2>
+            <div class="video-row" id="rekomendasi-row">
                 </div>
-            
+
+            <hr>
+
+            <h2>Baru untuk Anda</h2>
+            <div class="video-row" id="untuk-anda-row">
+                </div>
         </div>
-        
     </div>
 
-    <script src="2.js"></script>
+    <script src="3.js"></script>
+
 </body>
 </html>

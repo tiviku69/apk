@@ -1,0 +1,70 @@
+{
+    "rekomendasi": [
+        {
+            "id": "1",
+            "thumbnail": "https://i.ytimg.com/vi/W59c36yXq9E/maxresdefault.jpg",
+            "title": "Dinosaurus",
+            "channel": "CocoMelon - Bahasa Indonesia",
+            "views": "3,4 jt x ditonton",
+            "duration": "1:03:44"
+        },
+        {
+            "id": "2",
+            "thumbnail": "https://i.ytimg.com/vi/a_6mB_t6l4c/hq720.jpg",
+            "title": "SEUMUR HIDUP BARU TAU TEMPE DIBUAT SEPERTI INI ENAK BANGET",
+            "channel": "Dapurnya Emak",
+            "views": "3.8 jt x ditonton",
+            "duration": "8:13"
+        },
+        {
+            "id": "3",
+            "thumbnail": "https://i.ytimg.com/vi/8s6J3q_lQx4/hqdefault.jpg",
+            "title": "EMAK EMAK",
+            "channel": "CBs TV",
+            "views": "4M x ditonton",
+            "duration": "4:56"
+        },
+        {
+            "id": "4",
+            "thumbnail": "https://i.ytimg.com/vi/W59c36yXq9E/maxresdefault.jpg",
+            "title": "Contoh Video 4",
+            "channel": "Contoh Channel",
+            "views": "2.1 jt x ditonton",
+            "duration": "12:34"
+        }
+    ],
+    "untukAnda": [
+        {
+            "id": "5",
+            "thumbnail": "https://i.ytimg.com/vi/K63W3wXg_4A/hq720.jpg",
+            "title": "SEVENTEEN 'God of Music'",
+            "channel": "HYBE LABELS",
+            "views": "86 jt x ditonton",
+            "duration": "4:01"
+        },
+        {
+            "id": "6",
+            "thumbnail": "https://i.ytimg.com/vi/GzN_UfI557o/hq720.jpg",
+            "title": "THE BOX - 1 HOUR LOOP",
+            "channel": "Music Channel",
+            "views": "98 jt x ditonton",
+            "duration": "1:00:00"
+        },
+        {
+            "id": "7",
+            "thumbnail": "https://i.ytimg.com/vi/J-oWvG2dMv8/hq720.jpg",
+            "title": "Video 7",
+            "channel": "Random Channel",
+            "views": "7.5 jt x ditonton",
+            "duration": "2:45"
+        },
+        {
+            "id": "8",
+            "thumbnail": "https://i.ytimg.com/vi/a_6mB_t6l4c/hq720.jpg",
+            "title": "Video 8",
+            "channel": "Another Channel",
+            "views": "1.2 jt x ditonton",
+            "duration": "5:30"
+        }
+    ]
+}
