@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Mengambil data dari films.json
     async function fetchFilms() {
         try {
-            const response = await fetch('films.json');
+            const response = await fetch('2.json');
             films = await response.json();
             renderFilms(films);
         } catch (error) {
