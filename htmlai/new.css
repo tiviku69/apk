@@ -5,6 +5,28 @@
   --bg-black: #181919;
 }
 
+#custom-controls {
+    position: absolute; /* Atur posisi agar di atas video */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #333;
+    padding: 10px;
+    top: 100px;
+}
+
+#play-pause-btn {
+    padding: 5px 10px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#progress-bar {
+    width: 80%;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
 /* RESET CSS */
 *,
 *::before,
