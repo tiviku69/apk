@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tiviku</title>
+    <link rel="stylesheet" href="new.css">
+</head>
+<body>
+				
+    <div tabindex="-1" id="player"></div>
+    
+    <script>
+    				// Contoh fungsi untuk mendukung remote
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('player').focus();
+});
+        document.addEventListener('keydown', function(event) {
+            switch(event.key) {
+                case "ArrowRight":
+                    playerInstance.seek(playerInstance.getPosition() + 10); // Maju 10 detik
+                    break;
+                case "ArrowLeft":
+                    playerInstance.seek(playerInstance.getPosition() - 10); // Mundur 10 detik
+                    break;
+                
+                case "Enter":
+                    if (playerInstance.getState() === "playing") {
+                        playerInstance.pause(); 
+                    } else {
+                        playerInstance.play(); 
+                    }
+                    break;
+            }
+        });
+    </script>
+    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script><script  src="new.js"></script>
+</body>
+</html>
