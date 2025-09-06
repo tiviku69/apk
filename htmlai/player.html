@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pemutar Video</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="video-player-container">
+        <video id="video-player" controls autoplay></video>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const videoPlayer = document.getElementById('video-player');
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoUrl = urlParams.get('url');
+
+            if (videoUrl) {
+                videoPlayer.src = decodeURIComponent(videoUrl);
+                videoPlayer.focus();
+            } else {
+                alert('URL video tidak ditemukan!');
+            }
+        });
+
+        // Dukungan remote Android TV (misalnya tombol "Kembali")
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Backspace' || e.key === 'GoBack') {
+                window.history.back();
+            }
+        });
+    </script>
+</body>
+</html>

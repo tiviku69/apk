@@ -1,0 +1,32 @@
+[
+    {
+        "id": 1,
+        "title": "Film A",
+        "posterUrl": "https://example.com/poster-a.jpg",
+        "videoUrl": "https://example.com/video-a.mp4"
+    },
+    {
+        "id": 2,
+        "title": "Film B",
+        "posterUrl": "https://example.com/poster-b.jpg",
+        "videoUrl": "https://example.com/video-b.mp4"
+    },
+    {
+        "id": 3,
+        "title": "Film C",
+        "posterUrl": "https://example.com/poster-c.jpg",
+        "videoUrl": "https://example.com/video-c.mp4"
+    },
+    {
+        "id": 4,
+        "title": "Film D",
+        "posterUrl": "https://example.com/poster-d.jpg",
+        "videoUrl": "https://example.com/video-d.mp4"
+    },
+    {
+        "id": 5,
+        "title": "Film E",
+        "posterUrl": "https://example.com/poster-e.jpg",
+        "videoUrl": "https://example.com/video-e.mp4"
+    }
+]
