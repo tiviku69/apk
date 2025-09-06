@@ -1,0 +1,38 @@
+[
+  {
+    "title": "Aksi Heroik",
+    "genre": "Aksi",
+    "poster": "https://images.unsplash.com/photo-1542204165-65bf26472b9b?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "year": 2023
+  },
+  {
+    "title": "Misteri Senyap",
+    "genre": "Misteri",
+    "poster": "https://images.unsplash.com/photo-1620145642879-1d98991276a6?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "year": 2022
+  },
+  {
+    "title": "Petualangan Luar Angkasa",
+    "genre": "Fiksi Ilmiah",
+    "poster": "https://images.unsplash.com/photo-1518384218331-628f80459518?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "year": 2021
+  },
+  {
+    "title": "Komedi Kocak",
+    "genre": "Komedi",
+    "poster": "https://images.unsplash.com/photo-1536440136628-849c177e76a1?q=80&w=1925&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "year": 2024
+  },
+  {
+    "title": "Drama Keluarga",
+    "genre": "Drama",
+    "poster": "https://images.unsplash.com/photo-1582266075480-c11649231f82?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "year": 2023
+  },
+  {
+    "title": "Horor Malam",
+    "genre": "Horor",
+    "poster": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "year": 2022
+  }
+]
