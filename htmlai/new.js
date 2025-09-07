@@ -1,5 +1,5 @@
 window.onload = function() {
-    const videoFile = sessionStorage.getItem('videoFile') || 'URL_VIDEO_ANDA_DI_SINI.mp4'; // Ganti dengan URL video default
+    const videoFile = sessionStorage.getItem('videoFile') || 'URL_VIDEO_ANDA_DI_SINI.mp4';
     const textFile = sessionStorage.getItem('textFile') || "Default Title";
 
     if (videoFile) {
@@ -7,9 +7,10 @@ window.onload = function() {
         const playerInstance = jwplayer("player").setup({
             file: videoFile,
             title: textFile,
+            autostart: false,
             controls: false, // Penting: ini akan menyembunyikan kontrol bawaan
             width: "100%",
-            aspectratio: "16:9", // Menggunakan aspectratio agar video proporsional
+            aspectratio: "16:9",
             displaytitle: true,
             displaydescription: true,
             description: "Kamu Sedang Nonton",
@@ -25,11 +26,10 @@ window.onload = function() {
                 backgroundOpacity: 0,
                 edgeStyle: "raised"
             },
-            // Menambahkan event listener untuk interaksi
+            // Menghapus playerInstance.play() dari sini
             events: {
                 onReady: function() {
-                    console.log("JW Player is ready.");
-                    playerInstance.play();
+                    console.log("JW Player is ready. Video will not autoplay.");
                 }
             }
         });
@@ -67,7 +67,6 @@ window.onload = function() {
         document.addEventListener('keydown', (event) => {
             console.log("Key pressed:", event.key, "with code:", event.keyCode);
             
-            // Fokuskan pada tombol play/pause jika tidak ada yang difokuskan
             if (!document.activeElement.matches('.controls__button')) {
                 playPauseBtn.focus();
             }
@@ -75,11 +74,9 @@ window.onload = function() {
             switch (event.key) {
                 case "Enter":
                 case " " :
-                    // Memicu klik pada tombol yang sedang difokus
                     document.activeElement.click();
                     break;
                 case "ArrowRight":
-                    // Pindah fokus ke tombol selanjutnya
                     if (document.activeElement === rwBtn) {
                         playPauseBtn.focus();
                     } else if (document.activeElement === playPauseBtn) {
@@ -87,7 +84,6 @@ window.onload = function() {
                     }
                     break;
                 case "ArrowLeft":
-                    // Pindah fokus ke tombol sebelumnya
                     if (document.activeElement === ffBtn) {
                         playPauseBtn.focus();
                     } else if (document.activeElement === playPauseBtn) {
