@@ -8,7 +8,7 @@ window.onload = function() {
             file: videoFile,
             width: "100%",
             height: "100%",
-            controls: false,
+            controls: true,
             sharing: false,
             displaytitle: true,
             displaydescription: true,
@@ -27,29 +27,7 @@ window.onload = function() {
                 edgeStyle: "raised"
             }
         });
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const progressBar = document.getElementById('progress-bar');
 
-        // Tambahkan event listener untuk tombol play/pause
-        playPauseBtn.addEventListener('click', () => {
-            if (playerInstance.getState() === 'playing') {
-                playerInstance.pause();
-                playPauseBtn.textContent = 'Play';
-            } else {
-                playerInstance.play();
-                playPauseBtn.textContent = 'Pause';
-            }
-        });
-
-        // Tambahkan event listener untuk progress bar
-        playerInstance.on('time', (data) => {
-            const progress = (data.position / data.duration) * 100;
-            progressBar.value = progress;
-        });
-
-        progressBar.addEventListener('input', () => {
-            const seekPosition = (progressBar.value / 100) * playerInstance.getDuration();
-            playerInstance.seek(seekPosition);
-        });
+        playerInstance.play();
     }
 };

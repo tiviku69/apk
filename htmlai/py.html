@@ -9,35 +9,8 @@
 <body>
 				
     <div tabindex="-1" id="player"></div>
-<div id="custom-controls">
-    <button id="play-pause-btn">Play</button>
-    <input type="range" id="progress-bar" value="0" min="0" max="100">
-    </div>
-    
-    <script>
-    				// Contoh fungsi untuk mendukung remote
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('player').focus();
-});
-        document.addEventListener('keydown', function(event) {
-            switch(event.key) {
-                case "ArrowRight":
-                    playerInstance.seek(playerInstance.getPosition() + 10); // Maju 10 detik
-                    break;
-                case "ArrowLeft":
-                    playerInstance.seek(playerInstance.getPosition() - 10); // Mundur 10 detik
-                    break;
-                
-                case "Enter":
-                    if (playerInstance.getState() === "playing") {
-                        playerInstance.pause(); 
-                    } else {
-                        playerInstance.play(); 
-                    }
-                    break;
-            }
-        });
-    </script>
+    <div id="controls">
+        <div class='progress'> <div class='progress__filled'></div> </div> <button class='controls__button' data-skip='-10'><b>« 10s</b></button> <button class='controls__button toggleButton' title='Toggle Play'><b>▶</b></button> <button class='controls__button' data-skip='25'><b>10s »</b></button> </div>
     <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script><script  src="new.js"></script>
 </body>
 </html>
