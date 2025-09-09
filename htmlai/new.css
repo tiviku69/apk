@@ -41,6 +41,17 @@ body {
   aspect-ratio: 16 / 9; /* Menjaga rasio aspek 16:9 */
 }
 
+#dd {
+  position: absolute;
+  left: 20px;
+  top: 10px;
+  display: flex;
+  width: 60px;
+  height: 30px;
+  padding: 0px;
+  margin: 0px;
+}
+
 #controls {
   position: absolute; /* Mengatur posisi menjadi normal */
   top: auto;

@@ -17,9 +17,7 @@ window.onload = function() {
             skin: {
                 name: "netflix"
             },
-            logo: {
-                file: "https://filmovie.github.io/tiviku/gambar/tiviku.png",
-            },
+            
             captions: {
                 color: "#FFF",
                 fontSize: 14,
