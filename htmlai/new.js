@@ -62,3 +62,12 @@ window.onload = function() {
         }
     }
 };
+
+document.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown' || event.key === 'Enter') {
+            controls.style.display = 'flex';
+        }
+        if (event.key === 'ArrowUp') {
+            controls.style.display = 'none';
+        }
+    });

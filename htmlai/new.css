@@ -60,7 +60,7 @@ body {
   top: auto;
   left: auto;
   transform: none;
-  display: flex; /* Menggunakan Flexbox untuk menata tombol */
+  display: none; /* Menggunakan Flexbox untuk menata tombol */
   justify-content: center;
   align-items: center;
   gap: 15px; /* Memberi jarak antar tombol */
