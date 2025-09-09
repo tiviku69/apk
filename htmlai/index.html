@@ -1,91 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="in">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube TV Klon Sederhana</title>
-    <link rel="stylesheet" href="style.css">
+				<meta charset="UTF-8">
+				<title>Page title</title>
+				<style>
+        
+        .offline-message {
+            display: none;         
+            border: 1px solid #f44336;
+            padding: 0:
+            margin: 0;
+            color: #f44336;
+            background-color: #ffe5e5;
+        }
+    </style>
+				<link rel="stylesheet" href="er.css"></link>
 </head>
 <body>
-    <div class="sidebar">
-        <div class="logo">YouTube TV</div>
-        <ul class="menu">
-            <li class="menu-item focused" data-target="home">Home</li>
-            <li class="menu-item" data-target="live">Live</li>
-            <li class="menu-item" data-target="library">Library</li>
-            <li class="menu-item" data-target="search">Search</li>
-            <li class="menu-item" data-target="settings">Settings</li>
-        </ul>
+				<div id="atas"></div>
+				<div class="offline-message" id="offlineMessage">
+        <h1>Anda Tidak Terhubung ke Internet</h1>
+        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
     </div>
-    <div class="content">
-        <div id="home" class="page active">
-            <h2>Welcome Home!</h2>
-            <div class="carousel">
-                <h3>Recommended for You</h3>
-                <div class="row">
-                    <div class="card focused" data-video-id="vid1">
-                        <img src="https://via.placeholder.com/200x120?text=Video+1" alt="Video 1">
-                        <h4>Video Title 1</h4>
-                    </div>
-                    <div class="card" data-video-id="vid2">
-                        <img src="https://via.placeholder.com/200x120?text=Video+2" alt="Video 2">
-                        <h4>Video Title 2</h4>
-                    </div>
-                    <div class="card" data-video-id="vid3">
-                        <img src="https://via.placeholder.com/200x120?text=Video+3" alt="Video 3">
-                        <h4>Video Title 3</h4>
-                    </div>
-                    <div class="card" data-video-id="vid4">
-                        <img src="https://via.placeholder.com/200x120?text=Video+4" alt="Video 4">
-                        <h4>Video Title 4</h4>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel">
-                <h3>Continue Watching</h3>
-                <div class="row">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/200x120?text=Continue+1" alt="Continue 1">
-                        <h4>Continue Title 1</h4>
-                    </div>
-                    <div class="card">
-                        <img src="https://via.placeholder.com/200x120?text=Continue+2" alt="Continue 2">
-                        <h4>Continue Title 2</h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="live" class="page">
-            <h2>Live Channels</h2>
-            <p>Daftar saluran langsung akan ditampilkan di sini.</p>
-        </div>
-        <div id="library" class="page">
-            <h2>Your Library</h2>
-            <p>Film, acara, dan rekaman Anda.</p>
-        </div>
-        <div id="search" class="page">
-            <h2>Search</h2>
-            <input type="text" placeholder="Cari...">
-        </div>
-        <div id="settings" class="page">
-            <h2>Settings</h2>
-            <p>Pengaturan akun dan aplikasi.</p>
-        </div>
-    </div>
+				<div id="container"></div>
+				
+<script>
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            const atas = document.getElementById('atas');
+            const container = document.getElementById('container');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+                atas.style.display = 'block';
+                container.style.display = 'block';
+            } else {
+                offlineMessage.style.display = 'block';
+                atas.style.display = 'none';
+                container.style.display = 'none';
+            }
+        }
 
-    <div id="video-player-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <div class="video-container">
-                <!-- Video player akan dimuat di sini -->
-                <p>Video Player akan ditampilkan di sini untuk Video ID: <span id="current-video-id"></span></p>
-                <img id="placeholder-video" src="https://via.placeholder.com/640x360?text=Playing+Video" alt="Video Player Placeholder">
-            </div>
-            <h3>Video Title</h3>
-            <p>Video Description here...</p>
-        </div>
-    </div>
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
 
-    <script src="script.js"></script>
+        // Set initial status
+        updateOnlineStatus();
+    </script>
+
+<script src="er.js"></script>
+
 </body>
 </html>
