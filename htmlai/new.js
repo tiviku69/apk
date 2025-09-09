@@ -24,7 +24,7 @@ window.onload = function() {
                 backgroundOpacity: 0,
                 edgeStyle: "raised"
             },
-            // Menghapus playerInstance.play() dari sini
+            
             events: {
                 onReady: function() {
                     console.log("JW Player is ready. Video will not autoplay.");
@@ -60,35 +60,5 @@ window.onload = function() {
                 playerInstance.seek(playerInstance.getPosition() - 10);
             });
         }
-
-        // 3. Tambahkan navigasi remote Android TV
-        document.addEventListener('keydown', (event) => {
-            console.log("Key pressed:", event.key, "with code:", event.keyCode);
-            
-            if (!document.activeElement.matches('.controls__button')) {
-                playPauseBtn.focus();
-            }
-
-            switch (event.key) {
-                case "Enter":
-                case " " :
-                    document.activeElement.click();
-                    break;
-                case "ArrowRight":
-                    if (document.activeElement === rwBtn) {
-                        playPauseBtn.focus();
-                    } else if (document.activeElement === playPauseBtn) {
-                        ffBtn.focus();
-                    }
-                    break;
-                case "ArrowLeft":
-                    if (document.activeElement === ffBtn) {
-                        playPauseBtn.focus();
-                    } else if (document.activeElement === playPauseBtn) {
-                        rwBtn.focus();
-                    }
-                    break;
-            }
-        });
     }
 };
