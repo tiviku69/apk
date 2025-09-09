@@ -41,6 +41,10 @@ body {
   aspect-ratio: 16 / 9; /* Menjaga rasio aspek 16:9 */
 }
 
+#player:focus {
+  outline: none;
+}
+
 #dd {
   position: absolute;
   left: 20px;
