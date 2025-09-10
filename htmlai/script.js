@@ -2,25 +2,73 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.querySelector('.main-content');
     const sidebar = document.querySelector('.sidebar');
     const navItems = document.querySelectorAll('.sidebar .nav-item');
-    const videoCarousels = document.querySelectorAll('.video-carousel');
+    let videoCarousels = document.querySelectorAll('.video-carousel'); // Make it changeable as we'll re-query
+    let allVideoData = []; // To store all loaded video data
 
-    let currentSectionIndex = 0; // 0 for Recommended, 1 for Continue Watching
-    let currentVideoIndexes = Array.from(videoCarousels).map(() => 0); // Current focused video index per carousel
+    let currentSectionIndex = 0;
+    let currentVideoIndexes = []; // Initialize after data load
     let isSidebarOpen = false;
-    let focusMode = 'mainContent'; // 'mainContent' or 'sidebar'
+    let focusMode = 'mainContent';
 
-    // Constants for layout
-    const VIDEO_ITEM_WIDTH = 300; // Must match CSS .video-item width
-    const VIDEO_ITEM_GAP = 30;    // Must match CSS .video-carousel gap
+    const VIDEO_ITEM_WIDTH = 300;
+    const VIDEO_ITEM_GAP = 30;
     const TOTAL_ITEM_WIDTH = VIDEO_ITEM_WIDTH + VIDEO_ITEM_GAP;
 
-    // Initialize focus
+    // Function to fetch video data and render it
+    async function loadVideos() {
+        try {
+            const response = await fetch('cmpr.json'); // Path to your JSON file
+            allVideoData = await response.json();
+
+            // For demonstration, let's put all videos into both carousels for now.
+            // In a real app, you'd filter/categorize them for different sections.
+            const recommendedCarousel = document.getElementById('recommended-carousel');
+            const continueWatchingCarousel = document.getElementById('continue-watching-carousel');
+
+            renderVideos(allVideoData, recommendedCarousel);
+            // Example: For continue watching, you might want a subset or different videos
+            renderVideos(allVideoData.slice(2, 6), continueWatchingCarousel); // Just a slice for example
+
+            // Re-query carousels after they are populated
+            videoCarousels = document.querySelectorAll('.video-carousel');
+            currentVideoIndexes = Array.from(videoCarousels).map(() => 0); // Re-initialize after carousels are ready
+
+            initializeFocus();
+
+        } catch (error) {
+            console.error('Error loading video data:', error);
+        }
+    }
+
+    // Function to render video items into a given carousel element
+    function renderVideos(videos, carouselElement) {
+        carouselElement.innerHTML = ''; // Clear existing content
+        videos.forEach(video => {
+            const videoItem = document.createElement('div');
+            videoItem.classList.add('video-item');
+            videoItem.dataset.link = video.lnk; // Store the video link
+
+            videoItem.innerHTML = `
+                <img src="${video.logo}" alt="Video Thumbnail" class="thumbnail">
+                <div class="duration">${video.dur}</div>
+                <div class="video-title">${video.ttl}</div>
+                <div class="video-meta"></div> `;
+            // Add a badge if 'tiviku' is 'apk' or some other condition
+            if (video.tiviku === 'apk') {
+                 const badge = document.createElement('div');
+                 badge.classList.add('badge');
+                 badge.textContent = 'APK'; // Or 'New' or 'Premium'
+                 videoItem.appendChild(badge);
+            }
+            carouselElement.appendChild(videoItem);
+        });
+    }
+
     function initializeFocus() {
         if (videoCarousels.length > 0) {
             const firstCarouselItems = videoCarousels[currentSectionIndex].querySelectorAll('.video-item');
             if (firstCarouselItems.length > 0) {
                 firstCarouselItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-                // Adjust scroll so the first item is centered (or near center) initially
                 scrollToCenter(videoCarousels[currentSectionIndex], currentVideoIndexes[currentSectionIndex]);
             }
         }
@@ -43,17 +91,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function updateSidebarFocus() {
         removeAllFocus();
-        navItems[currentSectionIndex].classList.add('active');
+        // Ensure currentSectionIndex is within bounds for navItems
+        if (currentSectionIndex < navItems.length) {
+            navItems[currentSectionIndex].classList.add('active');
+        } else {
+            // Fallback or adjust currentSectionIndex if it's out of bounds for sidebar
+            navItems[0].classList.add('active');
+            currentSectionIndex = 0; // Reset for sidebar navigation
+        }
     }
 
-    // New function to scroll the carousel so the focused item is centered
     function scrollToCenter(carousel, focusedIndex) {
         const carouselRect = carousel.getBoundingClientRect();
         const centerOffset = (carouselRect.width / 2) - (VIDEO_ITEM_WIDTH / 2);
 
         const targetScrollLeft = (focusedIndex * TOTAL_ITEM_WIDTH) - centerOffset;
 
-        carousel.scrollLeft = targetScrollLeft;
+        // Ensure scrollLeft doesn't go below 0
+        carousel.scrollLeft = Math.max(0, targetScrollLeft);
     }
 
     // Handle remote key presses
@@ -61,12 +116,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const keyCode = event.keyCode;
         console.log("Key pressed:", keyCode);
 
-        // Prevent default browser scrolling
         event.preventDefault();
 
         if (focusMode === 'mainContent') {
             const currentCarousel = videoCarousels[currentSectionIndex];
             const videoItems = currentCarousel.querySelectorAll('.video-item');
+
+            if (videoItems.length === 0) return; // No videos to navigate
 
             switch (keyCode) {
                 case 37: // Left arrow
@@ -81,9 +137,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
                         scrollToCenter(currentCarousel, currentVideoIndexes[currentSectionIndex]);
                     } else {
-                        // If at the first item and sidebar is not open, open sidebar
                         isSidebarOpen = true;
                         focusMode = 'sidebar';
+                        // When opening sidebar from first item, ensure sidebar active item is aligned
+                        currentSectionIndex = 0; // Assuming 'HOME' is the first sidebar item
                         updateSidebarFocus();
                         sidebar.classList.add('open');
                         mainContent.style.marginLeft = '250px';
@@ -112,7 +169,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case 13: // Enter/Select
-                    console.log(`Playing video: ${videoItems[currentVideoIndexes[currentSectionIndex]].querySelector('.video-title').textContent}`);
+                    const focusedVideoLink = videoItems[currentVideoIndexes[currentSectionIndex]].dataset.link;
+                    console.log(`Playing video from link: ${focusedVideoLink}`);
+                    // Here you would integrate a video player (e.g., HTML5 video, HLS.js for .m3u8)
+                    // For example:
+                    // window.location.href = focusedVideoLink; // This would navigate away
+                    // Or, if you have a video player element:
+                    // const player = document.getElementById('myVideoPlayer');
+                    // player.src = focusedVideoLink;
+                    // player.play();
                     break;
             }
         } else if (focusMode === 'sidebar') {
@@ -139,12 +204,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case 13: // Enter/Select
-                    console.log(`Navigating to section: ${navItems[currentSectionIndex].dataset.section}`);
+                    const selectedSection = navItems[currentSectionIndex].dataset.section;
+                    console.log(`Navigating to section: ${selectedSection}`);
+                    // Here you'd implement logic to change the content shown based on sidebar selection
+                    // For now, it just logs.
                     break;
             }
         }
     });
 
-    // Initial focus setup
-    initializeFocus();
+    // Call loadVideos to start the process
+    loadVideos();
 });
