@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let focusMode = 'mainContent'; // 'mainContent' or 'sidebar'
 
     // Constants for layout (MUST match CSS)
-    const NUM_ITEMS_PER_PAGE = 4; // Number of video items visible in one "page"
+    // NUM_ITEMS_PER_PAGE is no longer directly used for scrolling logic, but still useful for conceptual understanding
+    const NUM_ITEMS_PER_VISIBLE_SCREEN = 4; // Number of video items visible in one "page"
     const VIDEO_ITEM_WIDTH = 280; // Width of a single video item
     const VIDEO_ITEM_GAP = 30;    // Gap between video items
     const TOTAL_ITEM_WIDTH = VIDEO_ITEM_WIDTH + VIDEO_ITEM_GAP;
@@ -32,7 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const continueWatchingCarousel = document.getElementById('continue-watching-carousel');
 
             renderVideos(allVideoData, recommendedCarousel);
-            // Example: For continue watching, you might want a subset or different videos
             renderVideos(allVideoData.slice(2, 6), continueWatchingCarousel);
 
             videoCarousels = document.querySelectorAll('.video-carousel');
@@ -42,12 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Error loading video data:', error);
-            // Fallback for demonstration if JSON fails
-            // renderVideos(dummyVideoData, recommendedCarousel);
-            // renderVideos(dummyVideoData.slice(2, 4), continueWatchingCarousel);
-            // videoCarousels = document.querySelectorAll('.video-carousel');
-            // currentVideoIndexes = Array.from(videoCarousels).map(() => 0);
-            // initializeFocus();
+            // Consider adding dummy data or an error message to the UI here
         }
     }
 
@@ -57,9 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const videoItem = document.createElement('div');
             videoItem.classList.add('video-item');
             videoItem.dataset.link = video.lnk;
-            // No need for video.meta directly as per JSON, but if you want to add
-            // a custom meta field (e.g., "views • age"), you can add it here.
-            // videoItem.dataset.meta = "Some meta info";
 
             videoItem.innerHTML = `
                 <img src="${video.logo}" alt="Video Thumbnail" class="thumbnail">
@@ -83,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const firstCarouselItems = videoCarousels[currentSectionIndex].querySelectorAll('.video-item');
             if (firstCarouselItems.length > 0) {
                 firstCarouselItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-                scrollToPage(videoCarousels[currentSectionIndex], currentVideoIndexes[currentSectionIndex]);
+                // Use the new scrolling function
+                scrollToCenterFocusedItem(videoCarousels[currentSectionIndex], currentVideoIndexes[currentSectionIndex]);
             }
         }
     }
@@ -99,7 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentItems = currentCarousel.querySelectorAll('.video-item');
         if (currentItems.length > 0) {
             currentItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-            scrollToPage(currentCarousel, currentVideoIndexes[currentSectionIndex]);
+            // Use the new scrolling function
+            scrollToCenterFocusedItem(currentCarousel, currentVideoIndexes[currentSectionIndex]);
         }
     }
 
@@ -113,20 +107,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Scrolling Logic ---
-    // Scrolls the carousel to show the page where the focused item is
-    function scrollToPage(carousel, focusedIndex) {
-        const pageNumber = Math.floor(focusedIndex / NUM_ITEMS_PER_PAGE);
-        const targetScrollLeft = pageNumber * (NUM_ITEMS_PER_PAGE * TOTAL_ITEM_WIDTH);
-        carousel.scrollLeft = targetScrollLeft;
+    // --- Scrolling Logic (Updated) ---
+    // Scrolls the carousel to keep the focused item near the center of the visible area
+    function scrollToCenterFocusedItem(carousel, focusedIndex) {
+        const carouselRect = carousel.getBoundingClientRect();
+        // Calculate the position of the focused item's center
+        const itemCenterPosition = focusedIndex * TOTAL_ITEM_WIDTH + (VIDEO_ITEM_WIDTH / 2);
+
+        // Calculate the scroll position needed to bring this item's center to the carousel's view center
+        const targetScrollLeft = itemCenterPosition - (carouselRect.width / 2);
+
+        // Apply scroll, ensuring it doesn't go out of bounds
+        carousel.scrollLeft = Math.max(0, Math.min(targetScrollLeft, carousel.scrollWidth - carouselRect.width));
     }
+
 
     // --- Player Functions ---
     function playVideo(link) {
-        playerOverlay.style.display = 'flex'; // Show the player overlay
+        playerOverlay.style.display = 'flex';
 
         if (hlsInstance) {
-            hlsInstance.destroy(); // Destroy previous HLS instance if any
+            hlsInstance.destroy();
         }
 
         if (Hls.isSupported()) {
@@ -166,16 +167,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeVideoPlayer() {
         if (hlsInstance) {
-            hlsInstance.destroy(); // Clean up HLS.js
+            hlsInstance.destroy();
             hlsInstance = null;
         }
         hlsVideoPlayer.pause();
-        hlsVideoPlayer.src = ""; // Clear source
-        hlsVideoPlayer.load(); // Reload to clear player state
+        hlsVideoPlayer.src = "";
+        hlsVideoPlayer.load();
         playerOverlay.style.display = 'none';
     }
 
-    // Event listener for close button
     closePlayerButton.addEventListener('click', closeVideoPlayer);
 
 
@@ -184,14 +184,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const keyCode = event.keyCode;
         console.log("Key pressed:", keyCode);
 
-        event.preventDefault(); // Prevent default browser actions
+        event.preventDefault();
 
-        // If player is open, only allow 'escape' or 'back' key to close it
         if (playerOverlay.style.display === 'flex') {
-            if (keyCode === 27 || keyCode === 461 || keyCode === 4 || keyCode === 10009) { // Escape, Back on Android TV, Back/Menu key on some remotes
+            if (keyCode === 27 || keyCode === 461 || keyCode === 4 || keyCode === 10009) {
                 closeVideoPlayer();
             }
-            return; // Don't process other keys while player is open
+            return;
         }
 
         if (focusMode === 'mainContent') {
@@ -211,11 +210,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
                         currentVideoIndexes[currentSectionIndex]--;
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-                        scrollToPage(currentCarousel, currentVideoIndexes[currentSectionIndex]);
+                        // Call the updated scrolling function
+                        scrollToCenterFocusedItem(currentCarousel, currentVideoIndexes[currentSectionIndex]);
                     } else { // At the first item, open sidebar
                         isSidebarOpen = true;
                         focusMode = 'sidebar';
-                        currentSectionIndex = 0; // Assuming 'HOME' is the first sidebar item
+                        currentSectionIndex = 0;
                         updateSidebarFocus();
                         sidebar.classList.add('open');
                         mainContent.style.marginLeft = '250px';
@@ -226,14 +226,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
                         currentVideoIndexes[currentSectionIndex]++;
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-                        scrollToPage(currentCarousel, currentVideoIndexes[currentSectionIndex]);
+                        // Call the updated scrolling function
+                        scrollToCenterFocusedItem(currentCarousel, currentVideoIndexes[currentSectionIndex]);
                     }
                     break;
                 case 38: // Up arrow
                     if (currentSectionIndex > 0) {
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
                         currentSectionIndex--;
-                        // Adjust currentVideoIndexes[currentSectionIndex] to align with new row
                         currentVideoIndexes[currentSectionIndex] = Math.min(
                             currentVideoIndexes[currentSectionIndex],
                             videoCarousels[currentSectionIndex].querySelectorAll('.video-item').length - 1
@@ -245,7 +245,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (currentSectionIndex < videoCarousels.length - 1) {
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
                         currentSectionIndex++;
-                         // Adjust currentVideoIndexes[currentSectionIndex] to align with new row
                         currentVideoIndexes[currentSectionIndex] = Math.min(
                             currentVideoIndexes[currentSectionIndex],
                             videoCarousels[currentSectionIndex].querySelectorAll('.video-item').length - 1
@@ -284,12 +283,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 13: // Enter/Select
                     const selectedSection = navItems[currentSectionIndex].dataset.section;
                     console.log(`Navigating to section: ${selectedSection}`);
-                    // You would typically load different content here
                     break;
             }
         }
     });
 
-    // Initial load
     loadVideos();
 });
