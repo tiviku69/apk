@@ -9,13 +9,19 @@ document.addEventListener('DOMContentLoaded', () => {
     let isSidebarOpen = false;
     let focusMode = 'mainContent'; // 'mainContent' or 'sidebar'
 
+    // Constants for layout
+    const VIDEO_ITEM_WIDTH = 300; // Must match CSS .video-item width
+    const VIDEO_ITEM_GAP = 30;    // Must match CSS .video-carousel gap
+    const TOTAL_ITEM_WIDTH = VIDEO_ITEM_WIDTH + VIDEO_ITEM_GAP;
+
     // Initialize focus
     function initializeFocus() {
         if (videoCarousels.length > 0) {
             const firstCarouselItems = videoCarousels[currentSectionIndex].querySelectorAll('.video-item');
             if (firstCarouselItems.length > 0) {
                 firstCarouselItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-                scrollToFocused(videoCarousels[currentSectionIndex], firstCarouselItems[currentVideoIndexes[currentSectionIndex]]);
+                // Adjust scroll so the first item is centered (or near center) initially
+                scrollToCenter(videoCarousels[currentSectionIndex], currentVideoIndexes[currentSectionIndex]);
             }
         }
     }
@@ -31,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const currentItems = currentCarousel.querySelectorAll('.video-item');
         if (currentItems.length > 0) {
             currentItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-            scrollToFocused(currentCarousel, currentItems[currentVideoIndexes[currentSectionIndex]]);
+            scrollToCenter(currentCarousel, currentVideoIndexes[currentSectionIndex]);
         }
     }
 
@@ -40,13 +46,14 @@ document.addEventListener('DOMContentLoaded', () => {
         navItems[currentSectionIndex].classList.add('active');
     }
 
-    function scrollToFocused(carousel, focusedItem) {
-        const itemRect = focusedItem.getBoundingClientRect();
+    // New function to scroll the carousel so the focused item is centered
+    function scrollToCenter(carousel, focusedIndex) {
         const carouselRect = carousel.getBoundingClientRect();
+        const centerOffset = (carouselRect.width / 2) - (VIDEO_ITEM_WIDTH / 2);
 
-        // Calculate the scroll position to keep the focused item near the left
-        const scrollLeft = focusedItem.offsetLeft - (carouselRect.width / 2) + (itemRect.width / 2);
-        carousel.scrollLeft = scrollLeft;
+        const targetScrollLeft = (focusedIndex * TOTAL_ITEM_WIDTH) - centerOffset;
+
+        carousel.scrollLeft = targetScrollLeft;
     }
 
     // Handle remote key presses
@@ -64,23 +71,22 @@ document.addEventListener('DOMContentLoaded', () => {
             switch (keyCode) {
                 case 37: // Left arrow
                     if (isSidebarOpen) {
-                        // If sidebar is open, move focus to sidebar
                         focusMode = 'sidebar';
                         updateSidebarFocus();
                         sidebar.classList.add('open');
-                        mainContent.classList.add('sidebar-open-margin'); // Add margin to main content
+                        mainContent.style.marginLeft = '250px';
                     } else if (currentVideoIndexes[currentSectionIndex] > 0) {
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
                         currentVideoIndexes[currentSectionIndex]--;
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-                        scrollToFocused(currentCarousel, videoItems[currentVideoIndexes[currentSectionIndex]]);
+                        scrollToCenter(currentCarousel, currentVideoIndexes[currentSectionIndex]);
                     } else {
-                        // If at the first item, open sidebar
+                        // If at the first item and sidebar is not open, open sidebar
                         isSidebarOpen = true;
                         focusMode = 'sidebar';
                         updateSidebarFocus();
                         sidebar.classList.add('open');
-                        mainContent.style.marginLeft = '250px'; // Shift main content
+                        mainContent.style.marginLeft = '250px';
                     }
                     break;
                 case 39: // Right arrow
@@ -88,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
                         currentVideoIndexes[currentSectionIndex]++;
                         videoItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
-                        scrollToFocused(currentCarousel, videoItems[currentVideoIndexes[currentSectionIndex]]);
+                        scrollToCenter(currentCarousel, currentVideoIndexes[currentSectionIndex]);
                     }
                     break;
                 case 38: // Up arrow
@@ -106,19 +112,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case 13: // Enter/Select
-                    // Simulate clicking the focused video
                     console.log(`Playing video: ${videoItems[currentVideoIndexes[currentSectionIndex]].querySelector('.video-title').textContent}`);
-                    // Add actual video playback logic here
                     break;
             }
         } else if (focusMode === 'sidebar') {
             switch (keyCode) {
                 case 39: // Right arrow
-                    // Close sidebar and move focus back to main content
                     isSidebarOpen = false;
                     focusMode = 'mainContent';
                     sidebar.classList.remove('open');
-                    mainContent.style.marginLeft = '0'; // Reset main content position
+                    mainContent.style.marginLeft = '0';
                     updateMainContentFocus();
                     break;
                 case 38: // Up arrow
@@ -136,9 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case 13: // Enter/Select
-                    // Simulate clicking the focused sidebar item
                     console.log(`Navigating to section: ${navItems[currentSectionIndex].dataset.section}`);
-                    // Add actual navigation logic here (e.g., load different content)
                     break;
             }
         }
