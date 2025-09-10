@@ -1,191 +1,149 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const menuItems = document.querySelectorAll('.menu-item');
-    const pages = document.querySelectorAll('.page');
-    const cards = document.querySelectorAll('.card');
+    const mainContent = document.querySelector('.main-content');
     const sidebar = document.querySelector('.sidebar');
-    const content = document.querySelector('.content');
+    const navItems = document.querySelectorAll('.sidebar .nav-item');
+    const videoCarousels = document.querySelectorAll('.video-carousel');
 
-    let currentFocusedElement = null;
-    let focusScope = 'sidebar'; // Can be 'sidebar', 'content-row-X', 'modal'
+    let currentSectionIndex = 0; // 0 for Recommended, 1 for Continue Watching
+    let currentVideoIndexes = Array.from(videoCarousels).map(() => 0); // Current focused video index per carousel
+    let isSidebarOpen = false;
+    let focusMode = 'mainContent'; // 'mainContent' or 'sidebar'
 
-    const videoPlayerModal = document.getElementById('video-player-modal');
-    const closeButton = videoPlayerModal.querySelector('.close-button');
-    const currentVideoIdSpan = document.getElementById('current-video-id');
-    const placeholderVideo = document.getElementById('placeholder-video');
-
-    function setFocus(element) {
-        if (currentFocusedElement) {
-            currentFocusedElement.classList.remove('focused');
-        }
-        currentFocusedElement = element;
-        if (currentFocusedElement) {
-            currentFocusedElement.classList.add('focused');
-            currentFocusedElement.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
-        }
-    }
-
-    function switchPage(targetId) {
-        pages.forEach(page => page.classList.remove('active'));
-        document.getElementById(targetId).classList.add('active');
-        // After switching page, reset focus within the new page or sidebar
-        if (targetId === 'home') {
-            setFocus(document.querySelector('#home .card') || menuItems[0]);
-            focusScope = 'content-row-0'; // Assume first row in home
-        } else {
-            setFocus(document.querySelector(`#${targetId} .focused`) || menuItems[0]);
-            focusScope = 'sidebar';
-        }
-    }
-
-    // Initialize: Set focus to the first menu item
-    setFocus(menuItems[0]);
-
-    menuItems.forEach(item => {
-        item.addEventListener('click', () => {
-            const targetId = item.dataset.target;
-            switchPage(targetId);
-            setFocus(item); // Keep focus on the clicked menu item
-            focusScope = 'sidebar';
-        });
-    });
-
-    cards.forEach(card => {
-        card.addEventListener('click', () => {
-            const videoId = card.dataset.videoId;
-            if (videoId) {
-                openVideoPlayer(videoId);
+    // Initialize focus
+    function initializeFocus() {
+        if (videoCarousels.length > 0) {
+            const firstCarouselItems = videoCarousels[currentSectionIndex].querySelectorAll('.video-item');
+            if (firstCarouselItems.length > 0) {
+                firstCarouselItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
+                scrollToFocused(videoCarousels[currentSectionIndex], firstCarouselItems[currentVideoIndexes[currentSectionIndex]]);
             }
-        });
-    });
-
-    closeButton.addEventListener('click', closeVideoPlayer);
-    window.addEventListener('click', (event) => {
-        if (event.target == videoPlayerModal) {
-            closeVideoPlayer();
-        }
-    });
-
-    function openVideoPlayer(videoId) {
-        currentVideoIdSpan.textContent = videoId;
-        // In a real app, you would load the actual video player here
-        // For now, just show the placeholder
-        placeholderVideo.src = `https://via.placeholder.com/640x360?text=Playing+Video+${videoId}`;
-        videoPlayerModal.classList.add('active');
-        focusScope = 'modal';
-        setFocus(closeButton); // Focus on close button when modal opens
-    }
-
-    function closeVideoPlayer() {
-        videoPlayerModal.classList.remove('active');
-        // Return focus to the element that was focused before opening the modal
-        if (currentFocusedElement) {
-            setFocus(currentFocusedElement);
-        } else {
-            setFocus(menuItems[0]);
-            focusScope = 'sidebar';
         }
     }
 
-    // --- Keyboard Navigation for Android TV Remote Simulation ---
+    function removeAllFocus() {
+        document.querySelectorAll('.focused').forEach(el => el.classList.remove('focused'));
+        document.querySelectorAll('.nav-item.active').forEach(el => el.classList.remove('active'));
+    }
+
+    function updateMainContentFocus() {
+        removeAllFocus();
+        const currentCarousel = videoCarousels[currentSectionIndex];
+        const currentItems = currentCarousel.querySelectorAll('.video-item');
+        if (currentItems.length > 0) {
+            currentItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
+            scrollToFocused(currentCarousel, currentItems[currentVideoIndexes[currentSectionIndex]]);
+        }
+    }
+
+    function updateSidebarFocus() {
+        removeAllFocus();
+        navItems[currentSectionIndex].classList.add('active');
+    }
+
+    function scrollToFocused(carousel, focusedItem) {
+        const itemRect = focusedItem.getBoundingClientRect();
+        const carouselRect = carousel.getBoundingClientRect();
+
+        // Calculate the scroll position to keep the focused item near the left
+        const scrollLeft = focusedItem.offsetLeft - (carouselRect.width / 2) + (itemRect.width / 2);
+        carousel.scrollLeft = scrollLeft;
+    }
+
+    // Handle remote key presses
     document.addEventListener('keydown', (event) => {
-        const key = event.key; // For physical keyboard
-        const keyCode = event.keyCode; // For Android TV key codes
+        const keyCode = event.keyCode;
+        console.log("Key pressed:", keyCode);
 
-        let handled = false;
+        // Prevent default browser scrolling
+        event.preventDefault();
 
-        if (focusScope === 'modal') {
-            // Handle navigation within the modal (e.g., close button)
-            if (key === 'Enter' || keyCode === 66 || keyCode === 13) { // Enter or Back (Android TV)
-                closeVideoPlayer();
-                handled = true;
-            }
-        } else if (focusScope === 'sidebar') {
-            const currentIndex = Array.from(menuItems).indexOf(currentFocusedElement);
-            if (key === 'ArrowDown' || keyCode === 20) { // Down arrow
-                if (currentIndex < menuItems.length - 1) {
-                    setFocus(menuItems[currentIndex + 1]);
-                    handled = true;
-                }
-            } else if (key === 'ArrowUp' || keyCode === 19) { // Up arrow
-                if (currentIndex > 0) {
-                    setFocus(menuItems[currentIndex - 1]);
-                    handled = true;
-                }
-            } else if (key === 'ArrowRight' || keyCode === 21) { // Right arrow
-                // Move focus to content area if on a page that has focusable content
-                const activePage = document.querySelector('.page.active');
-                if (activePage && activePage.id === 'home') {
-                    const firstCard = activePage.querySelector('.card');
-                    if (firstCard) {
-                        setFocus(firstCard);
-                        focusScope = 'content-row-0'; // Assume first row
-                        handled = true;
+        if (focusMode === 'mainContent') {
+            const currentCarousel = videoCarousels[currentSectionIndex];
+            const videoItems = currentCarousel.querySelectorAll('.video-item');
+
+            switch (keyCode) {
+                case 37: // Left arrow
+                    if (isSidebarOpen) {
+                        // If sidebar is open, move focus to sidebar
+                        focusMode = 'sidebar';
+                        updateSidebarFocus();
+                        sidebar.classList.add('open');
+                        mainContent.classList.add('sidebar-open-margin'); // Add margin to main content
+                    } else if (currentVideoIndexes[currentSectionIndex] > 0) {
+                        videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
+                        currentVideoIndexes[currentSectionIndex]--;
+                        videoItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
+                        scrollToFocused(currentCarousel, videoItems[currentVideoIndexes[currentSectionIndex]]);
+                    } else {
+                        // If at the first item, open sidebar
+                        isSidebarOpen = true;
+                        focusMode = 'sidebar';
+                        updateSidebarFocus();
+                        sidebar.classList.add('open');
+                        mainContent.style.marginLeft = '250px'; // Shift main content
                     }
-                }
-            } else if (key === 'Enter' || keyCode === 23 || keyCode === 66) { // Enter or Select (Android TV) or Back
-                currentFocusedElement.click(); // Simulate click on the focused menu item
-                handled = true;
-            }
-        } else if (focusScope.startsWith('content-row-')) {
-            const currentRowIndex = parseInt(focusScope.split('-')[2]);
-            const rows = document.querySelectorAll('.content .row');
-            if (!rows[currentRowIndex]) return;
-
-            const currentCardsInRow = Array.from(rows[currentRowIndex].querySelectorAll('.card'));
-            const currentIndexInRow = currentCardsInRow.indexOf(currentFocusedElement);
-
-            if (key === 'ArrowRight' || keyCode === 22) { // Right arrow
-                if (currentIndexInRow < currentCardsInRow.length - 1) {
-                    setFocus(currentCardsInRow[currentIndexInRow + 1]);
-                    handled = true;
-                }
-            } else if (key === 'ArrowLeft' || keyCode === 21) { // Left arrow
-                if (currentIndexInRow > 0) {
-                    setFocus(currentCardsInRow[currentIndexInRow - 1]);
-                    handled = true;
-                } else {
-                    // Move focus back to sidebar
-                    setFocus(menuItems.find(item => item.dataset.target === document.querySelector('.page.active').id) || menuItems[0]);
-                    focusScope = 'sidebar';
-                    handled = true;
-                }
-            } else if (key === 'ArrowDown' || keyCode === 20) { // Down arrow
-                if (currentRowIndex < rows.length - 1) {
-                    const nextRow = rows[currentRowIndex + 1];
-                    const firstCardInNextRow = nextRow.querySelector('.card');
-                    if (firstCardInNextRow) {
-                        setFocus(firstCardInNextRow);
-                        focusScope = `content-row-${currentRowIndex + 1}`;
-                        handled = true;
+                    break;
+                case 39: // Right arrow
+                    if (currentVideoIndexes[currentSectionIndex] < videoItems.length - 1) {
+                        videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
+                        currentVideoIndexes[currentSectionIndex]++;
+                        videoItems[currentVideoIndexes[currentSectionIndex]].classList.add('focused');
+                        scrollToFocused(currentCarousel, videoItems[currentVideoIndexes[currentSectionIndex]]);
                     }
-                }
-            } else if (key === 'ArrowUp' || keyCode === 19) { // Up arrow
-                if (currentRowIndex > 0) {
-                    const prevRow = rows[currentRowIndex - 1];
-                    const firstCardInPrevRow = prevRow.querySelector('.card');
-                    if (firstCardInPrevRow) {
-                        setFocus(firstCardInPrevRow);
-                        focusScope = `content-row-${currentRowIndex - 1}`;
-                        handled = true;
+                    break;
+                case 38: // Up arrow
+                    if (currentSectionIndex > 0) {
+                        videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
+                        currentSectionIndex--;
+                        updateMainContentFocus();
                     }
-                } else {
-                    // If at the top row, move focus back to sidebar
-                    setFocus(menuItems.find(item => item.dataset.target === document.querySelector('.page.active').id) || menuItems[0]);
-                    focusScope = 'sidebar';
-                    handled = true;
-                }
-            } else if (key === 'Enter' || keyCode === 23) { // Enter or Select (Android TV)
-                currentFocusedElement.click(); // Simulate click on the focused card
-                handled = true;
+                    break;
+                case 40: // Down arrow
+                    if (currentSectionIndex < videoCarousels.length - 1) {
+                        videoItems[currentVideoIndexes[currentSectionIndex]].classList.remove('focused');
+                        currentSectionIndex++;
+                        updateMainContentFocus();
+                    }
+                    break;
+                case 13: // Enter/Select
+                    // Simulate clicking the focused video
+                    console.log(`Playing video: ${videoItems[currentVideoIndexes[currentSectionIndex]].querySelector('.video-title').textContent}`);
+                    // Add actual video playback logic here
+                    break;
             }
-        }
-
-        if (handled) {
-            event.preventDefault(); // Prevent default browser behavior (e.g., scrolling)
+        } else if (focusMode === 'sidebar') {
+            switch (keyCode) {
+                case 39: // Right arrow
+                    // Close sidebar and move focus back to main content
+                    isSidebarOpen = false;
+                    focusMode = 'mainContent';
+                    sidebar.classList.remove('open');
+                    mainContent.style.marginLeft = '0'; // Reset main content position
+                    updateMainContentFocus();
+                    break;
+                case 38: // Up arrow
+                    if (currentSectionIndex > 0) {
+                        navItems[currentSectionIndex].classList.remove('active');
+                        currentSectionIndex--;
+                        navItems[currentSectionIndex].classList.add('active');
+                    }
+                    break;
+                case 40: // Down arrow
+                    if (currentSectionIndex < navItems.length - 1) {
+                        navItems[currentSectionIndex].classList.remove('active');
+                        currentSectionIndex++;
+                        navItems[currentSectionIndex].classList.add('active');
+                    }
+                    break;
+                case 13: // Enter/Select
+                    // Simulate clicking the focused sidebar item
+                    console.log(`Navigating to section: ${navItems[currentSectionIndex].dataset.section}`);
+                    // Add actual navigation logic here (e.g., load different content)
+                    break;
+            }
         }
     });
 
-    // Helper to identify Android TV remote key codes
-    // You can find a comprehensive list online, but common ones are:
-    // Up: 19, Down: 20, Left: 21, Right: 22, Enter/Select: 23, Back: 4 (or 66 on some devices), Menu: 82
+    // Initial focus setup
+    initializeFocus();
 });
