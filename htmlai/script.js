@@ -17,35 +17,35 @@ document.addEventListener('DOMContentLoaded', () => {
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json"
         },
         {
-            title: "Trending",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/captain.json"
         },
         {
-            title: "Pilihan Editor",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/avat.json"
         },
         {
-            title: "Ghost",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json"
         },
         {
-            title: "Avatar",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json"
         },
         {
-            title: "Squid Game",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/squid.json"
         },
         {
-            title: "Journey",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/journey.json"
         },
         {
-            title: "One Piece",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/one.json"
         },
         {
-            title: "Film MP4",
+            
             url: "https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json"
         }
     ];
