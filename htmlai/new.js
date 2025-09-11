@@ -9,7 +9,7 @@ window.onload = function() {
         const playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
-            autostart: true, // Ubah agar video otomatis diputar saat halaman dimuat
+            autostart: false, // Ubah agar video otomatis diputar saat halaman dimuat
             controls: false, // Kita akan menggunakan kontrol kustom
             width: "100%",
             aspectratio: "16:9",
