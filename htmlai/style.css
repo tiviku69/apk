@@ -160,7 +160,7 @@ header nav ul li.active {
     background-color: #1a1a1a;
     border-radius: 8px;
     overflow: hidden;
-    transform: scale(0.4);
+    transform: scale(0.9);
     transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
     cursor: pointer;
     box-sizing: border-box;
@@ -192,7 +192,7 @@ header nav ul li.active {
 }
 
 .video-card:focus {
-    transform: scale(1.02);
+    transform: scale(1.01);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
     border-color: #fff;
     position: relative;
