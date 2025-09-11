@@ -3,73 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube TV Clone</title>
+    <title>YouTube TV Layout</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo" class="yt-logo-small">
+    <header>
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/256px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo">
+            <span>YouTube</span>
         </div>
-        <ul>
-            <li class="nav-item active" data-section="home">
-                <img src="https://www.svgrepo.com/show/368817/home-solid.svg" alt="Home Icon">
-                <span>HOME</span>
-            </li>
-            <li class="nav-item" data-section="recommended">
-                <img src="https://www.svgrepo.com/show/368817/home-solid.svg" alt="Recommended Icon">
-                <span>Recommended</span>
-            </li>
-            <li class="nav-item" data-section="trending">
-                <img src="https://www.svgrepo.com/show/368817/home-solid.svg" alt="Trending Icon">
-                <span>Trending</span>
-            </li>
-            <li class="nav-item" data-section="subscriptions">
-                <img src="https://www.svgrepo.com/show/368817/home-solid.svg" alt="Subscriptions Icon">
-                <span>Subscriptions</span>
-            </li>
-            <li class="nav-item" data-section="library">
-                <img src="https://www.svgrepo.com/show/368817/home-solid.svg" alt="Library Icon">
-                <span>Library</span>
-            </li>
-            <li class="nav-item" data-section="history">
-                <img src="https://www.svgrepo.com/show/368817/home-solid.svg" alt="History Icon">
-                <span>History</span>
-            </li>
-        </ul>
-    </div>
+        <nav>
+            <ul>
+                <li>Home</li>
+                <li>Recommended</li>
+            </ul>
+        </nav>
+        <div class="user-profile">
+            <img src="https://via.placeholder.com/30" alt="User Profile">
+        </div>
+    </header>
 
     <div class="main-content">
-        <header class="header">
-            <div class="profile-info">
-                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Profile Picture" class="profile-pic">
-                <span class="profile-name">HOME</span>
-            </div>
-            <div class="header-right">
-                <div class="menu-label">Recommended</div>
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1280px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo" class="yt-logo">
-            </div>
-        </header>
+        <aside class="sidebar">
+            <ul>
+                <li class="active">
+                    <img src="https://via.placeholder.com/20" alt="Home">
+                    <span>HOME</span>
+                </li>
+                <li>
+                    <img src="https://via.placeholder.com/20" alt="Trending">
+                    <span>TRENDING</span>
+                </li>
+                <li>
+                    <img src="https://via.placeholder.com/20" alt="Subscriptions">
+                    <span>SUBSCRIPTIONS</span>
+                </li>
+                <li>
+                    <img src="https://via.placeholder.com/20" alt="Library">
+                    <span>LIBRARY</span>
+                </li>
+                <li>
+                    <img src="https://via.placeholder.com/20" alt="History">
+                    <span>HISTORY</span>
+                </li>
+            </ul>
+        </aside>
 
-        <section class="video-section">
-            <h2 class="section-title">Recommended</h2>
-            <div class="video-carousel" id="recommended-carousel">
+        <section class="video-rows">
+            <div class="row-title">Recommended</div>
+            <div class="video-row" id="recommended-row">
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Visit Peru</h3>
+                        <p>Jacob + Katie Schwarz</p>
+                        <p>46M views - 1 yr ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Wonder Woman 1984</h3>
+                        <p>PG-13 | Action & Adventure - 2020</p>
+                        <p>Buy or Rent</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Indian Wedding Makeup Tutorial</h3>
+                        <p>Smitha Deepak</p>
+                        <p>186K views - 3 weeks ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 4</h3>
+                        <p>Description 4</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 5</h3>
+                        <p>Description 5</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 6</h3>
+                        <p>Description 6</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <section class="video-section">
-            <h2 class="section-title">Continue watching</h2>
-            <div class="video-carousel" id="continue-watching-carousel">
+            <div class="row-title">Continue Watching</div>
+            <div class="video-row" id="continue-watching-row">
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 7</h3>
+                        <p>Description 7</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 8</h3>
+                        <p>Description 8</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 9</h3>
+                        <p>Description 9</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 10</h3>
+                        <p>Description 10</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
+                <div class="video-item" tabindex="0">
+                    <img src="https://via.placeholder.com/320x180" alt="Video Thumbnail">
+                    <div class="video-info">
+                        <h3>Video Title 11</h3>
+                        <p>Description 11</p>
+                        <p>Views - Time Ago</p>
+                    </div>
+                </div>
             </div>
         </section>
     </div>
 
-    <div id="playerOverlay" class="player-overlay">
-        <video id="hlsVideoPlayer" controls autoplay></video>
-        <button id="closePlayer" class="close-player-button">X</button>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -3,38 +3,70 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #000;
     color: #fff;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden; /* Prevent scrollbars */
+}
+
+header {
+    display: flex;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #1a1a1a;
+    border-bottom: 1px solid #333;
+}
+
+header .logo {
+    display: flex;
+    align-items: center;
+    margin-right: 40px;
+}
+
+header .logo img {
+    height: 30px;
+    margin-right: 10px;
+}
+
+header .logo span {
+    font-size: 24px;
+    font-weight: bold;
+    color: #fff;
+}
+
+header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
     display: flex;
 }
 
-/* Sidebar */
+header nav ul li {
+    margin-right: 30px;
+    font-size: 18px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+header nav ul li:hover,
+header nav ul li.active {
+    color: #fff;
+}
+
+.user-profile img {
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    margin-left: auto;
+}
+
+.main-content {
+    display: flex;
+    height: calc(100vh - 71px); /* Adjust based on header height */
+}
+
 .sidebar {
-    width: 0; /* Hidden by default */
-    background-color: #202020;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    top: 0;
-    overflow-x: hidden;
-    transition: width 0.3s ease-in-out;
-    padding-top: 20px;
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar.open {
-    width: 250px; /* Open width */
-}
-
-.sidebar-header {
-    padding: 0 20px 20px;
-    text-align: center;
-}
-
-.yt-logo-small {
-    width: 100px;
-    height: auto;
+    width: 250px;
+    padding: 30px 20px;
+    background-color: #1a1a1a;
+    border-right: 1px solid #333;
 }
 
 .sidebar ul {
@@ -43,215 +75,101 @@ body {
     margin: 0;
 }
 
-.sidebar .nav-item {
+.sidebar ul li {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
+    padding: 15px 0;
+    font-size: 18px;
+    color: #aaa;
     cursor: pointer;
     transition: background-color 0.2s;
 }
 
-.sidebar .nav-item img {
-    width: 24px;
-    height: 24px;
-    filter: invert(100%); /* Make icons white */
+.sidebar ul li img {
+    height: 20px;
     margin-right: 15px;
+    filter: invert(70%); /* Make icons visible on dark background */
 }
 
-.sidebar .nav-item span {
-    font-size: 1.1em;
-}
-
-.sidebar .nav-item.active,
-.sidebar .nav-item:hover {
-    background-color: #383838;
+.sidebar ul li.active,
+.sidebar ul li:focus {
     color: #fff;
+    background-color: #333;
+    border-radius: 5px;
+    outline: none; /* Remove default focus outline */
 }
 
-/* Main Content */
-.main-content {
+.sidebar ul li.active img,
+.sidebar ul li:focus img {
+    filter: invert(0%); /* Restore icon color for active item */
+}
+
+.video-rows {
     flex-grow: 1;
-    transition: margin-left 0.3s ease-in-out;
-    margin-left: 0; /* Default position */
-    padding: 20px 40px; /* Add padding for content */
+    padding: 30px 0 30px 30px; /* Adjust padding for visual alignment */
+    overflow-y: auto; /* Allow vertical scrolling for rows */
 }
 
-.sidebar.open + .main-content {
-    margin-left: 250px; /* Adjust main content when sidebar is open */
-}
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-}
-
-.profile-info {
-    display: flex;
-    align-items: center;
-}
-
-.profile-pic {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    margin-right: 15px;
-    border: 2px solid #fff;
-}
-
-.profile-name {
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-.header-right {
-    display: flex;
-    align-items: center;
-}
-
-.menu-label {
-    font-size: 1.2em;
-    font-weight: bold;
-    margin-right: 20px;
-    color: #aaa;
-}
-
-.yt-logo {
-    width: 120px;
-    height: auto;
-}
-
-.video-section {
-    margin-bottom: 50px;
-}
-
-.section-title {
-    font-size: 1.8em;
+.row-title {
+    font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
+    margin-left: 20px; /* Align with video items */
 }
 
-.video-carousel {
+.video-row {
     display: flex;
-    gap: 30px; /* Jarak antar gambar */
-    overflow-x: hidden;
-    padding-bottom: 10px;
+    align-items: center;
+    white-space: nowrap; /* Prevent items from wrapping */
+    margin-bottom: 40px;
     position: relative;
+    overflow-x: hidden; /* Hide overflowing items, will be controlled by JS */
+    padding-left: calc(50% - 160px); /* Center the first item */
+    padding-right: calc(50% - 160px); /* Balance padding */
     scroll-behavior: smooth;
-    /* Ensure content area allows 4 items + gaps */
-    width: calc(4 * (280px + 30px) - 30px); /* 4 items * (width + gap) - last gap */
-    margin: 0 auto; /* Center the carousel if needed */
 }
 
 .video-item {
-    flex: 0 0 280px; /* Lebar baru agar 4 gambar muat */
+    display: inline-block; /* Allows horizontal arrangement */
+    width: 320px; /* Width of the video thumbnail */
+    margin-right: 20px;
     background-color: #1a1a1a;
-    border-radius: 10px;
+    border-radius: 8px;
     overflow: hidden;
-    position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    border: 3px solid transparent; /* Default border */
-    transition: all 0.2s ease-in-out;
-    height: 250px; /* Fixed height for video item container */
+    transform: scale(0.9); /* Slightly smaller when not focused */
+    transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
+    cursor: pointer;
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    border: 3px solid transparent; /* Default transparent border */
 }
 
-.video-item.focused {
-    border-color: #fff; /* Highlight border */
-    transform: scale(1.05); /* Slightly larger */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-}
-
-.thumbnail {
+.video-item img {
     width: 100%;
-    height: 160px; /* Fixed height for thumbnails */
-    object-fit: cover;
+    height: 180px; /* Maintain aspect ratio */
     display: block;
 }
 
-.duration {
-    position: absolute;
-    bottom: 70px; /* Adjusted for new layout */
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
+.video-item .video-info {
+    padding: 15px;
+}
+
+.video-item h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
     color: #fff;
-    padding: 4px 8px;
-    border-radius: 5px;
-    font-size: 0.9em;
 }
 
-.video-title {
-    font-size: 1.1em;
-    font-weight: bold;
-    padding: 10px 15px 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.video-meta {
-    font-size: 0.9em;
+.video-item p {
+    margin: 0;
+    font-size: 14px;
     color: #aaa;
-    padding: 0 15px 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.badge {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    background-color: #cc0000;
-    color: #fff;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.8em;
-    font-weight: bold;
-}
-
-
-/* Video Player Overlay Styles */
-.player-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
-    z-index: 2000;
-    display: none; /* Hidden by default */
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-}
-
-.player-overlay video {
-    width: 90%;
-    max-height: 80%;
-    background-color: #000;
-}
-
-.close-player-button {
-    position: absolute;
-    top: 30px;
-    right: 30px;
-    background-color: #f00;
-    color: #fff;
-    border: none;
-    padding: 12px 18px;
-    cursor: pointer;
-    font-size: 1.2em;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-    transition: background-color 0.2s;
-}
-
-.close-player-button:hover {
-    background-color: #e00;
+.video-item:focus {
+    outline: none;
+    transform: scale(1.05); /* Enlarge when focused */
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    border-color: #fff; /* White border when focused */
+    position: relative;
+    z-index: 10; /* Bring focused item to front */
 }
