@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
     const sidebarItems = document.querySelectorAll('.sidebar .nav-item');
     const videoRows = document.querySelectorAll('.video-row');
 
-    let currentFocusedElement = null; // To keep track of the currently focused element
-    let activeRowIndex = 0; // Index of the current active video row
-    let activeVideoCardIndex = 0; // Index of the current active card in the row
+    let currentFocusedElement = null;
+    let activeRowIndex = 0;
+    let activeVideoCardIndex = 0;
+
+    let isSidebarOpen = false; // Track sidebar state
 
     // --- Helper Functions ---
 
@@ -17,6 +21,17 @@ document.addEventListener('DOMContentLoaded', () => {
         currentFocusedElement = element;
     }
 
+    function toggleSidebar(open) {
+        isSidebarOpen = open;
+        if (open) {
+            sidebar.classList.add('open');
+            mainContent.classList.add('sidebar-visible');
+        } else {
+            sidebar.classList.remove('open');
+            mainContent.classList.remove('sidebar-visible');
+        }
+    }
+
     function scrollRowToCenter(rowElement, cardIndex) {
         const videoCards = Array.from(rowElement.children);
         if (videoCards.length === 0) return;
@@ -24,33 +39,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const cardWidth = videoCards[0].offsetWidth + 20; // Card width + margin-right
         const containerWidth = rowElement.offsetWidth;
 
-        // Calculate the scroll position to center the card
-        // We want the focused card's left edge to be at (containerWidth / 2) - (cardWidth / 2)
         const scrollOffset = (cardIndex * cardWidth) - (containerWidth / 2) + (cardWidth / 2);
-
         rowElement.scrollLeft = Math.max(0, scrollOffset);
     }
 
     function initializeFocus() {
-        if (sidebarItems.length > 0) {
-            setFocus(sidebarItems[0]); // Start with sidebar focused
+        toggleSidebar(false); // Ensure sidebar is closed initially
+
+        // Start focus on the first video card
+        if (videoRows.length > 0 && videoRows[0].children.length > 0) {
+            setFocus(videoRows[0].children[0]);
+            scrollRowToCenter(videoRows[0], 0);
+        } else if (sidebarItems.length > 0) {
+            // Fallback: If no videos, focus sidebar
+            setFocus(sidebarItems[0]);
+            toggleSidebar(true); // Open sidebar if starting focus there
         }
-        // If you prefer to start with video:
-        // if (videoRows.length > 0 && videoRows[0].children.length > 0) {
-        //     setFocus(videoRows[0].children[0]);
-        //     scrollRowToCenter(videoRows[0], 0);
-        // }
     }
 
     // --- Event Listener for Keyboard/Remote ---
 
     document.addEventListener('keydown', (event) => {
-        event.preventDefault(); // Prevent default browser actions (like scrolling)
+        event.preventDefault();
 
         const focusedElement = document.activeElement;
 
         // --- Sidebar Navigation ---
-        if (focusedElement.closest('.sidebar')) {
+        if (isSidebarOpen && focusedElement.closest('.sidebar')) {
             const currentSidebarIndex = Array.from(sidebarItems).indexOf(focusedElement);
             switch (event.key) {
                 case 'ArrowDown':
@@ -64,11 +79,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 case 'ArrowRight':
-                    // Move to the first video card of the current active row
+                    // Close sidebar and move focus to video content
+                    toggleSidebar(false);
                     if (videoRows.length > 0) {
                         const targetRow = videoRows[activeRowIndex];
                         if (targetRow && targetRow.children.length > 0) {
-                            // Ensure activeVideoCardIndex is valid for the target row
                             activeVideoCardIndex = Math.min(activeVideoCardIndex, targetRow.children.length - 1);
                             setFocus(targetRow.children[activeVideoCardIndex]);
                             scrollRowToCenter(targetRow, activeVideoCardIndex);
@@ -99,49 +114,40 @@ document.addEventListener('DOMContentLoaded', () => {
                         setFocus(videoCards[activeVideoCardIndex]);
                         scrollRowToCenter(currentVideoRow, activeVideoCardIndex);
                     } else {
-                        // Move to sidebar if at the beginning of the row
-                        if (sidebarItems.length > 0) {
-                            setFocus(sidebarItems[0]); // You might want to focus on the active sidebar item
-                        }
+                        // At the first item of a row, open the sidebar
+                        toggleSidebar(true);
+                        setFocus(sidebarItems[0]); // Focus on the first sidebar item
                     }
                     break;
                 case 'ArrowDown':
                     if (currentRowIndexInSections < videoRows.length - 1) {
                         activeRowIndex = currentRowIndexInSections + 1;
                         const nextRow = videoRows[activeRowIndex];
-                        // Ensure activeVideoCardIndex is valid for the next row
                         activeVideoCardIndex = Math.min(activeVideoCardIndex, nextRow.children.length - 1);
                         if (nextRow.children.length > 0) {
                             setFocus(nextRow.children[activeVideoCardIndex]);
                             scrollRowToCenter(nextRow, activeVideoCardIndex);
                         }
-                        // Scroll the main content to bring the new row into view if it's far down
-                        nextRow.closest('.video-sections').scrollTop = nextRow.offsetTop - 100; // Adjust offset as needed
+                        nextRow.closest('.video-sections').scrollTop = nextRow.offsetTop - 100;
                     }
                     break;
                 case 'ArrowUp':
                     if (currentRowIndexInSections > 0) {
                         activeRowIndex = currentRowIndexInSections - 1;
                         const prevRow = videoRows[activeRowIndex];
-                        // Ensure activeVideoCardIndex is valid for the previous row
                         activeVideoCardIndex = Math.min(activeVideoCardIndex, prevRow.children.length - 1);
                         if (prevRow.children.length > 0) {
                             setFocus(prevRow.children[activeVideoCardIndex]);
                             scrollRowToCenter(prevRow, activeVideoCardIndex);
                         }
-                        // Scroll the main content to bring the new row into view
                         prevRow.closest('.video-sections').scrollTop = prevRow.offsetTop - 100;
                     } else {
-                        // Move to sidebar if at the first row
-                        if (sidebarItems.length > 0) {
-                            setFocus(sidebarItems[0]); // Focus on the first sidebar item (Home)
-                        }
+                        // If at the first row and trying to go up, do nothing or focus header if desired
                     }
                     break;
             }
         } else {
-            // If no specific element is focused (e.g., initial load or lost focus),
-            // move focus to the default starting point.
+            // Fallback for when focus is lost or at the very beginning
             initializeFocus();
         }
     });
