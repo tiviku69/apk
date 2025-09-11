@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // ... (kode helper functions lainnya sama seperti sebelumnya) ...
+    // ... (Semua kode helper functions dan setup awal tetap sama) ...
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
     const sidebarItems = document.querySelectorAll('.sidebar .nav-item');
@@ -112,7 +112,6 @@ document.addEventListener('DOMContentLoaded', () => {
         await Promise.all(fetchPromises);
     }
     
-    // ... (kode fungsi-fungsi lain seperti setFocus, toggleSidebar, dll. sama seperti sebelumnya) ...
     function setFocus(element) {
         if (currentFocusedElement) {
             currentFocusedElement.classList.remove('active');
@@ -241,17 +240,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         prevRow.closest('.video-sections').scrollTop = prevRow.offsetTop - 100;
                     }
                     break;
-                case 'Enter':
+                case 'Enter': // Handle "Enter" or "OK" button press
                     if (focusedElement.classList.contains('video-card')) {
                         const videoLink = focusedElement.dataset.lnk;
+                        const videoTitle = focusedElement.querySelector('h3').textContent; // Ambil judul dari H3
+
                         if (videoLink) {
-                            console.log("Playing video:", videoLink);
-                            alert(`Memutar: ${focusedElement.querySelector('h3').textContent}\nLink: ${videoLink}`);
+                            // Simpan data ke sessionStorage
+                            sessionStorage.setItem('videoLink', videoLink);
+                            sessionStorage.setItem('videoTitle', videoTitle);
+
+                            // Arahkan ke ply.html
+                            window.location.href = 'ply.html';
                         }
                     }
                     break;
             }
         } else {
+            // Jika fokus hilang atau di luar area video/sidebar, inisialisasi ulang
+            // (Anda mungkin ingin mengubah perilaku ini agar lebih intuitif,
+            // seperti selalu fokus ke sidebar atau video pertama)
             initializeApp();
         }
     });

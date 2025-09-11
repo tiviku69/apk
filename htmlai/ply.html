@@ -3,22 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>tiviku</title>
-    <link rel="stylesheet" href="new.css">
+    <title>Video Player</title>
+    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Prevent scrolling */
+        }
+        #player {
+            width: 100vw;
+            height: 100vh;
+        }
+        .custom-controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            z-index: 1000;
+        }
+        .custom-controls button {
+            background-color: #f00;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 24px;
+            cursor: pointer;
+            border-radius: 5px;
+            outline: none;
+            transition: background-color 0.2s;
+        }
+        .custom-controls button:hover,
+        .custom-controls button:focus {
+            background-color: #c00;
+        }
+        h1 {
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
-    
-    <div tabindex="-1" id="player"></div>
-    
-    <div tabindex="-1" id="dd"><img tabindex="-1" id="im" src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt=""></div>
-    
-    <div id="controls">
-        <button id="rw-btn" class="controls__button"><b>« 10s</b></button>
-        <button id="play-pause-btn" class="controls__button"><b>▶</b></button>
-        <button id="ff-btn" class="controls__button"><b>10s »</b></button>
+    <div id="player"></div>
+
+    <div class="custom-controls" id="player-controls">
+        <button id="rw-btn"><b>«</b></button>
+        <button id="play-pause-btn"><b>▶</b></button>
+        <button id="ff-btn"><b>»</b></button>
     </div>
-    
-    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
-    <script src="new.js"></script>
-</body>
+
+    <script src="new.js"></script> </body>
 </html>
