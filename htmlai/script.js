@@ -253,10 +253,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
                 // ... kode lainnya
-                case 13: // Enter/Select
-                    // Arahkan ke halaman ply.html saat tombol Enter ditekan
-                    window.location.href = 'ply.html';
-                    break;
+case 13: // Enter/Select
+    const focusedVideoItem = videoItems[currentVideoIndexes[currentSectionIndex]];
+    const focusedVideoData = focusedVideoItem.dataset;
+
+    // Simpan data video ke sessionStorage
+    sessionStorage.setItem('videoLink', focusedVideoData.link);
+    sessionStorage.setItem('videoTitle', focusedVideoData.title); // Jika Anda memiliki judul
+    sessionStorage.setItem('videoThumbnail', focusedVideoData.thumbnail); // Jika Anda memiliki gambar
+
+    // Arahkan ke halaman ply.html
+    window.location.href = 'ply.html';
+    break;
 // ... kode lainnya
             }
         } else if (focusMode === 'sidebar') {
