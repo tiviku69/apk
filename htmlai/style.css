@@ -12,6 +12,9 @@ header {
     padding: 20px 40px;
     background-color: #1a1a1a;
     border-bottom: 1px solid #333;
+    position: fixed; /* Fix header at top */
+    width: 100%;
+    z-index: 100;
 }
 
 header .logo {
@@ -60,6 +63,7 @@ header nav ul li.active {
 .main-content {
     display: flex;
     height: calc(100vh - 71px); /* Adjust based on header height */
+    margin-top: 71px; /* Offset for fixed header */
 }
 
 .sidebar {
@@ -75,7 +79,7 @@ header nav ul li.active {
     margin: 0;
 }
 
-.sidebar ul li {
+.sidebar .nav-item { /* Changed from li to .nav-item */
     display: flex;
     align-items: center;
     padding: 15px 0;
@@ -83,93 +87,95 @@ header nav ul li.active {
     color: #aaa;
     cursor: pointer;
     transition: background-color 0.2s;
+    outline: none; /* Remove default focus outline */
+    border-radius: 5px;
 }
 
-.sidebar ul li img {
+.sidebar .nav-item img {
     height: 20px;
     margin-right: 15px;
     filter: invert(70%); /* Make icons visible on dark background */
 }
 
-.sidebar ul li.active,
-.sidebar ul li:focus {
+.sidebar .nav-item.active,
+.sidebar .nav-item:focus {
     color: #fff;
     background-color: #333;
-    border-radius: 5px;
-    outline: none; /* Remove default focus outline */
 }
 
-.sidebar ul li.active img,
-.sidebar ul li:focus img {
+.sidebar .nav-item.active img,
+.sidebar .nav-item:focus img {
     filter: invert(0%); /* Restore icon color for active item */
 }
 
-.video-rows {
+.video-sections {
     flex-grow: 1;
-    padding: 30px 0 30px 30px; /* Adjust padding for visual alignment */
-    overflow-y: auto; /* Allow vertical scrolling for rows */
+    padding-top: 30px;
+    overflow-y: auto; /* Allow vertical scrolling for sections */
+}
+
+.video-row-container {
+    margin-bottom: 40px;
 }
 
 .row-title {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 20px;
-    margin-left: 20px; /* Align with video items */
+    margin-left: 50px; /* Adjust for centering effect */
 }
 
 .video-row {
     display: flex;
-    align-items: center;
     white-space: nowrap; /* Prevent items from wrapping */
-    margin-bottom: 40px;
     position: relative;
     overflow-x: hidden; /* Hide overflowing items, will be controlled by JS */
-    padding-left: calc(50% - 160px); /* Center the first item */
-    padding-right: calc(50% - 160px); /* Balance padding */
     scroll-behavior: smooth;
+    padding: 0 50px; /* Provide padding for the "centering" effect */
 }
 
-.video-item {
-    display: inline-block; /* Allows horizontal arrangement */
-    width: 320px; /* Width of the video thumbnail */
+.video-card { /* Changed from .video-item to .video-card */
+    display: inline-block;
+    width: 320px; /* Fixed width */
     margin-right: 20px;
     background-color: #1a1a1a;
     border-radius: 8px;
     overflow: hidden;
-    transform: scale(0.9); /* Slightly smaller when not focused */
+    transform: scale(0.9);
     transition: transform 0.2s, box-shadow 0.2s, border 0.2s;
     cursor: pointer;
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    border: 3px solid transparent; /* Default transparent border */
+    box-sizing: border-box;
+    border: 3px solid transparent;
+    outline: none; /* Remove default focus outline */
+    flex-shrink: 0; /* Prevent items from shrinking */
 }
 
-.video-item img {
+.video-card img {
     width: 100%;
-    height: 180px; /* Maintain aspect ratio */
+    height: 180px;
     display: block;
 }
 
-.video-item .video-info {
+.video-card .video-details { /* Changed from .video-info to .video-details */
     padding: 15px;
 }
 
-.video-item h3 {
+.video-card h3 {
     margin: 0 0 5px 0;
     font-size: 18px;
     color: #fff;
 }
 
-.video-item p {
+.video-card p {
     margin: 0;
     font-size: 14px;
     color: #aaa;
 }
 
-.video-item:focus {
-    outline: none;
-    transform: scale(1.05); /* Enlarge when focused */
+.video-card:focus {
+    transform: scale(1.05);
     box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-    border-color: #fff; /* White border when focused */
+    border-color: #fff;
     position: relative;
-    z-index: 10; /* Bring focused item to front */
+    z-index: 10;
 }
