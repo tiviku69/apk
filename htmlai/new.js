@@ -7,9 +7,9 @@ window.onload = function() {
     if (videoLink) {
         // 1. Inisialisasi JW Player
         const playerInstance = jwplayer("player").setup({
-            file: videoLink, // Gunakan link video dari sessionStorage
-            title: videoTitle || "Sedang Memutar Film", // Gunakan judul dari sessionStorage
-            autostart: false, // Ubah agar video otomatis diputar
+            file: videoLink,
+            title: videoTitle || "Sedang Memutar Film",
+            autostart: false,
             controls: false,
             width: "100%",
             aspectratio: "16:9",
@@ -67,12 +67,52 @@ window.onload = function() {
     }
 };
 
-// ... (Kode untuk keydown listener tetap sama)
+// ... (Kode untuk keydown listener telah diperbarui)
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowDown' || event.key === 'Enter') {
+    const controls = document.getElementById('controls-wrapper'); // Pastikan id ini benar di HTML
+    const focusableElements = controls.querySelectorAll('button'); // Ambil semua elemen tombol
+    let currentFocusIndex = -1;
+
+    // Temukan elemen yang sedang fokus
+    focusableElements.forEach((el, index) => {
+        if (document.activeElement === el) {
+            currentFocusIndex = index;
+        }
+    });
+
+    // Logika navigasi remote
+    if (event.key === 'ArrowDown') {
         controls.style.display = 'flex';
-    }
-    if (event.key === 'ArrowUp') {
+        // Beri fokus ke tombol pertama jika belum ada yang fokus
+        if (currentFocusIndex === -1 && focusableElements.length > 0) {
+            focusableElements[0].focus();
+        } else {
+            // Pindahkan fokus ke tombol berikutnya
+            let nextIndex = (currentFocusIndex + 1) % focusableElements.length;
+            focusableElements[nextIndex].focus();
+        }
+        event.preventDefault(); // Mencegah scrolling browser
+    } else if (event.key === 'ArrowUp') {
+        // Sembunyikan kontrol dan hapus fokus
         controls.style.display = 'none';
+        if (document.activeElement) {
+            document.activeElement.blur();
+        }
+        event.preventDefault(); // Mencegah scrolling browser
+    } else if (event.key === 'ArrowLeft') {
+        if (currentFocusIndex > 0) {
+            focusableElements[currentFocusIndex - 1].focus();
+        }
+        event.preventDefault();
+    } else if (event.key === 'ArrowRight') {
+        if (currentFocusIndex < focusableElements.length - 1) {
+            focusableElements[currentFocusIndex + 1].focus();
+        }
+        event.preventDefault();
+    } else if (event.key === 'Enter') {
+        if (document.activeElement) {
+            document.activeElement.click();
+        }
+        event.preventDefault();
     }
 });
