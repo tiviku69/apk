@@ -1,58 +1,118 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ... (kode helper functions lainnya sama seperti sebelumnya) ...
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
     const sidebarItems = document.querySelectorAll('.sidebar .nav-item');
-    const videoRowsContainer = document.querySelector('.video-sections');
+    const dynamicVideoSections = document.getElementById('dynamic-video-sections');
 
     let currentFocusedElement = null;
     let activeRowIndex = 0;
     let activeVideoCardIndex = 0;
-
     let isSidebarOpen = false;
 
-    // URL ke file JSON Anda
-    // Jika file JSON ada di folder yang sama, Anda bisa gunakan nama filenya saja.
-    // Contoh: const JSON_URL = 'videos.json';
-    const JSON_URL = 'cmpr.json'; // Ganti dengan URL JSON Anda yang sebenarnya
+    // Definisikan daftar file JSON Anda di sini
+    const JSON_SOURCES = [
+        {
+            title: "Recomendasi",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json"
+        },
+        {
+            title: "Trending",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/captain.json"
+        },
+        {
+            title: "Pilihan Editor",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/avat.json"
+        },
+        {
+            title: "Ghost",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json"
+        },
+        {
+            title: "Avatar",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json"
+        },
+        {
+            title: "Squid Game",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/squid.json"
+        },
+        {
+            title: "Journey",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/journey.json"
+        },
+        {
+            title: "One Piece",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/one.json"
+        },
+        {
+            title: "Film MP4",
+            url: "https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json"
+        }
+    ];
 
-    // --- Helper Functions ---
-
+    // Fungsi untuk membuat elemen video card
     function createVideoCard(video) {
         const videoCard = document.createElement('div');
         videoCard.classList.add('video-card');
-        videoCard.tabIndex = 0; // Make it focusable
-
-        // Tambahkan atribut data-lnk untuk menyimpan link video, berguna saat diklik
+        videoCard.tabIndex = 0;
         videoCard.dataset.lnk = video.lnk;
+
+        const durationHtml = video.dur ? `<span class="duration-overlay">${video.dur}</span>` : '';
 
         videoCard.innerHTML = `
             <img src="${video.logo}" alt="${video.ttl}">
             <div class="video-details">
                 <h3>${video.ttl}</h3>
-                <p>Durasi: ${video.dur}</p>
             </div>
+            ${durationHtml}
         `;
         return videoCard;
     }
 
-    function renderVideoRows(data) {
-        const recommendedRow = document.getElementById('recommended-row');
-        const otherRow = document.getElementById('other-row');
+    // Fungsi utama untuk mengambil dan merender semua baris
+    async function fetchAndRenderRows() {
+        dynamicVideoSections.innerHTML = '';
+        const fetchPromises = JSON_SOURCES.map(async (source, index) => {
+            try {
+                const response = await fetch(source.url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error for ${source.title}! status: ${response.status}`);
+                }
+                const videoData = await response.json();
+                
+                if (videoData.length > 0) {
+                    const rowContainer = document.createElement('div');
+                    rowContainer.classList.add('video-row-container');
 
-        // Clear existing content
-        recommendedRow.innerHTML = '';
-        otherRow.innerHTML = '';
+                    const rowTitle = document.createElement('div');
+                    rowTitle.classList.add('row-title');
+                    rowTitle.textContent = source.title;
+                    rowContainer.appendChild(rowTitle);
 
-        // Example: Distribute videos to different rows
-        data.forEach((video, index) => {
-            if (index < 4) { // First 4 videos to recommended
-                recommendedRow.appendChild(createVideoCard(video));
-            } else { // Others to 'other-row'
-                otherRow.appendChild(createVideoCard(video));
+                    const videoRow = document.createElement('div');
+                    videoRow.classList.add('video-row');
+                    videoRow.id = `video-row-${index}`;
+                    
+                    videoData.forEach(video => {
+                        videoRow.appendChild(createVideoCard(video));
+                    });
+
+                    rowContainer.appendChild(videoRow);
+                    dynamicVideoSections.appendChild(rowContainer);
+                }
+            } catch (error) {
+                console.error(`Error fetching data for ${source.title}:`, error);
+                const errorDiv = document.createElement('div');
+                errorDiv.classList.add('error-message');
+                errorDiv.textContent = `Gagal memuat data untuk '${source.title}'.`;
+                dynamicVideoSections.appendChild(errorDiv);
             }
         });
-    }
 
+        await Promise.all(fetchPromises);
+    }
+    
+    // ... (kode fungsi-fungsi lain seperti setFocus, toggleSidebar, dll. sama seperti sebelumnya) ...
     function setFocus(element) {
         if (currentFocusedElement) {
             currentFocusedElement.classList.remove('active');
@@ -77,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const videoCards = Array.from(rowElement.children);
         if (videoCards.length === 0) return;
 
-        const cardWidth = videoCards[0].offsetWidth + 20; // Card width + margin-right
+        const cardWidth = videoCards[0].offsetWidth + 20;
         const containerWidth = rowElement.offsetWidth;
 
         const scrollOffset = (cardIndex * cardWidth) - (containerWidth / 2) + (cardWidth / 2);
@@ -85,29 +145,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function initializeApp() {
-        toggleSidebar(false); // Ensure sidebar is closed initially
-
-        try {
-            const response = await fetch(JSON_URL);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const videoData = await response.json();
-            renderVideoRows(videoData); // Render videos from fetched JSON
-        } catch (error) {
-            console.error("Error fetching video data:", error);
-            // Tampilkan pesan kesalahan di UI jika perlu
-            const errorDiv = document.createElement('div');
-            errorDiv.classList.add('error-message');
-            errorDiv.textContent = 'Gagal memuat data film. Silakan coba lagi nanti.';
-            videoRowsContainer.innerHTML = ''; // Clear existing content
-            videoRowsContainer.appendChild(errorDiv);
-        }
-
-        // After rendering, get the updated videoRows NodeList
+        toggleSidebar(false);
+        await fetchAndRenderRows();
         const updatedVideoRows = document.querySelectorAll('.video-row');
 
-        // Start focus on the first video card of the first rendered row
         if (updatedVideoRows.length > 0 && updatedVideoRows[0].children.length > 0) {
             setFocus(updatedVideoRows[0].children[0]);
             scrollRowToCenter(updatedVideoRows[0], 0);
@@ -119,15 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Event Listener for Keyboard/Remote ---
-
     document.addEventListener('keydown', (event) => {
         event.preventDefault();
-
         const focusedElement = document.activeElement;
-        const videoRows = document.querySelectorAll('.video-row'); // Get updated list of rows
+        const videoRows = document.querySelectorAll('.video-row');
 
-        // --- Sidebar Navigation ---
         if (isSidebarOpen && focusedElement.closest('.sidebar')) {
             const currentSidebarIndex = Array.from(sidebarItems).indexOf(focusedElement);
             switch (event.key) {
@@ -154,7 +191,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
             }
         }
-        // --- Video Rows Navigation ---
         else if (focusedElement.closest('.video-row')) {
             const currentVideoRow = focusedElement.closest('.video-row');
             const videoCards = Array.from(currentVideoRow.children);
@@ -205,14 +241,11 @@ document.addEventListener('DOMContentLoaded', () => {
                         prevRow.closest('.video-sections').scrollTop = prevRow.offsetTop - 100;
                     }
                     break;
-                case 'Enter': // Handle "Enter" or "OK" button press (simulates clicking a video)
+                case 'Enter':
                     if (focusedElement.classList.contains('video-card')) {
                         const videoLink = focusedElement.dataset.lnk;
                         if (videoLink) {
                             console.log("Playing video:", videoLink);
-                            // Di sini Anda bisa menambahkan logika untuk memutar video
-                            // Misalnya: window.location.href = videoLink; (akan mengarahkan ke link)
-                            // Atau, jika Anda menggunakan video player tertanam, panggil fungsinya.
                             alert(`Memutar: ${focusedElement.querySelector('h3').textContent}\nLink: ${videoLink}`);
                         }
                     }
@@ -222,7 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
             initializeApp();
         }
     });
-
-    // --- Initial setup ---
-    initializeApp(); // Call the async function to start fetching and rendering
+    
+    // Panggil fungsi utama saat halaman dimuat
+    initializeApp();
 });
