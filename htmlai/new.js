@@ -9,7 +9,7 @@ window.onload = function() {
         const playerInstance = jwplayer("player").setup({
             file: videoLink, // Gunakan link video dari sessionStorage
             title: videoTitle || "Sedang Memutar Film", // Gunakan judul dari sessionStorage
-            autostart: true, // Ubah agar video otomatis diputar
+            autostart: false, // Ubah agar video otomatis diputar
             controls: false,
             width: "100%",
             aspectratio: "16:9",
