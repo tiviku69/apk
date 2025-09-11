@@ -161,7 +161,7 @@ header nav ul li.active {
     border-radius: 8px;
     overflow: hidden;
     transform: scale(0.9);
-    transition: transform 0.5s, box-shadow 0.5s, border 0.2s;
+    transition: transform 0.4s, box-shadow 0.4s, border 0.2s;
     cursor: pointer;
     box-sizing: border-box;
     border: 3px solid transparent;
