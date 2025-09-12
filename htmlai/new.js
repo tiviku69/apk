@@ -1,29 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Ambil data dari sessionStorage
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
     const playerControls = document.getElementById('player-controls');
-    const playPauseBtn = document.getElementById('play-pause-btn');
-    const ffBtn = document.getElementById('ff-btn');
-    const rwBtn = document.getElementById('rw-btn');
-    const progressBar = document.getElementById('progress-bar'); // Deklarasikan variabel progress bar
+    const playPauseBtn = document.getElementById('play-pause-btn'); // Pastikan ID ini ada di HTML
+    const ffBtn = document.getElementById('ff-btn'); // Pastikan ID ini ada di HTML
+    const rwBtn = document.getElementById('rw-btn'); // Pastikan ID ini ada di HTML
+    const progressBar = document.getElementById('progress-bar');
+    const loadingSpinner = document.getElementById('loading-spinner'); // Ambil elemen spinner
 
     let playerInstance;
     let controlsTimeout;
 
     if (videoLink) {
-        // Inisialisasi JW Player
         playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
-            autostart: false, // Ubah agar video otomatis diputar saat halaman dimuat
-            controls: false, // Kita akan menggunakan kontrol kustom
+            autostart: false, // Mengubah menjadi true agar video otomatis diputar
+            controls: false,
             width: "100%",
             displaytitle: true,
             displaydescription: true,
             description: "Kamu Sedang Nonton",
             skin: {
-                name: "netflix"
+                name: "seven" // Mengganti skin ke 'seven' atau 'glow' yang umum dan stabil
             },
             captions: {
                 color: "#FFF",
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
             resetControlsTimeout();
         });
 
-        // Tambahkan event listener untuk memperbarui progress bar
         playerInstance.on('time', (data) => {
             if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
@@ -51,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         playerInstance.on('play', () => {
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
+            loadingSpinner.style.display = 'none'; // Sembunyikan spinner saat video mulai diputar
             resetControlsTimeout();
         });
 
@@ -59,13 +58,27 @@ document.addEventListener('DOMContentLoaded', () => {
             clearTimeout(controlsTimeout);
         });
 
+        playerInstance.on('buffering', () => {
+            loadingSpinner.style.display = 'block'; // Tampilkan spinner saat buffering
+            clearTimeout(controlsTimeout); // Jaga kontrol tetap terlihat saat buffering
+        });
+
+        playerInstance.on('bufferChange', (event) => {
+            if (event.reason === 'complete') {
+                 loadingSpinner.style.display = 'none'; // Sembunyikan spinner saat buffering selesai
+                 resetControlsTimeout();
+            }
+        });
+
         playerInstance.on('complete', () => {
             console.log("Video finished playing.");
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
+            loadingSpinner.style.display = 'none'; // Pastikan spinner hilang saat selesai
             clearTimeout(controlsTimeout);
         });
 
         // --- Kustom Kontrol Tombol ---
+        // (Pastikan tombol-tombol ini ada di HTML Anda dengan ID yang benar)
         if (playPauseBtn) {
             playPauseBtn.addEventListener('click', () => {
                 playerInstance.playToggle();
