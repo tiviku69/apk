@@ -16,58 +16,44 @@
         #player {
             width: 100vw;
             height: 100vh;
-            position: absolute; /* Penting untuk tumpukan dengan spinner */
+            position: absolute;
             top: 0;
             left: 0;
         }
+
+        /* Styling for Custom Controls Container (now only contains progress bar) */
         .custom-controls {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            display: none; /* Hidden by default */
-            justify-content: center;
+            padding: 20px 0; /* Adjust padding as buttons are removed */
+            display: none; /* Hidden by default, shown by JS */
+            justify-content: center; /* Center progress bar horizontally */
             align-items: center;
-            gap: 20px;
             z-index: 1000;
+            box-sizing: border-box; /* Ensure padding is included in width */
         }
-        .custom-controls button {
-            background-color: #f00;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 24px;
-            cursor: pointer;
-            border-radius: 5px;
-            outline: none;
-            transition: background-color 0.2s;
-        }
-        .custom-controls button:hover,
-        .custom-controls button:focus {
-            background-color: #c00;
-        }
-        h1 {
-            text-align: center;
-            margin-top: 50px;
-        }
+        /* No button styles needed anymore */
+
+        /* Styling for Progress Bar */
         .progress-bar-container {
-            position: absolute; /* Posisikan relatif terhadap .custom-controls */
-            top: -15px; /* Pindah ke atas tombol */
-            left: 0;
-            width: 100%;
+            width: 90%; /* Make progress bar take up most of the width */
             height: 10px;
             background: rgba(255, 255, 255, 0.3);
+            cursor: pointer; /* Make it clickable for seeking */
+            border-radius: 5px; /* Optional: rounded corners for the bar */
+            overflow: hidden; /* Ensure progress bar stays within container */
         }
         .progress-bar {
             height: 100%;
-            background-color: #f00; /* Warna merah yang sama dengan tombol */
-            width: 0%; /* Dimulai dari 0% */
-            transition: width 0.1s linear; /* Animasi halus saat progres berjalan */
+            background-color: #f00;
+            width: 0%;
+            transition: width 0.1s linear;
         }
 
-        /* Gaya untuk Loading Spinner */
+        /* Styling for Loading Spinner */
         #loading-spinner {
             position: absolute;
             top: 50%;
@@ -75,12 +61,12 @@
             transform: translate(-50%, -50%);
             width: 50px;
             height: 50px;
-            border: 5px solid rgba(255, 0, 0, 0.3); /* Merah transparan */
-            border-top: 5px solid #f00; /* Merah solid untuk bagian bergerak */
+            border: 5px solid rgba(255, 0, 0, 0.3); /* Transparent red border */
+            border-top: 5px solid #f00; /* Solid red for the spinning part */
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            z-index: 1001; /* Pastikan di atas player dan kontrol */
-            display: none; /* Sembunyikan secara default */
+            z-index: 1001; /* Ensure it's above player and controls */
+            display: none; /* Hidden by default, shown by JS */
         }
 
         @keyframes spin {
@@ -91,8 +77,10 @@
 </head>
 <body>
     <div id="player"></div>
-    <div id="loading-spinner"></div> <div class="custom-controls" id="player-controls">
-        <div class="progress-bar-container">
+    <div id="loading-spinner"></div>
+
+    <div class="custom-controls" id="player-controls">
+        <div class="progress-bar-container" id="progress-bar-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
         </div>
