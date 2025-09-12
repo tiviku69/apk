@@ -1,30 +1,28 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Ambil data dari sessionStorage
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
-
-    // Ambil elemen-elemen DOM
     const playerControls = document.getElementById('player-controls');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const ffBtn = document.getElementById('ff-btn');
+    const rwBtn = document.getElementById('rw-btn');
     const progressBar = document.getElementById('progress-bar');
-    const progressBarContainer = document.getElementById('progress-bar-container');
-    const loadingSpinner = document.getElementById('loading-spinner');
+    const loadingSpinner = document.getElementById('loading-spinner'); // Ambil elemen spinner
 
     let playerInstance;
-    let controlsTimeout; // Timeout untuk menyembunyikan kontrol
+    let controlsTimeout;
 
     if (videoLink) {
-        // Inisialisasi JW Player
         playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
-            autostart: false, // Video otomatis diputar saat halaman dimuat
-            controls: false, // Menggunakan kontrol kustom
+            autostart: false, // Mengubah menjadi true agar video otomatis diputar
+            controls: false,
             width: "100%",
             displaytitle: true,
             displaydescription: true,
             description: "Kamu Sedang Nonton",
             skin: {
-                name: "seven" // Menggunakan skin bawaan yang stabil
+                name: "seven" // Mengganti skin ke 'seven' atau 'glow' yang umum dan stabil
             },
             captions: {
                 color: "#FFF",
@@ -36,110 +34,121 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // --- Event Listener JW Player ---
         playerInstance.on('ready', () => {
-            console.log("JW Player is ready and attempting to play.");
-            playerControls.style.display = 'flex'; // Tampilkan kontrol (progress bar)
-            resetControlsTimeout(); // Mulai timer untuk menyembunyikan kontrol
+            console.log("JW Player is ready.");
+            // Karena autostart true, player akan langsung mencoba play
+            // Spinner akan terlihat jika ada buffering awal
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
+            if (playerControls) playerControls.style.display = 'flex';
+            resetControlsTimeout();
         });
 
         playerInstance.on('time', (data) => {
-            // Perbarui progress bar
-            if (data.duration > 0) {
+            if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
             }
         });
 
+        // Tampilkan spinner saat player sedang buffering
         playerInstance.on('buffer', () => {
-            // Tampilkan spinner saat buffering
             loadingSpinner.style.display = 'block';
             console.log("Buffering...");
-            clearTimeout(controlsTimeout); // Jaga kontrol (progress bar) tetap terlihat saat buffering
+            clearTimeout(controlsTimeout); // Jaga kontrol tetap terlihat saat buffering
         });
 
+        // Sembunyikan spinner saat player mulai diputar (setelah buffering selesai)
         playerInstance.on('play', () => {
-            // Sembunyikan spinner
-            loadingSpinner.style.display = 'none';
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
+            loadingSpinner.style.display = 'none'; // Sembunyikan spinner saat video mulai diputar
             console.log("Playing.");
-            resetControlsTimeout(); // Reset timer kontrol
+            resetControlsTimeout();
         });
 
         playerInstance.on('pause', () => {
-            // Sembunyikan spinner
-            loadingSpinner.style.display = 'none';
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
+            loadingSpinner.style.display = 'none'; // Sembunyikan spinner jika di-pause
             console.log("Paused.");
-            clearTimeout(controlsTimeout); // Hentikan timer kontrol saat di-pause
+            clearTimeout(controlsTimeout);
         });
 
         playerInstance.on('complete', () => {
-            // Sembunyikan spinner
             console.log("Video finished playing.");
-            loadingSpinner.style.display = 'none';
-            clearTimeout(controlsTimeout); // Hentikan timer kontrol
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
+            loadingSpinner.style.display = 'none'; // Pastikan spinner hilang saat selesai
+            clearTimeout(controlsTimeout);
         });
 
-        // --- Klik pada Progress Bar untuk Seek ---
-        progressBarContainer.addEventListener('click', (event) => {
-            if (playerInstance && playerInstance.getDuration() > 0) {
-                const rect = progressBarContainer.getBoundingClientRect();
-                const clickX = event.clientX - rect.left;
-                const percentage = (clickX / rect.width);
-                const seekTo = percentage * playerInstance.getDuration();
-                playerInstance.seek(seekTo);
-                resetControlsTimeout(); // Reset timer kontrol setelah seek
-            }
-        });
+        // --- Kustom Kontrol Tombol ---
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', () => {
+                playerInstance.playToggle();
+            });
+        }
+
+        if (ffBtn) {
+            ffBtn.addEventListener('click', () => {
+                playerInstance.seek(playerInstance.getPosition() + 10);
+                resetControlsTimeout();
+            });
+        }
+
+        if (rwBtn) {
+            rwBtn.addEventListener('click', () => {
+                playerInstance.seek(playerInstance.getPosition() - 10);
+                resetControlsTimeout();
+            });
+        }
 
         // --- Kontrol Keyboard ---
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
                 switch (event.key) {
                     case 'Enter':
-                    case ' ': // Spasi untuk play/pause
+                    case ' ':
                         playerInstance.playToggle();
                         break;
-                    case 'ArrowRight': // Panah kanan untuk fast forward
+                    case 'ArrowRight':
                         playerInstance.seek(playerInstance.getPosition() + 10);
                         break;
-                    case 'ArrowLeft': // Panah kiri untuk rewind
+                    case 'ArrowLeft':
                         playerInstance.seek(playerInstance.getPosition() - 10);
                         break;
-                    case 'Escape': // Escape untuk kembali
+                    case 'Escape':
                         window.history.back();
                         break;
                 }
-                resetControlsTimeout(); // Reset timer kontrol setelah interaksi keyboard
+                resetControlsTimeout();
             }
         });
 
         // --- Manajemen Tampilan Kontrol Otomatis ---
         const hideControls = () => {
-            // Sembunyikan kontrol (progress bar) hanya jika player sedang bermain DAN tidak buffering
+            // Sembunyikan kontrol hanya jika player sedang bermain DAN TIDAK buffering
             if (playerControls && playerInstance.getState() === 'playing' && playerInstance.getBuffer() === 100) {
-                playerControls.style.display = 'none';
+                 playerControls.style.display = 'none';
             }
         };
 
         const resetControlsTimeout = () => {
-            clearTimeout(controlsTimeout); // Hapus timeout sebelumnya
-            playerControls.style.display = 'flex'; // Pastikan kontrol terlihat
-
+            clearTimeout(controlsTimeout);
+            if (playerControls) playerControls.style.display = 'flex';
             // Hanya atur timeout untuk menyembunyikan kontrol jika tidak buffering
-            if (playerInstance.getState() !== 'buffering') {
-                controlsTimeout = setTimeout(hideControls, 3000); // Sembunyikan setelah 3 detik
+            if (playerInstance.getState() !== 'buffering') { // Memeriksa state langsung
+                controlsTimeout = setTimeout(hideControls, 3000);
             }
         };
 
-        // Event untuk mendeteksi aktivitas pengguna (mouse, sentuh)
+
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);
+        // JW Player useractive/userinactive events juga memicu resetControlsTimeout
         playerInstance.on('useractive', resetControlsTimeout);
         playerInstance.on('userinactive', hideControls);
 
     } else {
-        // Jika tidak ada video, tampilkan pesan error dan arahkan kembali
-        console.error('No video data found in sessionStorage.');
-        document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama...</h1>';
+        console.error('Tidak ada data video ditemukan di sessionStorage.');
+        document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 3000);
