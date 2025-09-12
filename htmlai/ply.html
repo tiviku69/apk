@@ -16,9 +16,6 @@
         #player {
             width: 100vw;
             height: 100vh;
-            position: absolute; /* Penting untuk tumpukan dengan spinner */
-            top: 0;
-            left: 0;
         }
         .custom-controls {
             position: fixed;
@@ -52,51 +49,34 @@
             text-align: center;
             margin-top: 50px;
         }
-        .progress-bar-container {
-            position: absolute; /* Posisikan relatif terhadap .custom-controls */
-            top: -15px; /* Pindah ke atas tombol */
-            left: 0;
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.3);
-        }
-        .progress-bar {
-            height: 100%;
-            background-color: #f00; /* Warna merah yang sama dengan tombol */
-            width: 0%; /* Dimulai dari 0% */
-            transition: width 0.1s linear; /* Animasi halus saat progres berjalan */
-        }
+.progress-bar-container {
+    position: absolute; /* Posisikan relatif terhadap .custom-controls */
+    top: -15px; /* Pindah ke atas tombol */
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+}
 
-        /* Gaya untuk Loading Spinner */
-        #loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 0, 0, 0.3); /* Merah transparan */
-            border-top: 5px solid #f00; /* Merah solid untuk bagian bergerak */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            z-index: 1001; /* Pastikan di atas player dan kontrol */
-            display: none; /* Sembunyikan secara default */
-        }
-
-        @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
-        }
+.progress-bar {
+    height: 100%;
+    background-color: #f00; /* Warna merah yang sama dengan tombol */
+    width: 0%; /* Dimulai dari 0% */
+    transition: width 0.1s linear; /* Animasi halus saat progres berjalan */
+}
     </style>
 </head>
 <body>
     <div id="player"></div>
-    <div id="loading-spinner"></div> <div class="custom-controls" id="player-controls">
-        <div class="progress-bar-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        </div>
 
-    <script src="new.js"></script>
-</body>
+    <div class="custom-controls" id="player-controls">
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+    <button id="rw-btn"><b>«</b></button>
+    <button id="play-pause-btn"><b>▶</b></button>
+    <button id="ff-btn"><b>»</b></button>
+</div>
+
+    <script src="new.js"></script> </body>
 </html>
