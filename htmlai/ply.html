@@ -49,16 +49,34 @@
             text-align: center;
             margin-top: 50px;
         }
+.progress-bar-container {
+    position: absolute; /* Posisikan relatif terhadap .custom-controls */
+    top: -15px; /* Pindah ke atas tombol */
+    left: 0;
+    width: 100%;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.progress-bar {
+    height: 100%;
+    background-color: #f00; /* Warna merah yang sama dengan tombol */
+    width: 0%; /* Dimulai dari 0% */
+    transition: width 0.1s linear; /* Animasi halus saat progres berjalan */
+}
     </style>
 </head>
 <body>
     <div id="player"></div>
 
     <div class="custom-controls" id="player-controls">
-        <button id="rw-btn"><b>«</b></button>
-        <button id="play-pause-btn"><b>▶</b></button>
-        <button id="ff-btn"><b>»</b></button>
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="progress-bar"></div>
     </div>
+    <button id="rw-btn"><b>«</b></button>
+    <button id="play-pause-btn"><b>▶</b></button>
+    <button id="ff-btn"><b>»</b></button>
+</div>
 
     <script src="new.js"></script> </body>
 </html>
