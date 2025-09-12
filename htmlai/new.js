@@ -1,18 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Ambil data dari sessionStorage
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
     const playerControls = document.getElementById('player-controls');
-    const progressBar = document.getElementById('progress-bar');
+    const playPauseBtn = document.getElementById('play-pause-btn');
+    const ffBtn = document.getElementById('ff-btn');
+    const rwBtn = document.getElementById('rw-btn');
+    const progressBar = document.getElementById('progress-bar'); // Deklarasikan variabel progress bar
 
     let playerInstance;
     let controlsTimeout;
 
     if (videoLink) {
+        // Inisialisasi JW Player
         playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
-            autostart: false,
-            controls: false,
+            autostart: false, // Ubah agar video otomatis diputar saat halaman dimuat
+            controls: false, // Kita akan menggunakan kontrol kustom
             width: "100%",
             displaytitle: true,
             displaydescription: true,
@@ -31,11 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Event Listener JW Player ---
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
             if (playerControls) playerControls.style.display = 'flex';
             resetControlsTimeout();
         });
 
-        // Event listener to update the progress bar
+        // Tambahkan event listener untuk memperbarui progress bar
         playerInstance.on('time', (data) => {
             if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
@@ -44,19 +50,43 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         playerInstance.on('play', () => {
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
             resetControlsTimeout();
         });
 
         playerInstance.on('pause', () => {
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
             clearTimeout(controlsTimeout);
         });
 
         playerInstance.on('complete', () => {
             console.log("Video finished playing.");
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
             clearTimeout(controlsTimeout);
         });
 
-        // --- Keyboard Controls ---
+        // --- Kustom Kontrol Tombol ---
+        if (playPauseBtn) {
+            playPauseBtn.addEventListener('click', () => {
+                playerInstance.playToggle();
+            });
+        }
+
+        if (ffBtn) {
+            ffBtn.addEventListener('click', () => {
+                playerInstance.seek(playerInstance.getPosition() + 10);
+                resetControlsTimeout();
+            });
+        }
+
+        if (rwBtn) {
+            rwBtn.addEventListener('click', () => {
+                playerInstance.seek(playerInstance.getPosition() - 10);
+                resetControlsTimeout();
+            });
+        }
+
+        // --- Kontrol Keyboard ---
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
                 switch (event.key) {
@@ -78,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // --- Automatic Control Display Management ---
+        // --- Manajemen Tampilan Kontrol Otomatis ---
         const hideControls = () => {
             if (playerControls && playerInstance.getState() === 'playing') {
                 playerControls.style.display = 'none';
