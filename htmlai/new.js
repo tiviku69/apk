@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const playPauseBtn = document.getElementById('play-pause-btn');
     const ffBtn = document.getElementById('ff-btn');
     const rwBtn = document.getElementById('rw-btn');
-    const progressBar = document.getElementById('progress-bar'); // Deklarasikan variabel progress bar
+    const progressBar = document.getElementById('progress-bar');
+    const loadingSpinner = document.getElementById('loading-spinner'); // Tambahan: Ambil elemen spinner
 
     let playerInstance;
     let controlsTimeout;
@@ -34,6 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // --- Event Listener JW Player ---
+
+        // Event saat JW Player siap
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
@@ -41,28 +44,40 @@ document.addEventListener('DOMContentLoaded', () => {
             resetControlsTimeout();
         });
 
-        // Tambahkan event listener untuk memperbarui progress bar
+        // Event saat video mulai buffering
+        playerInstance.on('buffer', () => {
+            console.log("Video sedang buffering.");
+            loadingSpinner.style.display = 'block'; // Tampilkan spinner
+        });
+
+        // Event saat video mulai diputar
+        playerInstance.on('play', () => {
+            console.log("Video mulai diputar.");
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
+            loadingSpinner.style.display = 'none'; // Sembunyikan spinner
+            resetControlsTimeout();
+        });
+
+        // Event saat video dijeda
+        playerInstance.on('pause', () => {
+            console.log("Video dijeda.");
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
+            clearTimeout(controlsTimeout);
+        });
+
+        // Event saat video selesai
+        playerInstance.on('complete', () => {
+            console.log("Video selesai diputar.");
+            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
+            clearTimeout(controlsTimeout);
+        });
+
+        // Event untuk memperbarui progress bar
         playerInstance.on('time', (data) => {
             if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
             }
-        });
-
-        playerInstance.on('play', () => {
-            if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
-            resetControlsTimeout();
-        });
-
-        playerInstance.on('pause', () => {
-            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
-            clearTimeout(controlsTimeout);
-        });
-
-        playerInstance.on('complete', () => {
-            console.log("Video finished playing.");
-            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
-            clearTimeout(controlsTimeout);
         });
 
         // --- Kustom Kontrol Tombol ---
