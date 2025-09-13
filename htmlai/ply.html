@@ -16,7 +16,7 @@
         #player {
             width: 100vw;
             height: 100vh;
-            position: absolute; /* Penting untuk tumpukan dengan spinner */
+            position: absolute;
             top: 0;
             left: 0;
         }
@@ -30,7 +30,8 @@
             display: none; /* Hidden by default */
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            flex-direction: column; /* Mengubah arah flex menjadi kolom */
+            gap: 10px; /* Jarak antara progress bar dan tombol */
             z-index: 1000;
         }
         .custom-controls button {
@@ -53,18 +54,23 @@
             margin-top: 50px;
         }
         .progress-bar-container {
-            position: absolute; /* Posisikan relatif terhadap .custom-controls */
-            top: -15px; /* Pindah ke atas tombol */
-            left: 0;
-            width: 100%;
+            width: 90%; /* Mengisi lebar kontainer */
             height: 10px;
             background: rgba(255, 255, 255, 0.3);
+            cursor: pointer; /* Tambahkan agar bisa di-klik */
         }
         .progress-bar {
             height: 100%;
             background-color: #f00; /* Warna merah yang sama dengan tombol */
             width: 0%; /* Dimulai dari 0% */
             transition: width 0.1s linear; /* Animasi halus saat progres berjalan */
+        }
+
+        /* Gaya untuk Tampilan Waktu */
+        #time-display {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
 
         /* Gaya untuk Loading Spinner */
@@ -91,11 +97,12 @@
 </head>
 <body>
     <div id="player"></div>
-    <div id="loading-spinner"></div> <div class="custom-controls" id="player-controls">
-        <div class="progress-bar-container">
+    <div id="loading-spinner"></div>
+    <div class="custom-controls" id="player-controls">
+        <div id="time-display">0:00 / 0:00</div> <div class="progress-bar-container" id="progress-bar-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
-        </div>
+    </div>
 
     <script src="new.js"></script>
 </body>

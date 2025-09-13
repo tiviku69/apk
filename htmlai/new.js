@@ -7,7 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const ffBtn = document.getElementById('ff-btn');
     const rwBtn = document.getElementById('rw-btn');
     const progressBar = document.getElementById('progress-bar');
-    const loadingSpinner = document.getElementById('loading-spinner'); // Tambahan: Ambil elemen spinner
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const timeDisplay = document.getElementById('time-display'); // Tambahan: Ambil elemen waktu
 
     let playerInstance;
     let controlsTimeout;
@@ -17,8 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
         playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
-            autostart: false, // Ubah agar video otomatis diputar saat halaman dimuat
-            controls: false, // Kita akan menggunakan kontrol kustom
+            autostart: true,
+            controls: false,
             width: "100%",
             displaytitle: true,
             displaydescription: true,
@@ -34,9 +35,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // --- Fungsi Pembantu ---
+        const formatTime = (seconds) => {
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
+            return `${minutes}:${paddedSeconds}`;
+        };
+
         // --- Event Listener JW Player ---
 
-        // Event saat JW Player siap
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
@@ -44,39 +52,40 @@ document.addEventListener('DOMContentLoaded', () => {
             resetControlsTimeout();
         });
 
-        // Event saat video mulai buffering
         playerInstance.on('buffer', () => {
             console.log("Video sedang buffering.");
-            loadingSpinner.style.display = 'block'; // Tampilkan spinner
+            loadingSpinner.style.display = 'block';
         });
 
-        // Event saat video mulai diputar
         playerInstance.on('play', () => {
             console.log("Video mulai diputar.");
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
-            loadingSpinner.style.display = 'none'; // Sembunyikan spinner
+            loadingSpinner.style.display = 'none';
             resetControlsTimeout();
         });
 
-        // Event saat video dijeda
         playerInstance.on('pause', () => {
             console.log("Video dijeda.");
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
             clearTimeout(controlsTimeout);
         });
 
-        // Event saat video selesai
         playerInstance.on('complete', () => {
             console.log("Video selesai diputar.");
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
             clearTimeout(controlsTimeout);
         });
 
-        // Event untuk memperbarui progress bar
+        // Perbarui event listener untuk memperbarui progress bar dan waktu
         playerInstance.on('time', (data) => {
             if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
+                
+                // Tambahan: Perbarui tampilan waktu
+                const currentTime = formatTime(data.position);
+                const totalDuration = formatTime(data.duration);
+                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
             }
         });
 
