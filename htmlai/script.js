@@ -129,19 +129,37 @@ document.addEventListener('DOMContentLoaded', () => {
         // Ambil margin-right dari video-card untuk perhitungan akurat
         const cardStyle = window.getComputedStyle(videoCards[0]);
         const cardMarginRight = parseFloat(cardStyle.marginRight);
-        const cardWidth = videoCards[0].offsetWidth + cardMarginRight;
+        const cardWidth = videoCards[0].offsetWidth + cardMarginRight; // Termasuk margin
 
         const containerWidth = rowElement.offsetWidth;
         const paddingLeft = parseFloat(window.getComputedStyle(rowElement).paddingLeft);
+
+        // Posisi highlight yang diinginkan (misal: 25% dari lebar container)
+        // Disini kita akan mengambil posisi X dari focused element
+        const focusedCard = videoCards[cardIndex];
+        const focusedCardRect = focusedCard.getBoundingClientRect();
+        const rowRect = rowElement.getBoundingClientRect();
+
+        // Hitung posisi horizontal kartu relatif terhadap awal elemen row (termasuk scroll saat ini)
+        const cardRelativeX = focusedCardRect.left - rowRect.left + rowElement.scrollLeft;
+
+        // Hitung target scroll agar kartu yang difokuskan berada pada posisi X yang diinginkan di dalam container
+        // Misalnya, kita ingin kartu berada sekitar 25% dari kiri rowElement (setelah padding)
+        const targetHighlightPosition = 0.25 * (containerWidth - (2 * paddingLeft)); // 25% dari area yang bisa digulir
         
-        // Sesuaikan nilai 0.25 (25%) ini agar sesuai dengan posisi highlight yang Anda inginkan
-        const targetHighlightPosition = containerWidth * 0.25;
+        // Offset tambahan untuk memusatkan highlight pada kartu itu sendiri jika perlu
+        const offsetToCenterHighlight = (focusedCard.offsetWidth / 2);
 
-        // Hitung posisi scroll yang diperlukan
-        const scrollPosition = (cardIndex * cardWidth) - targetHighlightPosition + (cardWidth / 2);
 
-        rowElement.scrollLeft = Math.max(0, scrollPosition);
+        // Hitung posisi scroll yang baru
+        // Kita ingin `cardRelativeX` menjadi `targetHighlightPosition` setelah scrolling
+        const newScrollPosition = cardRelativeX - targetHighlightPosition;
+
+
+        // Pastikan tidak menggulir terlalu jauh ke kiri atau kanan
+        rowElement.scrollLeft = Math.max(0, Math.min(newScrollPosition, rowElement.scrollWidth - containerWidth + (2 * paddingLeft)));
     }
+
 
     async function initializeApp() {
         toggleSidebar(false);
@@ -224,7 +242,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             setFocus(nextRow.children[activeVideoCardIndex]);
                             scrollRowToMaintainFocus(nextRow, activeVideoCardIndex);
                         }
-                        nextRow.closest('.video-sections').scrollTop = nextRow.offsetTop - 100;
+                        // Scroll the main video-sections container to make the new row visible
+                        const targetRowElement = nextRow.closest('.video-row-container');
+                        if (targetRowElement) {
+                             dynamicVideoSections.scrollTo({
+                                top: targetRowElement.offsetTop - (dynamicVideoSections.offsetHeight / 3), // Scroll to about 1/3 down the screen
+                                behavior: 'smooth'
+                            });
+                        }
                     }
                     break;
                 case 'ArrowUp':
@@ -236,7 +261,14 @@ document.addEventListener('DOMContentLoaded', () => {
                             setFocus(prevRow.children[activeVideoCardIndex]);
                             scrollRowToMaintainFocus(prevRow, activeVideoCardIndex);
                         }
-                        prevRow.closest('.video-sections').scrollTop = prevRow.offsetTop - 100;
+                        // Scroll the main video-sections container to make the new row visible
+                        const targetRowElement = prevRow.closest('.video-row-container');
+                        if (targetRowElement) {
+                            dynamicVideoSections.scrollTo({
+                                top: targetRowElement.offsetTop - (dynamicVideoSections.offsetHeight / 3), // Scroll to about 1/3 down the screen
+                                behavior: 'smooth'
+                            });
+                        }
                     }
                     break;
                 case 'Enter': // Handle "Enter" or "OK" button press
