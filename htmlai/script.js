@@ -1,35 +1,45 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
+    const sidebarItems = document.querySelectorAll('.sidebar .nav-item');
     const dynamicVideoSections = document.getElementById('dynamic-video-sections');
-    let sidebarItems = []; // Akan diisi setelah DOMContentLoaded
-
-    const highlightBoxWrapper = document.getElementById('highlight-box-wrapper');
 
     let currentFocusedElement = null;
     let activeRowIndex = 0;
     let activeVideoCardIndex = 0;
     let isSidebarOpen = false;
 
-    // --- Definisi ukuran berdasarkan CSS Anda ---
-    const THUMBNAIL_WIDTH = 320;
-    const THUMBNAIL_GAP = 20;
-    const VIDEO_ROW_HORIZ_PADDING = 50; // Total padding horizontal di video-row
-    const HIGHLIGHT_TARGET_VIEW_INDEX = 1; // Indeks kartu yang ingin di-highlight (0-indexed)
-
     // Definisikan daftar file JSON Anda di sini
-    const JSON_SOURCES = [
-        { title: "Rekomendasi", url: "https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json" },
-        { title: "Captain", url: "https://raw.githubusercontent.com/tiviku69/apk/main/captain.json" },
-        { title: "Avat", url: "https://raw.githubusercontent.com/tiviku69/apk/main/avat.json" },
-        { title: "Ghost", url: "https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json" },
-        { title: "Avatar", url: "https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json" },
-        { title: "Squid", url: "https://raw.githubusercontent.com/tiviku69/apk/main/squid.json" },
-        { title: "Journey", url: "https://raw.githubusercontent.com/tiviku69/apk/main/journey.json" },
-        { title: "One Piece", url: "https://raw.githubusercontent.com/tiviku69/apk/main/one.json" },
-        { title: "MP4", url: "https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json" }
-    ];
+    const JSON_SOURCES = [{
+        title: "Recomendasi",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json"
+    }, {
+        title: "Captain",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/captain.json"
+    }, {
+        title: "Avatar The Last Airbender",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/avat.json"
+    }, {
+        title: "Ghost",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json"
+    }, {
+        title: "Avatar",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json"
+    }, {
+        title: "Squid Game",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/squid.json"
+    }, {
+        title: "Journey to The West",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/journey.json"
+    }, {
+        title: "One Punch Man",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/one.json"
+    }, {
+        title: "Movie & Video",
+        url: "https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json"
+    }];
 
+    // Fungsi untuk membuat elemen video card
     function createVideoCard(video) {
         const videoCard = document.createElement('div');
         videoCard.classList.add('video-card');
@@ -48,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return videoCard;
     }
 
+    // Fungsi utama untuk mengambil dan merender semua baris
     async function fetchAndRenderRows() {
         dynamicVideoSections.innerHTML = '';
         const fetchPromises = JSON_SOURCES.map(async (source, index) => {
@@ -57,11 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw new Error(`HTTP error for ${source.title}! status: ${response.status}`);
                 }
                 const videoData = await response.json();
-                
-                if (videoData && videoData.length > 0) {
+
+                if (videoData.length > 0) {
                     const rowContainer = document.createElement('div');
                     rowContainer.classList.add('video-row-container');
-                    rowContainer.setAttribute('data-row-index', index);
 
                     const rowTitle = document.createElement('div');
                     rowTitle.classList.add('row-title');
@@ -89,236 +99,151 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         await Promise.all(fetchPromises);
-        console.log("Finished rendering rows. Total video rows:", document.querySelectorAll('.video-row').length);
     }
-    
+
     function setFocus(element) {
-        if (currentFocusedElement && currentFocusedElement !== element) {
+        if (currentFocusedElement) {
             currentFocusedElement.classList.remove('active');
         }
         element.focus();
-        if (element.classList.contains('nav-item')) {
-            element.classList.add('active');
-            hideHighlightBox();
-        } else if (element.closest('header')) {
-            hideHighlightBox();
-        } else { // Asumsi itu adalah video-card
-            showHighlightBox(element);
-        }
+        element.classList.add('active');
         currentFocusedElement = element;
-    }
-
-    function showHighlightBox(targetElement) {
-        if (!targetElement || !targetElement.classList.contains('video-card')) {
-            hideHighlightBox();
-            return;
-        }
-
-        const rect = targetElement.getBoundingClientRect();
-        
-        // Atur posisi highlight box berdasarkan rect dari targetElement
-        highlightBoxWrapper.style.left = `${rect.left}px`;
-        highlightBoxWrapper.style.top = `${rect.top}px`;
-        highlightBoxWrapper.style.width = `${rect.width}px`;
-        highlightBoxWrapper.style.height = `${rect.height}px`;
-
-        highlightBoxWrapper.classList.add('visible');
-    }
-
-    function hideHighlightBox() {
-        highlightBoxWrapper.classList.remove('visible');
     }
 
     function toggleSidebar(open) {
         isSidebarOpen = open;
-        sidebar.classList.toggle('open', open);
-        mainContent.classList.toggle('sidebar-visible', open);
+        if (open) {
+            sidebar.classList.add('open');
+            mainContent.classList.add('sidebar-visible');
+        } else {
+            sidebar.classList.remove('open');
+            mainContent.classList.remove('sidebar-visible');
+        }
     }
 
-    function updateVideoFocusAndScroll() {
-        const allVideoRows = dynamicVideoSections.querySelectorAll('.video-row');
-        if (allVideoRows.length === 0) {
-            hideHighlightBox();
-            return;
-        }
+    // Fungsi baru untuk mengelola scroll dengan mempertahankan posisi highlight
+    function scrollRowToMaintainFocus(rowElement, cardIndex) {
+        const videoCards = Array.from(rowElement.children);
+        if (videoCards.length === 0) return;
 
-        // Pastikan activeRowIndex valid
-        activeRowIndex = Math.max(0, Math.min(activeRowIndex, allVideoRows.length - 1));
+        // Ambil margin-right dari video-card untuk perhitungan akurat
+        const cardStyle = window.getComputedStyle(videoCards[0]);
+        const cardMarginRight = parseFloat(cardStyle.marginRight);
+        const cardWidth = videoCards[0].offsetWidth + cardMarginRight;
 
-        const targetVideoRow = allVideoRows[activeRowIndex];
-        const allVideoCardsInRow = Array.from(targetVideoRow.children);
-
-        if (allVideoCardsInRow.length === 0) {
-            hideHighlightBox();
-            return;
-        }
-
-        // Pastikan activeVideoCardIndex valid untuk baris ini
-        activeVideoCardIndex = Math.max(0, Math.min(activeVideoCardIndex, allVideoCardsInRow.length - 1));
-
-        const targetCard = allVideoCardsInRow[activeVideoCardIndex];
-        setFocus(targetCard);
-
-        // --- Logika pergeseran horizontal baris video (transform translateX) ---
-        // Hitung posisi horizontal yang harus dimiliki targetVideoRow
-        // agar activeVideoCardIndex muncul di HIGHLIGHT_TARGET_VIEW_INDEX dari area yang terlihat.
-
-        // Lebar total item yang akan di-highlight
-        const highlightItemWidth = THUMBNAIL_WIDTH + THUMBNAIL_GAP;
+        const containerWidth = rowElement.offsetWidth;
+        const paddingLeft = parseFloat(window.getComputedStyle(rowElement).paddingLeft);
         
-        // Jarak dari awal baris (termasuk padding kiri) hingga tepi kiri kartu aktif
-        const currentCardOffsetFromRowStart = (activeVideoCardIndex * highlightItemWidth);
+        // Sesuaikan nilai 0.25 (25%) ini agar sesuai dengan posisi highlight yang Anda inginkan
+        const targetHighlightPosition = containerWidth * 0.25;
 
-        // Target posisi X (dari kiri viewport video-sections) untuk kartu yang di-highlight
-        // Ini adalah di mana highlight box akan muncul
-        const targetHighlightXInViewport = VIDEO_ROW_HORIZ_PADDING + (HIGHLIGHT_TARGET_VIEW_INDEX * highlightItemWidth);
+        // Hitung posisi scroll yang diperlukan
+        const scrollPosition = (cardIndex * cardWidth) - targetHighlightPosition + (cardWidth / 2);
 
-        // Hitung berapa banyak konten di .video-row yang perlu digeser ke kiri (translateX)
-        // agar kartu aktif berada di posisi highlight target
-        let translateXAmount = currentCardOffsetFromRowStart - (HIGHLIGHT_TARGET_VIEW_INDEX * highlightItemWidth);
-
-        // Batasi translateXAmount agar tidak geser terlalu jauh ke kiri/kanan
-        translateXAmount = Math.max(0, translateXAmount); // Jangan geser ke kanan melewati awal
-
-        const rowTotalContentWidth = allVideoCardsInRow.length * highlightItemWidth;
-        const rowVisibleWidth = targetVideoRow.offsetWidth; // Lebar .video-row yang terlihat
-        
-        // Batas maksimal geser ke kiri agar tidak ada ruang kosong di kanan
-        const maxTranslateAmount = Math.max(0, rowTotalContentWidth - rowVisibleWidth + VIDEO_ROW_HORIZ_PADDING);
-        
-        translateXAmount = Math.min(translateXAmount, maxTranslateAmount);
-        
-        targetVideoRow.style.transform = `translateX(-${translateXAmount}px)`;
-        
-        console.log(`Row ${activeRowIndex}, Card ${activeVideoCardIndex}: translateX(-${translateXAmount}px)`);
-
-        // --- Logika menggulirkan `dynamicVideoSections` secara vertikal ---
-        const focusedRowContainer = targetCard.closest('.video-row-container');
-        if (focusedRowContainer) {
-            const containerRect = dynamicVideoSections.getBoundingClientRect();
-            const rowRect = focusedRowContainer.getBoundingClientRect();
-
-            const scrollPadding = 100;
-
-            if (rowRect.top < containerRect.top + scrollPadding) {
-                dynamicVideoSections.scrollTop += (rowRect.top - (containerRect.top + scrollPadding));
-            } else if (rowRect.bottom > containerRect.bottom - scrollPadding) {
-                dynamicVideoSections.scrollTop += (rowRect.bottom - (containerRect.bottom - scrollPadding));
-            }
-        }
+        rowElement.scrollLeft = Math.max(0, scrollPosition);
     }
 
     async function initializeApp() {
         toggleSidebar(false);
         await fetchAndRenderRows();
-        sidebarItems = document.querySelectorAll('.sidebar .nav-item'); // Pastikan ini diperbarui
-
         const updatedVideoRows = document.querySelectorAll('.video-row');
 
         if (updatedVideoRows.length > 0 && updatedVideoRows[0].children.length > 0) {
+            setFocus(updatedVideoRows[0].children[0]);
+            scrollRowToMaintainFocus(updatedVideoRows[0], 0);
             activeRowIndex = 0;
-            activeVideoCardIndex = HIGHLIGHT_TARGET_VIEW_INDEX; // Mulai fokus di target highlight
-            // Pastikan activeVideoCardIndex tidak melebihi jumlah kartu yang ada
-            if (activeVideoCardIndex >= updatedVideoRows[0].children.length) {
-                activeVideoCardIndex = updatedVideoRows[0].children.length - 1;
-            }
-            updateVideoFocusAndScroll();
+            activeVideoCardIndex = 0;
         } else if (sidebarItems.length > 0) {
             setFocus(sidebarItems[0]);
             toggleSidebar(true);
-        } else {
-             hideHighlightBox();
-             const firstHeaderNavItem = document.querySelector('header nav ul li');
-             if (firstHeaderNavItem) {
-                 setFocus(firstHeaderNavItem);
-             }
         }
     }
 
     document.addEventListener('keydown', (event) => {
         event.preventDefault();
-
         const focusedElement = document.activeElement;
         const videoRows = document.querySelectorAll('.video-row');
-        const allRowContainers = document.querySelectorAll('.video-row-container');
-        
-        sidebarItems = document.querySelectorAll('.sidebar .nav-item'); // Refresh sidebar items
 
-        // Navigasi Sidebar
         if (isSidebarOpen && focusedElement.closest('.sidebar')) {
             const currentSidebarIndex = Array.from(sidebarItems).indexOf(focusedElement);
             switch (event.key) {
                 case 'ArrowDown':
-                    if (currentSidebarIndex < sidebarItems.length - 1) setFocus(sidebarItems[currentSidebarIndex + 1]);
+                    if (currentSidebarIndex < sidebarItems.length - 1) {
+                        setFocus(sidebarItems[currentSidebarIndex + 1]);
+                    }
                     break;
                 case 'ArrowUp':
-                    if (currentSidebarIndex > 0) setFocus(sidebarItems[currentSidebarIndex - 1]);
+                    if (currentSidebarIndex > 0) {
+                        setFocus(sidebarItems[currentSidebarIndex - 1]);
+                    }
                     break;
                 case 'ArrowRight':
                     toggleSidebar(false);
                     if (videoRows.length > 0) {
-                        // Saat kembali dari sidebar, aktifkan kembali kartu yang terakhir difokuskan atau yang pertama
-                        if (activeRowIndex === 0 && activeVideoCardIndex === 0 && videoRows[0].children.length > HIGHLIGHT_TARGET_VIEW_INDEX) {
-                            activeVideoCardIndex = HIGHLIGHT_TARGET_VIEW_INDEX;
+                        const targetRow = videoRows[activeRowIndex];
+                        if (targetRow && targetRow.children.length > 0) {
+                            activeVideoCardIndex = Math.min(activeVideoCardIndex, targetRow.children.length - 1);
+                            setFocus(targetRow.children[activeVideoCardIndex]);
+                            scrollRowToMaintainFocus(targetRow, activeVideoCardIndex);
                         }
-                        updateVideoFocusAndScroll();
-                    } else if (document.activeElement !== document.body) {
-                        document.activeElement.blur();
-                        hideHighlightBox();
                     }
-                    break;
-                case 'Enter':
-                    console.log("Sidebar Item Clicked:", focusedElement.textContent);
                     break;
             }
         } else if (focusedElement.closest('.video-row')) {
-            activeRowIndex = Array.from(allRowContainers).indexOf(focusedElement.closest('.video-row-container'));
-            activeVideoCardIndex = Array.from(focusedElement.closest('.video-row').children).indexOf(focusedElement);
+            const currentVideoRow = focusedElement.closest('.video-row');
+            const videoCards = Array.from(currentVideoRow.children);
+            const currentCardIndex = videoCards.indexOf(focusedElement);
+            const currentRowContainer = focusedElement.closest('.video-row-container');
+            const allRowContainers = document.querySelectorAll('.video-row-container');
+            const currentRowIndexInSections = Array.from(allRowContainers).indexOf(currentRowContainer);
 
             switch (event.key) {
                 case 'ArrowRight':
-                    if (activeVideoCardIndex < videoRows[activeRowIndex].children.length - 1) {
-                        activeVideoCardIndex++;
-                        updateVideoFocusAndScroll();
+                    if (currentCardIndex < videoCards.length - 1) {
+                        activeVideoCardIndex = currentCardIndex + 1;
+                        setFocus(videoCards[activeVideoCardIndex]);
+                        scrollRowToMaintainFocus(currentVideoRow, activeVideoCardIndex);
                     }
                     break;
                 case 'ArrowLeft':
-                    if (activeVideoCardIndex > 0) {
-                        activeVideoCardIndex--;
-                        updateVideoFocusAndScroll();
+                    if (currentCardIndex > 0) {
+                        activeVideoCardIndex = currentCardIndex - 1;
+                        setFocus(videoCards[activeVideoCardIndex]);
+                        scrollRowToMaintainFocus(currentVideoRow, activeVideoCardIndex);
                     } else {
                         toggleSidebar(true);
                         setFocus(sidebarItems[0]);
                     }
                     break;
                 case 'ArrowDown':
-                    if (activeRowIndex < videoRows.length - 1) {
-                        activeRowIndex++;
-                        const nextRowCards = videoRows[activeRowIndex].children;
-                        activeVideoCardIndex = Math.min(activeVideoCardIndex, nextRowCards.length - 1);
-                        updateVideoFocusAndScroll();
+                    if (currentRowIndexInSections < videoRows.length - 1) {
+                        activeRowIndex = currentRowIndexInSections + 1;
+                        const nextRow = videoRows[activeRowIndex];
+                        activeVideoCardIndex = Math.min(activeVideoCardIndex, nextRow.children.length - 1);
+                        if (nextRow.children.length > 0) {
+                            setFocus(nextRow.children[activeVideoCardIndex]);
+                            scrollRowToMaintainFocus(nextRow, activeVideoCardIndex);
+                        }
+                        nextRow.closest('.video-sections').scrollTop = nextRow.offsetTop - 100;
                     }
                     break;
                 case 'ArrowUp':
-                    if (activeRowIndex > 0) {
-                        activeRowIndex--;
-                        const prevRowCards = videoRows[activeRowIndex].children;
-                        activeVideoCardIndex = Math.min(activeVideoCardIndex, prevRowCards.length - 1);
-                        updateVideoFocusAndScroll();
-                    } else {
-                        const firstHeaderNavItem = document.querySelector('header nav ul li');
-                        if (firstHeaderNavItem) {
-                            setFocus(firstHeaderNavItem);
-                        } else {
-                            focusedElement.blur();
-                            hideHighlightBox();
+                    if (currentRowIndexInSections > 0) {
+                        activeRowIndex = currentRowIndexInSections - 1;
+                        const prevRow = videoRows[activeRowIndex];
+                        activeVideoCardIndex = Math.min(activeVideoCardIndex, prevRow.children.length - 1);
+                        if (prevRow.children.length > 0) {
+                            setFocus(prevRow.children[activeVideoCardIndex]);
+                            scrollRowToMaintainFocus(prevRow, activeVideoCardIndex);
                         }
+                        prevRow.closest('.video-sections').scrollTop = prevRow.offsetTop - 100;
                     }
                     break;
-                case 'Enter':
+                case 'Enter': // Handle "Enter" or "OK" button press
                     if (focusedElement.classList.contains('video-card')) {
                         const videoLink = focusedElement.dataset.lnk;
                         const videoTitle = focusedElement.querySelector('h3').textContent;
+
                         if (videoLink) {
                             sessionStorage.setItem('videoLink', videoLink);
                             sessionStorage.setItem('videoTitle', videoTitle);
@@ -327,47 +252,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     break;
             }
-        }
-        else if (focusedElement.closest('header')) {
-            const headerNavItems = Array.from(document.querySelectorAll('header nav ul li'));
-            const userProfileImg = document.querySelector('.user-profile img');
-            const allHeaderFocusable = [...headerNavItems, userProfileImg].filter(el => el);
-            const currentIndexInHeader = allHeaderFocusable.indexOf(focusedElement);
-
-            switch (event.key) {
-                case 'ArrowRight':
-                    if (currentIndexInHeader < allHeaderFocusable.length - 1) {
-                        setFocus(allHeaderFocusable[currentIndexInHeader + 1]);
-                    }
-                    break;
-                case 'ArrowLeft':
-                    if (currentIndexInHeader > 0) {
-                        setFocus(allHeaderFocusable[currentIndexInHeader - 1]);
-                    }
-                    break;
-                case 'ArrowDown':
-                    if (videoRows.length > 0) {
-                        activeRowIndex = 0;
-                        activeVideoCardIndex = HIGHLIGHT_TARGET_VIEW_INDEX; // Saat dari header ke video
-                        if (activeVideoCardIndex >= videoRows[0].children.length) {
-                            activeVideoCardIndex = videoRows[0].children.length - 1;
-                        }
-                        updateVideoFocusAndScroll();
-                    }
-                    break;
-                case 'Enter':
-                    console.log("Header Item Clicked:", focusedElement.textContent);
-                    break;
-            }
-        }
-        else {
-            if (event.key === 'ArrowDown' || event.key === 'ArrowUp' || event.key === 'ArrowLeft' || event.key === 'ArrowRight' || event.key === 'Enter') {
-                 initializeApp();
-            } else {
-                 hideHighlightBox();
-            }
+        } else {
+            initializeApp();
         }
     });
-    
+
     initializeApp();
 });

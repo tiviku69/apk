@@ -3,10 +3,7 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #000;
     color: #fff;
-    overflow: hidden; /* Mencegah scrollbar utama */
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
+    overflow: hidden; /* Prevent scrollbars */
 }
 
 header {
@@ -15,7 +12,7 @@ header {
     padding: 20px 40px;
     background-color: #1a1a1a;
     border-bottom: 1px solid #333;
-    position: fixed;
+    position: fixed; /* Fix header at top */
     width: 100%;
     z-index: 100;
 }
@@ -49,12 +46,10 @@ header nav ul li {
     font-size: 18px;
     cursor: pointer;
     color: #aaa;
-    outline: none;
-    tab-index: 0; /* Pastikan ini bisa difokuskan */
 }
 
 header nav ul li:hover,
-header nav ul li:focus {
+header nav ul li.active {
     color: #fff;
 }
 
@@ -63,33 +58,30 @@ header nav ul li:focus {
     width: 30px;
     border-radius: 50%;
     margin-left: auto;
-    outline: none;
-    tab-index: 0; /* Pastikan ini bisa difokuskan */
 }
 
 .main-content {
     display: flex;
-    height: calc(100vh - 71px); /* Tinggi header 71px (20px padding top+bottom + 1px border-bottom + 30px content height = ~71px) */
-    margin-top: 71px;
-    position: relative;
-    transition: margin-left 0.3s ease-out;
+    height: calc(100vh - 71px); /* Adjust based on header height */
+    margin-top: 71px; /* Offset for fixed header */
+    position: relative; /* For sidebar absolute positioning */
 }
 
 .sidebar {
-    position: absolute;
+    position: absolute; /* Position sidebar absolutely */
     top: 0;
-    left: -250px; /* Hidden by default */
+    left: -250px; /* Hide sidebar by default */
     width: 250px;
     height: 100%;
     padding: 30px 20px;
     background-color: #1a1a1a;
     border-right: 1px solid #333;
-    transition: left 0.3s ease-out;
-    z-index: 90;
+    transition: left 0.3s ease-out; /* Smooth transition for showing/hiding */
+    z-index: 90; /* Below header, above video content */
 }
 
 .sidebar.open {
-    left: 0;
+    left: 0; /* Show sidebar when 'open' class is added */
 }
 
 .sidebar ul {
@@ -130,14 +122,16 @@ header nav ul li:focus {
 .video-sections {
     flex-grow: 1;
     padding-top: 30px;
-    overflow-y: auto; /* Memungkinkan scroll vertikal */
-    transition: margin-left 0.3s ease-out;
-    position: relative; /* Penting untuk konteks positioning jika kita punya elemen absolut di sini */
+    overflow-y: auto;
+    /* Adjust margin-left when sidebar is open to prevent content overlap */
+    margin-left: 0;
+    transition: margin-left 0.3s ease-out; /* Smooth transition */
 }
 
 .main-content.sidebar-visible .video-sections {
-    margin-left: 250px;
+    margin-left: 250px; /* Push content when sidebar is open */
 }
+
 
 .video-row-container {
     margin-bottom: 40px;
@@ -152,11 +146,11 @@ header nav ul li:focus {
 
 .video-row {
     display: flex;
-    position: relative; /* Penting untuk translateX */
-    overflow: hidden; /* Sembunyikan overflow horizontal agar translateX bekerja */
-    padding: 0 50px; /* Padding ini akan menjadi bagian dari perhitungan offset */
-    transition: transform 0.3s ease-in-out; /* Animasi pergeseran */
-    transform: translateX(0); /* Default state */
+    white-space: nowrap;
+    position: relative;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    padding: 0 50px;
 }
 
 .video-card {
@@ -167,25 +161,18 @@ header nav ul li:focus {
     border-radius: 8px;
     overflow: hidden;
     transform: scale(0.9);
-    transition: transform 0.4s; /* Hanya transform untuk card itu sendiri */
+    transition: transform 0.4s, box-shadow 0.4s, border 0.2s;
     cursor: pointer;
     box-sizing: border-box;
-    /* border: 3px solid transparent; */ /* Dihapus, highlight box yang mengurus ini */
-    outline: none; /* Hilangkan outline default browser */
-    flex-shrink: 0; /* Mencegah kartu mengecil */
-    position: relative;
-}
-
-.video-card:focus {
-    transform: scale(1.01); /* Efek membesar saat fokus */
-    /* Highlight visual akan ditangani oleh #highlight-box-wrapper */
+    border: 3px solid transparent;
+    outline: none;
+    flex-shrink: 0;
 }
 
 .video-card img {
     width: 100%;
     height: 180px;
     display: block;
-    object-fit: cover;
 }
 
 .video-card .video-details {
@@ -193,48 +180,21 @@ header nav ul li:focus {
 }
 
 .video-card h3 {
-    margin: 0;
+    margin: 0 0 5px 0;
     font-size: 18px;
     color: #fff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
 
-.duration-overlay {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    background-color: rgba(0, 0, 0, 0.8);
-    color: #fff;
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 12px;
+.video-card p {
+    margin: 0;
+    font-size: 14px;
+    color: #aaa;
 }
 
-.error-message {
-    color: red;
-    text-align: center;
-    padding: 20px;
-}
-
-/* --- Highlight Box untuk Efek Statis --- */
-#highlight-box-wrapper {
-    position: fixed; /* Penting: agar highlight selalu di viewport */
-    top: 0; /* Akan diatur oleh JS */
-    left: 0; /* Akan diatur oleh JS */
-    width: 320px; /* Ukuran dasar sama dengan video-card */
-    height: 180px; /* Ukuran gambar video-card */
-    border: 3px solid white; /* Border putih */
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7); /* Shadow */
-    pointer-events: none; /* Agar tidak menghalangi event pada thumbnail di bawahnya */
-    z-index: 100; /* Pastikan di atas semua konten */
-    transition: transform 0.2s ease, top 0.2s ease, left 0.2s ease, opacity 0.2s ease; /* Transisi untuk pergerakan */
-    opacity: 0; /* Sembunyikan secara default */
-    box-sizing: border-box; /* Agar border tidak menambah ukuran */
-    border-radius: 8px; /* Cocokkan dengan video-card */
-    transform: translate(-50%, -50%) scale(1.01); /* Awalnya sedikit membesar seperti focus */
-}
-#highlight-box-wrapper.visible {
-    opacity: 1; /* Tampilkan saat ada fokus */
+.video-card:focus {
+    transform: scale(1.01);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    border-color: #fff;
+    position: relative;
+    z-index: 10;
 }
