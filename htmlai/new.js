@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
-            autostart: true,
+            autostart: false,
             controls: false,
             width: "100%",
             displaytitle: true,
