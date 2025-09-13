@@ -1,45 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.sidebar');
     const mainContent = document.querySelector('.main-content');
-    const sidebarItems = document.querySelectorAll('.sidebar .nav-item');
+    // AMBIL SEMUA ITEMS TERMASUK PENCARIAN BARU
+    const sidebarNavItems = document.querySelectorAll('.sidebar .nav-item'); 
     const dynamicVideoSections = document.getElementById('dynamic-video-sections');
     const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button'); // Ambil tombol pencarian
+
     let allVideoData = [];
 
     let currentFocusedElement = null;
     let activeRowIndex = 0;
     let activeVideoCardIndex = 0;
     let isSidebarOpen = false;
+    let activeNavIndex = 0; // Indeks untuk navigasi sidebar
 
-    // Definisikan daftar file JSON Anda di sini
-    const JSON_SOURCES = [{
-        title: "Recomendasi",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json"
-    }, {
-        title: "Captain",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/captain.json"
-    }, {
-        title: "Avatar The Last Airbender",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/avat.json"
-    }, {
-        title: "Ghost",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json"
-    }, {
-        title: "Avatar",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json"
-    }, {
-        title: "Squid Game",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/squid.json"
-    }, {
-        title: "Journey to The West",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/journey.json"
-    }, {
-        title: "One Punch Man",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/one.json"
-    }, {
-        title: "Movie & Video",
-        url: "https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json"
-    }];
+    const JSON_SOURCES = [
+        { title: "Recomendasi", url: "https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json" },
+        { title: "Captain", url: "https://raw.githubusercontent.com/tiviku69/apk/main/captain.json" },
+        { title: "Avatar The Last Airbender", url: "https://raw.githubusercontent.com/tiviku69/apk/main/avat.json" },
+        { title: "Ghost", url: "https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json" },
+        { title: "Avatar", url: "https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json" },
+        { title: "Squid Game", url: "https://raw.githubusercontent.com/tiviku69/apk/main/squid.json" },
+        { title: "Journey to The West", url: "https://raw.githubusercontent.com/tiviku69/apk/main/journey.json" },
+        { title: "One Punch Man", url: "https://raw.githubusercontent.com/tiviku69/apk/main/one.json" },
+        { title: "Movie & Video", url: "https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json" }
+    ];
 
     // Fungsi untuk membuat elemen video card
     function createVideoCard(video) {
@@ -109,32 +95,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             })
         );
-        // Render all data initially
-        renderVideoSections(allVideoData);
+        renderVideoSections(allVideoData); // Render all data initially
     }
 
     // Fungsi untuk memfilter dan merender hasil pencarian
     function filterAndRender(query) {
         const lowerCaseQuery = query.toLowerCase();
         if (lowerCaseQuery.length === 0) {
-            // If query is empty, show all sections again
-            renderVideoSections(allVideoData);
+            renderVideoSections(allVideoData); // Show all sections if query is empty
         } else {
             const filteredData = allVideoData
                 .map(row => {
                     const filteredVideos = row.videos.filter(video =>
                         video.ttl.toLowerCase().includes(lowerCaseQuery)
                     );
-                    return {
-                        title: row.title,
-                        videos: filteredVideos
-                    };
+                    return { title: row.title, videos: filteredVideos };
                 })
                 .filter(row => row.videos.length > 0); // Remove rows with no matches
 
             renderVideoSections(filteredData);
         }
-        // After rendering, try to set initial focus
+        // After rendering, try to set initial focus on the first video card
         const updatedVideoRows = document.querySelectorAll('.video-row');
         if (updatedVideoRows.length > 0 && updatedVideoRows[0].children.length > 0) {
             setFocus(updatedVideoRows[0].children[0]);
@@ -146,9 +127,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Add event listener for search input
+    // Event listener untuk input pencarian
     searchInput.addEventListener('keyup', (event) => {
         filterAndRender(event.target.value);
+    });
+    // Event listener untuk tombol pencarian (opsional, untuk klik mouse)
+    searchButton.addEventListener('click', () => {
+        filterAndRender(searchInput.value);
     });
 
     function setFocus(element) {
@@ -186,81 +171,92 @@ document.addEventListener('DOMContentLoaded', () => {
         const rowRect = rowElement.getBoundingClientRect();
 
         const cardRelativeX = focusedCardRect.left - rowRect.left + rowElement.scrollLeft;
-        const targetHighlightPosition = 0.25 * (containerWidth - (2 * paddingLeft));
+        const targetHighlightPosition = 0.25 * (containerWidth - (2 * paddingLeft)); // Usahakan fokus di 25% kiri container
         const newScrollPosition = cardRelativeX - targetHighlightPosition;
 
         rowElement.scrollLeft = Math.max(0, Math.min(newScrollPosition, rowElement.scrollWidth - containerWidth + (2 * paddingLeft)));
     }
 
+    // Fungsi untuk menginisialisasi aplikasi
     async function initializeApp() {
-        toggleSidebar(false);
-        await fetchAllData();
-        const updatedVideoRows = document.querySelectorAll('.video-row');
-        if (updatedVideoRows.length > 0 && updatedVideoRows[0].children.length > 0) {
-            setFocus(updatedVideoRows[0].children[0]);
-            scrollRowToMaintainFocus(updatedVideoRows[0], 0);
-            activeRowIndex = 0;
-            activeVideoCardIndex = 0;
-        } else if (sidebarItems.length > 0) {
-            setFocus(sidebarItems[0]);
-            toggleSidebar(true);
+        toggleSidebar(false); // Tutup sidebar secara default
+        await fetchAllData(); // Ambil semua data
+        
+        // Atur fokus awal ke elemen pertama di sidebar
+        if (sidebarNavItems.length > 0) {
+            setFocus(sidebarNavItems[0]);
+            activeNavIndex = 0;
+            toggleSidebar(true); // Buka sidebar
         }
     }
 
+    // Event listener utama untuk input keyboard/remote
     document.addEventListener('keydown', (event) => {
-        event.preventDefault();
+        event.preventDefault(); // Cegah aksi default browser
         const focusedElement = document.activeElement;
         const videoRows = document.querySelectorAll('.video-row');
         
+        // --- LOGIKA UNTUK INPUT PENCARIAN ---
         if (focusedElement.id === 'search-input') {
             switch (event.key) {
                 case 'ArrowDown':
+                    // Jika menekan panah bawah dari input pencarian, pindah ke video pertama
                     if (videoRows.length > 0 && videoRows[0].children.length > 0) {
-                        toggleSidebar(false);
-                        setFocus(videoRows[0].children[0]);
-                        activeRowIndex = 0;
-                        activeVideoCardIndex = 0;
+                        toggleSidebar(false); // Pastikan sidebar tertutup
+                        setFocus(videoRows[0].children[0]); // Fokus ke video pertama
+                        activeRowIndex = 0; // Set index baris aktif
+                        activeVideoCardIndex = 0; // Set index kartu video aktif
                     }
                     break;
                 case 'Enter':
+                    // Jika menekan Enter, picu pencarian
                     filterAndRender(focusedElement.value);
                     break;
             }
-            return;
+            return; // Hentikan eksekusi jika fokus di search input
         }
 
+        // --- LOGIKA UNTUK SIDEBAR NAVIGASI ---
         if (isSidebarOpen && focusedElement.closest('.sidebar')) {
-            const currentSidebarIndex = Array.from(sidebarItems).indexOf(focusedElement);
             switch (event.key) {
                 case 'ArrowDown':
-                    if (currentSidebarIndex < sidebarItems.length - 1) {
-                        setFocus(sidebarItems[currentSidebarIndex + 1]);
+                    if (activeNavIndex < sidebarNavItems.length - 1) {
+                        activeNavIndex++;
+                        setFocus(sidebarNavItems[activeNavIndex]);
                     }
                     break;
                 case 'ArrowUp':
-                    if (currentSidebarIndex > 0) {
-                        setFocus(sidebarItems[currentSidebarIndex - 1]);
+                    if (activeNavIndex > 0) {
+                        activeNavIndex--;
+                        setFocus(sidebarNavItems[activeNavIndex]);
                     }
                     break;
                 case 'ArrowRight':
-                    toggleSidebar(false);
-                    if (videoRows.length > 0) {
-                        const targetRow = videoRows[activeRowIndex];
-                        if (targetRow && targetRow.children.length > 0) {
-                            activeVideoCardIndex = Math.min(activeVideoCardIndex, targetRow.children.length - 1);
-                            setFocus(targetRow.children[activeVideoCardIndex]);
-                            scrollRowToMaintainFocus(targetRow, activeVideoCardIndex);
+                    // Jika menekan panah kanan saat di sidebar, pindah fokus ke input pencarian
+                    if (searchInput) {
+                        toggleSidebar(false); // Tutup sidebar
+                        setFocus(searchInput); // Fokus ke search input
+                    } else {
+                        // Jika search input tidak ada (seharusnya ada), pindah ke video pertama
+                        if (videoRows.length > 0 && videoRows[0].children.length > 0) {
+                            toggleSidebar(false);
+                            setFocus(videoRows[0].children[0]);
+                            activeRowIndex = 0;
+                            activeVideoCardIndex = 0;
                         }
                     }
                     break;
             }
-        } else if (focusedElement.closest('.video-row')) {
+        } 
+        // --- LOGIKA UNTUK NAVIGASI VIDEO CARDS ---
+        else if (focusedElement.closest('.video-row')) {
             const currentVideoRow = focusedElement.closest('.video-row');
             const videoCards = Array.from(currentVideoRow.children);
             const currentCardIndex = videoCards.indexOf(focusedElement);
             const currentRowContainer = focusedElement.closest('.video-row-container');
             const allRowContainers = document.querySelectorAll('.video-row-container');
             const currentRowIndexInSections = Array.from(allRowContainers).indexOf(currentRowContainer);
+
             switch (event.key) {
                 case 'ArrowRight':
                     if (currentCardIndex < videoCards.length - 1) {
@@ -275,8 +271,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         setFocus(videoCards[activeVideoCardIndex]);
                         scrollRowToMaintainFocus(currentVideoRow, activeVideoCardIndex);
                     } else {
+                        // Jika panah kiri ditekan di kartu video pertama dalam baris, kembali ke sidebar
                         toggleSidebar(true);
-                        setFocus(sidebarItems[0]);
+                        setFocus(sidebarNavItems[activeNavIndex]); // Kembali ke item sidebar yang terakhir aktif
                     }
                     break;
                 case 'ArrowDown':
@@ -288,10 +285,11 @@ document.addEventListener('DOMContentLoaded', () => {
                             setFocus(nextRow.children[activeVideoCardIndex]);
                             scrollRowToMaintainFocus(nextRow, activeVideoCardIndex);
                         }
+                        // Scroll container utama agar baris baru terlihat
                         const targetRowElement = nextRow.closest('.video-row-container');
                         if (targetRowElement) {
                              dynamicVideoSections.scrollTo({
-                                top: targetRowElement.offsetTop - (dynamicVideoSections.offsetHeight / 3),
+                                top: targetRowElement.offsetTop - (dynamicVideoSections.offsetHeight / 3), // Scroll ke sekitar 1/3 layar
                                 behavior: 'smooth'
                             });
                         }
@@ -306,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             setFocus(prevRow.children[activeVideoCardIndex]);
                             scrollRowToMaintainFocus(prevRow, activeVideoCardIndex);
                         }
+                         // Scroll container utama agar baris baru terlihat
                         const targetRowElement = prevRow.closest('.video-row-container');
                         if (targetRowElement) {
                             dynamicVideoSections.scrollTo({
@@ -315,7 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                     break;
-                case 'Enter': // Handle "Enter" or "OK" button press
+                case 'Enter': // Handle "Enter" atau "OK" button press
                     if (focusedElement.classList.contains('video-card')) {
                         const videoLink = focusedElement.dataset.lnk;
                         const videoTitle = focusedElement.querySelector('h3').textContent;
@@ -323,15 +322,16 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (videoLink) {
                             sessionStorage.setItem('videoLink', videoLink);
                             sessionStorage.setItem('videoTitle', videoTitle);
-                            window.location.href = 'ply.html';
+                            window.location.href = 'ply.html'; // Ganti dengan nama file pemutar video Anda
                         }
                     }
                     break;
             }
         } else {
+            // Jika tidak ada elemen yang fokus (misal: saat aplikasi pertama kali dimuat), inisialisasi ulang
             initializeApp();
         }
     });
 
-    initializeApp();
+    initializeApp(); // Inisialisasi aplikasi saat DOM siap
 });
