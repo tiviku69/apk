@@ -3,7 +3,10 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: #000;
     color: #fff;
-    overflow: hidden; /* Prevent scrollbars */
+    overflow: hidden; /* Mencegah scrollbar */
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 header {
@@ -12,7 +15,7 @@ header {
     padding: 20px 40px;
     background-color: #1a1a1a;
     border-bottom: 1px solid #333;
-    position: fixed; /* Fix header at top */
+    position: fixed;
     width: 100%;
     z-index: 100;
 }
@@ -46,10 +49,11 @@ header nav ul li {
     font-size: 18px;
     cursor: pointer;
     color: #aaa;
+    outline: none;
 }
 
 header nav ul li:hover,
-header nav ul li.active {
+header nav ul li:focus {
     color: #fff;
 }
 
@@ -58,30 +62,32 @@ header nav ul li.active {
     width: 30px;
     border-radius: 50%;
     margin-left: auto;
+    outline: none;
 }
 
 .main-content {
     display: flex;
-    height: calc(100vh - 71px); /* Adjust based on header height */
-    margin-top: 71px; /* Offset for fixed header */
-    position: relative; /* For sidebar absolute positioning */
+    height: calc(100vh - 71px);
+    margin-top: 71px;
+    position: relative;
+    transition: margin-left 0.3s ease-out;
 }
 
 .sidebar {
-    position: absolute; /* Position sidebar absolutely */
+    position: absolute;
     top: 0;
-    left: -250px; /* Hide sidebar by default */
+    left: -250px;
     width: 250px;
     height: 100%;
     padding: 30px 20px;
     background-color: #1a1a1a;
     border-right: 1px solid #333;
-    transition: left 0.3s ease-out; /* Smooth transition for showing/hiding */
-    z-index: 90; /* Below header, above video content */
+    transition: left 0.3s ease-out;
+    z-index: 90;
 }
 
 .sidebar.open {
-    left: 0; /* Show sidebar when 'open' class is added */
+    left: 0;
 }
 
 .sidebar ul {
@@ -123,15 +129,12 @@ header nav ul li.active {
     flex-grow: 1;
     padding-top: 30px;
     overflow-y: auto;
-    /* Adjust margin-left when sidebar is open to prevent content overlap */
-    margin-left: 0;
-    transition: margin-left 0.3s ease-out; /* Smooth transition */
+    transition: margin-left 0.3s ease-out;
 }
 
 .main-content.sidebar-visible .video-sections {
-    margin-left: 250px; /* Push content when sidebar is open */
+    margin-left: 250px;
 }
-
 
 .video-row-container {
     margin-bottom: 40px;
@@ -146,11 +149,10 @@ header nav ul li.active {
 
 .video-row {
     display: flex;
-    white-space: nowrap;
     position: relative;
     overflow-x: hidden;
-    scroll-behavior: smooth;
     padding: 0 50px;
+    scroll-behavior: smooth; /* Menggunakan scroll-behavior untuk pergeseran */
 }
 
 .video-card {
@@ -167,12 +169,21 @@ header nav ul li.active {
     border: 3px solid transparent;
     outline: none;
     flex-shrink: 0;
+    position: relative; /* Diperlukan untuk penempatan durasi */
+}
+
+.video-card:focus {
+    transform: scale(1.01);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    border-color: #fff;
+    z-index: 10;
 }
 
 .video-card img {
     width: 100%;
     height: 180px;
     display: block;
+    object-fit: cover;
 }
 
 .video-card .video-details {
@@ -180,21 +191,27 @@ header nav ul li.active {
 }
 
 .video-card h3 {
-    margin: 0 0 5px 0;
+    margin: 0;
     font-size: 18px;
     color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-.video-card p {
-    margin: 0;
-    font-size: 14px;
-    color: #aaa;
+.duration-overlay {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
 }
 
-.video-card:focus {
-    transform: scale(1.01);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
-    border-color: #fff;
-    position: relative;
-    z-index: 10;
+.error-message {
+    color: red;
+    text-align: center;
+    padding: 20px;
 }
