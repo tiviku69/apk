@@ -2,11 +2,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ambil data dari sessionStorage
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
+    
+    // Ambil elemen HTML
     const playerControls = document.getElementById('player-controls');
     const playPauseBtn = document.getElementById('play-pause-btn');
     const ffBtn = document.getElementById('ff-btn');
     const rwBtn = document.getElementById('rw-btn');
-    const progressBar = document.getElementById('progress-bar'); // Deklarasikan variabel progress bar
+    const progressBar = document.getElementById('progress-bar');
+    const bufferedBar = document.getElementById('buffered-bar'); // Elemen untuk buffering
+    const loadingSpinner = document.getElementById('loading-spinner');
 
     let playerInstance;
     let controlsTimeout;
@@ -16,8 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
         playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
-            autostart: false, // Ubah agar video otomatis diputar saat halaman dimuat
-            controls: false, // Kita akan menggunakan kontrol kustom
+            autostart: true, // Ubah agar video otomatis diputar saat halaman dimuat
+            controls: false, // Gunakan kontrol kustom
             width: "100%",
             displaytitle: true,
             displaydescription: true,
@@ -36,57 +40,70 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Event Listener JW Player ---
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
-            if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
             if (playerControls) playerControls.style.display = 'flex';
             resetControlsTimeout();
         });
 
-        // Tambahkan event listener untuk memperbarui progress bar
-        playerInstance.on('time', (data) => {
-            if (progressBar && data.duration > 0) {
-                const progressPercentage = (data.position / data.duration) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-            }
+        playerInstance.on('buffer', () => {
+            // Tampilkan spinner loading saat buffering
+            loadingSpinner.style.display = 'block';
         });
 
         playerInstance.on('play', () => {
+            // Sembunyikan spinner saat video mulai diputar
+            loadingSpinner.style.display = 'none';
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>❚❚</b>";
             resetControlsTimeout();
         });
 
         playerInstance.on('pause', () => {
+            // Sembunyikan spinner saat video dijeda
+            loadingSpinner.style.display = 'none';
             if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
             clearTimeout(controlsTimeout);
         });
+        
+        // Event untuk memperbarui progress bar waktu dan buffering
+        playerInstance.on('time', (data) => {
+            const duration = data.duration;
+            const position = data.position;
+            const buffered = playerInstance.getBuffered();
 
-        playerInstance.on('complete', () => {
-            console.log("Video finished playing.");
-            if (playPauseBtn) playPauseBtn.innerHTML = "<b>▶</b>";
-            clearTimeout(controlsTimeout);
+            if (duration > 0) {
+                // Perbarui progress bar pemutaran (merah)
+                const progressPercentage = (position / duration) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+
+                // Perbarui progress bar buffering (putih)
+                const bufferedPercentage = (buffered / duration) * 100;
+                bufferedBar.style.width = `${bufferedPercentage}%`;
+            }
         });
 
+        // ... (kode event listener lainnya, seperti seek, complete, dll., tetap sama) ...
+        
         // --- Kustom Kontrol Tombol ---
         if (playPauseBtn) {
             playPauseBtn.addEventListener('click', () => {
                 playerInstance.playToggle();
             });
         }
-
+        
         if (ffBtn) {
             ffBtn.addEventListener('click', () => {
                 playerInstance.seek(playerInstance.getPosition() + 10);
                 resetControlsTimeout();
             });
         }
-
+        
         if (rwBtn) {
             rwBtn.addEventListener('click', () => {
                 playerInstance.seek(playerInstance.getPosition() - 10);
                 resetControlsTimeout();
             });
         }
-
-        // --- Kontrol Keyboard ---
+        
+        // ... (kode kontrol keyboard dan manajemen tampilan kontrol otomatis tetap sama) ...
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
                 switch (event.key) {
@@ -107,8 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetControlsTimeout();
             }
         });
-
-        // --- Manajemen Tampilan Kontrol Otomatis ---
+        
         const hideControls = () => {
             if (playerControls && playerInstance.getState() === 'playing') {
                 playerControls.style.display = 'none';
