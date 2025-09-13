@@ -20,6 +20,24 @@
             top: 0;
             left: 0;
         }
+        /* --- Gaya untuk Logo --- */
+        .logo-container {
+            position: absolute; /* Memosisikan logo secara absolut */
+            top: 20px; /* Jarak dari atas */
+            left: 20px; /* Jarak dari kiri */
+            z-index: 1001; /* Memastikan logo berada di atas JW Player dan kontrol */
+            /* Anda bisa menambahkan background jika ingin logo lebih menonjol */
+            /* background-color: rgba(255, 255, 255, 0.2); */
+            /* padding: 5px 10px; */
+            /* border-radius: 5px; */
+        }
+        .logo-container img {
+            width: 150px; /* Sesuaikan ukuran logo sesuai keinginan Anda */
+            height: auto; /* Menjaga rasio aspek */
+            display: block; /* Menghilangkan spasi ekstra di bawah gambar */
+        }
+        /* --- Akhir Gaya untuk Logo --- */
+
         .custom-controls {
             position: fixed;
             bottom: 0;
@@ -96,10 +114,15 @@
     </style>
 </head>
 <body>
+    <div class="logo-container">
+        <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Logo Perusahaan Anda">
+    </div>
+
     <div id="player"></div>
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
-        <div id="time-display">0:00 / 0:00</div> <div class="progress-bar-container" id="progress-bar-container">
+        <div id="time-display">0:00 / 0:00</div>
+        <div class="progress-bar-container" id="progress-bar-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
     </div>
