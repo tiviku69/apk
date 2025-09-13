@@ -3,8 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mainContent = document.querySelector('.main-content');
     const sidebarItems = document.querySelectorAll('.sidebar .nav-item');
     const dynamicVideoSections = document.getElementById('dynamic-video-sections');
-    const searchInput = document.getElementById('search-input'); // New line
-    let allVideoData = []; // New variable to store all video data
+    const searchInput = document.getElementById('search-input');
+    let allVideoData = [];
 
     let currentFocusedElement = null;
     let activeRowIndex = 0;
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Fungsi baru untuk merender video rows dari data yang diberikan
     function renderVideoSections(data) {
-        dynamicVideoSections.innerHTML = ''; // Clear existing content
+        dynamicVideoSections.innerHTML = '';
         data.forEach((source, index) => {
             if (source.videos.length > 0) {
                 const rowContainer = document.createElement('div');
@@ -171,12 +171,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Fungsi baru untuk mengelola scroll dengan mempertahankan posisi highlight
     function scrollRowToMaintainFocus(rowElement, cardIndex) {
         const videoCards = Array.from(rowElement.children);
         if (videoCards.length === 0) return;
 
-        // Ambil margin-right dari video-card untuk perhitungan akurat
         const cardStyle = window.getComputedStyle(videoCards[0]);
         const cardMarginRight = parseFloat(cardStyle.marginRight);
         const cardWidth = videoCards[0].offsetWidth + cardMarginRight;
@@ -196,8 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function initializeApp() {
         toggleSidebar(false);
-        await fetchAllData(); // Fetch all data first
-        // Initial focus logic remains the same
+        await fetchAllData();
         const updatedVideoRows = document.querySelectorAll('.video-row');
         if (updatedVideoRows.length > 0 && updatedVideoRows[0].children.length > 0) {
             setFocus(updatedVideoRows[0].children[0]);
@@ -211,10 +208,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     document.addEventListener('keydown', (event) => {
-        // ... (your existing keydown logic remains the same)
         event.preventDefault();
         const focusedElement = document.activeElement;
         const videoRows = document.querySelectorAll('.video-row');
+        
+        if (focusedElement.id === 'search-input') {
+            switch (event.key) {
+                case 'ArrowDown':
+                    if (videoRows.length > 0 && videoRows[0].children.length > 0) {
+                        toggleSidebar(false);
+                        setFocus(videoRows[0].children[0]);
+                        activeRowIndex = 0;
+                        activeVideoCardIndex = 0;
+                    }
+                    break;
+                case 'Enter':
+                    filterAndRender(focusedElement.value);
+                    break;
+            }
+            return;
+        }
 
         if (isSidebarOpen && focusedElement.closest('.sidebar')) {
             const currentSidebarIndex = Array.from(sidebarItems).indexOf(focusedElement);
@@ -316,7 +329,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
             }
         } else {
-            // If nothing is focused, initialize the app
             initializeApp();
         }
     });
