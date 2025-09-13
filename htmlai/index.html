@@ -1,55 +1,69 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube TV Layout v6 - Multiple JSON</title>
-    <link rel="stylesheet" href="style.css"> </head>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
 <body>
     <header>
         <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/256px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo">
-            <span>YouTube</span>
+            <img src="https://www.youtube.com/s/desktop/27042854/img/favicon_96x96.png" alt="YouTube Logo">
+            <span>YouTube TV</span>
         </div>
         <nav>
             <ul>
-                <li>Home</li>
+                <li class="active">Home</li>
                 <li>Recommended</li>
             </ul>
         </nav>
+        <div class="search-bar">
+            <input type="text" id="search-input" placeholder="Cari...">
+            <span class="search-icon">🔍</span>
+        </div>
         <div class="user-profile">
-            <img src="https://via.placeholder.com/30" alt="User Profile">
+            <img src="https://i.pravatar.cc/300" alt="User Profile">
         </div>
     </header>
 
     <div class="main-content">
-        <aside class="sidebar">
+        <div class="sidebar">
             <ul>
-                <li class="nav-item active" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Home">
+                <li class="nav-item active" data-section="home">
+                    <img src="https://api.iconify.design/ic:baseline-home.svg" alt="Home">
                     <span>HOME</span>
                 </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Trending">
+                <li class="nav-item" data-section="trending">
+                    <img src="https://api.iconify.design/ic:baseline-trending-up.svg" alt="Trending">
                     <span>TRENDING</span>
                 </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Subscriptions">
+                <li class="nav-item" data-section="subscriptions">
+                    <img src="https://api.iconify.design/ic:baseline-subscriptions.svg" alt="Subscriptions">
                     <span>SUBSCRIPTIONS</span>
                 </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Library">
+                <li class="nav-item" data-section="library">
+                    <img src="https://api.iconify.design/ic:baseline-video-library.svg" alt="Library">
                     <span>LIBRARY</span>
                 </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.0com/20" alt="History">
+                <li class="nav-item" data-section="history">
+                    <img src="https://api.iconify.design/ic:baseline-history.svg" alt="History">
                     <span>HISTORY</span>
                 </li>
             </ul>
-        </aside>
+        </div>
+        
+        <div id="dynamic-video-sections" class="video-sections">
+            </div>
 
-        <section class="video-sections" id="dynamic-video-sections">
-            </section>
+        <div id="search-results-section" class="search-results-container">
+            <h2 class="row-title">Hasil Pencarian</h2>
+            <div id="search-results-row" class="video-row">
+                </div>
+            <p id="no-results-message" class="no-results">Tidak ada hasil ditemukan.</p>
+        </div>
+
     </div>
 
     <script src="script.js"></script>
