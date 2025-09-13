@@ -16,6 +16,7 @@
         #player {
             width: 100vw;
             height: 100vh;
+            position: relative; /* Penting untuk penempatan overlay */
         }
         .custom-controls {
             position: fixed;
@@ -28,7 +29,7 @@
             justify-content: center;
             align-items: center;
             gap: 20px;
-            z-index: 1000;
+            z-index: 1000; /* Di atas JW Player, di bawah buffering overlay */
         }
         .custom-controls button {
             background-color: #f00;
@@ -49,60 +50,72 @@
             text-align: center;
             margin-top: 50px;
         }
+
+        /* Gaya untuk Progress Bar */
         .progress-bar-container {
             position: absolute;
-            top: -15px;
+            top: -15px; /* Pindah ke atas tombol */
             left: 0;
             width: 100%;
             height: 10px;
             background: rgba(255, 255, 255, 0.3);
+            /* Pastikan z-index lebih rendah dari kontrol utama jika Anda ingin tombol di atasnya */
+            z-index: 999; 
         }
-        .buffered-bar {
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.5); /* Warna buffering */
-            width: 0%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1; /* Di bawah progress bar utama */
-        }
+
         .progress-bar {
             height: 100%;
-            background-color: #f00;
-            width: 0%;
-            transition: width 0.1s linear;
+            background-color: #f00; /* Warna merah yang sama dengan tombol */
+            width: 0%; /* Dimulai dari 0% */
+            transition: width 0.1s linear; /* Animasi halus saat progres berjalan */
+        }
+
+        /* Gaya untuk overlay buffering */
+        .loading-overlay {
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 2; /* Di atas buffered bar */
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7); /* Latar belakang gelap transparan */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001; /* Pastikan di atas JW Player dan kontrol kustom */
+            opacity: 0; /* Mulai tersembunyi */
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* Agar tidak menghalangi interaksi dengan video */
         }
-        .loading-spinner {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #fff;
+
+        .loading-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 8px solid rgba(255, 255, 255, 0.3); /* Warna border default */
+            border-top: 8px solid #ff0000; /* Warna merah untuk indikator buffering */
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            display: none;
-            z-index: 1001;
         }
+
         @keyframes spin {
-            0% { transform: translate(-50%, -50%) rotate(0deg); }
-            100% { transform: translate(-50%, -50%) rotate(360deg); }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div id="player"></div>
-    <div class="loading-spinner" id="loading-spinner"></div>
-    
+    <div id="player">
+        <div id="loadingOverlay" class="loading-overlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+
     <div class="custom-controls" id="player-controls">
         <div class="progress-bar-container">
-            <div class="buffered-bar" id="buffered-bar"></div>
             <div class="progress-bar" id="progress-bar"></div>
         </div>
         <button id="rw-btn"><b>«</b></button>
