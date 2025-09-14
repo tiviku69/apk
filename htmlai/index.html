@@ -2,62 +2,66 @@
 <html lang="in">
 <head>
     <meta charset="UTF-8">
-    <title>YouTube Klon</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Tiviku</title>
+    <link rel="stylesheet" href="erc.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
-    <div class="sidebar">
-        <div class="sidebar-item active">
-            <img src="https://www.youtube.com/s/desktop/f1725b84/img/favicon_32.png" alt="Home Icon" class="sidebar-icon">
-            <span>Home</span>
+    <div id="offlineMessage" class="offline-message">
+        <h1>Anda Tidak Terhubung ke Internet</h1>
+        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
+    </div>
+
+    <div id="main-container">
+        <div id="sidebar" class="sidebar">
+            <div class="sidebar-item active"><i class="material-icons">home</i><span>Beranda</span></div>
+            <div class="sidebar-item"><i class="material-icons">explore</i><span>Jelajahi</span></div>
+            <div class="sidebar-item"><i class="material-icons">subscriptions</i><span>Langganan</span></div>
+            <div class="sidebar-item"><i class="material-icons">video_library</i><span>Koleksi</span></div>
+            <div class="sidebar-item"><i class="material-icons">history</i><span>Histori</span></div>
         </div>
-        <div class="sidebar-item">
-            <img src="https://www.youtube.com/s/desktop/f1725b84/img/favicon_32.png" alt="Shorts Icon" class="sidebar-icon">
-            <span>Shorts</span>
+
+        <div id="atas" class="top-bar">
+            <div class="logo">
+                <img src="https://www.youtube.com/s/desktop/2513f412/img/favicon_32x32.png" alt="YouTube Logo">
+                <span class="logo-text">YouTube</span>
+            </div>
+            <div id="search-container">
+                <input type="text" id="cari" placeholder="Cari..." onkeyup="prosesMenu()">
+            </div>
         </div>
-        <div class="sidebar-item">
-            <img src="https://www.youtube.com/s/desktop/f1725b84/img/favicon_32.png" alt="Subscriptions Icon" class="sidebar-icon">
-            <span>Subscriptions</span>
-        </div>
-        <div class="sidebar-item">
-            <img src="https://www.youtube.com/s/desktop/f1725b84/img/favicon_32.png" alt="Library Icon" class="sidebar-icon">
-            <span>Library</span>
-        </div>
-        <div class="sidebar-item">
-            <img src="https://www.youtube.com/s/desktop/f1725b84/img/favicon_32.png" alt="History Icon" class="sidebar-icon">
-            <span>History</span>
+
+        <div id="content-container">
+            <h2>Direkomendasikan</h2>
+            <div id="container" class="video-grid"></div>
         </div>
     </div>
 
-    <div class="main-content">
-        <header class="header">
-            <div class="header-left">
-                <img src="https://yt3.googleusercontent.com/yti/AOXA7GEy4nI2J_iY_iY_iY_iY_iY_iY_iY_iY_iY_iY=s88-c-k-c0x00ffffff-no-rj-mo" alt="User Profile" class="profile-pic">
-                <span class="user-name">HOME</span>
-                <span class="recommended-text">Recommended</span>
-            </div>
-            <div class="header-right">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Logo_of_YouTube_%282015-2017%29.svg/2560px-Logo_of_YouTube_%282015-2017%29.svg.png" alt="YouTube Logo" class="youtube-logo">
-            </div>
-        </header>
+    <script src="er.js"></script>
+    <script>
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            const mainContainer = document.getElementById('main-container');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+                mainContainer.style.display = 'flex';
+            } else {
+                offlineMessage.style.display = 'block';
+                mainContainer.style.display = 'none';
+            }
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
 
-        <div class="offline-message" id="offlineMessage">
-            <h1>Anda Tidak Terhubung ke Internet</h1>
-            <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
-        </div>
-
-        <div class="video-section">
-            <h2 class="section-title"></h2> <div class="video-grid" id="container">
-                </div>
-        </div>
-
-        <div class="video-section">
-            <h2 class="section-title">Continue watching</h2>
-            <div class="video-grid" id="continueWatchingContainer">
-                </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+        document.addEventListener('keydown', (event) => {
+            const sidebar = document.getElementById('sidebar');
+            if (event.key === 'ArrowLeft') {
+                sidebar.classList.add('show');
+            } else if (event.key === 'ArrowRight' && sidebar.classList.contains('show')) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
 </body>
 </html>
