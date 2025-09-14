@@ -1,67 +1,67 @@
 <!DOCTYPE html>
-<html lang="in">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tiviku</title>
-    <link rel="stylesheet" href="erc.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="offlineMessage" class="offline-message">
-        <h1>Anda Tidak Terhubung ke Internet</h1>
-        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
+    <div id="app-container">
+        <nav id="sidebar">
+            <div id="profile">
+                <img src="profile.png" alt="Profile" class="profile-pic">
+                <span>Charlie David</span>
+            </div>
+            <ul>
+                <li class="nav-item active" id="search-nav">
+                    <img src="icons/search.svg" alt="Search">
+                    <span>Search</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/home.svg" alt="Home">
+                    <span>Home</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/music.svg" alt="Music">
+                    <span>Music</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/movies.svg" alt="Movies and shows">
+                    <span>Movies and shows</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/news.svg" alt="News">
+                    <span>News</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/gaming.svg" alt="Gaming">
+                    <span>Gaming</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/subscriptions.svg" alt="Subscriptions">
+                    <span>Subscriptions</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/library.svg" alt="Library">
+                    <span>Library</span>
+                </li>
+                <li class="nav-item">
+                    <img src="icons/settings.svg" alt="Settings">
+                    <span>Settings</span>
+                </li>
+            </ul>
+        </nav>
+
+        <main id="main-content">
+            <div id="search-bar-container">
+                <input type="text" id="search-input" placeholder="Search" autofocus>
+            </div>
+            <div id="content">
+                </div>
+        </main>
     </div>
 
-    <div id="main-container">
-        <div id="sidebar" class="sidebar">
-            <div class="sidebar-item active"><i class="material-icons">home</i><span>Beranda</span></div>
-            <div class="sidebar-item"><i class="material-icons">explore</i><span>Jelajahi</span></div>
-            <div class="sidebar-item"><i class="material-icons">subscriptions</i><span>Langganan</span></div>
-            <div class="sidebar-item"><i class="material-icons">video_library</i><span>Koleksi</span></div>
-            <div class="sidebar-item"><i class="material-icons">history</i><span>Histori</span></div>
-        </div>
-
-        <div id="atas" class="top-bar">
-            <div class="logo">
-                <img src="https://www.youtube.com/s/desktop/2513f412/img/favicon_32x32.png" alt="YouTube Logo">
-                <span class="logo-text">YouTube</span>
-            </div>
-            <div id="search-container">
-                <input type="text" id="cari" placeholder="Cari..." onkeyup="prosesMenu()">
-            </div>
-        </div>
-
-        <div id="content-container">
-            <h2>Direkomendasikan</h2>
-            <div id="container" class="video-grid"></div>
-        </div>
-    </div>
-
-    <script src="er.js"></script>
-    <script>
-        function updateOnlineStatus() {
-            const offlineMessage = document.getElementById('offlineMessage');
-            const mainContainer = document.getElementById('main-container');
-            if (navigator.onLine) {
-                offlineMessage.style.display = 'none';
-                mainContainer.style.display = 'flex';
-            } else {
-                offlineMessage.style.display = 'block';
-                mainContainer.style.display = 'none';
-            }
-        }
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus();
-
-        document.addEventListener('keydown', (event) => {
-            const sidebar = document.getElementById('sidebar');
-            if (event.key === 'ArrowLeft') {
-                sidebar.classList.add('show');
-            } else if (event.key === 'ArrowRight' && sidebar.classList.contains('show')) {
-                sidebar.classList.remove('show');
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
