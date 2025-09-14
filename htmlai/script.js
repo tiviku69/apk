@@ -4,10 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');
     const contentContainer = document.getElementById('content');
     const navItems = document.querySelectorAll('.nav-item');
+    const contentItems = document.querySelectorAll('.item');
 
     let allItems = [];
     let currentFocusIndex = 0;
     let sidebarOpen = false;
+    let isHoveringContent = false; // New state variable
 
     // Fetches and displays content
     const files = [
@@ -33,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         renderItems(allItems);
+        addContentHoverListeners();
     };
 
     const renderItems = (items) => {
@@ -59,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             item.ttl.toLowerCase().includes(query.toLowerCase())
         );
         renderItems(filteredItems);
+        addContentHoverListeners();
     };
 
     function playVideo(videoLink, logoFile, title) {
@@ -78,15 +82,41 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     };
+
+    // Add event listeners for content hover/focus
+    const addContentHoverListeners = () => {
+        const items = document.querySelectorAll('.item');
+        items.forEach(item => {
+            item.addEventListener('mouseenter', () => isHoveringContent = true);
+            item.addEventListener('mouseleave', () => isHoveringContent = false);
+            item.addEventListener('focusin', () => isHoveringContent = true);
+            item.addEventListener('focusout', () => isHoveringContent = false);
+        });
+    };
     
     // Keyboard navigation (remote control simulation)
     document.addEventListener('keydown', (e) => {
         if (!sidebarOpen && e.key === 'ArrowLeft') {
-            sidebar.classList.add('open');
-            mainContent.classList.add('shifted');
-            sidebarOpen = true;
-            updateFocus();
-            e.preventDefault();
+            // Check if any content item is still highlighted
+            if (!isHoveringContent) {
+                // If not, show the sidebar immediately
+                sidebar.classList.add('open');
+                mainContent.classList.add('shifted');
+                sidebarOpen = true;
+                updateFocus();
+                e.preventDefault();
+            } else {
+                // If a content item is highlighted, wait for a short delay
+                setTimeout(() => {
+                    // Check again after the delay
+                    if (!isHoveringContent) {
+                        sidebar.classList.add('open');
+                        mainContent.classList.add('shifted');
+                        sidebarOpen = true;
+                        updateFocus();
+                    }
+                }, 300); // Wait for 300ms, which is the transition duration
+            }
         } else if (sidebarOpen) {
             if (e.key === 'ArrowDown') {
                 currentFocusIndex = (currentFocusIndex + 1) % navItems.length;
@@ -103,7 +133,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 navItems.forEach(item => item.classList.remove('active'));
                 e.preventDefault();
             } else if (e.key === 'Enter') {
-                // Simulate a click on the focused item
                 navItems[currentFocusIndex].click();
                 e.preventDefault();
             }
