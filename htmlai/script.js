@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
 
     let allItems = [];
+    let currentFocusIndex = 0;
+    let sidebarOpen = false;
 
     // Fetches and displays content
     const files = [
@@ -53,32 +55,58 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const filterContent = (query) => {
-        const filteredItems = allItems.filter(item => 
+        const filteredItems = allItems.filter(item =>
             item.ttl.toLowerCase().includes(query.toLowerCase())
         );
         renderItems(filteredItems);
     };
 
-    // Video playback function
     function playVideo(videoLink, logoFile, title) {
         sessionStorage.setItem('videoLink', videoLink);
         sessionStorage.setItem('videoTitle', title);
         sessionStorage.setItem('logoFile', logoFile);
         window.location.href = 'ply.html';
     }
-
+    
+    // Function to handle navigation and focus
+    const updateFocus = () => {
+        navItems.forEach((item, index) => {
+            if (index === currentFocusIndex) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    };
+    
     // Keyboard navigation (remote control simulation)
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') {
+        if (!sidebarOpen && e.key === 'ArrowLeft') {
             sidebar.classList.add('open');
             mainContent.classList.add('shifted');
-            e.preventDefault(); // Prevent default browser behavior
-        } else if (e.key === 'ArrowRight') {
-            sidebar.classList.remove('open');
-            mainContent.classList.remove('shifted');
-        } else if (e.key === 'Escape') {
-            sidebar.classList.remove('open');
-            mainContent.classList.remove('shifted');
+            sidebarOpen = true;
+            updateFocus();
+            e.preventDefault();
+        } else if (sidebarOpen) {
+            if (e.key === 'ArrowDown') {
+                currentFocusIndex = (currentFocusIndex + 1) % navItems.length;
+                updateFocus();
+                e.preventDefault();
+            } else if (e.key === 'ArrowUp') {
+                currentFocusIndex = (currentFocusIndex - 1 + navItems.length) % navItems.length;
+                updateFocus();
+                e.preventDefault();
+            } else if (e.key === 'ArrowRight' || e.key === 'Escape') {
+                sidebar.classList.remove('open');
+                mainContent.classList.remove('shifted');
+                sidebarOpen = false;
+                navItems.forEach(item => item.classList.remove('active'));
+                e.preventDefault();
+            } else if (e.key === 'Enter') {
+                // Simulate a click on the focused item
+                navItems[currentFocusIndex].click();
+                e.preventDefault();
+            }
         }
     });
 
