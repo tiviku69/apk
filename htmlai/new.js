@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Ambil data dari sessionStorage
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
     const playerControls = document.getElementById('player-controls');
@@ -7,11 +6,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingSpinner = document.getElementById('loading-spinner');
     const timeDisplay = document.getElementById('time-display');
 
+    // Referensi elemen baru
+    const playPauseCenter = document.getElementById('play-pause-center');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
+
     let playerInstance;
     let controlsTimeout;
 
     if (videoLink) {
-        // Inisialisasi JW Player
         playerInstance = jwplayer("player").setup({
             file: videoLink,
             title: videoTitle || "Sedang Memutar Film",
@@ -31,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 edgeStyle: "raised"
             },
             
-            // Tambahkan ini untuk mengontrol kualitas video
             qualityLabels: {
                 "360": "Normal",
                 "480": "HD",
@@ -39,55 +41,61 @@ document.addEventListener('DOMContentLoaded', () => {
                 "1080": "Ultra HD"
             },
             
-            // Tambahkan event listener untuk mendeteksi buffering
             onBuffer: () => {
                 const currentQuality = playerInstance.getQuality();
                 const availableQualities = playerInstance.getQualityLevels();
                 const lowestQuality = availableQualities.find(q => q.label === "Normal");
-                
                 if (currentQuality && lowestQuality && currentQuality.label !== "Normal") {
                     playerInstance.setQuality(lowestQuality.index);
                     console.log("Koneksi lambat, beralih ke kualitas terendah untuk mencegah buffering.");
                 }
             }
         });
-        
-        // --- Fungsi Pembantu ---
+
         const formatTime = (seconds) => {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
             const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
             return `${minutes}:${paddedSeconds}`;
         };
-        
+
         // --- Event Listener JW Player ---
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
             if (playerControls) playerControls.style.display = 'flex';
             resetControlsTimeout();
         });
-        
+
         playerInstance.on('buffer', () => {
             console.log("Video sedang buffering.");
             loadingSpinner.style.display = 'block';
         });
-        
+
         playerInstance.on('play', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
+            // Sembunyikan tombol di tengah saat video diputar
+            playPauseCenter.style.opacity = '0';
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
             resetControlsTimeout();
         });
-        
+
         playerInstance.on('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
+            // Tampilkan tombol di tengah saat video dijeda
+            playPauseCenter.style.opacity = '1';
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
         });
-        
+
         playerInstance.on('complete', () => {
             console.log("Video selesai diputar.");
             clearTimeout(controlsTimeout);
+            playPauseCenter.style.opacity = '1';
         });
-        
+
         playerInstance.on('time', (data) => {
             if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
@@ -98,7 +106,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
             }
         });
-        
+
+        // Tambahkan listener klik pada tombol di tengah
+        playPauseCenter.addEventListener('click', () => {
+            playerInstance.playToggle();
+        });
+
         // --- Kontrol Keyboard ---
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
@@ -139,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('touchstart', resetControlsTimeout);
         playerInstance.on('useractive', resetControlsTimeout);
         playerInstance.on('userinactive', hideControls);
-        
     } else {
         console.error('Tidak ada data video ditemukan di sessionStorage.');
         document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
