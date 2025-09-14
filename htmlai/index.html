@@ -1,64 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="in">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube TV Layout v6 - Multiple JSON</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Page title</title>
+    <style>
+        .offline-message {
+            display: none;
+            border: 1px solid #f44336;
+            padding: 0;
+            margin: 0;
+            color: #f44336;
+            background-color: #ffe5e5;
+        }
+    </style>
+    <link rel="stylesheet" href="erc.css">
 </head>
 <body>
-    <header>
-        <div class="logo">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/256px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo">
-            <span>YouTube</span>
-        </div>
-        <nav>
-            <ul>
-                <li>Home</li>
-                <li>Recommended</li>
-            </ul>
-        </nav>
-        <div class="search-container">
-            <input type="text" id="search-input" placeholder="Search..." autocomplete="off">
-            <button id="search-button">
-                <img src="https://via.placeholder.com/20" alt="Search">
-            </button>
-        </div>
-        <div class="user-profile">
-            <img src="https://via.placeholder.com/30" alt="User Profile">
-        </div>
-    </header>
-
-    <div class="main-content">
-        <aside class="sidebar">
-            <ul>
-                <li class="nav-item active" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Home">
-                    <span>HOME</span>
-                </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Trending">
-                    <span>SEARCH</span>
-                </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Subscriptions">
-                    <span>SUBSCRIPTIONS</span>
-                </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.com/20" alt="Library">
-                    <span>LIBRARY</span>
-                </li>
-                <li class="nav-item" tabindex="0">
-                    <img src="https://via.placeholder.0com/20" alt="History">
-                    <span>HISTORY</span>
-                </li>
-            </ul>
-        </aside>
-
-        <section class="video-sections" id="dynamic-video-sections">
-        </section>
+    <div id="atas"></div>
+    <div class="offline-message" id="offlineMessage">
+        <h1>Anda Tidak Terhubung ke Internet</h1>
+        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
     </div>
+    <div id="container"></div>
 
-    <script src="script.js"></script>
+    <script>
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            const atas = document.getElementById('atas');
+            const container = document.getElementById('container');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+                atas.style.display = 'block';
+                container.style.display = 'block';
+            } else {
+                offlineMessage.style.display = 'block';
+                atas.style.display = 'none';
+                container.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Set initial status
+        updateOnlineStatus();
+    </script>
+    <script src="er.js"></script>
 </body>
 </html>
