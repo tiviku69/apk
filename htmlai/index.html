@@ -1,67 +1,94 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="in">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiviku</title>
+    <title>Tiviku - Movies and Shows</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="app-container">
-        <nav id="sidebar">
-            <div id="profile">
-                <img src="profile.png" alt="Profile" class="profile-pic">
-                <span>Charlie David</span>
-            </div>
-            <ul>
-                <li class="nav-item active" id="search-nav">
-                    <img src="icons/search.svg" alt="Search">
-                    <span>Search</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/home.svg" alt="Home">
-                    <span>Home</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/music.svg" alt="Music">
-                    <span>Music</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/movies.svg" alt="Movies and shows">
-                    <span>Movies and shows</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/news.svg" alt="News">
-                    <span>News</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/gaming.svg" alt="Gaming">
-                    <span>Gaming</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/subscriptions.svg" alt="Subscriptions">
-                    <span>Subscriptions</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/library.svg" alt="Library">
-                    <span>Library</span>
-                </li>
-                <li class="nav-item">
-                    <img src="icons/settings.svg" alt="Settings">
-                    <span>Settings</span>
-                </li>
-            </ul>
-        </nav>
-
-        <main id="main-content">
-            <div id="search-bar-container">
-                <input type="text" id="search-input" placeholder="Search" autofocus>
-            </div>
-            <div id="content">
-                </div>
-        </main>
+    <div class="offline-message" id="offlineMessage">
+        <h1>Anda Tidak Terhubung ke Internet</h1>
+        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
     </div>
 
+    <div id="main-layout">
+        <div id="sidebar">
+            <div class="profile-section">
+                <img src="https://via.placeholder.com/30" alt="Profile" class="profile-pic">
+                <span>Charlie David</span>
+            </div>
+            <div class="sidebar-item search-item">
+                <img src="https://via.placeholder.com/20" alt="Search Icon" class="icon">
+                <input type="text" id="cari" onkeyup="prosesMenu()" placeholder="Search">
+            </div>
+            <div class="sidebar-item active">
+                <img src="https://via.placeholder.com/20" alt="Home Icon" class="icon">
+                <span>Home</span>
+            </div>
+            <div class="sidebar-item">
+                <img src="https://via.placeholder.com/20" alt="Music Icon" class="icon">
+                <span>Music</span>
+            </div>
+            <div class="sidebar-item active">
+                <img src="https://via.placeholder.com/20" alt="Movies Icon" class="icon">
+                <span>Movies and shows</span>
+            </div>
+            <div class="sidebar-item">
+                <img src="https://via.placeholder.com/20" alt="News Icon" class="icon">
+                <span>News</span>
+            </div>
+            <div class="sidebar-item">
+                <img src="https://via.placeholder.com/20" alt="Gaming Icon" class="icon">
+                <span>Gaming</span>
+            </div>
+            <div class="sidebar-item">
+                <img src="https://via.placeholder.com/20" alt="Subscriptions Icon" class="icon">
+                <span>Subscriptions</span>
+            </div>
+            <div class="sidebar-item">
+                <img src="https://via.placeholder.com/20" alt="Library Icon" class="icon">
+                <span>Library</span>
+            </div>
+            <div class="sidebar-item settings-item">
+                <img src="https://via.placeholder.com/20" alt="Settings Icon" class="icon">
+                <span>Settings</span>
+            </div>
+        </div>
+
+        <div id="content-area">
+            <div id="header-bar">
+                <div class="header-left">
+                    <span>Free to watch shows</span>
+                </div>
+                <div class="header-right">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/YouTube_full-color_icon_%282017%29.svg/1024px-YouTube_full-color_icon_%282017%29.svg.png" alt="YouTube Logo" class="youtube-logo">
+                </div>
+            </div>
+
+            <div id="container">
+                </div>
+        </div>
+    </div>
+
+    <script>
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            const mainLayout = document.getElementById('main-layout');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+                mainLayout.style.display = 'flex'; // Use flex for the main layout
+            } else {
+                offlineMessage.style.display = 'block';
+                mainLayout.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Set initial status
+        updateOnlineStatus();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>

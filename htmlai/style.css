@@ -1,167 +1,220 @@
-:root {
-    --bg-color: #000;
-    --text-color: #fff;
-    --secondary-text: #aaa;
-    --nav-bg: #121212;
-    --nav-item-hover: #333;
-    --nav-item-active: #fff;
-    --content-bg: #000;
-}
-
 body {
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    font-family: 'Roboto', sans-serif;
+    background-color: black;
+    color: white; /* Default text color */
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    display: flex;
-    overflow: hidden;
+    overflow: hidden; /* Prevent body scroll, container will scroll */
 }
 
-#app-container {
+/* Offline Message Styling */
+.offline-message {
+    display: none;
+    border: 1px solid #f44336;
+    padding: 20px;
+    margin: 20px;
+    color: #f44336;
+    background-color: #ffe5e5;
+    text-align: center;
+    border-radius: 8px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 500px;
+    z-index: 1000;
+}
+.offline-message h1 {
+    color: #f44336;
+    margin-top: 0;
+}
+.offline-message p {
+    color: #f44336;
+}
+
+/* Main Layout */
+#main-layout {
     display: flex;
-    width: 100vw;
     height: 100vh;
+    width: 100vw;
 }
 
 /* Sidebar Styling */
 #sidebar {
-    width: 200px;
-    background-color: var(--nav-bg);
+    width: 250px; /* Fixed width for the sidebar */
+    background-color: #222;
     padding: 20px 0;
-    transition: transform 0.3s ease-in-out;
-    transform: translateX(-100%);
-    position: absolute;
-    height: 100%;
-    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    color: #aaa;
+    border-right: 1px solid #333;
 }
 
-#sidebar.open {
-    transform: translateX(0);
-}
-
-#profile {
+.profile-section {
     display: flex;
     align-items: center;
-    padding: 0 20px 20px;
-    border-bottom: 1px solid #333;
+    padding: 10px 20px;
     margin-bottom: 20px;
+    font-weight: bold;
+    color: white;
 }
-
-.profile-pic {
-    width: 40px;
-    height: 40px;
+.profile-section .profile-pic {
     border-radius: 50%;
     margin-right: 10px;
 }
 
-#sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.nav-item {
+.sidebar-item {
     display: flex;
     align-items: center;
     padding: 10px 20px;
     cursor: pointer;
+    margin-bottom: 5px;
     transition: background-color 0.2s;
 }
-
-.nav-item:hover {
-    background-color: var(--nav-item-hover);
+.sidebar-item:hover, .sidebar-item.active {
+    background-color: #3a3a3a;
+    color: white;
 }
-
-.nav-item img {
-    width: 24px;
-    height: 24px;
+.sidebar-item .icon {
+    width: 20px;
+    height: 20px;
     margin-right: 15px;
-    filter: invert(1);
+    filter: invert(70%); /* Make icons visible on dark background */
+}
+.sidebar-item.active .icon {
+    filter: invert(100%); /* Make active icon white */
 }
 
-.nav-item.active {
-    color: var(--nav-item-active);
-    font-weight: bold;
-    background-color: #222;
-    border-left: 4px solid var(--nav-item-active);
+.sidebar-item.search-item {
+    padding: 10px 20px;
+    margin-bottom: 15px;
 }
-
-/* Main Content Styling */
-#main-content {
+#cari {
     flex-grow: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background-color: var(--content-bg);
-    position: relative;
-    left: 0;
-    transition: left 0.3s ease-in-out;
-}
-
-#main-content.shifted {
-    left: 200px;
-}
-
-#search-bar-container {
-    padding: 10px 0;
-    margin-bottom: 20px;
-}
-
-#search-input {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
     background-color: #333;
     border: none;
-    color: #fff;
+    padding: 8px 10px;
     border-radius: 5px;
+    color: white;
+    font-size: 15px;
     outline: none;
 }
-
-/* Content Grid Styling */
-#content {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 20px;
+#cari::placeholder {
+    color: #888;
 }
 
-.item {
+.settings-item {
+    margin-top: auto; /* Push settings to the bottom */
+}
+
+/* Content Area Styling */
+#content-area {
+    flex-grow: 1; /* Takes remaining width */
     display: flex;
     flex-direction: column;
-    text-decoration: none;
-    color: var(--text-color);
-    position: relative;
+    padding: 20px;
+    overflow-y: auto; /* Allow content to scroll vertically */
+}
+
+#header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #333;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+.youtube-logo {
+    height: 25px; /* Adjust size as needed */
+}
+
+#container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap to the next line */
+    gap: 20px; /* Space between items */
+    justify-content: flex-start; /* Align items to the start */
+    padding-bottom: 50px; /* Add some padding at the bottom for scrolling */
+}
+
+/* Responsive Div Styling (Content items) */
+.responsive-div {
+    width: 280px; /* Fixed width for content items */
+    height: auto; /* Adjust height based on content */
+    background-color: #1a1a1a;
     border-radius: 8px;
     overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    cursor: pointer;
+    border: 1px solid #333;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 
-.item:hover, .item:focus {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+.responsive-div:hover {
+    transform: translateY(-5px);
+    border-color: #fff;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
 }
 
-.item-thumbnail {
+.responsive-div img {
     width: 100%;
-    height: auto;
-    border-radius: 8px;
+    height: 160px; /* Fixed height for image */
+    object-fit: cover;
+    display: block;
+    border-radius: 8px 8px 0 0;
 }
 
 .item-details {
-    padding-top: 10px;
+    padding: 10px;
     text-align: left;
 }
 
 .item-title {
+    color: white;
+    font-weight: bold;
     font-size: 16px;
-    margin: 0;
+    margin-bottom: 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-.item-metadata {
-    font-size: 12px;
-    color: var(--secondary-text);
-    margin: 5px 0 0;
+.item-subtitle {
+    color: #aaa;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.item-meta {
+    display: flex;
+    flex-wrap: wrap; /* Allow tags to wrap */
+    gap: 5px;
+    font-size: 11px;
+    color: #888;
+    margin-top: 10px;
+}
+
+.meta-tag {
+    background-color: #333;
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+
+/* The 're' and 'dur' classes from original code are now adapted */
+.re { /* Now used as item-title in the new structure for consistency */
+    display: none; /* Hidden, replaced by item-title */
+}
+
+.dur { /* Now adapted into the item-subtitle/meta structure */
+    display: none; /* Hidden, replaced by item-subtitle or a meta-tag */
+}
+
+/* Specific styling for the 'Free with ads' and rating */
+.free-with-ads {
+    color: #4CAF50; /* Green */
+    font-weight: bold;
 }

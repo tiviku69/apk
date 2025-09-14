@@ -1,149 +1,141 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('main-content');
-    const searchInput = document.getElementById('search-input');
-    const contentContainer = document.getElementById('content');
-    const navItems = document.querySelectorAll('.nav-item');
-    const contentItems = document.querySelectorAll('.item');
+// No need for 'atas' element, as header is part of content-area now.
+// const atas = document.getElementById('atas');
+// atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
 
-    let allItems = [];
-    let currentFocusIndex = 0;
-    let sidebarOpen = false;
-    let isHoveringContent = false; // New state variable
+const container = document.getElementById('container');
 
-    // Fetches and displays content
-    const files = [
-        'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/captain.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/avat.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/squid.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/journey.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/one.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json'
-    ];
+const files = [
+    'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/captain.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/avat.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/squid.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/journey.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/one.json',
+    'https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json'
+];
 
-    const fetchContent = async () => {
-        for (const file of files) {
-            try {
-                const response = await fetch(file);
-                const data = await response.json();
-                allItems = allItems.concat(data);
-            } catch (error) {
-                console.error('Error fetching JSON:', error);
-            }
-        }
-        renderItems(allItems);
-        addContentHoverListeners();
-    };
+// Function to create a section header if needed (e.g., "Free to watch movies")
+function createSectionHeader(title) {
+    const header = document.createElement('h2');
+    header.textContent = title;
+    header.style.color = 'white';
+    header.style.marginTop = '40px';
+    header.style.marginBottom = '20px';
+    header.style.width = '100%'; // Ensure header takes full width
+    container.appendChild(header);
+}
 
-    const renderItems = (items) => {
-        contentContainer.innerHTML = '';
-        items.forEach(item => {
-            const itemElement = document.createElement('a');
-            itemElement.href = '#';
-            itemElement.className = 'item';
-            itemElement.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
+// Mimicking sections, you might need to adjust this based on your JSON structure or add more logic
+createSectionHeader('Free to watch shows'); // First section title
 
-            itemElement.innerHTML = `
-                <img src="${item.logo}" alt="${item.ttl}" class="item-thumbnail">
-                <div class="item-details">
-                    <p class="item-title">${item.ttl}</p>
-                    <p class="item-metadata">${item.dur}</p>
-                </div>
-            `;
-            contentContainer.appendChild(itemElement);
-        });
-    };
+let movieSectionAdded = false; // Flag to add movie section header only once
 
-    const filterContent = (query) => {
-        const filteredItems = allItems.filter(item =>
-            item.ttl.toLowerCase().includes(query.toLowerCase())
-        );
-        renderItems(filteredItems);
-        addContentHoverListeners();
-    };
+files.forEach(file => {
+    fetch(file)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(item => {
+                // If a certain condition is met (e.g., specific JSON file or item property),
+                // you could add a new section header.
+                // For demonstration, let's say the 'mp4.json' marks the start of 'movies'.
+                if (file.includes('mp4.json') && !movieSectionAdded) {
+                    createSectionHeader('Free to watch movies');
+                    movieSectionAdded = true;
+                }
 
-    function playVideo(videoLink, logoFile, title) {
-        sessionStorage.setItem('videoLink', videoLink);
-        sessionStorage.setItem('videoTitle', title);
-        sessionStorage.setItem('logoFile', logoFile);
-        window.location.href = 'ply.html';
-    }
-    
-    // Function to handle navigation and focus
-    const updateFocus = () => {
-        navItems.forEach((item, index) => {
-            if (index === currentFocusIndex) {
-                item.classList.add('active');
-            } else {
-                item.classList.remove('active');
-            }
-        });
-    };
+                const dv = document.createElement('div');
+                dv.className = 'responsive-div';
+                dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
 
-    // Add event listeners for content hover/focus
-    const addContentHoverListeners = () => {
-        const items = document.querySelectorAll('.item');
-        items.forEach(item => {
-            item.addEventListener('mouseenter', () => isHoveringContent = true);
-            item.addEventListener('mouseleave', () => isHoveringContent = false);
-            item.addEventListener('focusin', () => isHoveringContent = true);
-            item.addEventListener('focusout', () => isHoveringContent = false);
-        });
-    };
-    
-    // Keyboard navigation (remote control simulation)
-    document.addEventListener('keydown', (e) => {
-        if (!sidebarOpen && e.key === 'ArrowLeft') {
-            // Check if any content item is still highlighted
-            if (!isHoveringContent) {
-                // If not, show the sidebar immediately
-                sidebar.classList.add('open');
-                mainContent.classList.add('shifted');
-                sidebarOpen = true;
-                updateFocus();
-                e.preventDefault();
-            } else {
-                // If a content item is highlighted, wait for a short delay
-                setTimeout(() => {
-                    // Check again after the delay
-                    if (!isHoveringContent) {
-                        sidebar.classList.add('open');
-                        mainContent.classList.add('shifted');
-                        sidebarOpen = true;
-                        updateFocus();
-                    }
-                }, 300); // Wait for 300ms, which is the transition duration
-            }
-        } else if (sidebarOpen) {
-            if (e.key === 'ArrowDown') {
-                currentFocusIndex = (currentFocusIndex + 1) % navItems.length;
-                updateFocus();
-                e.preventDefault();
-            } else if (e.key === 'ArrowUp') {
-                currentFocusIndex = (currentFocusIndex - 1 + navItems.length) % navItems.length;
-                updateFocus();
-                e.preventDefault();
-            } else if (e.key === 'ArrowRight' || e.key === 'Escape') {
-                sidebar.classList.remove('open');
-                mainContent.classList.remove('shifted');
-                sidebarOpen = false;
-                navItems.forEach(item => item.classList.remove('active'));
-                e.preventDefault();
-            } else if (e.key === 'Enter') {
-                navItems[currentFocusIndex].click();
-                e.preventDefault();
-            }
-        }
-    });
+                const img = document.createElement('img');
+                img.src = item.logo;
+                img.alt = item.ttl; // Add alt text for accessibility
 
-    // Handle search input
-    searchInput.addEventListener('input', (e) => {
-        filterContent(e.target.value);
-    });
+                const detailsDiv = document.createElement('div');
+                detailsDiv.className = 'item-details';
 
-    // Initial content load
-    fetchContent();
+                const titleP = document.createElement('p');
+                titleP.className = 'item-title';
+                titleP.innerText = item.ttl;
+
+                const subtitleP = document.createElement('p');
+                subtitleP.className = 'item-subtitle';
+                // Combining duration and potentially other info
+                // Assuming 'dur' could be '4 Seasons' or '2011' from the image
+                subtitleP.innerText = item.dur || ''; // Use item.dur if available
+
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'item-meta';
+
+                // Adding "Free with ads"
+                const freeWithAdsSpan = document.createElement('span');
+                freeWithAdsSpan.className = 'meta-tag free-with-ads';
+                freeWithAdsSpan.innerText = 'Free with ads';
+                metaDiv.appendChild(freeWithAdsSpan);
+
+                // Adding TV rating and CC (if applicable)
+                if (item.rating) { // Assuming item.rating exists in your JSON
+                    const ratingSpan = document.createElement('span');
+                    ratingSpan.className = 'meta-tag';
+                    ratingSpan.innerText = item.rating; // e.g., "TV-14"
+                    metaDiv.appendChild(ratingSpan);
+                }
+
+                if (item.audio) { // Assuming item.audio exists for language
+                    const audioSpan = document.createElement('span');
+                    audioSpan.className = 'meta-tag';
+                    audioSpan.innerText = item.audio; // e.g., "English audio"
+                    metaDiv.appendChild(audioSpan);
+                }
+
+                if (item.cc) { // Assuming item.cc for closed captions
+                    const ccSpan = document.createElement('span');
+                    ccSpan.className = 'meta-tag';
+                    ccSpan.innerText = 'CC';
+                    metaDiv.appendChild(ccSpan);
+                }
+
+
+                detailsDiv.appendChild(titleP);
+                detailsDiv.appendChild(subtitleP);
+                detailsDiv.appendChild(metaDiv);
+
+
+                dv.appendChild(img);
+                dv.appendChild(detailsDiv);
+                container.appendChild(dv);
+            });
+        })
+        .catch(error => console.error('Error loading JSON:', error));
 });
+
+function playVideo(videoFile, logoFile, textFile) {
+    sessionStorage.setItem('videoLink', videoFile);
+    sessionStorage.setItem('videoTitle', textFile);
+    sessionStorage.setItem('logoFile', logoFile);
+    window.location.href = 'ply.html';
+}
+
+function prosesMenu() {
+    var input = document.getElementById("cari");
+    var filter = input.value.toLowerCase();
+    var li = document.querySelectorAll('.responsive-div');
+    var headerBars = document.querySelectorAll('#content-area h2'); // Select section headers
+
+    li.forEach(item => {
+        const title = item.querySelector('.item-title').innerText.toLowerCase();
+        if (title.indexOf(filter) > -1) {
+            item.style.display = "";
+        } else {
+            item.style.display = "none";
+        }
+    });
+
+    // Optionally hide section headers if all items under them are hidden
+    // This part can be more complex if sections are not strictly separated in DOM
+    // For now, let's keep headers visible, or implement more sophisticated logic if needed.
+}
+
+document.getElementById("cari").addEventListener("input", prosesMenu);
