@@ -1,82 +1,107 @@
 body {
-    background-color: #0d0d0d;
-    color: #f5f5f5;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #0a0a0a;
+    color: #e0e0e0;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     padding: 0;
 }
 
 #atas {
-    background-color: #1a1a1a;
-    padding: 15px 30px;
+    background-color: #121212;
+    padding: 15px 40px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid #333;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
 }
 
 .logo {
     font-size: 28px;
-    font-weight: bold;
-    color: #f5f5f5;
+    font-weight: 700;
+    color: #e0e0e0;
+    letter-spacing: -1px;
 }
 
 .logo span {
-    color: #ff0000;
+    color: #e50914; /* Aksen warna merah khas Netflix/YouTube TV */
 }
 
 .search-container {
     position: relative;
-    width: 300px;
 }
 
 #cari {
-    width: 100%;
-    padding: 10px 15px 10px 40px;
+    width: 0;
+    padding: 10px 15px;
     border: none;
     border-radius: 20px;
     background-color: #2c2c2c;
     color: #fff;
     font-size: 16px;
     outline: none;
-    transition: background-color 0.3s ease;
+    transition: width 0.4s ease, background-color 0.3s ease;
 }
 
-#cari:focus {
-    background-color: #383838;
+#cari.active {
+    width: 250px;
+    padding-left: 40px;
 }
 
-.search-container .fa-search {
+#cari::placeholder {
+    color: #999;
+}
+
+.search-icon {
     position: absolute;
-    left: 15px;
+    right: 15px;
     top: 50%;
     transform: translateY(-50%);
-    color: #888;
+    color: #999;
+    cursor: pointer;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+.search-icon:hover {
+    color: #fff;
 }
 
 #container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-    padding: 20px;
+    gap: 25px;
+    padding: 30px;
 }
 
 .responsive-div {
-    width: 280px;
-    height: 200px;
+    width: 260px;
+    height: 190px;
     position: relative;
-    border-radius: 12px;
+    border-radius: 10px;
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    border: 2px solid transparent;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #222;
 }
 
-.responsive-div:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-    border: 2px solid #fff;
+.responsive-div:hover,
+.responsive-div.focused {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 10px 20px rgba(0, 0, 0, 0.8);
+    z-index: 10;
+}
+
+.responsive-div:hover .overlay,
+.responsive-div.focused .overlay {
+    opacity: 1;
+}
+
+.responsive-div:hover .re,
+.responsive-div.focused .re {
+    transform: translateY(0);
+    opacity: 1;
 }
 
 #imgv {
@@ -84,6 +109,18 @@ body {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: filter 0.3s ease;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .re {
@@ -91,8 +128,7 @@ body {
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 15px 10px 10px;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+    padding: 20px 15px 10px;
     color: white;
     font-size: 16px;
     font-weight: 500;
@@ -100,25 +136,50 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    transform: translateY(10px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
 .dur {
     position: absolute;
-    bottom: 10px;
+    top: 10px;
     right: 10px;
     background-color: rgba(0, 0, 0, 0.7);
     color: white;
-    padding: 4px 8px;
+    padding: 3px 6px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 11px;
+    font-weight: 500;
 }
 
-.offline-message {
-    text-align: center;
-    padding: 20px;
-    margin: 20px;
-    border-radius: 8px;
-    border: 1px solid #f44336;
-    background-color: #ffe5e5;
-    color: #f44336;
+/* Responsive design */
+@media (max-width: 768px) {
+    #atas {
+        padding: 15px 20px;
+    }
+    #cari.active {
+        width: 180px;
+    }
+    .responsive-div {
+        width: 45%;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    #atas {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    .search-container {
+        width: 100%;
+    }
+    #cari.active {
+        width: 100%;
+    }
+    .responsive-div {
+        width: 100%;
+    }
 }
