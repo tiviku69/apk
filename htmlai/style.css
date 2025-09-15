@@ -1,185 +1,115 @@
 body {
-    background-color: #0a0a0a;
-    color: #e0e0e0;
-    font-family: 'Poppins', sans-serif;
+    background-color: black;
+    text-align: center;
     margin: 0;
     padding: 0;
 }
 
-#atas {
-    background-color: #121212;
-    padding: 15px 40px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+h1 {
+    color: yellowgreen;
 }
 
-.logo {
-    font-size: 28px;
-    font-weight: 700;
-    color: #e0e0e0;
-    letter-spacing: -1px;
+.re {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    font-weight: 1000;
+    font-style: italic;
+    position: relative;
+    letter-spacing: 1px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 5px;
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
 }
 
-.logo span {
-    color: #e50914; /* Aksen warna merah khas Netflix/YouTube TV */
+.dur {
+    color: white;
+    font-weight: 900;
+    font-style: italic;
+    position: absolute;
+    border-radius: 3px;
+    bottom: 180px;
+    padding: 3px;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 15px;
+    z-index: 1;
 }
 
-.search-container {
+.responsive-div:focus .re,
+.responsive-div:hover .re {
+    font-size: 19px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.responsive-div:focus {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+.responsive-div:hover {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+/* Penambahan CSS untuk highlight awal */
+.responsive-div.initial-focus {
+    border: 5px solid yellow;
+    border-radius: 13px;
+}
+
+#imgv {				
+    border-radius: 11px;
+    width: 270px;
+    height: 220px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#atas {				
     position: relative;
 }
 
-#cari {
-    width: 0;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 20px;
-    background-color: #2c2c2c;
-    color: #fff;
-    font-size: 16px;
-    outline: none;
-    transition: width 0.4s ease, background-color 0.3s ease;
-}
-
-#cari.active {
-    width: 250px;
-    padding-left: 40px;
-}
-
-#cari::placeholder {
-    color: #999;
-}
-
-.search-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    cursor: pointer;
-    font-size: 18px;
-    transition: color 0.3s ease;
-}
-
-.search-icon:hover {
-    color: #fff;
-}
-
 #container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 25px;
-    padding: 30px;
+    height: 530px;
+    position: relative;
+    top: 15px;
+    padding: 0px;
+    overflow: auto;
+}
+
+#cari {
+    border-radius: 8px;
+    height: 25px;
+    background: whitesmoke;
+    margin: 0px;
+    padding: 0px;
+    font-size: 20px;
+    top: 60px;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    position: absolute;
+}
+#search {
+    padding: 0px;
 }
 
 .responsive-div {
     width: 260px;
-    height: 190px;
+    height: 210px;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 13px;
+    overflow: hidden;
     position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    background-color: #222;
-}
-
-.responsive-div:hover,
-.responsive-div.focused {
-    transform: scale(1.08);
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.5), 0 10px 20px rgba(0, 0, 0, 0.8);
-    z-index: 10;
-}
-
-.responsive-div:hover .overlay,
-.responsive-div.focused .overlay {
-    opacity: 1;
-}
-
-.responsive-div:hover .re,
-.responsive-div.focused .re {
-    transform: translateY(0);
-    opacity: 1;
-}
-
-#imgv {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: filter 0.3s ease;
-}
-
-.overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.re {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 20px 15px 10px;
-    color: white;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: left;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transform: translateY(10px);
-    opacity: 0;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.dur {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    padding: 3px 6px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 500;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-    #atas {
-        padding: 15px 20px;
-    }
-    #cari.active {
-        width: 180px;
-    }
-    .responsive-div {
-        width: 45%;
-        height: auto;
-    }
-}
-
-@media (max-width: 480px) {
-    #atas {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    .search-container {
-        width: 100%;
-    }
-    #cari.active {
-        width: 100%;
-    }
-    .responsive-div {
-        width: 100%;
-    }
+    padding: 8px 8px;
+    margin: 15px;
+    border: 5px solid red;
 }
