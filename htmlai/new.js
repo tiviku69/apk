@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
-    const videoThumbnailUrl = sessionStorage.getItem('videoThumbnail'); // Ambil URL thumbnail
     const playerControls = document.getElementById('player-controls');
     const progressBar = document.getElementById('progress-bar');
     const loadingSpinner = document.getElementById('loading-spinner');
@@ -10,22 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
     const videoTitleContainer = document.getElementById('video-title-container');
-    const thumbnailContainer = document.getElementById('thumbnail-container'); // Dapatkan elemen container thumbnail
-    const videoThumbnailElement = document.getElementById('video-thumbnail'); // Dapatkan elemen img thumbnail
-
     let playerInstance;
     let controlsTimeout;
 
     if (videoLink) {
         if (videoTitleContainer) {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
-        }
-        // Atur thumbnail jika ada
-        if (videoThumbnailUrl && videoThumbnailElement) {
-            videoThumbnailElement.src = videoThumbnailUrl;
-            thumbnailContainer.style.display = 'block'; // Pastikan thumbnail terlihat
-        } else if (thumbnailContainer) {
-            thumbnailContainer.style.display = 'none'; // Sembunyikan jika tidak ada thumbnail
         }
         
         playerInstance = jwplayer("player").setup({
@@ -83,32 +72,29 @@ document.addEventListener('DOMContentLoaded', () => {
         playerInstance.on('play', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
-            // Sembunyikan tombol tengah, judul, dan thumbnail
+            // Sembunyikan tombol tengah & judul
             playPauseCenter.style.opacity = '0';
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
-            videoTitleContainer.style.opacity = '0';
-            if (thumbnailContainer) thumbnailContainer.style.opacity = '0'; // Sembunyikan thumbnail
+            videoTitleContainer.style.opacity = '0'; // Perubahan yang ditambahkan
             resetControlsTimeout();
         });
 
         playerInstance.on('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
-            // Tampilkan tombol tengah, judul, dan thumbnail
+            // Tampilkan tombol tengah & judul
             playPauseCenter.style.opacity = '1';
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
-            videoTitleContainer.style.opacity = '1';
-            if (thumbnailContainer) thumbnailContainer.style.opacity = '1'; // Tampilkan thumbnail
+            videoTitleContainer.style.opacity = '1'; // Perubahan yang ditambahkan
         });
 
         playerInstance.on('complete', () => {
             console.log("Video selesai diputar.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
-            videoTitleContainer.style.opacity = '1';
-            if (thumbnailContainer) thumbnailContainer.style.opacity = '1'; // Tampilkan thumbnail
+            videoTitleContainer.style.opacity = '1'; // Perubahan yang ditambahkan
         });
 
         playerInstance.on('time', (data) => {
@@ -149,25 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const hideControls = () => {
             if (playerControls && playerInstance.getState() === 'playing') {
                 playerControls.style.display = 'none';
-                playPauseCenter.style.opacity = '0'; // Sembunyikan tombol tengah
-                videoTitleContainer.style.opacity = '0'; // Sembunyikan judul
-                if (thumbnailContainer) thumbnailContainer.style.opacity = '0'; // Sembunyikan thumbnail
             }
         };
 
         const resetControlsTimeout = () => {
             clearTimeout(controlsTimeout);
             if (playerControls) playerControls.style.display = 'flex';
-            if (playerInstance.getState() !== 'playing') { // Selalu tampilkan saat tidak memutar
-                playPauseCenter.style.opacity = '1';
-                videoTitleContainer.style.opacity = '1';
-                if (thumbnailContainer) thumbnailContainer.style.opacity = '1';
-            } else { // Sembunyikan saat memutar setelah timeout
-                playPauseCenter.style.opacity = '1'; // Tampilkan sebentar saat ada aktivitas
-                videoTitleContainer.style.opacity = '1';
-                if (thumbnailContainer) thumbnailContainer.style.opacity = '1';
-                controlsTimeout = setTimeout(hideControls, 3000);
-            }
+            controlsTimeout = setTimeout(hideControls, 3000);
         };
 
         document.addEventListener('mousemove', resetControlsTimeout);
