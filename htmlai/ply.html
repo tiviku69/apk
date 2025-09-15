@@ -130,7 +130,22 @@
             font-weight: bold;
             color: white;
             text-shadow: 2px 2px 4px #000000;
-            transition: opacity 0.3s ease-in-out; /* Perubahan yang ditambahkan */
+            transition: opacity 0.3s ease-in-out;
+        }
+        /* Style untuk thumbnail */
+        #thumbnail-container {
+            position: absolute;
+            top: 120px; /* Sesuaikan posisi vertikal */
+            left: 20px; /* Sesuaikan posisi horizontal */
+            z-index: 1001;
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+        #thumbnail-container img {
+            width: 160px; /* Sesuaikan ukuran thumbnail */
+            height: 90px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -139,6 +154,9 @@
         <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Logo Perusahaan Anda">
     </div>
     <div id="video-title-container"></div>
+    <div id="thumbnail-container">
+        <img id="video-thumbnail" src="" alt="Video Thumbnail">
+    </div>
     <div id="play-pause-center">
         <svg id="play-icon" viewBox="0 0 24 24" style="display: block;">
             <path d="M8 5v14l11-7z"/>
