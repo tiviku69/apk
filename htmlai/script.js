@@ -2,11 +2,14 @@ const atas = document.getElementById('atas');
 atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
 
 const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' ];
+
+let filesProcessed = 0;
+const totalFiles = files.length;
+
 files.forEach(file => {
     fetch(file)
         .then(response => response.json())
         .then(data => {
-            let isFirstItem = true;
             data.forEach(item => {
                 const container = document.getElementById('container');
                 const img = document.createElement('img');
@@ -25,22 +28,35 @@ files.forEach(file => {
 
                 const dv = document.createElement('div');
                 dv.className = 'responsive-div';
-
-                // Tambahkan kelas khusus untuk elemen pertama
-                if (isFirstItem) {
-                    dv.classList.add('initial-focus');
-                    isFirstItem = false;
-                }
-
                 dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
 
                 dv.appendChild(img);
+ 
                 dv.appendChild(pp);
                 dv.appendChild(dur);
                 container.appendChild(dv);
             });
+            filesProcessed++;
+            if (filesProcessed === totalFiles) {
+                // All files have been processed, highlight the first one
+                const firstDiv = document.querySelector('.responsive-div');
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus(); // Set focus for keyboard navigation
+                }
+            }
         })
-        .catch(error => console.error('Error loading JSON:', error));
+        .catch(error => {
+            console.error('Error loading JSON:', error);
+            filesProcessed++;
+            if (filesProcessed === totalFiles) {
+                const firstDiv = document.querySelector('.responsive-div');
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
+                }
+            }
+        });
 });
 
 function playVideo(videoFile, logoFile, textFile) {

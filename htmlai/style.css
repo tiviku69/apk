@@ -55,13 +55,12 @@ h1 {
     border-radius: 13px;
 }
 
-/* Penambahan CSS untuk highlight awal */
-.responsive-div.initial-focus {
-    border: 5px solid yellow;
+.highlight {
+    border: 5px solid #fff;
     border-radius: 13px;
 }
 
-#imgv {				
+#imgv {                
     border-radius: 11px;
     width: 270px;
     height: 220px;
@@ -71,7 +70,7 @@ h1 {
     transform: translate(-50%,-50%);
 }
 
-#atas {				
+#atas {                
     position: relative;
 }
 
