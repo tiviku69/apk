@@ -9,8 +9,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
     const videoTitleContainer = document.getElementById('video-title-container');
+    const digitalClock = document.getElementById('digital-clock');
+
     let playerInstance;
     let controlsTimeout;
+
+    function updateClock() {
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        digitalClock.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
 
     if (videoLink) {
         if (videoTitleContainer) {
@@ -50,53 +63,44 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-
         const formatTime = (seconds) => {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
             const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
             return `${minutes}:${paddedSeconds}`;
         };
-
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
             if (playerControls) playerControls.style.display = 'flex';
             resetControlsTimeout();
         });
-
         playerInstance.on('buffer', () => {
             console.log("Video sedang buffering.");
             loadingSpinner.style.display = 'block';
         });
-
         playerInstance.on('play', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
-            // Sembunyikan tombol tengah & judul
             playPauseCenter.style.opacity = '0';
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
-            videoTitleContainer.style.opacity = '0'; // Perubahan yang ditambahkan
+            videoTitleContainer.style.opacity = '0';
             resetControlsTimeout();
         });
-
         playerInstance.on('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
-            // Tampilkan tombol tengah & judul
             playPauseCenter.style.opacity = '1';
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
-            videoTitleContainer.style.opacity = '1'; // Perubahan yang ditambahkan
+            videoTitleContainer.style.opacity = '1';
         });
-
         playerInstance.on('complete', () => {
             console.log("Video selesai diputar.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
-            videoTitleContainer.style.opacity = '1'; // Perubahan yang ditambahkan
+            videoTitleContainer.style.opacity = '1';
         });
-
         playerInstance.on('time', (data) => {
             if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
@@ -106,11 +110,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
             }
         });
-
         playPauseCenter.addEventListener('click', () => {
             playerInstance.playToggle();
         });
-
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
                 switch (event.key) {
@@ -131,25 +133,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetControlsTimeout();
             }
         });
-
         const hideControls = () => {
             if (playerControls && playerInstance.getState() === 'playing') {
                 playerControls.style.display = 'none';
             }
         };
-
         const resetControlsTimeout = () => {
             clearTimeout(controlsTimeout);
             if (playerControls) playerControls.style.display = 'flex';
             controlsTimeout = setTimeout(hideControls, 3000);
         };
-
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);
         playerInstance.on('useractive', resetControlsTimeout);
         playerInstance.on('userinactive', hideControls);
-
     } else {
         console.error('Tidak ada data video ditemukan di sessionStorage.');
         document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
