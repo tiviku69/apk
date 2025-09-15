@@ -32,22 +32,20 @@
             display: block;
         }
         .custom-controls {
-    position: fixed;
-    bottom: 0;
-    /* Ubah properti ini */
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%; /* Contoh lebar, sesuaikan sesuai kebutuhan */
-    /* Akhir perubahan */
-    background: rgba(0, 0, 0, 0.7);
-    padding: 20px;
-    display: none;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    z-index: 1000;
-}
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
         .custom-controls button {
             background-color: #f00;
             color: white;
@@ -102,7 +100,6 @@
             0% { transform: translate(-50%, -50%) rotate(0deg); }
             100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
-        /* Style untuk tombol play/pause di tengah */
         #play-pause-center {
             position: absolute;
             top: 50%;
@@ -116,12 +113,24 @@
             cursor: pointer;
             z-index: 1002;
             transition: opacity 0.3s ease-in-out;
-            opacity: 1; /* Awalnya terlihat */
+            opacity: 1;
         }
         #play-pause-center svg {
             fill: #f00;
             width: 100%;
             height: 100%;
+        }
+        #video-title-container {
+            position: absolute;
+            top: 80px;
+            left: 20px;
+            z-index: 1001;
+            padding: 5px 10px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px #000000;
+            transition: opacity 0.3s ease-in-out; /* Perubahan yang ditambahkan */
         }
     </style>
 </head>
@@ -129,7 +138,7 @@
     <div class="logo-container">
         <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Logo Perusahaan Anda">
     </div>
-
+    <div id="video-title-container"></div>
     <div id="play-pause-center">
         <svg id="play-icon" viewBox="0 0 24 24" style="display: block;">
             <path d="M8 5v14l11-7z"/>
@@ -138,7 +147,6 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
-
     <div id="player"></div>
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
@@ -147,7 +155,6 @@
             <div class="progress-bar" id="progress-bar"></div>
         </div>
     </div>
-    
     <script src="new.js"></script>
 </body>
 </html>

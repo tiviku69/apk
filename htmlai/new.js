@@ -5,23 +5,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const progressBar = document.getElementById('progress-bar');
     const loadingSpinner = document.getElementById('loading-spinner');
     const timeDisplay = document.getElementById('time-display');
-
-    // Referensi elemen baru
     const playPauseCenter = document.getElementById('play-pause-center');
     const playIcon = document.getElementById('play-icon');
     const pauseIcon = document.getElementById('pause-icon');
-
+    const videoTitleContainer = document.getElementById('video-title-container');
     let playerInstance;
     let controlsTimeout;
 
     if (videoLink) {
+        if (videoTitleContainer) {
+            videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
+        }
+        
         playerInstance = jwplayer("player").setup({
             file: videoLink,
-            title: videoTitle || "Sedang Memutar Film",
             autostart: false,
             controls: false,
             width: "100%",
-            displaytitle: true,
+            displaytitle: false,
             displaydescription: true,
             description: "Kamu Sedang Nonton",
             skin: {
@@ -33,14 +34,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 backgroundOpacity: 0,
                 edgeStyle: "raised"
             },
-            
             qualityLabels: {
                 "360": "Normal",
                 "480": "HD",
                 "720": "Full HD",
                 "1080": "Ultra HD"
             },
-            
             onBuffer: () => {
                 const currentQuality = playerInstance.getQuality();
                 const availableQualities = playerInstance.getQualityLevels();
@@ -59,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${minutes}:${paddedSeconds}`;
         };
 
-        // --- Event Listener JW Player ---
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
             if (playerControls) playerControls.style.display = 'flex';
@@ -74,45 +72,45 @@ document.addEventListener('DOMContentLoaded', () => {
         playerInstance.on('play', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
-            // Sembunyikan tombol di tengah saat video diputar
+            // Sembunyikan tombol tengah & judul
             playPauseCenter.style.opacity = '0';
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
+            videoTitleContainer.style.opacity = '0'; // Perubahan yang ditambahkan
             resetControlsTimeout();
         });
 
         playerInstance.on('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
-            // Tampilkan tombol di tengah saat video dijeda
+            // Tampilkan tombol tengah & judul
             playPauseCenter.style.opacity = '1';
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
+            videoTitleContainer.style.opacity = '1'; // Perubahan yang ditambahkan
         });
 
         playerInstance.on('complete', () => {
             console.log("Video selesai diputar.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
+            videoTitleContainer.style.opacity = '1'; // Perubahan yang ditambahkan
         });
 
         playerInstance.on('time', (data) => {
             if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
-                
                 const currentTime = formatTime(data.position);
                 const totalDuration = formatTime(data.duration);
                 timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
             }
         });
 
-        // Tambahkan listener klik pada tombol di tengah
         playPauseCenter.addEventListener('click', () => {
             playerInstance.playToggle();
         });
 
-        // --- Kontrol Keyboard ---
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
                 switch (event.key) {
@@ -133,8 +131,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 resetControlsTimeout();
             }
         });
-        
-        // --- Manajemen Tampilan Kontrol Otomatis ---
+
         const hideControls = () => {
             if (playerControls && playerInstance.getState() === 'playing') {
                 playerControls.style.display = 'none';
@@ -152,6 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.addEventListener('touchstart', resetControlsTimeout);
         playerInstance.on('useractive', resetControlsTimeout);
         playerInstance.on('userinactive', hideControls);
+
     } else {
         console.error('Tidak ada data video ditemukan di sessionStorage.');
         document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
