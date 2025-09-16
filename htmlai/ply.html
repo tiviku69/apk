@@ -144,6 +144,24 @@
             font-weight: bold;
             text-shadow: 2px 2px 4px #000000;
         }
+        /* Style baru untuk thumbnail video */
+        #video-thumbnail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #000;
+            z-index: 999; /* Posisi di atas player */
+        }
+        #thumbnail-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -160,6 +178,11 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
+    
+    <div id="video-thumbnail">
+        <img id="thumbnail-img" src="" alt="Video Thumbnail">
+    </div>
+
     <div id="player"></div>
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
