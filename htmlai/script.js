@@ -1,17 +1,7 @@
 const atas = document.getElementById('atas');
 atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
 
-const files = [ 
-    'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/captain.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/avat.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/squid.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/journey.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/one.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' 
-];
+const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' ];
 
 let filesProcessed = 0;
 const totalFiles = files.length;
@@ -24,13 +14,15 @@ files.forEach(file => {
                 const container = document.getElementById('container');
                 const img = document.createElement('img');
                 img.id = 'imgv';
-                img.src = item.logo; // Pastikan 'logo' adalah key yang benar di JSON
+    
+                img.src = item.logo;
 
                 const pp = document.createElement('p');
                 pp.className = 're';
                 pp.innerText = item.ttl;
 
                 const dur = document.createElement('p');
+            
                 dur.className = 'dur';
                 dur.innerText = item.dur;
 
@@ -39,6 +31,7 @@ files.forEach(file => {
                 dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
 
                 dv.appendChild(img);
+ 
                 dv.appendChild(pp);
                 dv.appendChild(dur);
                 container.appendChild(dv);
@@ -69,7 +62,7 @@ files.forEach(file => {
 function playVideo(videoFile, logoFile, textFile) {
     sessionStorage.setItem('videoLink', videoFile);
     sessionStorage.setItem('videoTitle', textFile);
-    sessionStorage.setItem('logoFile', logoFile); // Baris penting yang menyimpan thumbnail
+    sessionStorage.setItem('logoFile', logoFile);
     window.location.href = 'ply.html';
 }
 
