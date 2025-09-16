@@ -2,6 +2,7 @@ const atas = document.getElementById('atas');
 atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
 
 const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' ];
+
 let filesProcessed = 0;
 const totalFiles = files.length;
 
@@ -13,6 +14,7 @@ files.forEach(file => {
                 const container = document.getElementById('container');
                 const img = document.createElement('img');
                 img.id = 'imgv';
+    
                 img.src = item.logo;
 
                 const pp = document.createElement('p');
@@ -20,6 +22,7 @@ files.forEach(file => {
                 pp.innerText = item.ttl;
 
                 const dur = document.createElement('p');
+            
                 dur.className = 'dur';
                 dur.innerText = item.dur;
 
@@ -28,16 +31,18 @@ files.forEach(file => {
                 dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
 
                 dv.appendChild(img);
+ 
                 dv.appendChild(pp);
                 dv.appendChild(dur);
                 container.appendChild(dv);
             });
             filesProcessed++;
             if (filesProcessed === totalFiles) {
+                // All files have been processed, highlight the first one
                 const firstDiv = document.querySelector('.responsive-div');
                 if (firstDiv) {
                     firstDiv.classList.add('highlight');
-                    firstDiv.focus();
+                    firstDiv.focus(); // Set focus for keyboard navigation
                 }
             }
         })
@@ -75,74 +80,3 @@ function prosesMenu() {
 }
 
 document.getElementById("cari").addEventListener("input", prosesMenu);
-
-// Logika navigasi remote
-let activeElement = null;
-const sideMenu = document.getElementById('sideMenu');
-
-function toggleMenu() {
-    const isMenuOpen = sideMenu.classList.contains('open');
-    if (isMenuOpen) {
-        sideMenu.classList.remove('open');
-        document.getElementById('atas').classList.remove('shift-right');
-        document.getElementById('container').classList.remove('shift-right');
-    } else {
-        sideMenu.classList.add('open');
-        document.getElementById('atas').classList.add('shift-right');
-        document.getElementById('container').classList.add('shift-right');
-    }
-}
-
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') {
-        const firstDiv = document.querySelector('.responsive-div.highlight');
-        if (firstDiv) {
-            firstDiv.classList.remove('highlight');
-        }
-        toggleMenu();
-        if (sideMenu.classList.contains('open')) {
-            document.getElementById('searchMenu').classList.add('active');
-            activeElement = document.getElementById('searchMenu');
-        }
-    } else if (event.key === 'ArrowRight') {
-        if (sideMenu.classList.contains('open')) {
-            toggleMenu();
-            const firstDiv = document.querySelector('.responsive-div');
-            if (firstDiv) {
-                firstDiv.classList.add('highlight');
-                firstDiv.focus();
-            }
-        }
-    } else if (event.key === 'ArrowUp') {
-        if (sideMenu.classList.contains('open')) {
-            const menuItems = document.querySelectorAll('.menu-item');
-            let currentIndex = Array.from(menuItems).indexOf(activeElement);
-            if (currentIndex > 0) {
-                activeElement.classList.remove('active');
-                currentIndex--;
-                activeElement = menuItems[currentIndex];
-                activeElement.classList.add('active');
-            }
-        }
-    } else if (event.key === 'ArrowDown') {
-        if (sideMenu.classList.contains('open')) {
-            const menuItems = document.querySelectorAll('.menu-item');
-            let currentIndex = Array.from(menuItems).indexOf(activeElement);
-            if (currentIndex < menuItems.length - 1) {
-                activeElement.classList.remove('active');
-                currentIndex++;
-                activeElement = menuItems[currentIndex];
-                activeElement.classList.add('active');
-            }
-        }
-    } else if (event.key === 'Enter') {
-        if (sideMenu.classList.contains('open') && activeElement) {
-            if (activeElement.id === 'searchMenu') {
-                toggleMenu();
-                document.getElementById('cari').focus();
-            } else if (activeElement.id === 'infoMenu') {
-                alert('Informasi mengenai aplikasi tiviku.');
-            }
-        }
-    }
-});
