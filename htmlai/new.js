@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const pauseIcon = document.getElementById('pause-icon');
     const videoTitleContainer = document.getElementById('video-title-container');
     const digitalClock = document.getElementById('digital-clock');
-
     let playerInstance;
     let controlsTimeout;
 
@@ -37,7 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             width: "100%",
             displaytitle: false,
             displaydescription: true,
-            description: "Kamu Sedang Nonton",
             skin: {
                 name: "netflix"
             },
