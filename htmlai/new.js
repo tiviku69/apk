@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         playerInstance = jwplayer("player").setup({
             file: videoLink,
-            autostart: true,
+            autostart: false,
             controls: false,
             width: "100%",
             displaytitle: false,
@@ -61,34 +61,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-
         const formatTime = (seconds) => {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
             const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
             return `${minutes}:${paddedSeconds}`;
         };
-
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
-            playerInstance.pause();
-            if (playerControls) {
-                playerControls.style.display = 'flex';
-                // Menampilkan durasi total video saat player siap
-                const duration = playerInstance.getDuration();
-                if (duration > 0) {
-                    const totalDuration = formatTime(duration);
-                    timeDisplay.innerHTML = `0:00 / ${totalDuration}`;
-                }
-            }
-            loadingSpinner.style.display = 'none';
-            playPauseCenter.style.opacity = '1';
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            videoTitleContainer.style.opacity = '1';
+            if (playerControls) playerControls.style.display = 'flex';
             resetControlsTimeout();
         });
-        
         playerInstance.on('buffer', () => {
             console.log("Video sedang buffering.");
             loadingSpinner.style.display = 'block';
