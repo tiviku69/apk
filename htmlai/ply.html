@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
-    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
     <style>
         body {
             background-color: #000;
@@ -19,6 +18,7 @@
             position: absolute;
             top: 0;
             left: 0;
+            z-index: 1;
         }
         .logo-container {
             position: absolute;
@@ -141,7 +141,7 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
-    <div id="player"></div>
+    <video id="player"></video>
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
         <div id="time-display">0:00 / 0:00</div>
@@ -149,6 +149,7 @@
             <div class="progress-bar" id="progress-bar"></div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script src="new.js"></script>
 </body>
 </html>
