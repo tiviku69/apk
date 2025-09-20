@@ -29,23 +29,29 @@ document.addEventListener('DOMContentLoaded', () => {
         if (videoTitleContainer) {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
         }
-
-        // HLS.js logic
-        if (Hls.isSupported() && videoLink.includes('.m3u8')) {
-            const hls = new Hls();
-            hls.loadSource(videoLink);
-            hls.attachMedia(videoPlayer);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                console.log("HLS manifest parsed.");
-                videoPlayer.play();
-            });
-            hls.on(Hls.Events.ERROR, (event, data) => {
-                console.error(`HLS.js error: ${data.details}`);
-            });
+        
+        // Cek jika video adalah HLS, jika tidak, gunakan HTML5 Video
+        if (videoLink.includes('.m3u8')) {
+            if (Hls.isSupported()) {
+                const hls = new Hls();
+                hls.loadSource(videoLink);
+                hls.attachMedia(videoPlayer);
+                hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                    console.log("HLS manifest parsed.");
+                    videoPlayer.play();
+                });
+                hls.on(Hls.Events.ERROR, (event, data) => {
+                    console.error(`HLS.js error: ${data.details}`);
+                });
+            } else {
+                // Fallback jika HLS tidak didukung di browser
+                videoPlayer.src = videoLink;
+                console.log("HLS is not supported, using standard HTML5 video playback.");
+            }
         } else {
-            // Fallback for non-HLS or unsupported browser
+            // Gunakan pemutar HTML5 untuk format lain seperti MP4
             videoPlayer.src = videoLink;
-            console.log("Using standard HTML5 video playback.");
+            console.log("Using standard HTML5 video playback for non-HLS content.");
         }
 
         const formatTime = (seconds) => {
@@ -55,7 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return `${minutes}:${paddedSeconds}`;
         };
 
-        // Fungsi untuk memperbarui progress bar
         const updateProgressBar = () => {
             if (progressBar && videoPlayer.duration > 0) {
                 const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
@@ -113,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.style.opacity = '1';
         });
 
-        // Event listener bawaan timeupdate tetap digunakan untuk pembaruan normal
         videoPlayer.addEventListener('timeupdate', updateProgressBar);
 
         playPauseCenter.addEventListener('click', () => {
@@ -136,12 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'ArrowRight':
                     videoPlayer.currentTime += 10;
-                    // Perbarui progress bar secara instan
                     updateProgressBar();
                     break;
                 case 'ArrowLeft':
                     videoPlayer.currentTime -= 10;
-                    // Perbarui progress bar secara instan
                     updateProgressBar();
                     break;
                 case 'Escape':
