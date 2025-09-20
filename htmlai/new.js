@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoTitle = sessionStorage.getItem('videoTitle');
     const playerControls = document.getElementById('player-controls');
     const progressBar = document.getElementById('progress-bar');
+    const progressBarContainer = document.getElementById('progress-bar-container');
     const loadingSpinner = document.getElementById('loading-spinner');
     const timeDisplay = document.getElementById('time-display');
     const playPauseCenter = document.getElementById('play-pause-center');
@@ -10,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pauseIcon = document.getElementById('pause-icon');
     const videoTitleContainer = document.getElementById('video-title-container');
     const digitalClock = document.getElementById('digital-clock');
-    let playerInstance;
+    const videoPlayer = document.getElementById('video-player');
     let controlsTimeout;
 
     function updateClock() {
@@ -29,54 +30,28 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
         }
         
-        playerInstance = jwplayer("player").setup({
-            file: videoLink,
-            autostart: false,
-            controls: false,
-            width: "100%",
-            displaytitle: false,
-            displaydescription: true,
-            skin: {
-                name: "netflix"
-            },
-            captions: {
-                color: "#FFF",
-                fontSize: 14,
-                backgroundOpacity: 0,
-                edgeStyle: "raised"
-            },
-            qualityLabels: {
-                "360": "Normal",
-                "480": "HD",
-                "720": "Full HD",
-                "1080": "Ultra HD"
-            },
-            onBuffer: () => {
-                const currentQuality = playerInstance.getQuality();
-                const availableQualities = playerInstance.getQualityLevels();
-                const lowestQuality = availableQualities.find(q => q.label === "Normal");
-                if (currentQuality && lowestQuality && currentQuality.label !== "Normal") {
-                    playerInstance.setQuality(lowestQuality.index);
-                    console.log("Koneksi lambat, beralih ke kualitas terendah untuk mencegah buffering.");
-                }
-            }
-        });
+        videoPlayer.src = videoLink;
+        videoPlayer.autoplay = true;
+
         const formatTime = (seconds) => {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
             const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
             return `${minutes}:${paddedSeconds}`;
         };
-        playerInstance.on('ready', () => {
-            console.log("JW Player is ready.");
+
+        videoPlayer.addEventListener('loadedmetadata', () => {
+            console.log("Video metadata is loaded.");
             if (playerControls) playerControls.style.display = 'flex';
             resetControlsTimeout();
         });
-        playerInstance.on('buffer', () => {
+
+        videoPlayer.addEventListener('waiting', () => {
             console.log("Video sedang buffering.");
             loadingSpinner.style.display = 'block';
         });
-        playerInstance.on('play', () => {
+
+        videoPlayer.addEventListener('playing', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
             playPauseCenter.style.opacity = '0';
@@ -85,7 +60,8 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.style.opacity = '0';
             resetControlsTimeout();
         });
-        playerInstance.on('pause', () => {
+
+        videoPlayer.addEventListener('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
@@ -93,59 +69,84 @@ document.addEventListener('DOMContentLoaded', () => {
             pauseIcon.style.display = 'none';
             videoTitleContainer.style.opacity = '1';
         });
-        playerInstance.on('complete', () => {
+
+        videoPlayer.addEventListener('ended', () => {
             console.log("Video selesai diputar.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
             videoTitleContainer.style.opacity = '1';
         });
-        playerInstance.on('time', (data) => {
-            if (progressBar && data.duration > 0) {
-                const progressPercentage = (data.position / data.duration) * 100;
+
+        videoPlayer.addEventListener('timeupdate', () => {
+            if (progressBar && videoPlayer.duration > 0) {
+                const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(data.position);
-                const totalDuration = formatTime(data.duration);
+                const currentTime = formatTime(videoPlayer.currentTime);
+                const totalDuration = formatTime(videoPlayer.duration);
                 timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
             }
         });
+
         playPauseCenter.addEventListener('click', () => {
-            playerInstance.playToggle();
-        });
-        document.addEventListener('keydown', (event) => {
-            if (playerInstance) {
-                switch (event.key) {
-                    case 'Enter':
-                    case ' ':
-                        playerInstance.playToggle();
-                        break;
-                    case 'ArrowRight':
-                        playerInstance.seek(playerInstance.getPosition() + 10);
-                        break;
-                    case 'ArrowLeft':
-                        playerInstance.seek(playerInstance.getPosition() - 10);
-                        break;
-                    case 'Escape':
-                        window.history.back();
-                        break;
-                }
-                resetControlsTimeout();
+            if (videoPlayer.paused) {
+                videoPlayer.play();
+            } else {
+                videoPlayer.pause();
             }
         });
+        
+        progressBarContainer.addEventListener('click', (e) => {
+            const rect = progressBarContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            videoPlayer.currentTime = percentage * videoPlayer.duration;
+            resetControlsTimeout();
+        });
+
+        document.addEventListener('keydown', (event) => {
+            switch (event.key) {
+                case 'Enter':
+                case ' ':
+                    if (videoPlayer.paused) {
+                        videoPlayer.play();
+                    } else {
+                        videoPlayer.pause();
+                    }
+                    break;
+                case 'ArrowRight':
+                    videoPlayer.currentTime += 10;
+                    break;
+                case 'ArrowLeft':
+                    videoPlayer.currentTime -= 10;
+                    break;
+                case 'Escape':
+                    window.history.back();
+                    break;
+            }
+            resetControlsTimeout();
+        });
+
         const hideControls = () => {
-            if (playerControls && playerInstance.getState() === 'playing') {
+            if (!videoPlayer.paused) {
                 playerControls.style.display = 'none';
+                videoTitleContainer.style.opacity = '0';
             }
         };
+
         const resetControlsTimeout = () => {
             clearTimeout(controlsTimeout);
-            if (playerControls) playerControls.style.display = 'flex';
+            if (playerControls) {
+                playerControls.style.display = 'flex';
+                videoTitleContainer.style.opacity = '1';
+            }
             controlsTimeout = setTimeout(hideControls, 3000);
         };
+        
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);
-        playerInstance.on('useractive', resetControlsTimeout);
-        playerInstance.on('userinactive', hideControls);
+        videoPlayer.addEventListener('click', resetControlsTimeout);
+
     } else {
         console.error('Tidak ada data video ditemukan di sessionStorage.');
         document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
