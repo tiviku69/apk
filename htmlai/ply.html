@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
     <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
             background-color: #000;
@@ -20,62 +20,118 @@
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1; /* Ensure player is behind overlays */
+            background-color: #000; /* Ensure black background */
         }
         .logo-container {
             position: absolute;
             top: 20px;
             left: 20px;
             z-index: 1001;
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
         .logo-container img {
-            width: 135px;
-            height: 45px;
+            width: 120px; /* Slightly smaller logo */
+            height: auto;
             display: block;
         }
-        #video-details-overlay {
+        .custom-controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9));
+            padding: 15px 20px; /* Adjusted padding */
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            box-sizing: border-box;
+        }
+        .custom-controls.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 8px; /* Thinner progress bar */
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            border-radius: 4px;
+            position: relative;
+        }
+        .progress-bar-container:hover .progress-bar {
+            height: 100%; /* Expand on hover */
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #e50914; /* Netflix red */
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.1s linear, height 0.1s linear;
             position: absolute;
-            top: 100px;
-            left: 20px;
-            max-width: 400px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 15px;
-            border-radius: 8px;
-            z-index: 1001;
-            transition: opacity 0.3s ease-in-out;
-            pointer-events: none; /* Allows interaction with player */
+            left: 0;
+            top: 0;
         }
-        #video-details-overlay h2 {
-            margin: 0 0 5px 0;
-            font-size: 1.5em;
-            color: white;
-        }
-        #video-details-overlay p {
-            margin: 0;
-            font-size: 0.9em;
-            color: #aaa;
-        }
-        #digital-clock {
+        .progress-bar-scrubber {
             position: absolute;
-            top: 25px;
-            right: 20px;
-            z-index: 1001;
-            color: white;
-            font-size: 22px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px #000000;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 0; /* Aligned with current progress */
+            width: 16px; /* Larger scrubber */
+            height: 16px;
+            background-color: #e50914;
+            border-radius: 50%;
+            display: none; /* Hidden by default */
+            z-index: 2;
+        }
+        .progress-bar-container:hover .progress-bar-scrubber {
+            display: block; /* Show on hover */
+        }
+        .controls-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        .controls-left, .controls-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .control-button {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .control-button:hover {
+            color: #e50914;
+            transform: scale(1.1);
+        }
+        #time-display {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 500;
+            min-width: 120px; /* Ensure space for time */
         }
         #loading-spinner {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 50px;
-            height: 50px;
-            border: 5px solid rgba(255, 0, 0, 0.3);
-            border-top: 5px solid #f00;
+            width: 60px;
+            height: 60px;
+            border: 6px solid rgba(255, 255, 255, 0.3);
+            border-top: 6px solid #e50914; /* Netflix red */
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 1s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite; /* More dynamic spin */
             z-index: 1001;
             display: none;
         }
@@ -88,93 +144,81 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
+            background: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+            border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             z-index: 1002;
-            transition: opacity 0.3s ease-in-out;
+            transition: opacity 0.3s ease-in-out, background 0.2s ease;
             opacity: 1;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+        #play-pause-center:hover {
+            background: rgba(0, 0, 0, 0.8);
         }
         #play-pause-center svg {
-            fill: #f00;
-            width: 70%;
-            height: 70%;
+            fill: #fff; /* White icons */
+            width: 60%;
+            height: 60%;
+            transition: fill 0.2s ease;
         }
-        /* Custom controls styling */
-        .custom-controls {
-            position: fixed;
-            bottom: 0;
+        #play-pause-center:hover svg {
+            fill: #e50914;
+        }
+        #video-title-container {
+            position: absolute;
+            top: 100px; /* Lower title */
             left: 50%;
             transform: translateX(-50%);
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 1000;
+            max-width: 80%;
+            text-align: center;
+            z-index: 1001;
+            padding: 10px 20px;
+            font-size: 32px; /* Larger title */
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 15px rgba(0, 0, 0, 0.9); /* Stronger shadow */
             opacity: 1;
             transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* Allow clicks through */
         }
-        .progress-bar-container {
-            width: 100%;
-            height: 5px;
-            background: #555;
-            cursor: pointer;
-            position: relative;
-        }
-        .progress-bar {
-            height: 100%;
-            background-color: #ff0000;
-            width: 0%;
-        }
-        .control-button {
-            background: none;
-            border: none;
+        #digital-clock {
+            position: absolute;
+            top: 20px;
+            right: 20px; /* Positioned to the right */
+            z-index: 1001;
             color: white;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.7);
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
-        .control-button .material-icons {
-            font-size: 28px;
+
+        /* Quality selector styles (optional, JW Player often handles this) */
+        .jw-button-container.jw-quality {
+            order: 3; /* Position after volume */
+            margin-left: auto; /* Push to the right */
         }
-        .volume-slider {
-            width: 80px;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
-            outline: none;
-            -webkit-appearance: none;
-            appearance: none;
+        .jw-quality-label {
+            color: #fff !important;
         }
-        .volume-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #f00;
-            cursor: pointer;
+        .jw-button-container.jw-quality .jw-icon {
+            color: #fff !important;
         }
     </style>
 </head>
 <body>
-    <div class="logo-container">
-        <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Tiviku Logo">
+    <div class="logo-container" id="player-logo">
+        <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Logo Perusahaan Anda">
     </div>
-    <div id="video-details-overlay">
-        <h2 id="current-video-title"></h2>
-        <p id="current-video-channel"></p>
-        <p id="current-video-views"></p>
-    </div>
+    <div id="video-title-container"></div>
     <div id="digital-clock"></div>
+    
     <div id="play-pause-center">
         <svg id="play-icon" viewBox="0 0 24 24" style="display: block;">
             <path d="M8 5v14l11-7z"/>
@@ -183,27 +227,40 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
+    
     <div id="player"></div>
     <div id="loading-spinner"></div>
-
+    
     <div class="custom-controls" id="player-controls">
         <div class="progress-bar-container" id="progress-bar-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-        <div style="display: flex; align-items: center; gap: 15px; width: 100%; justify-content: center;">
-            <button class="control-button" id="play-pause-button">
-                <i class="material-icons" id="controls-play-icon">play_arrow</i>
-                <i class="material-icons" id="controls-pause-icon" style="display: none;">pause</i>
-            </button>
-            <div id="time-display">0:00 / 0:00</div>
-            <div class="volume-container">
-                <button class="control-button" id="mute-button"><i class="material-icons">volume_up</i></button>
-                <input type="range" min="0" max="1" step="0.01" value="1" class="volume-slider" id="volume-slider">
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress-bar-scrubber" id="progress-scrubber"></div>
             </div>
-            <button class="control-button" id="fullscreen-button"><i class="material-icons">fullscreen</i></button>
+        </div>
+        <div class="controls-row">
+            <div class="controls-left">
+                <button class="control-button" id="play-pause-button">
+                    <i class="fas fa-play" id="play-button-icon"></i>
+                    <i class="fas fa-pause" id="pause-button-icon" style="display: none;"></i>
+                </button>
+                <button class="control-button" id="rewind-button">
+                    <i class="fas fa-backward"></i>
+                </button>
+                <button class="control-button" id="forward-button">
+                    <i class="fas fa-forward"></i>
+                </button>
+                <span id="time-display">0:00 / 0:00</span>
+            </div>
+            <div class="controls-right">
+                <button class="control-button" id="fullscreen-button">
+                    <i class="fas fa-expand"></i>
+                </button>
+                <button class="control-button" id="mute-button">
+                    <i class="fas fa-volume-up" id="volume-icon"></i>
+                </button>
+                </div>
         </div>
     </div>
-
     <script src="new.js"></script>
 </body>
 </html>

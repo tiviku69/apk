@@ -2,121 +2,58 @@
 <html lang="in">
 <head>
     <meta charset="UTF-8">
-    <title>Tiviku - Beranda</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TiviKu</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 <body>
     <div class="offline-message" id="offlineMessage">
+        <i class="fas fa-exclamation-triangle"></i>
         <h1>Anda Tidak Terhubung ke Internet</h1>
         <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
     </div>
+    
+    <div id="main-content">
+        <header id="atas">
+            <div class="header-left">
+                <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="TiviKu Logo" class="logo">
+                <span class="brand-text">by tiviku</span>
+            </div>
+            <div class="search-container">
+                <input type="text" id="cari" onkeyup="prosesMenu()" placeholder="Cari konten...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+        </header>
 
-    <div id="app-container">
-        <aside id="sidebar">
-            <div class="sidebar-item active">
-                <i class="material-icons">home</i>
-                <span>Beranda</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">explore</i>
-                <span>Jelajahi</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">subscriptions</i>
-                <span>Langganan</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">video_library</i>
-                <span>Koleksi</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">history</i>
-                <span>Histori</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">watch_later</i>
-                <span>Tonton Nanti</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">thumb_up_alt</i>
-                <span>Video yang Disukai</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">settings</i>
-                <span>Setelan</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">help_outline</i>
-                <span>Bantuan</span>
-            </div>
-            <div class="sidebar-item">
-                <i class="material-icons">feedback</i>
-                <span>Kirim Masukan</span>
-            </div>
-        </aside>
+        <nav class="sidebar" id="sidebar">
+            <ul>
+                <li class="nav-item active" data-category="home">
+                    <i class="fas fa-home"></i>
+                    <span>Beranda</span>
+                </li>
+                <li class="nav-item" data-category="movies">
+                    <i class="fas fa-film"></i>
+                    <span>Film</span>
+                </li>
+                <li class="nav-item" data-category="series">
+                    <i class="fas fa-tv"></i>
+                    <span>Serial TV</span>
+                </li>
+                <li class="nav-item" data-category="originals">
+                    <i class="fas fa-star"></i>
+                    <span>Originals</span>
+                </li>
+                <li class="nav-item" data-category="new">
+                    <i class="fas fa-fire"></i>
+                    <span>Terbaru</span>
+                </li>
+            </ul>
+        </nav>
 
-        <main id="main-content">
-            <header id="main-header">
-                <div class="header-left">
-                    <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Tiviku Logo" class="logo">
-                </div>
-                <div class="header-center">
-                    <input type="text" id="cari" placeholder="Cari..." onkeyup="prosesMenu()">
-                    <button class="search-button"><i class="material-icons">search</i></button>
-                </div>
-                <div class="header-right">
-                    <i class="material-icons">search</i>
-                    <i class="material-icons">apps</i>
-                    <i class="material-icons">notifications</i>
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User Avatar" class="user-avatar">
-                </div>
-            </header>
-
-            <div id="content-area">
-                <section class="video-section">
-                    <div class="section-header">
-                        <span class="section-title">Direkomendasikan</span>
-                    </div>
-                    <div class="video-grid" id="container">
-                        
-
-</div>
-                </section>
-
-                <section class="video-section">
-                    <div class="section-header">
-                        <span class="section-title">Lanjutkan Menonton</span>
-                    </div>
-                    <div class="video-grid" id="continue-watching-container">
-                        
-
-</div>
-                </section>
-                
-                
-
-</div>
-        </main>
+        <div id="container" class="content-grid"></div>
     </div>
 
-    <script>
-        function updateOnlineStatus() {
-            const offlineMessage = document.getElementById('offlineMessage');
-            const appContainer = document.getElementById('app-container');
-            if (navigator.onLine) {
-                offlineMessage.style.display = 'none';
-                appContainer.style.display = 'grid'; // Use grid for online
-            } else {
-                offlineMessage.style.display = 'block';
-                appContainer.style.display = 'none'; // Hide app content when offline
-            }
-        }
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus(); // Set initial status
-    </script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,10 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.getElementById('container');
-    const continueWatchingContainer = document.getElementById('continue-watching-container'); // New container
-    const searchInput = document.getElementById('cari');
-    const headerRightSearchIcon = document.querySelector('.header-right .material-icons:first-child');
-    const headerCenter = document.querySelector('.header-center');
-    let allVideos = []; // To store all loaded video data
+    // Online/Offline status handler
+    function updateOnlineStatus() {
+        const offlineMessage = document.getElementById('offlineMessage');
+        const mainContent = document.getElementById('main-content');
+        if (navigator.onLine) {
+            offlineMessage.style.display = 'none';
+            mainContent.style.display = 'flex'; // Ensure main content is visible
+            loadContent(); // Load content when online
+        } else {
+            offlineMessage.style.display = 'flex';
+            mainContent.style.display = 'none'; // Hide main content when offline
+        }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+
+    // Initial status check
+    updateOnlineStatus();
 
     const files = [
         'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json',
@@ -18,213 +31,167 @@ document.addEventListener('DOMContentLoaded', () => {
         'https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json'
     ];
 
-    let filesProcessed = 0;
-    const totalFiles = files.length;
+    let allContent = []; // To store all loaded content for filtering
+    const container = document.getElementById('container');
 
-    const createVideoCard = (item) => {
-        const dv = document.createElement('div');
-        dv.className = 'responsive-div';
-        dv.tabIndex = 0; // Make div focusable for keyboard navigation
+    async function loadContent() {
+        if (!navigator.onLine) return; // Don't load if offline
 
-        dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl, item.chn, item.vws, item.age);
+        container.innerHTML = '<div class="loading-animation"></div>'; // Show loading spinner
+        allContent = []; // Clear previous content
 
-        const img = document.createElement('img');
-        img.id = 'imgv';
-        img.src = item.logo;
-        img.alt = item.ttl;
+        let filesProcessed = 0;
+        const totalFiles = files.length;
 
-        const dur = document.createElement('div');
-        dur.className = 'dur';
-        dur.innerText = item.dur;
-
-        const videoInfo = document.createElement('div');
-        videoInfo.className = 'video-info';
-
-        const title = document.createElement('h3');
-        title.className = 'video-title';
-        title.innerText = item.ttl;
-
-        const details = document.createElement('div');
-        details.className = 'video-details';
-
-        const channel = document.createElement('p');
-        channel.className = 'channel-name';
-        channel.innerText = item.chn || 'Channel Tidak Dikenal';
-
-        const viewsTime = document.createElement('p');
-        viewsTime.className = 'views-time';
-        viewsTime.innerText = `${item.vws || 'N/A'} ditonton • ${item.age || 'N/A'}`;
-
-        details.appendChild(channel);
-        details.appendChild(viewsTime);
-
-        videoInfo.appendChild(title);
-        videoInfo.appendChild(details);
-
-        dv.appendChild(img);
-        dv.appendChild(dur); // Duration overlay on image
-        dv.appendChild(videoInfo);
-
-        // Add a play overlay icon (similar to YouTube)
-        const thumbnailOverlay = document.createElement('div');
-        thumbnailOverlay.className = 'thumbnail-overlay';
-        const playIconOverlay = document.createElement('i');
-        playIconOverlay.className = 'material-icons';
-        playIconOverlay.textContent = 'play_arrow';
-        thumbnailOverlay.appendChild(playIconOverlay);
-        dv.appendChild(thumbnailOverlay);
-
-        return dv;
-    };
-
-    files.forEach(file => {
-        fetch(file)
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(item => {
-                    allVideos.push(item); // Add to our master list
-                    container.appendChild(createVideoCard(item));
-                });
-                filesProcessed++;
-                if (filesProcessed === totalFiles) {
-                    // All files loaded, highlight the first one
-                    const firstDiv = document.querySelector('.responsive-div');
-                    if (firstDiv) {
-                        firstDiv.classList.add('highlight');
-                        firstDiv.focus();
-                    }
-                }
-            })
-            .catch(error => {
+        for (const file of files) {
+            try {
+                const response = await fetch(file);
+                const data = await response.json();
+                allContent = allContent.concat(data); // Add to allContent array
+            } catch (error) {
                 console.error('Error loading JSON:', error);
+            } finally {
                 filesProcessed++;
                 if (filesProcessed === totalFiles) {
+                    displayContent(allContent); // Display all content after loading
+                    // Highlight the first item after initial load
                     const firstDiv = document.querySelector('.responsive-div');
                     if (firstDiv) {
                         firstDiv.classList.add('highlight');
                         firstDiv.focus();
                     }
                 }
-            });
-    });
-
-    // Function to handle video playback
-    function playVideo(videoFile, logoFile, textFile, channelName, views, age) {
-        sessionStorage.setItem('videoLink', videoFile);
-        sessionStorage.setItem('videoTitle', textFile);
-        sessionStorage.setItem('logoFile', logoFile); // If ply.html needs the logo
-        sessionStorage.setItem('videoChannel', channelName);
-        sessionStorage.setItem('videoViews', views);
-        sessionStorage.setItem('videoAge', age);
-        window.location.href = 'ply.html';
+            }
+        }
     }
 
-    // New search function
-    window.prosesMenu = function() {
-        const filter = searchInput.value.toLowerCase();
-        // Clear existing videos from the container
-        container.innerHTML = '';
+    function displayContent(contentArray) {
+        container.innerHTML = ''; // Clear container before adding new content
 
-        const filteredVideos = allVideos.filter(item =>
-            item.ttl.toLowerCase().includes(filter) ||
-            (item.chn && item.chn.toLowerCase().includes(filter)) // Also search by channel name
-        );
-
-        if (filteredVideos.length > 0) {
-            filteredVideos.forEach(item => {
-                container.appendChild(createVideoCard(item));
-            });
-            // Re-highlight the first filtered item if any
-            const firstDiv = document.querySelector('.responsive-div');
-            if (firstDiv) {
-                firstDiv.classList.add('highlight');
-                firstDiv.focus();
-            }
-        } else {
-            container.innerHTML = '<p style="color: grey; text-align: center; padding: 20px;">Tidak ada video yang ditemukan.</p>';
+        if (contentArray.length === 0) {
+            container.innerHTML = '<p class="no-results">Tidak ada hasil ditemukan.</p>';
+            return;
         }
-    };
 
-    // Keyboard navigation (similar to previous version, adapted for new structure)
-    document.addEventListener('keydown', (event) => {
-        const currentActive = document.activeElement;
-        let nextElement;
+        contentArray.forEach(item => {
+            const dv = document.createElement('div');
+            dv.className = 'responsive-div';
+            dv.tabIndex = 0; // Make div focusable for keyboard navigation
+            dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
+            dv.onkeydown = (event) => {
+                if (event.key === 'Enter') {
+                    playVideo(item.lnk, item.logo, item.ttl);
+                }
+            };
 
-        if (currentActive && currentActive.classList.contains('responsive-div')) {
-            const videoElements = Array.from(document.querySelectorAll('.responsive-div:not([style*="display: none"])')); // Only visible videos
-            const currentIndex = videoElements.indexOf(currentActive);
+            const img = document.createElement('img');
+            img.id = 'imgv';
+            img.src = item.logo;
+            img.alt = item.ttl;
 
-            switch (event.key) {
-                case 'ArrowRight':
-                    if (currentIndex < videoElements.length - 1) {
-                        nextElement = videoElements[currentIndex + 1];
-                    }
-                    break;
-                case 'ArrowLeft':
-                    if (currentIndex > 0) {
-                        nextElement = videoElements[currentIndex - 1];
-                    }
-                    break;
-                case 'ArrowDown':
-                case 'ArrowUp':
-                    // Basic row navigation: calculate based on grid columns
-                    const gridComputedStyle = window.getComputedStyle(container);
-                    const gridColumns = gridComputedStyle.getPropertyValue('grid-template-columns').split(' ').length;
-                    
-                    if (event.key === 'ArrowDown') {
-                        nextElement = videoElements[currentIndex + gridColumns];
-                    } else if (event.key === 'ArrowUp') {
-                        nextElement = videoElements[currentIndex - gridColumns];
-                    }
-                    break;
-                case 'Enter':
-                    currentActive.click(); // Simulate click on Enter
-                    break;
-            }
+            const cardInfo = document.createElement('div');
+            cardInfo.className = 'card-info';
 
-            if (nextElement) {
-                currentActive.classList.remove('highlight');
-                nextElement.classList.add('highlight');
-                nextElement.focus();
-                nextElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                event.preventDefault();
-            }
-        } else if (searchInput === currentActive) {
-            // Handle search input focus
-        } else {
-            // If nothing is focused, try to focus the first video
-            const firstDiv = document.querySelector('.responsive-div:not([style*="display: none"])');
-            if (firstDiv) {
-                firstDiv.classList.add('highlight');
-                firstDiv.focus();
-                event.preventDefault();
-            }
-        }
-    });
+            const pp = document.createElement('p');
+            pp.className = 're';
+            pp.innerText = item.ttl;
 
-    // Toggle search bar visibility on mobile
-    if (headerRightSearchIcon) {
-        headerRightSearchIcon.addEventListener('click', () => {
-            headerCenter.style.display = headerCenter.style.display === 'flex' ? 'none' : 'flex';
-            if (headerCenter.style.display === 'flex') {
-                searchInput.focus();
-            }
+            const dur = document.createElement('p');
+            dur.className = 'dur';
+            dur.innerText = item.dur;
+
+            cardInfo.appendChild(pp);
+            cardInfo.appendChild(dur);
+            
+            dv.appendChild(img);
+            dv.appendChild(cardInfo);
+            container.appendChild(dv);
         });
     }
 
-    // Simulating "Continue Watching" by adding a few items (e.g., first 3)
-    // In a real app, this would be dynamic based on user history.
-    function loadContinueWatching() {
-        if (continueWatchingContainer && allVideos.length > 0) {
-            // Get the first few items from the main video list
-            const continueWatchingItems = allVideos.slice(0, 3); 
-            continueWatchingItems.forEach(item => {
-                continueWatchingContainer.appendChild(createVideoCard(item));
-            });
-        }
+    window.playVideo = function(videoFile, logoFile, textFile) {
+        sessionStorage.setItem('videoLink', videoFile);
+        sessionStorage.setItem('videoTitle', textFile);
+        sessionStorage.setItem('logoFile', logoFile);
+        window.location.href = 'ply.html';
     }
 
-    // Call this after all videos are loaded
-    // This needs to be slightly delayed to ensure allVideos is populated
-    setTimeout(loadContinueWatching, 1000); 
+    window.prosesMenu = function() {
+        const input = document.getElementById("cari");
+        const filter = input.value.toLowerCase();
+        
+        const filteredContent = allContent.filter(item => {
+            return item.ttl.toLowerCase().includes(filter);
+        });
+        displayContent(filteredContent);
+    }
+
+    document.getElementById("cari").addEventListener("input", prosesMenu);
+
+
+    // Sidebar navigation logic
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            navItems.forEach(nav => nav.classList.remove('active'));
+            item.classList.add('active');
+            
+            const category = item.dataset.category;
+            // In a real app, you'd load content based on category here.
+            // For now, we'll just filter if needed or reload all.
+            // If you have 'category' data in your JSON, you can filter `allContent` based on it.
+            if (category === 'home') {
+                displayContent(allContent);
+            } else {
+                // Example: Filter by category if your JSON had a 'category' field
+                // const categoryFilteredContent = allContent.filter(item => item.category === category);
+                // displayContent(categoryFilteredContent);
+                // For now, just show all content
+                displayContent(allContent);
+            }
+        });
+    });
+
+    // Handle keyboard navigation for content grid
+    let currentFocus = 0; // Index of the currently focused div
+
+    document.addEventListener('keydown', (event) => {
+        const focusableDivs = Array.from(document.querySelectorAll('.responsive-div'));
+        if (focusableDivs.length === 0) return;
+
+        // Remove highlight from previous focused element
+        focusableDivs.forEach(div => div.classList.remove('highlight'));
+
+        if (event.key === 'ArrowRight') {
+            currentFocus = (currentFocus + 1) % focusableDivs.length;
+            focusableDivs[currentFocus].focus();
+        } else if (event.key === 'ArrowLeft') {
+            currentFocus = (currentFocus - 1 + focusableDivs.length) % focusableDivs.length;
+            focusableDivs[currentFocus].focus();
+        } else if (event.key === 'ArrowDown') {
+            // Logic to move down in a grid. This is more complex
+            // For simplicity, let's jump by a 'row' factor (e.g., 3 or 4 items per row)
+            const gridStyle = getComputedStyle(container);
+            const gridTemplateColumns = gridStyle.gridTemplateColumns;
+            const columns = gridTemplateColumns.split(' ').length; // Number of columns
+
+            currentFocus = Math.min(currentFocus + columns, focusableDivs.length - 1);
+            focusableDivs[currentFocus].focus();
+        } else if (event.key === 'ArrowUp') {
+            const gridStyle = getComputedStyle(container);
+            const gridTemplateColumns = gridStyle.gridTemplateColumns;
+            const columns = gridTemplateColumns.split(' ').length;
+
+            currentFocus = Math.max(currentFocus - columns, 0);
+            focusableDivs[currentFocus].focus();
+        }
+
+        // Add highlight to the new focused element
+        focusableDivs[currentFocus].classList.add('highlight');
+    });
+
+    // Initial content load when script is ready
+    if (navigator.onLine) {
+        loadContent();
+    }
 });
