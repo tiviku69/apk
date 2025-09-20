@@ -29,10 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const currentVideoViews = document.getElementById('current-video-views');
     const videoDetailsOverlay = document.getElementById('video-details-overlay');
 
-
     let playerInstance;
     let controlsTimeout;
-    let isSeeking = false; // Flag to prevent time updates during seeking
+    let isSeeking = false;
 
     // --- Utility Functions ---
     function updateClock() {
@@ -54,21 +53,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const showControls = () => {
         clearTimeout(controlsTimeout);
         playerControls.style.opacity = '1';
-        playerControls.style.pointerEvents = 'auto'; // Enable interactions
-        videoDetailsOverlay.style.opacity = '1'; // Show video details
+        playerControls.style.pointerEvents = 'auto';
+        videoDetailsOverlay.style.opacity = '1';
     };
 
     const hideControls = () => {
         if (playerInstance && playerInstance.getState() === 'playing' && !isSeeking) {
             playerControls.style.opacity = '0';
-            playerControls.style.pointerEvents = 'none'; // Disable interactions
-            videoDetailsOverlay.style.opacity = '0'; // Hide video details
+            playerControls.style.pointerEvents = 'none';
+            videoDetailsOverlay.style.opacity = '0';
         }
     };
 
     const resetControlsTimeout = () => {
-        showControls(); // Ensure controls are visible when activity
-        controlsTimeout = setTimeout(hideControls, 3000); // Hide after 3 seconds of inactivity
+        showControls();
+        controlsTimeout = setTimeout(hideControls, 3000);
     };
 
     // --- Initialization ---
@@ -76,20 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
 
     if (videoLink) {
-        // Populate video details overlay
         currentVideoTitle.textContent = videoTitle || "Video Sedang Diputar";
         currentVideoChannel.textContent = videoChannel || "Channel Tidak Dikenal";
         currentVideoViews.textContent = `${videoViews || 'N/A'} ditonton • ${videoAge || 'N/A'}`;
 
         playerInstance = jwplayer("player").setup({
             file: videoLink,
-            autostart: true, // Auto-start the video
-            controls: false, // Use custom controls
+            autostart: true,
+            controls: false,
             width: "100%",
             displaytitle: false,
             displaydescription: true,
             skin: {
-                name: "netflix" // A clean, modern skin
+                name: "netflix"
             },
             captions: {
                 color: "#FFF",
@@ -108,24 +106,24 @@ document.addEventListener('DOMContentLoaded', () => {
         // --- Event Listeners for JW Player ---
         playerInstance.on('ready', () => {
             console.log("JW Player is ready.");
-            volumeSlider.value = playerInstance.getVolume() / 100; // Set initial volume slider position
+            volumeSlider.value = playerInstance.getVolume() / 100;
             resetControlsTimeout();
         });
 
         playerInstance.on('buffer', () => {
             console.log("Video sedang buffering.");
             loadingSpinner.style.display = 'block';
-            playPauseCenter.style.opacity = '0'; // Hide center play/pause during buffer
-            showControls(); // Show controls during buffer
+            playPauseCenter.style.opacity = '0';
+            showControls();
         });
 
         playerInstance.on('play', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
-            playPauseCenter.style.opacity = '0'; // Hide center play/pause
+            playPauseCenter.style.opacity = '0';
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
-            controlsPlayIcon.style.display = 'none'; // Update custom controls
+            controlsPlayIcon.style.display = 'none';
             controlsPauseIcon.style.display = 'block';
             resetControlsTimeout();
         });
@@ -133,12 +131,12 @@ document.addEventListener('DOMContentLoaded', () => {
         playerInstance.on('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
-            playPauseCenter.style.opacity = '1'; // Show center play/pause
+            playPauseCenter.style.opacity = '1';
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
-            controlsPlayIcon.style.display = 'block'; // Update custom controls
+            controlsPlayIcon.style.display = 'block';
             controlsPauseIcon.style.display = 'none';
-            showControls(); // Keep controls visible when paused
+            showControls();
         });
 
         playerInstance.on('complete', () => {
@@ -149,11 +147,11 @@ document.addEventListener('DOMContentLoaded', () => {
             pauseIcon.style.display = 'none';
             controlsPlayIcon.style.display = 'block';
             controlsPauseIcon.style.display = 'none';
-            showControls(); // Keep controls visible when complete
+            showControls();
         });
 
         playerInstance.on('time', (data) => {
-            if (!isSeeking && progressBar && data.duration > 0) {
+            if (progressBar && data.duration > 0) {
                 const progressPercentage = (data.position / data.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
                 const currentTime = formatTime(data.position);
@@ -163,20 +161,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         playerInstance.on('seek', () => {
-            // This event fires when a seek operation starts
             isSeeking = true;
             showControls();
         });
 
         playerInstance.on('seeked', () => {
-            // This event fires when a seek operation completes
             isSeeking = false;
             resetControlsTimeout();
         });
 
         playerInstance.on('error', (error) => {
             console.error("JW Player error:", error);
-            // Display an error message to the user or redirect
             document.body.innerHTML = `
                 <div style="text-align: center; color: white; margin-top: 50px;">
                     <h1>Terjadi Kesalahan Saat Memutar Video</h1>
@@ -195,24 +190,14 @@ document.addEventListener('DOMContentLoaded', () => {
             playerInstance.playToggle();
         });
 
-        progressBarContainer.addEventListener('click', (event) => {
-            if (playerInstance && playerInstance.getDuration() > 0) {
-                const clickPosition = event.offsetX / progressBarContainer.offsetWidth;
-                const newPosition = clickPosition * playerInstance.getDuration();
-                playerInstance.seek(newPosition);
-                resetControlsTimeout();
-            }
-        });
-
         muteButton.addEventListener('click', () => {
             playerInstance.setMute(!playerInstance.getMute());
             if (playerInstance.getMute()) {
                 muteButton.querySelector('.material-icons').textContent = 'volume_off';
             } else {
                 muteButton.querySelector('.material-icons').textContent = 'volume_up';
-                // If unmuted, restore slider to last non-zero volume or default
                 if (playerInstance.getVolume() === 0 && volumeSlider.value === "0") {
-                    playerInstance.setVolume(50); // Set to 50% if it was at 0
+                    playerInstance.setVolume(50);
                     volumeSlider.value = "0.5";
                 }
             }
@@ -246,10 +231,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         playerInstance.playToggle();
                         break;
                     case 'ArrowRight':
-                        playerInstance.seek(playerInstance.getPosition() + 10); // Seek forward 10s
+                        playerInstance.seek(playerInstance.getPosition() + 10);
                         break;
                     case 'ArrowLeft':
-                        playerInstance.seek(playerInstance.getPosition() - 10); // Seek backward 10s
+                        playerInstance.seek(playerInstance.getPosition() - 10);
                         break;
                     case 'ArrowUp':
                         playerInstance.setVolume(Math.min(100, playerInstance.getVolume() + 5));
@@ -276,16 +261,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (playerInstance.getFullscreen()) {
                             playerInstance.setFullscreen(false);
                         } else {
-                            window.history.back(); // Go back to index.html
+                            window.history.back();
                         }
                         break;
                 }
                 resetControlsTimeout();
-                event.preventDefault(); // Prevent default browser actions for media keys
+                event.preventDefault();
             }
         });
 
-        // Hide controls on mouse/touch inactivity
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);

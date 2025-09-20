@@ -35,7 +35,7 @@
         }
         #video-details-overlay {
             position: absolute;
-            top: 20px;
+            top: 100px;
             left: 20px;
             max-width: 400px;
             background: rgba(0, 0, 0, 0.7);
@@ -58,7 +58,7 @@
         #digital-clock {
             position: absolute;
             top: 25px;
-            right: 20px; /* Moved to right for better placement */
+            right: 20px;
             z-index: 1001;
             color: white;
             font-size: 22px;
@@ -97,7 +97,7 @@
             z-index: 1002;
             transition: opacity 0.3s ease-in-out;
             opacity: 1;
-            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for button */
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 50%;
         }
         #play-pause-center svg {
@@ -105,38 +105,35 @@
             width: 70%;
             height: 70%;
         }
-        /* Custom controls (already in new.js, but ensure they have basic styling) */
+        /* Custom controls styling */
         .custom-controls {
             position: fixed;
             bottom: 0;
-            left: 0;
+            left: 50%;
+            transform: translateX(-50%);
             width: 100%;
             background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            box-sizing: border-box;
-            display: flex;
+            padding: 20px;
+            display: none;
+            justify-content: center;
             align-items: center;
+            flex-direction: column;
             gap: 15px;
             z-index: 1000;
-            opacity: 0; /* Hidden by default, controlled by JS */
+            opacity: 1;
             transition: opacity 0.3s ease-in-out;
         }
         .progress-bar-container {
-            flex-grow: 1;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.3);
+            width: 100%;
+            height: 5px;
+            background: #555;
             cursor: pointer;
             position: relative;
         }
         .progress-bar {
             height: 100%;
-            background-color: #f00;
+            background-color: #ff0000;
             width: 0%;
-        }
-        #time-display {
-            color: #fff;
-            font-size: 14px;
-            white-space: nowrap;
         }
         .control-button {
             background: none;
@@ -145,18 +142,9 @@
             font-size: 24px;
             cursor: pointer;
             padding: 5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
         .control-button .material-icons {
             font-size: 28px;
-        }
-        /* Volume slider */
-        .volume-container {
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
         .volume-slider {
             width: 80px;
@@ -197,23 +185,23 @@
     </div>
     <div id="player"></div>
     <div id="loading-spinner"></div>
-    
-    
 
-<div class="custom-controls" id="player-controls">
-        <button class="control-button" id="play-pause-button">
-            <i class="material-icons" id="controls-play-icon">play_arrow</i>
-            <i class="material-icons" id="controls-pause-icon" style="display: none;">pause</i>
-        </button>
-        <div id="time-display">0:00 / 0:00</div>
+    <div class="custom-controls" id="player-controls">
         <div class="progress-bar-container" id="progress-bar-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
-        <div class="volume-container">
-            <button class="control-button" id="mute-button"><i class="material-icons">volume_up</i></button>
-            <input type="range" min="0" max="1" step="0.01" value="1" class="volume-slider" id="volume-slider">
+        <div style="display: flex; align-items: center; gap: 15px; width: 100%; justify-content: center;">
+            <button class="control-button" id="play-pause-button">
+                <i class="material-icons" id="controls-play-icon">play_arrow</i>
+                <i class="material-icons" id="controls-pause-icon" style="display: none;">pause</i>
+            </button>
+            <div id="time-display">0:00 / 0:00</div>
+            <div class="volume-container">
+                <button class="control-button" id="mute-button"><i class="material-icons">volume_up</i></button>
+                <input type="range" min="0" max="1" step="0.01" value="1" class="volume-slider" id="volume-slider">
+            </div>
+            <button class="control-button" id="fullscreen-button"><i class="material-icons">fullscreen</i></button>
         </div>
-        <button class="control-button" id="fullscreen-button"><i class="material-icons">fullscreen</i></button>
     </div>
 
     <script src="new.js"></script>
