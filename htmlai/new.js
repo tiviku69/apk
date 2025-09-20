@@ -30,23 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
         }
         
-        // HLS.js logic
-        if (Hls.isSupported() && videoLink.includes('.m3u8')) {
-            const hls = new Hls();
-            hls.loadSource(videoLink);
-            hls.attachMedia(videoPlayer);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                console.log("HLS manifest parsed.");
-                videoPlayer.play();
-            });
-            hls.on(Hls.Events.ERROR, (event, data) => {
-                console.error(`HLS.js error: ${data.details}`);
-            });
-        } else {
-            // Fallback for non-HLS or unsupported browser
-            videoPlayer.src = videoLink;
-            console.log("Using standard HTML5 video playback.");
-        }
+        videoPlayer.src = videoLink;
+        videoPlayer.autoplay = false;
 
         const formatTime = (seconds) => {
             const minutes = Math.floor(seconds / 60);
