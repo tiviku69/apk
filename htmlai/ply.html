@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
+    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         body {
             background-color: #000;
             color: #fff;
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             overflow: hidden;
         }
         #player {
@@ -18,14 +20,11 @@
             position: absolute;
             top: 0;
             left: 0;
-        }
-        #video-player {
-            width: 100%;
-            height: 100%;
+            z-index: 1; /* Ensure player is behind overlays */
         }
         .logo-container {
             position: absolute;
-            top: 27px;
+            top: 20px;
             left: 20px;
             z-index: 1001;
         }
@@ -34,37 +33,37 @@
             height: 45px;
             display: block;
         }
-        .custom-controls {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
+        #video-details-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            max-width: 400px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 20px;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 1000;
+            padding: 10px 15px;
+            border-radius: 8px;
+            z-index: 1001;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none; /* Allows interaction with player */
         }
-        .progress-bar-container {
-            width: 90%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
+        #video-details-overlay h2 {
+            margin: 0 0 5px 0;
+            font-size: 1.5em;
+            color: white;
         }
-        .progress-bar {
-            height: 100%;
-            background-color: #f00;
-            width: 0%;
-            transition: width 0.1s linear;
+        #video-details-overlay p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #aaa;
         }
-        #time-display {
-            color: #fff;
-            font-size: 16px;
-            margin-bottom: 10px;
+        #digital-clock {
+            position: absolute;
+            top: 25px;
+            right: 20px; /* Moved to right for better placement */
+            z-index: 1001;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000;
         }
         #loading-spinner {
             position: absolute;
@@ -98,43 +97,95 @@
             z-index: 1002;
             transition: opacity 0.3s ease-in-out;
             opacity: 1;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent background for button */
+            border-radius: 50%;
         }
         #play-pause-center svg {
             fill: #f00;
-            width: 100%;
-            height: 100%;
+            width: 70%;
+            height: 70%;
         }
-        #video-title-container {
-            position: absolute;
-            top: 100px;
-            left: 20px;
-            width: 30%;
-            z-index: 1001;
-            padding: 5px 10px;
-            font-size: 25px;
-            font-weight: bold;
-            color: white;
-            text-shadow: 2px 2px 4px #000000;
+        /* Custom controls (already in new.js, but ensure they have basic styling) */
+        .custom-controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 1000;
+            opacity: 0; /* Hidden by default, controlled by JS */
             transition: opacity 0.3s ease-in-out;
         }
-        #digital-clock {
-            position: absolute;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
+        .progress-bar-container {
+            flex-grow: 1;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #f00;
+            width: 0%;
+        }
+        #time-display {
+            color: #fff;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .control-button {
+            background: none;
+            border: none;
             color: white;
-            font-size: 22px;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px #000000;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .control-button .material-icons {
+            font-size: 28px;
+        }
+        /* Volume slider */
+        .volume-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .volume-slider {
+            width: 80px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f00;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <div class="logo-container">
-        <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Logo Perusahaan Anda">
+        <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Tiviku Logo">
     </div>
-    <div id="video-title-container"></div>
+    <div id="video-details-overlay">
+        <h2 id="current-video-title"></h2>
+        <p id="current-video-channel"></p>
+        <p id="current-video-views"></p>
+    </div>
     <div id="digital-clock"></div>
     <div id="play-pause-center">
         <svg id="play-icon" viewBox="0 0 24 24" style="display: block;">
@@ -144,16 +195,27 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
-    <div id="player">
-        <video id="video-player" autoplay></video>
-    </div>
+    <div id="player"></div>
     <div id="loading-spinner"></div>
-    <div class="custom-controls" id="player-controls">
+    
+    
+
+<div class="custom-controls" id="player-controls">
+        <button class="control-button" id="play-pause-button">
+            <i class="material-icons" id="controls-play-icon">play_arrow</i>
+            <i class="material-icons" id="controls-pause-icon" style="display: none;">pause</i>
+        </button>
         <div id="time-display">0:00 / 0:00</div>
         <div class="progress-bar-container" id="progress-bar-container">
             <div class="progress-bar" id="progress-bar"></div>
         </div>
+        <div class="volume-container">
+            <button class="control-button" id="mute-button"><i class="material-icons">volume_up</i></button>
+            <input type="range" min="0" max="1" step="0.01" value="1" class="volume-slider" id="volume-slider">
+        </div>
+        <button class="control-button" id="fullscreen-button"><i class="material-icons">fullscreen</i></button>
     </div>
+
     <script src="new.js"></script>
 </body>
 </html>
