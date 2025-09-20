@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (videoTitleContainer) {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
         }
-        
+
         // HLS.js logic
         if (Hls.isSupported() && videoLink.includes('.m3u8')) {
             const hls = new Hls();
@@ -53,6 +53,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const remainingSeconds = Math.floor(seconds % 60);
             const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
             return `${minutes}:${paddedSeconds}`;
+        };
+
+        // Fungsi untuk memperbarui progress bar
+        const updateProgressBar = () => {
+            if (progressBar && videoPlayer.duration > 0) {
+                const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                const currentTime = formatTime(videoPlayer.currentTime);
+                const totalDuration = formatTime(videoPlayer.duration);
+                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
+            }
         };
 
         const resetControlsTimeout = () => {
@@ -102,15 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.style.opacity = '1';
         });
 
-        videoPlayer.addEventListener('timeupdate', () => {
-            if (progressBar && videoPlayer.duration > 0) {
-                const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(videoPlayer.currentTime);
-                const totalDuration = formatTime(videoPlayer.duration);
-                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
-            }
-        });
+        // Event listener bawaan timeupdate tetap digunakan untuk pembaruan normal
+        videoPlayer.addEventListener('timeupdate', updateProgressBar);
 
         playPauseCenter.addEventListener('click', () => {
             if (videoPlayer.paused) {
@@ -132,9 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'ArrowRight':
                     videoPlayer.currentTime += 10;
+                    // Perbarui progress bar secara instan
+                    updateProgressBar();
                     break;
                 case 'ArrowLeft':
                     videoPlayer.currentTime -= 10;
+                    // Perbarui progress bar secara instan
+                    updateProgressBar();
                     break;
                 case 'Escape':
                     window.history.back();
