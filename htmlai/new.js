@@ -134,19 +134,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     videoPlayer.paused ? videoPlayer.play() : videoPlayer.pause();
                     break;
                 case 'ArrowRight':
-                    const newTimeForward = Math.min(videoPlayer.currentTime + 10, videoPlayer.duration);
-                    videoPlayer.currentTime = newTimeForward;
-                    // Putar ulang video setelah FF jika video dijeda sebelumnya
-                    if (videoPlayer.paused) {
-                         videoPlayer.play();
+                    const wasPausedBefore = videoPlayer.paused;
+                    videoPlayer.currentTime = Math.min(videoPlayer.currentTime + 10, videoPlayer.duration);
+                    if (wasPausedBefore) {
+                        videoPlayer.pause(); // Pastikan video tetap dijeda setelah FF
                     }
                     break;
                 case 'ArrowLeft':
-                    const newTimeBackward = Math.max(videoPlayer.currentTime - 10, 0);
-                    videoPlayer.currentTime = newTimeBackward;
-                    // Putar ulang video setelah RW jika video dijeda sebelumnya
-                    if (videoPlayer.paused) {
-                         videoPlayer.play();
+                    const wasPausedBefore2 = videoPlayer.paused;
+                    videoPlayer.currentTime = Math.max(videoPlayer.currentTime - 10, 0);
+                    if (wasPausedBefore2) {
+                        videoPlayer.pause(); // Pastikan video tetap dijeda setelah RW
                     }
                     break;
                 case 'Escape':
