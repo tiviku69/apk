@@ -30,28 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
         }
         
-        // Cek jika video adalah HLS, jika tidak, gunakan HTML5 Video
-        if (videoLink.includes('.m3u8')) {
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(videoLink);
-                hls.attachMedia(videoPlayer);
-                hls.on(Hls.Events.MANIFEST_PARSED, () => {
-                    console.log("HLS manifest parsed.");
-                    videoPlayer.play();
-                });
-                hls.on(Hls.Events.ERROR, (event, data) => {
-                    console.error(`HLS.js error: ${data.details}`);
-                });
-            } else {
-                // Fallback jika HLS tidak didukung di browser
-                videoPlayer.src = videoLink;
-                console.log("HLS is not supported, using standard HTML5 video playback.");
-            }
+        // HLS.js logic
+        if (Hls.isSupported() && videoLink.includes('.m3u8')) {
+            const hls = new Hls();
+            hls.loadSource(videoLink);
+            hls.attachMedia(videoPlayer);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+                console.log("HLS manifest parsed.");
+                videoPlayer.play();
+            });
+            hls.on(Hls.Events.ERROR, (event, data) => {
+                console.error(`HLS.js error: ${data.details}`);
+            });
         } else {
-            // Gunakan pemutar HTML5 untuk format lain seperti MP4
+            // Fallback for non-HLS or unsupported browser
             videoPlayer.src = videoLink;
-            console.log("Using standard HTML5 video playback for non-HLS content.");
+            console.log("Using standard HTML5 video playback.");
         }
 
         const formatTime = (seconds) => {
@@ -59,16 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const remainingSeconds = Math.floor(seconds % 60);
             const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
             return `${minutes}:${paddedSeconds}`;
-        };
-
-        const updateProgressBar = () => {
-            if (progressBar && videoPlayer.duration > 0) {
-                const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(videoPlayer.currentTime);
-                const totalDuration = formatTime(videoPlayer.duration);
-                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
-            }
         };
 
         const resetControlsTimeout = () => {
@@ -118,7 +102,15 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.style.opacity = '1';
         });
 
-        videoPlayer.addEventListener('timeupdate', updateProgressBar);
+        videoPlayer.addEventListener('timeupdate', () => {
+            if (progressBar && videoPlayer.duration > 0) {
+                const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                const currentTime = formatTime(videoPlayer.currentTime);
+                const totalDuration = formatTime(videoPlayer.duration);
+                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
+            }
+        });
 
         playPauseCenter.addEventListener('click', () => {
             if (videoPlayer.paused) {
@@ -140,11 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'ArrowRight':
                     videoPlayer.currentTime += 10;
-                    updateProgressBar();
                     break;
                 case 'ArrowLeft':
                     videoPlayer.currentTime -= 10;
-                    updateProgressBar();
                     break;
                 case 'Escape':
                     window.history.back();
