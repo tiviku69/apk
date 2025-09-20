@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 3000);
-        return; // Hentikan eksekusi jika tidak ada video link
+        return;
     }
 
     if (videoTitleContainer) {
@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Event Listeners
     videoPlayer.addEventListener('loadedmetadata', () => {
         console.log("Video metadata is loaded.");
         showControls();
@@ -135,10 +134,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     videoPlayer.paused ? videoPlayer.play() : videoPlayer.pause();
                     break;
                 case 'ArrowRight':
-                    videoPlayer.currentTime = Math.min(videoPlayer.currentTime + 10, videoPlayer.duration);
+                    const newTimeForward = Math.min(videoPlayer.currentTime + 10, videoPlayer.duration);
+                    videoPlayer.currentTime = newTimeForward;
+                    // Putar ulang video setelah FF jika video dijeda sebelumnya
+                    if (videoPlayer.paused) {
+                         videoPlayer.play();
+                    }
                     break;
                 case 'ArrowLeft':
-                    videoPlayer.currentTime = Math.max(videoPlayer.currentTime - 10, 0);
+                    const newTimeBackward = Math.max(videoPlayer.currentTime - 10, 0);
+                    videoPlayer.currentTime = newTimeBackward;
+                    // Putar ulang video setelah RW jika video dijeda sebelumnya
+                    if (videoPlayer.paused) {
+                         videoPlayer.play();
+                    }
                     break;
                 case 'Escape':
                     window.history.back();
@@ -148,7 +157,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Event listener untuk mengaktifkan kontrol saat mouse bergerak atau disentuh
     document.addEventListener('mousemove', showControls);
     document.addEventListener('mousedown', showControls);
     document.addEventListener('touchstart', showControls);
