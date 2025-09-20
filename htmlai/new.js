@@ -32,22 +32,12 @@ document.addEventListener('DOMContentLoaded', () => {
         
         videoPlayer.src = videoLink;
         videoPlayer.autoplay = false;
-        
+
         const formatTime = (seconds) => {
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = Math.floor(seconds % 60);
             const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
             return `${minutes}:${paddedSeconds}`;
-        };
-
-        const updateProgressBar = () => {
-            if (progressBar && videoPlayer.duration > 0) {
-                const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(videoPlayer.currentTime);
-                const totalDuration = formatTime(videoPlayer.duration);
-                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
-            }
         };
 
         const resetControlsTimeout = () => {
@@ -97,7 +87,15 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.style.opacity = '1';
         });
 
-        videoPlayer.addEventListener('timeupdate', updateProgressBar);
+        videoPlayer.addEventListener('timeupdate', () => {
+            if (progressBar && videoPlayer.duration > 0) {
+                const progressPercentage = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                const currentTime = formatTime(videoPlayer.currentTime);
+                const totalDuration = formatTime(videoPlayer.duration);
+                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
+            }
+        });
 
         playPauseCenter.addEventListener('click', () => {
             if (videoPlayer.paused) {
@@ -119,11 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'ArrowRight':
                     videoPlayer.currentTime += 10;
-                    updateProgressBar();
                     break;
                 case 'ArrowLeft':
                     videoPlayer.currentTime -= 10;
-                    updateProgressBar();
                     break;
                 case 'Escape':
                     window.history.back();
