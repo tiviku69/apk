@@ -1,9 +1,9 @@
 const atas = document.getElementById('atas');
-atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b>'; // Hapus input cari dari sini
+atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b>';
 
 const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' ];
 
-let allVideoItems = []; // Menyimpan semua item video setelah dimuat
+let allVideoItems = [];
 let filesProcessed = 0;
 const totalFiles = files.length;
 
@@ -32,16 +32,15 @@ function loadVideos() {
                     dv.appendChild(img);
                     dv.appendChild(pp);
                     dv.appendChild(dur);
-                    allVideoItems.push(dv); // Simpan div ke array
+                    allVideoItems.push(dv);
                 });
                 filesProcessed++;
                 if (filesProcessed === totalFiles) {
-                    renderVideos(allVideoItems); // Tampilkan semua video setelah semua dimuat
-                    // Highlight the first one
+                    renderVideos(allVideoItems);
                     const firstDiv = document.querySelector('.responsive-div');
                     if (firstDiv) {
                         firstDiv.classList.add('highlight');
-                        firstDiv.focus(); // Set focus for keyboard navigation
+                        firstDiv.focus();
                     }
                 }
             })
@@ -62,7 +61,7 @@ function loadVideos() {
 
 function renderVideos(videoItemsToRender) {
     const container = document.getElementById('container');
-    container.innerHTML = ''; // Bersihkan kontainer
+    container.innerHTML = '';
     videoItemsToRender.forEach(item => container.appendChild(item));
 }
 
@@ -84,27 +83,22 @@ function prosesMenu() {
     renderVideos(filteredItems);
 }
 
-// Event listener untuk menu Home
 document.getElementById('home-menu').addEventListener('click', () => {
-    document.getElementById('cari').style.display = 'none'; // Sembunyikan search input
+    document.getElementById('cari').style.display = 'none';
     document.getElementById('home-menu').classList.add('active');
     document.getElementById('search-menu').classList.remove('active');
-    renderVideos(allVideoItems); // Tampilkan semua video
+    renderVideos(allVideoItems);
 });
 
-// Event listener untuk menu Search
 document.getElementById('search-menu').addEventListener('click', () => {
-    document.getElementById('cari').style.display = 'block'; // Tampilkan search input
+    document.getElementById('cari').style.display = 'block';
     document.getElementById('home-menu').classList.remove('active');
     document.getElementById('search-menu').classList.add('active');
-    document.getElementById('cari').focus(); // Fokuskan ke input search
-    renderVideos(allVideoItems); // Tampilkan kembali semua video saat pindah ke search
+    document.getElementById('cari').focus();
+    renderVideos(allVideoItems);
 });
 
 document.getElementById("cari").addEventListener("input", prosesMenu);
 
-// Load videos saat halaman pertama kali dimuat
 loadVideos();
-
-// Set menu Home sebagai default aktif
 document.getElementById('home-menu').classList.add('active');

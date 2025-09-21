@@ -6,7 +6,6 @@ body {
     color: white;
 }
 
-/* Layout utama dengan sidebar kiri */
 #main-wrapper {
     display: flex;
     min-height: 100vh;
@@ -21,10 +20,10 @@ body {
     flex-direction: column;
     gap: 15px;
     border-right: 1px solid #333;
-    position: fixed; /* Membuat sidebar tetap di tempatnya */
+    position: fixed;
     top: 0;
     left: 0;
-    height: 100%; /* Mengisi seluruh tinggi viewport */
+    height: 100%;
 }
 
 .menu-item {
@@ -61,12 +60,78 @@ body {
     flex-grow: 1;
     padding: 20px;
     overflow-y: auto;
-    margin-left: 200px; /* Tambahkan margin kiri agar tidak tertutup sidebar */
+    margin-left: 200px;
 }
 
-h1 {
-    color: yellowgreen;
+.offline-message {
+    display: none;
+    border: 1px solid #f44336;
+    padding: 20px;
+    margin: 20px;
+    color: #f44336;
+    background-color: #ffe5e5;
     text-align: center;
+}
+
+/* Mengembalikan gaya gambar ke awal */
+#atas {
+    text-align: center;
+}
+
+#atas h1, #atas b {
+    color: yellowgreen; /* Mengambil dari h1 */
+}
+
+#container {
+    height: 530px;
+    position: relative;
+    top: 15px;
+    padding: 0px;
+    overflow: auto;
+    display: flex; /* Tambahkan flexbox untuk layout */
+    flex-wrap: wrap; /* Izinkan item untuk wrap */
+    justify-content: center; /* Pusatkan item */
+    gap: 20px; /* Jarak antar gambar */
+}
+
+.responsive-div {
+    width: 260px;
+    height: 210px;
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 13px;
+    overflow: hidden;
+    position: relative;
+    padding: 8px 8px;
+    margin: 15px;
+    border: 5px solid red;
+}
+
+.responsive-div:focus {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+.responsive-div:hover {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+.highlight {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+#imgv {
+    border-radius: 11px;
+    width: 270px;
+    height: 220px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 
 .re {
@@ -98,83 +163,6 @@ h1 {
     z-index: 1;
 }
 
-.responsive-div:focus .re,
-.responsive-div:hover .re {
-    font-size: 19px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.responsive-div:focus {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-.responsive-div:hover {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-.highlight {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-#imgv {
-    border-radius: 11px;
-    width: 270px;
-    height: 220px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-
-#atas {
-    position: relative;
-    margin-bottom: 20px;
-}
-
-#atas h1, #atas b {
-    text-align: center;
-}
-
-#container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
-    padding: 0px;
-    height: auto;
-    overflow: visible;
-}
-
-.responsive-div {
-    width: 260px;
-    height: 210px;
-    display: inline-block;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 13px;
-    overflow: hidden;
-    position: relative;
-    padding: 8px 8px;
-    border: 5px solid red;
-    margin: 0;
-}
-
-.offline-message {
-    display: none;
-    border: 1px solid #f44336;
-    padding: 20px;
-    margin: 20px;
-    color: #f44336;
-    background-color: #ffe5e5;
-    text-align: center;
-}
-
-/* Sembunyikan input cari secara default, tampilkan saat menu search aktif */
 #cari {
     display: none;
 }

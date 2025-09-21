@@ -30,7 +30,7 @@
             const mainWrapper = document.getElementById('main-wrapper');
             if (navigator.onLine) {
                 offlineMessage.style.display = 'none';
-                mainWrapper.style.display = 'flex'; // Use flex for main layout
+                mainWrapper.style.display = 'flex';
             } else {
                 offlineMessage.style.display = 'block';
                 mainWrapper.style.display = 'none';
@@ -40,7 +40,6 @@
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
 
-        // Set initial status
         updateOnlineStatus();
     </script>
     <script src="script.js"></script>
