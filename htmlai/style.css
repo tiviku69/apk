@@ -169,3 +169,10 @@ body {
 #cari {
     display: none;
 }
+
+/* Tambahkan ini untuk highlight fokus pada menu item */
+.menu-item:focus {
+    background-color: #333;
+    outline: 2px solid white;
+    outline-offset: -2px;
+}
