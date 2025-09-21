@@ -2,58 +2,47 @@
 <html lang="in">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TiviKu</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Page title</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="offline-message" id="offlineMessage">
-        <i class="fas fa-exclamation-triangle"></i>
         <h1>Anda Tidak Terhubung ke Internet</h1>
         <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
     </div>
-    
-    <div id="main-content">
-        <header id="atas">
-            <div class="header-left">
-                <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="TiviKu Logo" class="logo">
-                <span class="brand-text">by tiviku</span>
-            </div>
-            <div class="search-container">
-                <input type="text" id="cari" onkeyup="prosesMenu()" placeholder="Cari konten...">
-                <i class="fas fa-search search-icon"></i>
-            </div>
-        </header>
 
-        <nav class="sidebar" id="sidebar">
-            <ul>
-                <li class="nav-item active" data-category="home">
-                    <i class="fas fa-home"></i>
-                    <span>Beranda</span>
-                </li>
-                <li class="nav-item" data-category="movies">
-                    <i class="fas fa-film"></i>
-                    <span>Film</span>
-                </li>
-                <li class="nav-item" data-category="series">
-                    <i class="fas fa-tv"></i>
-                    <span>Serial TV</span>
-                </li>
-                <li class="nav-item" data-category="originals">
-                    <i class="fas fa-star"></i>
-                    <span>Originals</span>
-                </li>
-                <li class="nav-item" data-category="new">
-                    <i class="fas fa-fire"></i>
-                    <span>Terbaru</span>
-                </li>
-            </ul>
-        </nav>
-
-        <div id="container" class="content-grid"></div>
+    <div id="main-wrapper">
+        <div id="left-sidebar">
+            <div class="menu-item" id="home-menu">Home</div>
+            <div class="menu-item" id="search-menu">Search</div>
+            <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari...">
+        </div>
+        
+        <div id="content-area">
+            <div id="atas"></div>
+            <div id="container"></div>
+        </div>
     </div>
 
+    <script>
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            const mainWrapper = document.getElementById('main-wrapper');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+                mainWrapper.style.display = 'flex'; // Use flex for main layout
+            } else {
+                offlineMessage.style.display = 'block';
+                mainWrapper.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Set initial status
+        updateOnlineStatus();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
