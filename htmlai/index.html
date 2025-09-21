@@ -13,7 +13,7 @@
 
     <div id="main-wrapper">
         <div id="left-sidebar">
-            <div class="menu-item" id="home-menu">Home</div>
+            <div class="menu-item active" id="home-menu">Home</div>
             <div class="menu-item" id="search-menu">Search</div>
             <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari...">
         </div>
@@ -40,6 +40,7 @@
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
 
+        // Set initial status
         updateOnlineStatus();
     </script>
     <script src="script.js"></script>

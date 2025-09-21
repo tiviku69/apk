@@ -65,7 +65,6 @@ function renderVideos(videoItemsToRender) {
     videoItemsToRender.forEach(item => container.appendChild(item));
 }
 
-
 function playVideo(videoFile, logoFile, textFile) {
     sessionStorage.setItem('videoLink', videoFile);
     sessionStorage.setItem('videoTitle', textFile);
@@ -101,4 +100,3 @@ document.getElementById('search-menu').addEventListener('click', () => {
 document.getElementById("cari").addEventListener("input", prosesMenu);
 
 loadVideos();
-document.getElementById('home-menu').classList.add('active');

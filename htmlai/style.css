@@ -63,37 +63,7 @@ body {
     margin-left: 200px;
 }
 
-.offline-message {
-    display: none;
-    border: 1px solid #f44336;
-    padding: 20px;
-    margin: 20px;
-    color: #f44336;
-    background-color: #ffe5e5;
-    text-align: center;
-}
-
-/* Mengembalikan gaya gambar ke awal */
-#atas {
-    text-align: center;
-}
-
-#atas h1, #atas b {
-    color: yellowgreen; /* Mengambil dari h1 */
-}
-
-#container {
-    height: 530px;
-    position: relative;
-    top: 15px;
-    padding: 0px;
-    overflow: auto;
-    display: flex; /* Tambahkan flexbox untuk layout */
-    flex-wrap: wrap; /* Izinkan item untuk wrap */
-    justify-content: center; /* Pusatkan item */
-    gap: 20px; /* Jarak antar gambar */
-}
-
+/* Mengembalikan style gambar ke versi awal */
 .responsive-div {
     width: 260px;
     height: 210px;
@@ -109,22 +79,7 @@ body {
     border: 5px solid red;
 }
 
-.responsive-div:focus {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-.responsive-div:hover {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-.highlight {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-#imgv {
+#imgv {                
     border-radius: 11px;
     width: 270px;
     height: 220px;
@@ -161,6 +116,54 @@ body {
     background-color: rgba(0, 0, 0, 0.6);
     font-size: 15px;
     z-index: 1;
+}
+
+.responsive-div:focus .re,
+.responsive-div:hover .re {
+    font-size: 19px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.responsive-div:focus {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+.responsive-div:hover {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+.highlight {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+#atas {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#atas h1, #atas b {
+    text-align: center;
+}
+
+#container {
+    display: block;
+    height: auto;
+    overflow: visible;
+    text-align: center;
+}
+
+.offline-message {
+    display: none;
+    border: 1px solid #f44336;
+    padding: 20px;
+    margin: 20px;
+    color: #f44336;
+    background-color: #ffe5e5;
+    text-align: center;
 }
 
 #cari {
