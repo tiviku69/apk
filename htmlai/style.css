@@ -3,7 +3,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-    color: white; /* Default text color for body */
+    color: white;
 }
 
 /* Layout utama dengan sidebar kiri */
@@ -13,14 +13,18 @@ body {
 }
 
 #left-sidebar {
-    width: 200px; /* Lebar sidebar */
+    width: 200px;
     background-color: #1a1a1a;
     padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 15px; /* Spasi antar item menu */
+    gap: 15px;
     border-right: 1px solid #333;
+    position: fixed; /* Membuat sidebar tetap di tempatnya */
+    top: 0;
+    left: 0;
+    height: 100%; /* Mengisi seluruh tinggi viewport */
 }
 
 .menu-item {
@@ -39,14 +43,14 @@ body {
 }
 
 #cari {
-    width: calc(100% - 20px); /* Lebar input search disesuaikan dengan padding */
+    width: calc(100% - 20px);
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #555;
     background-color: #333;
     color: white;
     font-size: 16px;
-    margin-top: 20px; /* Spasi dari menu item di atasnya */
+    margin-top: 20px;
 }
 
 #cari::placeholder {
@@ -54,14 +58,15 @@ body {
 }
 
 #content-area {
-    flex-grow: 1; /* Konten utama mengambil sisa ruang */
+    flex-grow: 1;
     padding: 20px;
-    overflow-y: auto; /* Mengaktifkan scroll pada area konten */
+    overflow-y: auto;
+    margin-left: 200px; /* Tambahkan margin kiri agar tidak tertutup sidebar */
 }
 
 h1 {
     color: yellowgreen;
-    text-align: center; /* Tetap di tengah untuk judul utama */
+    text-align: center;
 }
 
 .re {
@@ -115,7 +120,7 @@ h1 {
     border-radius: 13px;
 }
 
-#imgv {                
+#imgv {
     border-radius: 11px;
     width: 270px;
     height: 220px;
@@ -125,29 +130,29 @@ h1 {
     transform: translate(-50%,-50%);
 }
 
-#atas {                
+#atas {
     position: relative;
-    margin-bottom: 20px; /* Spasi antara judul "tiviku" dan grid video */
+    margin-bottom: 20px;
 }
 
 #atas h1, #atas b {
-    text-align: center; /* Pastikan teks di tengah dalam #atas */
+    text-align: center;
 }
 
 #container {
     display: flex;
-    flex-wrap: wrap; /* Mengatur item agar wrap ke baris berikutnya */
-    gap: 20px; /* Spasi antar video */
-    justify-content: center; /* Pusatkan item jika tidak memenuhi seluruh lebar */
-    padding: 0px; /* Hapus padding lama */
-    height: auto; /* Biarkan tinggi menyesuaikan konten */
-    overflow: visible; /* Tidak perlu scroll di sini, karena parent #content-area yang scroll */
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    padding: 0px;
+    height: auto;
+    overflow: visible;
 }
 
 .responsive-div {
     width: 260px;
     height: 210px;
-    display: inline-block; /* Agar bisa diatur dengan flex-wrap */
+    display: inline-block;
     justify-content: center;
     align-items: center;
     flex-direction: column;
@@ -156,7 +161,7 @@ h1 {
     position: relative;
     padding: 8px 8px;
     border: 5px solid red;
-    margin: 0; /* Hapus margin lama */
+    margin: 0;
 }
 
 .offline-message {
