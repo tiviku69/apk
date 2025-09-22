@@ -1,78 +1,71 @@
 <!DOCTYPE html>
-<html lang="in">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TiviKu - Clone Interface</title>
+    <title>YouTube TV Clone</title>
     <link rel="stylesheet" href="style.css">
-    <style>
-        .offline-message {
-            display: none;
-            border: 1px solid #f44336;
-            padding: 0;
-            margin: 0;
-            color: #f44336;
-            background-color: #ffe5e5;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
-    <div class="offline-message" id="offlineMessage">
-        <h1>Anda Tidak Terhubung ke Internet</h1>
-        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
-    </div>
 
-    <div id="main-container">
-        <div id="sidebar">
+    <div class="container">
+        <aside class="sidebar">
             <div class="logo">
-                <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="TiviKu Logo">
+                <img src="https://www.youtube.com/s/desktop/9d3df192/img/favicon_96x96.png" alt="YouTube Logo">
             </div>
-            <ul id="nav-list">
-                <li class="nav-item active" data-category="home">
-                    <span class="icon">🏠</span> Beranda
-                </li>
-                <li class="nav-item" data-category="music">
-                    <span class="icon">🎵</span> Musik
-                </li>
-                <li class="nav-item" data-category="films">
-                    <span class="icon">🎬</span> Film
-                </li>
-                <li class="nav-item" data-category="games">
-                    <span class="icon">🎮</span> Game
-                </li>
-                <li class="nav-item" data-category="collection">
-                    <span class="icon">⭐</span> Koleksi
-                </li>
-            </ul>
-        </div>
-        
-        <div id="content-area">
-            <div id="atas">
-                <input type="text" id="cari" placeholder="Telusuri">
-            </div>
-            
-            <div id="container">
+            <nav class="main-nav">
+                <ul>
+                    <li class="nav-item active" data-target="home">
+                        <span class="icon">🏠</span>
+                        <span class="text">Beranda</span>
+                    </li>
+                    <li class="nav-item" data-target="music">
+                        <span class="icon">🎵</span>
+                        <span class="text">Musik</span>
+                    </li>
+                    <li class="nav-item" data-target="movies">
+                        <span class="icon">🎬</span>
+                        <span class="text">Film</span>
+                    </li>
+                    <li class="nav-item" data-target="collection">
+                        <span class="icon">📚</span>
+                        <span class="text">Koleksi</span>
+                    </li>
+                    <li class="nav-item" data-target="subscriptions">
+                        <span class="icon">📥</span>
+                        <span class="text">Subscription</span>
+                    </li>
+                    <li class="nav-item" data-target="settings">
+                        <span class="icon">⚙️</span>
+                        <span class="text">Setelan</span>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="header">
+                <div class="search-bar-wrapper">
+                    <input type="text" class="search-bar" placeholder="Telusuri">
                 </div>
-        </div>
+            </header>
+
+            <section class="content-section" id="home-content">
+                <div class="video-grid-container">
+                    <h2>Direkomendasikan</h2>
+                    <div class="video-grid" id="recommended-videos">
+                        </div>
+                </div>
+
+                <div class="video-grid-container">
+                    <h2>Baru untuk Anda</h2>
+                    <div class="video-grid" id="new-videos">
+                        </div>
+                </div>
+            </section>
+        </main>
     </div>
 
     <script src="script.js"></script>
-    <script>
-        function updateOnlineStatus() {
-            const offlineMessage = document.getElementById('offlineMessage');
-            const mainContainer = document.getElementById('main-container');
-            if (navigator.onLine) {
-                offlineMessage.style.display = 'none';
-                mainContainer.style.display = 'flex';
-            } else {
-                offlineMessage.style.display = 'block';
-                mainContainer.style.display = 'none';
-            }
-        }
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus();
-    </script>
 </body>
 </html>
