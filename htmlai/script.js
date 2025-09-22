@@ -1,81 +1,159 @@
-// script.js
+document.addEventListener('DOMContentLoaded', () => {
+    const mainContainer = document.getElementById('mainContainer');
+    const offlineMessage = document.getElementById('offlineMessage');
+    const searchBar = document.getElementById('cari');
+    const videoContainer = document.getElementById('container');
 
-// Sample video data
-const recommendedVideos = [
-    { title: "Lagu Kendaraan Konstruksi | Cocomelon", channel: "CoComelon Indonesia", duration: "1.03.00", thumbnail: "https://i.ytimg.com/vi/a_lWb4_jJ0g/maxresdefault.jpg" },
-    { title: "Monday Morning Jazz", channel: "DooBee DooBee", duration: "1.03.00", thumbnail: "https://i.ytimg.com/vi/q_lWb4_jJ0g/maxresdefault.jpg" },
-    // more videos...
-];
+    const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' ];
 
-const newVideos = [
-    { title: "ARMADA FULL ALBUM", channel: "Galeri Musik", duration: "1.41.59", thumbnail: "https://i.ytimg.com/vi/b_lWb4_jJ0g/maxresdefault.jpg" },
-    // more videos...
-];
-
-const mainContent = document.querySelector('.main-content');
-let currentFocus = null;
-
-function renderVideos(containerId, videos) {
-    const container = document.getElementById(containerId);
-    container.innerHTML = '';
-    videos.forEach((video, index) => {
-        const videoCard = document.createElement('div');
-        videoCard.className = 'video-card';
-        videoCard.tabIndex = 0; // Make element focusable
-        videoCard.innerHTML = `
-            <img src="${video.thumbnail}" alt="${video.title}">
-            <div class="video-info">
-                <div class="title">${video.title}</div>
-                <div class="channel">${video.channel}</div>
-                <div class="views">${video.duration}</div>
-            </div>
-        `;
-        container.appendChild(videoCard);
-    });
-}
-
-// Initial rendering of videos
-renderVideos('recommended-videos', recommendedVideos);
-renderVideos('new-videos', newVideos);
-
-// Navigation logic for TV remote
-window.addEventListener('keydown', (e) => {
-    const focusableElements = document.querySelectorAll('.nav-item, .search-bar, .video-card');
-    let currentIndex = Array.from(focusableElements).indexOf(document.activeElement);
-
-    switch (e.key) {
-        case 'ArrowRight':
-            if (currentIndex < focusableElements.length - 1) {
-                focusableElements[currentIndex + 1].focus();
-            }
-            break;
-        case 'ArrowLeft':
-            if (currentIndex > 0) {
-                focusableElements[currentIndex - 1].focus();
-            }
-            break;
-        case 'Enter':
-            // Simulate a click on the focused element
-            if (document.activeElement) {
-                document.activeElement.click();
-            }
-            break;
+    function updateOnlineStatus() {
+        if (navigator.onLine) {
+            offlineMessage.style.display = 'none';
+            mainContainer.style.display = 'flex';
+        } else {
+            offlineMessage.style.display = 'block';
+            mainContainer.style.display = 'none';
+        }
     }
-});
 
-// Sidebar navigation click handler
-document.querySelectorAll('.nav-item').forEach(item => {
-    item.addEventListener('click', () => {
-        // Remove active class from all items
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        // Add active class to clicked item
-        item.classList.add('active');
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
 
-        // Logic to switch content based on the data-target attribute
-        const target = item.getAttribute('data-target');
-        // You would hide/show different sections here
+    let focusedElementIndex = 0;
+    const focusableElements = [];
+
+    function updateFocus() {
+        const allFocusable = document.querySelectorAll('.nav-item, .search-bar, .video-card');
+        allFocusable.forEach(el => el.classList.remove('highlight', 'active'));
+
+        const currentElement = allFocusable[focusedElementIndex];
+        if (currentElement) {
+            currentElement.classList.add('highlight');
+            if (currentElement.classList.contains('nav-item')) {
+                currentElement.classList.add('active');
+            }
+            currentElement.focus();
+        }
+    }
+
+    function renderVideos() {
+        videoContainer.innerHTML = '';
+        files.forEach(file => {
+            fetch(file)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        const videoCard = document.createElement('div');
+                        videoCard.className = 'video-card';
+                        videoCard.tabIndex = 0;
+                        videoCard.onclick = () => playVideo(item.lnk, item.ttl, item.logo);
+                        videoCard.innerHTML = `
+                            <img src="${item.logo}" alt="${item.ttl}">
+                            <p class="re">${item.ttl}</p>
+                            <p class="dur">${item.dur}</p>
+                        `;
+                        videoContainer.appendChild(videoCard);
+                        focusableElements.push(videoCard);
+                    });
+                    updateFocus();
+                })
+                .catch(error => console.error('Error loading JSON:', error));
+        });
+    }
+
+    function playVideo(videoFile, videoTitle, logoFile) {
+        sessionStorage.setItem('videoLink', videoFile);
+        sessionStorage.setItem('videoTitle', videoTitle);
+        sessionStorage.setItem('logoFile', logoFile);
+        window.location.href = 'ply.html';
+    }
+
+    function filterVideos() {
+        const filter = searchBar.value.toLowerCase();
+        const videoCards = document.querySelectorAll('.video-card');
+        videoCards.forEach(card => {
+            const title = card.querySelector('.re').innerText.toLowerCase();
+            if (title.includes(filter)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+        // Reset focus after filtering
+        const visibleElements = document.querySelectorAll('.nav-item, .search-bar, .video-card[style*="block"]');
+        focusedElementIndex = 0;
+        updateFocus();
+    }
+    
+    // Initial video rendering
+    renderVideos();
+    
+    // Event listeners
+    searchBar.addEventListener('input', filterVideos);
+
+    document.querySelectorAll('.nav-item').forEach((item, index) => {
+        item.addEventListener('click', () => {
+            focusedElementIndex = index;
+            updateFocus();
+            // Add logic here to switch content sections
+        });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        const allFocusable = document.querySelectorAll('.nav-item, .search-bar, .video-card');
+        let newIndex = focusedElementIndex;
+        const currentElement = allFocusable[focusedElementIndex];
+
+        switch (e.key) {
+            case 'ArrowRight':
+                newIndex++;
+                break;
+            case 'ArrowLeft':
+                newIndex--;
+                break;
+            case 'ArrowDown':
+                // Complex logic for grid navigation, for simplicity, we move down one row
+                if (currentElement && currentElement.classList.contains('video-card')) {
+                    const currentTop = currentElement.offsetTop;
+                    const nextElement = Array.from(allFocusable).find(el => 
+                        el.classList.contains('video-card') && el.offsetTop > currentTop
+                    );
+                    if (nextElement) {
+                        newIndex = Array.from(allFocusable).indexOf(nextElement);
+                    }
+                } else if (currentElement && currentElement.classList.contains('search-bar')) {
+                    const firstVideo = document.querySelector('.video-card');
+                    if (firstVideo) newIndex = Array.from(allFocusable).indexOf(firstVideo);
+                }
+                break;
+            case 'ArrowUp':
+                // Complex logic for grid navigation, for simplicity, we move up one row
+                if (currentElement && currentElement.classList.contains('video-card')) {
+                    const currentTop = currentElement.offsetTop;
+                    const prevElement = Array.from(allFocusable).reverse().find(el => 
+                        el.classList.contains('video-card') && el.offsetTop < currentTop
+                    );
+                    if (prevElement) {
+                        newIndex = Array.from(allFocusable).indexOf(prevElement);
+                    } else {
+                        const searchInput = document.getElementById('cari');
+                        if (searchInput) newIndex = Array.from(allFocusable).indexOf(searchInput);
+                    }
+                } else if (currentElement && currentElement.classList.contains('search-bar')) {
+                    const lastNavItem = document.querySelector('.nav-item:last-child');
+                    if (lastNavItem) newIndex = Array.from(allFocusable).indexOf(lastNavItem);
+                }
+                break;
+            case 'Enter':
+                e.preventDefault();
+                currentElement.click();
+                break;
+        }
+
+        if (newIndex >= 0 && newIndex < allFocusable.length) {
+            focusedElementIndex = newIndex;
+            updateFocus();
+        }
     });
 });
-
-// Set initial focus to the first nav item
-document.querySelector('.nav-item.active').focus();
