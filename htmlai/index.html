@@ -2,49 +2,100 @@
 <html lang="in">
 <head>
     <meta charset="UTF-8">
-    <title>Page title</title>
-    <style>
-        .offline-message {
-            display: none;
-            border: 1px solid #f44336;
-            padding: 0;
-            margin: 0;
-            color: #f44336;
-            background-color: #ffe5e5;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloning YouTube TV</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="atas"></div>
-    <div class="offline-message" id="offlineMessage">
-        <h1>Anda Tidak Terhubung ke Internet</h1>
-        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-text">film ovie</span>
+            </div>
+            <nav class="navigation">
+                <ul>
+                    <li class="nav-item active" data-target="beranda" tabindex="0">
+                        <span class="icon">🏠</span> Beranda
+                    </li>
+                    <li class="nav-item" data-target="musik" tabindex="0">
+                        <span class="icon">🎶</span> Musik
+                    </li>
+                    <li class="nav-item" data-target="film" tabindex="0">
+                        <span class="icon">🎬</span> Film
+                    </li>
+                    <li class="nav-item" data-target="game" tabindex="0">
+                        <span class="icon">🎮</span> Game
+                    </li>
+                    <li class="nav-item" data-target="koleksi" tabindex="0">
+                        <span class="icon">📥</span> Koleksi
+                    </li>
+                    <li class="nav-item" data-target="langganan" tabindex="0">
+                        <span class="icon">⭐</span> Langganan
+                    </li>
+                    <li class="nav-item" data-target="selengkapnya" tabindex="0">
+                        <span class="icon">•••</span> Selengkapnya
+                    </li>
+                </ul>
+            </nav>
+            <div class="settings-nav">
+                <li class="nav-item" data-target="setelan" tabindex="0">
+                    <span class="icon">⚙️</span> Setelan
+                </li>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="header-search">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="cari" placeholder="Telusuri" tabindex="0">
+                </div>
+            </header>
+            
+            <div class="offline-message" id="offlineMessage" style="display: none;">
+                <h1>Anda Tidak Terhubung ke Internet</h1>
+                <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
+            </div>
+
+            <section id="beranda" class="content-section active">
+                <div class="content-row">
+                    <h2>Direkomendasikan</h2>
+                    <div class="card-list" id="container">
+                        </div>
+                </div>
+            </section>
+
+            <section id="search-results" class="content-section">
+                <div class="content-row">
+                    <h2>Hasil Pencarian</h2>
+                    <div class="card-list" id="searchResultsContainer">
+                        </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <div class="keyboard-popup" style="display: none;">
+            <div class="keyboard">
+                <div class="keyboard-row">
+                    <span tabindex="0">A</span><span tabindex="0">B</span><span tabindex="0">C</span><span tabindex="0">D</span><span tabindex="0">E</span><span tabindex="0">F</span><span tabindex="0">G</span>
+                </div>
+                <div class="keyboard-row">
+                    <span tabindex="0">H</span><span tabindex="0">I</span><span tabindex="0">J</span><span tabindex="0">K</span><span tabindex="0">L</span><span tabindex="0">M</span><span tabindex="0">N</span>
+                </div>
+                <div class="keyboard-row">
+                    <span tabindex="0">O</span><span tabindex="0">P</span><span tabindex="0">Q</span><span tabindex="0">R</span><span tabindex="0">S</span><span tabindex="0">T</span><span tabindex="0">U</span>
+                </div>
+                <div class="keyboard-row">
+                    <span tabindex="0">V</span><span tabindex="0">W</span><span tabindex="0">X</span><span tabindex="0">Y</span><span tabindex="0">Z</span>
+                </div>
+                <div class="keyboard-row">
+                    <span class="func-key" tabindex="0">SPASI</span>
+                    <span class="func-key" tabindex="0">HAPUS</span>
+                    <span class="func-key" tabindex="0">TELUSURI</span>
+                </div>
+            </div>
+        </div>
     </div>
-    <div id="container"></div>
-
-    <script>
-        function updateOnlineStatus() {
-            const offlineMessage = document.getElementById('offlineMessage');
-            const atas = document.getElementById('atas');
-            const container = document.getElementById('container');
-            if (navigator.onLine) {
-                offlineMessage.style.display = 'none';
-                atas.style.display = 'block';
-                container.style.display = 'block';
-            } else {
-                offlineMessage.style.display = 'block';
-                atas.style.display = 'none';
-                container.style.display = 'none';
-            }
-        }
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-
-        // Set initial status
-        updateOnlineStatus();
-    </script>
     <script src="script.js"></script>
 </body>
 </html>

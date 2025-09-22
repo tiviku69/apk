@@ -1,114 +1,201 @@
 body {
-    background-color: black;
-    text-align: center;
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Roboto', sans-serif;
     margin: 0;
-    padding: 0;
+    overflow: hidden; /* Menyembunyikan scrollbar */
 }
 
-h1 {
-    color: yellowgreen;
+.app-container {
+    display: flex;
+    height: 100vh;
 }
 
-.re {
-    color: rgba(255, 255, 255, 0.8);
-    border-radius: 5px;
-    font-weight: 1000;
-    font-style: italic;
-    position: relative;
-    letter-spacing: 1px;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    padding: 5px;
-    font-size: 15px;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1;
-}
-
-.dur {
-    color: white;
-    font-weight: 900;
-    font-style: italic;
-    position: absolute;
-    border-radius: 3px;
-    bottom: 180px;
-    padding: 3px;
-    background-color: rgba(0, 0, 0, 0.6);
-    font-size: 15px;
-    z-index: 1;
-}
-
-.responsive-div:focus .re,
-.responsive-div:hover .re {
-    font-size: 19px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.responsive-div:focus {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-.responsive-div:hover {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-.highlight {
-    border: 5px solid #fff;
-    border-radius: 13px;
-}
-
-#imgv {                
-    border-radius: 11px;
-    width: 270px;
-    height: 220px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-
-#atas {                
-    position: relative;
-}
-
-#container {
-    height: 530px;
-    position: relative;
-    top: 15px;
-    padding: 0px;
-    overflow: auto;
-}
-
-#cari {
-    border-radius: 8px;
-    height: 25px;
-    background: whitesmoke;
-    margin: 0px;
-    padding: 0px;
-    font-size: 20px;
-    top: 60px;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    position: absolute;
-}
-#search {
-    padding: 0px;
-}
-
-.responsive-div {
-    width: 260px;
-    height: 210px;
-    display: inline-block;
-    justify-content: center;
-    align-items: center;
+.sidebar {
+    width: 280px;
+    background-color: #1f1f1f;
+    padding: 20px;
+    display: flex;
     flex-direction: column;
-    border-radius: 13px;
-    overflow: hidden;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navigation ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    margin-bottom: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.nav-item:hover, .nav-item.active {
+    background-color: #383838;
+}
+
+.nav-item .icon {
+    font-size: 22px;
+    margin-right: 15px;
+}
+
+.main-content {
+    flex-grow: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.header-search {
+    margin-bottom: 30px;
+}
+
+.search-box {
     position: relative;
-    padding: 8px 8px;
-    margin: 15px;
-    border: 5px solid red;
+}
+
+.search-input {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: #383838;
+    border: none;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.content-section {
+    display: none; /* Semua section disembunyikan secara default */
+}
+
+.content-section.active {
+    display: block; /* Tampilkan section yang aktif */
+}
+
+.content-row {
+    margin-bottom: 40px;
+}
+
+.content-row h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.card-list {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+}
+
+.video-card {
+    background-color: #1f1f1f;
+    border-radius: 8px;
+    overflow: hidden;
+    width: 270px;
+    height: auto;
+    flex-shrink: 0;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+    cursor: pointer;
+    border: 5px solid transparent;
+}
+
+.video-card:hover, .video-card:focus {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    border: 5px solid #fff;
+}
+
+.thumbnail {
+    width: 100%;
+    height: 170px;
+    object-fit: cover;
+}
+
+.video-info {
+    padding: 15px;
+}
+
+.video-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 0 10px;
+}
+
+.channel-name {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.keyboard-popup {
+    display: none; /* Sembunyikan pop-up secara default */
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1000;
+}
+
+.keyboard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.keyboard-row span {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    min-width: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.keyboard-row span:hover, .keyboard-row span:focus {
+    background-color: #555;
+}
+
+.func-key {
+    background-color: #555 !important;
+}
+
+.focused-element {
+    outline: 3px solid #00aaff;
+    /* Efek fokus untuk navigasi remote */
+    box-shadow: 0 0 10px #00aaff;
+}
+.offline-message {
+    border: 1px solid #f44336;
+    padding: 20px;
+    margin: 20px;
+    color: #f44336;
+    background-color: #ffe5e5;
+    text-align: center;
+    border-radius: 8px;
 }
