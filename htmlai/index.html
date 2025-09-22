@@ -3,67 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube TV Clone</title>
+    <title>Aplikasi TV</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="offline-message" id="offlineMessage">
-        <h1>Anda Tidak Terhubung ke Internet</h1>
-        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
-    </div>
-
-    <div class="container" id="mainContainer">
-        <aside class="sidebar">
-            <div class="logo">
-                <img src="https://www.youtube.com/s/desktop/9d3df192/img/favicon_96x96.png" alt="YouTube Logo">
+    <div class="tv-container">
+        <div class="sidebar">
+            <div class="logo">TV Apps</div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-target="home">Beranda</li>
+                <li class="nav-item" data-target="search">Telusuri</li>
+                <li class="nav-item" data-target="music">Musik</li>
+                <li class="nav-item" data-target="movies">Film</li>
+                <li class="nav-item" data-target="games">Game</li>
+                <li class="nav-item" data-target="library">Koleksi</li>
+                <li class="nav-item" data-target="subscription">Subscription</li>
+                <li class="nav-item" data-target="settings">Setelan</li>
+            </ul>
+        </div>
+        <div class="main-content">
+            <div class="section" id="home">
+                <h2>Rekomendasi</h2>
+                <div class="row">
+                    <div class="card active" data-id="video1">
+                        <img src="https://via.placeholder.com/250x150" alt="Video 1">
+                        <div class="info">Lagu Kendaraan Konstruksi</div>
+                    </div>
+                    <div class="card" data-id="video2">
+                        <img src="https://via.placeholder.com/250x150" alt="Video 2">
+                        <div class="info">Monday Morning Jazz</div>
+                    </div>
+                    </div>
+                <h2>Baru untuk Anda</h2>
+                <div class="row">
+                    <div class="card" data-id="video3">
+                        <img src="https://via.placeholder.com/250x150" alt="Video 3">
+                        <div class="info">Armada Full Album</div>
+                    </div>
+                    <div class="card" data-id="video4">
+                        <img src="https://via.placeholder.com/250x150" alt="Video 4">
+                        <div class="info">Naik Kereta Api</div>
+                    </div>
+                    </div>
             </div>
-            <nav class="main-nav">
-                <ul>
-                    <li class="nav-item active" data-target="home">
-                        <span class="icon">🏠</span>
-                        <span class="text">Beranda</span>
-                    </li>
-                    <li class="nav-item" data-target="music">
-                        <span class="icon">🎵</span>
-                        <span class="text">Musik</span>
-                    </li>
-                    <li class="nav-item" data-target="movies">
-                        <span class="icon">🎬</span>
-                        <span class="text">Film</span>
-                    </li>
-                    <li class="nav-item" data-target="collection">
-                        <span class="icon">📚</span>
-                        <span class="text">Koleksi</span>
-                    </li>
-                    <li class="nav-item" data-target="subscriptions">
-                        <span class="icon">📥</span>
-                        <span class="text">Subscription</span>
-                    </li>
-                    <li class="nav-item" data-target="settings">
-                        <span class="icon">⚙️</span>
-                        <span class="text">Setelan</span>
-                    </li>
-                </ul>
-            </nav>
-        </aside>
-
-        <main class="main-content">
-            <header class="header">
-                <div class="search-bar-wrapper">
-                    <input type="text" id="cari" class="search-bar" placeholder="Telusuri">
-                </div>
-            </header>
-
-            <section class="content-section" id="home-content">
-                <div class="video-grid-container">
-                    <div class="video-grid" id="container">
-                        </div>
-                </div>
-            </section>
-        </main>
+            </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>

@@ -1,159 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const mainContainer = document.getElementById('mainContainer');
-    const offlineMessage = document.getElementById('offlineMessage');
-    const searchBar = document.getElementById('cari');
-    const videoContainer = document.getElementById('container');
+    const navItems = document.querySelectorAll('.nav-item');
+    const cards = document.querySelectorAll('.card');
+    let activeElement = document.querySelector('.nav-item.active');
 
-    const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' ];
-
-    function updateOnlineStatus() {
-        if (navigator.onLine) {
-            offlineMessage.style.display = 'none';
-            mainContainer.style.display = 'flex';
-        } else {
-            offlineMessage.style.display = 'block';
-            mainContainer.style.display = 'none';
-        }
+    function setActive(element) {
+        // Hapus kelas 'active' dari elemen sebelumnya
+        document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
+        // Tambahkan kelas 'active' ke elemen yang baru
+        element.classList.add('active');
+        activeElement = element;
+        // Scroll ke elemen yang aktif jika diperlukan
+        activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     }
 
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
-
-    let focusedElementIndex = 0;
-    const focusableElements = [];
-
-    function updateFocus() {
-        const allFocusable = document.querySelectorAll('.nav-item, .search-bar, .video-card');
-        allFocusable.forEach(el => el.classList.remove('highlight', 'active'));
-
-        const currentElement = allFocusable[focusedElementIndex];
-        if (currentElement) {
-            currentElement.classList.add('highlight');
-            if (currentElement.classList.contains('nav-item')) {
-                currentElement.classList.add('active');
-            }
-            currentElement.focus();
-        }
-    }
-
-    function renderVideos() {
-        videoContainer.innerHTML = '';
-        files.forEach(file => {
-            fetch(file)
-                .then(response => response.json())
-                .then(data => {
-                    data.forEach(item => {
-                        const videoCard = document.createElement('div');
-                        videoCard.className = 'video-card';
-                        videoCard.tabIndex = 0;
-                        videoCard.onclick = () => playVideo(item.lnk, item.ttl, item.logo);
-                        videoCard.innerHTML = `
-                            <img src="${item.logo}" alt="${item.ttl}">
-                            <p class="re">${item.ttl}</p>
-                            <p class="dur">${item.dur}</p>
-                        `;
-                        videoContainer.appendChild(videoCard);
-                        focusableElements.push(videoCard);
-                    });
-                    updateFocus();
-                })
-                .catch(error => console.error('Error loading JSON:', error));
-        });
-    }
-
-    function playVideo(videoFile, videoTitle, logoFile) {
-        sessionStorage.setItem('videoLink', videoFile);
-        sessionStorage.setItem('videoTitle', videoTitle);
-        sessionStorage.setItem('logoFile', logoFile);
-        window.location.href = 'ply.html';
-    }
-
-    function filterVideos() {
-        const filter = searchBar.value.toLowerCase();
-        const videoCards = document.querySelectorAll('.video-card');
-        videoCards.forEach(card => {
-            const title = card.querySelector('.re').innerText.toLowerCase();
-            if (title.includes(filter)) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
-        });
-        // Reset focus after filtering
-        const visibleElements = document.querySelectorAll('.nav-item, .search-bar, .video-card[style*="block"]');
-        focusedElementIndex = 0;
-        updateFocus();
-    }
-    
-    // Initial video rendering
-    renderVideos();
-    
-    // Event listeners
-    searchBar.addEventListener('input', filterVideos);
-
-    document.querySelectorAll('.nav-item').forEach((item, index) => {
-        item.addEventListener('click', () => {
-            focusedElementIndex = index;
-            updateFocus();
-            // Add logic here to switch content sections
-        });
-    });
-
+    // Fungsi untuk mengelola navigasi
     document.addEventListener('keydown', (e) => {
-        const allFocusable = document.querySelectorAll('.nav-item, .search-bar, .video-card');
-        let newIndex = focusedElementIndex;
-        const currentElement = allFocusable[focusedElementIndex];
+        const key = e.key;
+        let nextElement = null;
 
-        switch (e.key) {
-            case 'ArrowRight':
-                newIndex++;
-                break;
-            case 'ArrowLeft':
-                newIndex--;
-                break;
-            case 'ArrowDown':
-                // Complex logic for grid navigation, for simplicity, we move down one row
-                if (currentElement && currentElement.classList.contains('video-card')) {
-                    const currentTop = currentElement.offsetTop;
-                    const nextElement = Array.from(allFocusable).find(el => 
-                        el.classList.contains('video-card') && el.offsetTop > currentTop
-                    );
-                    if (nextElement) {
-                        newIndex = Array.from(allFocusable).indexOf(nextElement);
-                    }
-                } else if (currentElement && currentElement.classList.contains('search-bar')) {
-                    const firstVideo = document.querySelector('.video-card');
-                    if (firstVideo) newIndex = Array.from(allFocusable).indexOf(firstVideo);
+        if (activeElement.classList.contains('nav-item')) {
+            // Navigasi di sidebar
+            const currentIndex = Array.from(navItems).indexOf(activeElement);
+            if (key === 'ArrowDown' && currentIndex < navItems.length - 1) {
+                nextElement = navItems[currentIndex + 1];
+            } else if (key === 'ArrowUp' && currentIndex > 0) {
+                nextElement = navItems[currentIndex - 1];
+            } else if (key === 'ArrowRight') {
+                // Pindah ke konten utama
+                nextElement = cards[0];
+            }
+        } else if (activeElement.classList.contains('card')) {
+            // Navigasi di konten utama (kartu/video)
+            const parentRow = activeElement.closest('.row');
+            const rowCards = Array.from(parentRow.querySelectorAll('.card'));
+            const currentIndex = rowCards.indexOf(activeElement);
+
+            if (key === 'ArrowRight' && currentIndex < rowCards.length - 1) {
+                nextElement = rowCards[currentIndex + 1];
+            } else if (key === 'ArrowLeft' && currentIndex > 0) {
+                nextElement = rowCards[currentIndex - 1];
+            } else if (key === 'ArrowLeft' && currentIndex === 0) {
+                // Pindah kembali ke sidebar
+                nextElement = navItems[0];
+            } else if (key === 'ArrowDown') {
+                // Pindah ke baris konten berikutnya
+                const nextRow = parentRow.nextElementSibling;
+                if (nextRow) {
+                    nextElement = nextRow.querySelector('.card');
                 }
-                break;
-            case 'ArrowUp':
-                // Complex logic for grid navigation, for simplicity, we move up one row
-                if (currentElement && currentElement.classList.contains('video-card')) {
-                    const currentTop = currentElement.offsetTop;
-                    const prevElement = Array.from(allFocusable).reverse().find(el => 
-                        el.classList.contains('video-card') && el.offsetTop < currentTop
-                    );
-                    if (prevElement) {
-                        newIndex = Array.from(allFocusable).indexOf(prevElement);
-                    } else {
-                        const searchInput = document.getElementById('cari');
-                        if (searchInput) newIndex = Array.from(allFocusable).indexOf(searchInput);
-                    }
-                } else if (currentElement && currentElement.classList.contains('search-bar')) {
-                    const lastNavItem = document.querySelector('.nav-item:last-child');
-                    if (lastNavItem) newIndex = Array.from(allFocusable).indexOf(lastNavItem);
+            } else if (key === 'ArrowUp') {
+                // Pindah ke baris konten sebelumnya
+                const prevRow = parentRow.previousElementSibling;
+                if (prevRow) {
+                    const prevRowCards = prevRow.querySelectorAll('.card');
+                    nextElement = prevRowCards[0];
                 }
-                break;
-            case 'Enter':
-                e.preventDefault();
-                currentElement.click();
-                break;
+            }
         }
 
-        if (newIndex >= 0 && newIndex < allFocusable.length) {
-            focusedElementIndex = newIndex;
-            updateFocus();
+        // Jika elemen baru ditemukan, set sebagai aktif
+        if (nextElement) {
+            setActive(nextElement);
+            e.preventDefault(); // Mencegah aksi default browser
+        }
+
+        // Aksi saat tombol "Enter" ditekan
+        if (key === 'Enter') {
+            if (activeElement.classList.contains('card')) {
+                const videoId = activeElement.dataset.id;
+                console.log(`Memutar video dengan ID: ${videoId}`);
+                // Di sini kamu bisa tambahin logika untuk memutar video
+                // Misalnya: window.location.href = `play.html?id=${videoId}`;
+            } else if (activeElement.classList.contains('nav-item')) {
+                const targetId = activeElement.dataset.target;
+                console.log(`Membuka halaman: ${targetId}`);
+                // Di sini kamu bisa tambahin logika untuk pindah halaman
+                // Misalnya: showPage(targetId);
+            }
         }
     });
+
+    // Menambahkan event listener untuk klik mouse sebagai fallback
+    navItems.forEach(item => item.addEventListener('click', () => setActive(item)));
+    cards.forEach(card => card.addEventListener('click', () => setActive(card)));
 });
