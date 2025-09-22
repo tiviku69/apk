@@ -3,7 +3,7 @@ body {
     color: #e0e0e0;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    overflow: hidden; /* Mencegah scrollbar muncul */
+    overflow: hidden;
 }
 
 .tv-container {
@@ -15,12 +15,29 @@ body {
     width: 250px;
     background-color: #212121;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .logo {
     font-size: 24px;
     font-weight: bold;
     margin-bottom: 30px;
+}
+
+.search-container {
+    margin-bottom: 20px;
+}
+
+#cari {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: none;
+    background-color: #383838;
+    color: #e0e0e0;
+    font-size: 16px;
+    box-sizing: border-box;
 }
 
 .nav-menu {
@@ -37,7 +54,6 @@ body {
     border-radius: 8px;
 }
 
-/* Style saat item menu aktif (focus/selected) */
 .nav-item.active {
     background-color: #383838;
     color: #fff;
@@ -48,7 +64,7 @@ body {
 .main-content {
     flex-grow: 1;
     padding: 30px;
-    overflow-y: auto; /* Memungkinkan konten utama bisa di-scroll */
+    overflow-y: hidden;
 }
 
 .section {
@@ -58,8 +74,9 @@ body {
 .row {
     display: flex;
     gap: 20px;
-    overflow-x: auto; /* Mengaktifkan horizontal scrolling */
-    padding-bottom: 10px; /* Ruang untuk scrollbar */
+    overflow-x: auto;
+    padding-bottom: 10px;
+    white-space: nowrap;
 }
 
 .card {
@@ -70,6 +87,8 @@ body {
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
     border: 3px solid transparent;
+    display: inline-block;
+    vertical-align: top;
 }
 
 .card img {
@@ -81,9 +100,17 @@ body {
 .card .info {
     padding: 10px;
     font-size: 16px;
+    color: white;
+    text-align: left;
 }
 
-/* Style saat card aktif (focus/selected) */
+.card .dur {
+    padding: 5px;
+    font-size: 14px;
+    color: #aaa;
+    text-align: left;
+}
+
 .card.active {
     transform: scale(1.05);
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);

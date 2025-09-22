@@ -1,53 +1,72 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="in">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi TV</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        .offline-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #121212;
+            color: #fff;
+            text-align: center;
+            padding-top: 20%;
+            z-index: 9999;
+        }
+    </style>
 </head>
 <body>
-    <div class="tv-container">
+    <div class="offline-message" id="offlineMessage">
+        <h1>Anda Tidak Terhubung ke Internet</h1>
+        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
+    </div>
+
+    <div class="tv-container" id="tvContainer">
         <div class="sidebar">
             <div class="logo">TV Apps</div>
+            <div class="search-container">
+                <input type="text" id="cari" placeholder="Cari...">
+            </div>
             <ul class="nav-menu">
                 <li class="nav-item active" data-target="home">Beranda</li>
-                <li class="nav-item" data-target="search">Telusuri</li>
-                <li class="nav-item" data-target="music">Musik</li>
-                <li class="nav-item" data-target="movies">Film</li>
-                <li class="nav-item" data-target="games">Game</li>
-                <li class="nav-item" data-target="library">Koleksi</li>
-                <li class="nav-item" data-target="subscription">Subscription</li>
+                <li class="nav-item" data-target="my-list">Daftar Saya</li>
                 <li class="nav-item" data-target="settings">Setelan</li>
             </ul>
         </div>
         <div class="main-content">
             <div class="section" id="home">
-                <h2>Rekomendasi</h2>
-                <div class="row">
-                    <div class="card active" data-id="video1">
-                        <img src="https://via.placeholder.com/250x150" alt="Video 1">
-                        <div class="info">Lagu Kendaraan Konstruksi</div>
-                    </div>
-                    <div class="card" data-id="video2">
-                        <img src="https://via.placeholder.com/250x150" alt="Video 2">
-                        <div class="info">Monday Morning Jazz</div>
-                    </div>
-                    </div>
-                <h2>Baru untuk Anda</h2>
-                <div class="row">
-                    <div class="card" data-id="video3">
-                        <img src="https://via.placeholder.com/250x150" alt="Video 3">
-                        <div class="info">Armada Full Album</div>
-                    </div>
-                    <div class="card" data-id="video4">
-                        <img src="https://via.placeholder.com/250x150" alt="Video 4">
-                        <div class="info">Naik Kereta Api</div>
-                    </div>
+                <h2 id="section-title"></h2>
+                <div class="row" id="container">
                     </div>
             </div>
-            </div>
+        </div>
     </div>
+
+    <script>
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            const tvContainer = document.getElementById('tvContainer');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+                tvContainer.style.display = 'flex';
+            } else {
+                offlineMessage.style.display = 'block';
+                tvContainer.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Set initial status
+        updateOnlineStatus();
+    </script>
     <script src="script.js"></script>
 </body>
 </html>
