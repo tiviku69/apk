@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', () => {
         activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
     }
 
-    // Load video data from JSON files
     const files = [
         'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json',
         'https://raw.githubusercontent.com/tiviku69/apk/main/captain.json',
@@ -34,10 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 data.forEach(item => {
                     const card = document.createElement('div');
                     card.className = 'card';
-                    card.dataset.id = item.lnk; // Use link as ID
+                    card.dataset.id = item.lnk;
                     card.dataset.title = item.ttl;
                     card.dataset.logo = item.logo;
-                    card.tabIndex = 0; // Make the element focusable
+                    card.tabIndex = 0;
 
                     card.innerHTML = `
                         <img src="${item.logo}" alt="${item.ttl}">
@@ -46,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     `;
 
                     card.addEventListener('click', () => {
+                        setActive(card);
                         playVideo(item.lnk, item.logo, item.ttl);
                     });
 
@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 filesProcessed++;
                 if (filesProcessed === totalFiles) {
-                    // Set initial focus on the first card
                     const firstCard = document.querySelector('.card');
                     if (firstCard) {
                         setActive(firstCard);
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
     });
-    
+
     function playVideo(videoFile, logoFile, textFile) {
         sessionStorage.setItem('videoLink', videoFile);
         sessionStorage.setItem('videoTitle', textFile);
@@ -79,13 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = 'ply.html';
     }
 
-    // Keyboard navigation logic for TV remote
     document.addEventListener('keydown', (e) => {
         const key = e.key;
         let nextElement = null;
 
-        if (document.querySelector('.nav-item.active')) {
-            // Navigation in the sidebar
+        if (activeElement.classList.contains('nav-item')) {
             const navItemsList = Array.from(navItems);
             const currentIndex = navItemsList.indexOf(activeElement);
             if (key === 'ArrowDown' && currentIndex < navItemsList.length - 1) {
@@ -98,8 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     nextElement = firstCard;
                 }
             }
-        } else if (document.querySelector('.card.active')) {
-            // Navigation in the main content (cards)
+        } else if (activeElement.classList.contains('card')) {
             const cards = Array.from(document.querySelectorAll('.card'));
             const currentIndex = cards.indexOf(activeElement);
 
@@ -110,7 +106,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (key === 'ArrowLeft' && currentIndex === 0) {
                 nextElement = navItems[0];
             }
-            // ArrowUp/Down logic for moving between rows can be added here if needed for multiple rows
         }
 
         if (nextElement) {
@@ -128,12 +123,10 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (activeElement.classList.contains('nav-item')) {
                 const targetId = activeElement.dataset.target;
                 console.log(`Membuka halaman: ${targetId}`);
-                // Add logic for changing pages or content sections
             }
         }
     });
 
-    // Search functionality
     searchInput.addEventListener('input', () => {
         const filter = searchInput.value.toLowerCase();
         const cards = document.querySelectorAll('.card');
