@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
-    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+    <link href="https://vjs.zencdn.net/7.20.3/video-js.css" rel="stylesheet" />
+    <script src="https://vjs.zencdn.net/7.20.3/video.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.12/dist/hls.min.js"></script>
+
     <style>
         body {
             background-color: #000;
@@ -141,7 +144,7 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
-    <div id="player"></div>
+    <video id="player" class="video-js vjs-default-skin"></video>
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
         <div id="time-display">0:00 / 0:00</div>
