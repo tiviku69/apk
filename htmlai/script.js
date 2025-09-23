@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
     const searchInput = document.getElementById('cari');
     const container = document.getElementById('container');
-    const focusableElements = [searchInput, ...navItems, ...container.querySelectorAll('.card')];
     let activeElement = document.querySelector('.nav-item.active');
 
     function setActive(element) {
@@ -37,8 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.dataset.id = item.lnk;
                     card.dataset.title = item.ttl;
                     card.dataset.logo = item.logo;
-                    card.tabIndex = 0;
-
+                    
+                    // Removed tabindex="0" here to prevent default browser highlight
+                    // highlight is now controlled solely by the .active class
+                    
                     card.innerHTML = `
                         <img src="${item.logo}" alt="${item.ttl}">
                         <div class="info">${item.ttl}</div>
@@ -85,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (activeElement === searchInput) {
             if (key === 'ArrowUp') {
-                nextElement = navItems[0];
+                nextElement = navItems[navItems.length - 1];
             } else if (key === 'ArrowRight') {
                 const firstCard = container.querySelector('.card');
                 if (firstCard) {
@@ -118,17 +119,12 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (key === 'ArrowLeft' && currentIndex > 0) {
                 nextElement = cards[currentIndex - 1];
             } else if (key === 'ArrowLeft' && currentIndex === 0) {
-                nextElement = searchInput;
+                nextElement = navItems[0];
             }
         }
 
         if (nextElement) {
             setActive(nextElement);
-            if (nextElement === searchInput) {
-                searchInput.focus();
-            } else {
-                searchInput.blur();
-            }
             e.preventDefault();
         }
 
@@ -143,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const targetId = activeElement.dataset.target;
                 console.log(`Membuka halaman: ${targetId}`);
             } else if (activeElement === searchInput) {
-                // Trigger search function if Enter is pressed on the search box
                 searchInput.focus();
             }
         }
