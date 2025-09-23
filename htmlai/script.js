@@ -1,163 +1,82 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const navItems = document.querySelectorAll('.nav-item');
-    const searchInput = document.getElementById('cari');
-    const container = document.getElementById('container');
-    let activeElement = document.querySelector('.nav-item.active');
+const atas = document.getElementById('atas');
+atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
 
-    function setActive(element) {
-        document.querySelectorAll('.active').forEach(el => el.classList.remove('active'));
-        element.classList.add('active');
-        activeElement = element;
-        activeElement.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-    }
+const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json' ];
 
-    const files = [
-        'https://raw.githubusercontent.com/tiviku69/apk/main/cmpr.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/captain.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/avat.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/ghost.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/avatar.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/squid.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/journey.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/one.json',
-        'https://raw.githubusercontent.com/tiviku69/apk/main/mp4.json'
-    ];
+let filesProcessed = 0;
+const totalFiles = files.length;
 
-    let filesProcessed = 0;
-    const totalFiles = files.length;
+files.forEach(file => {
+    fetch(file)
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(item => {
+                const container = document.getElementById('container');
+                const img = document.createElement('img');
+                img.id = 'imgv';
+    
+                img.src = item.logo;
 
-    files.forEach(file => {
-        fetch(file)
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.dataset.id = item.lnk;
-                    card.dataset.title = item.ttl;
-                    card.dataset.logo = item.logo;
-                    
-                    card.innerHTML = `
-                        <img src="${item.logo}" alt="${item.ttl}">
-                        <div class="info">${item.ttl}</div>
-                        <div class="dur">${item.dur}</div>
-                    `;
+                const pp = document.createElement('p');
+                pp.className = 're';
+                pp.innerText = item.ttl;
 
-                    card.addEventListener('click', () => {
-                        setActive(card);
-                        playVideo(item.lnk, item.logo, item.ttl);
-                    });
+                const dur = document.createElement('p');
+            
+                dur.className = 'dur';
+                dur.innerText = item.dur;
 
-                    container.appendChild(card);
-                });
-                filesProcessed++;
-                if (filesProcessed === totalFiles) {
-                    const firstCard = document.querySelector('.card');
-                    if (firstCard) {
-                        setActive(firstCard);
-                    }
-                }
-            })
-            .catch(error => {
-                console.error('Error loading JSON:', error);
-                filesProcessed++;
-                if (filesProcessed === totalFiles) {
-                    const firstCard = document.querySelector('.card');
-                    if (firstCard) {
-                        setActive(firstCard);
-                    }
-                }
+                const dv = document.createElement('div');
+                dv.className = 'responsive-div';
+                dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
+
+                dv.appendChild(img);
+ 
+                dv.appendChild(pp);
+                dv.appendChild(dur);
+                container.appendChild(dv);
             });
-    });
-
-    function playVideo(videoFile, logoFile, textFile) {
-        sessionStorage.setItem('videoLink', videoFile);
-        sessionStorage.setItem('videoTitle', textFile);
-        sessionStorage.setItem('logoFile', logoFile);
-        window.location.href = 'ply.html';
-    }
-
-    document.addEventListener('keydown', (e) => {
-        const key = e.key;
-        let nextElement = null;
-
-        if (activeElement === searchInput) {
-            if (key === 'ArrowUp') {
-                nextElement = navItems[navItems.length - 1];
-            } else if (key === 'ArrowRight') {
-                const firstCard = container.querySelector('.card');
-                if (firstCard) {
-                    nextElement = firstCard;
+            filesProcessed++;
+            if (filesProcessed === totalFiles) {
+                // All files have been processed, highlight the first one
+                const firstDiv = document.querySelector('.responsive-div');
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus(); // Set focus for keyboard navigation
                 }
             }
-        } else if (activeElement.classList.contains('nav-item')) {
-            const navItemsList = Array.from(navItems);
-            const currentIndex = navItemsList.indexOf(activeElement);
-            if (key === 'ArrowDown') {
-                if (currentIndex < navItemsList.length - 1) {
-                    nextElement = navItemsList[currentIndex + 1];
-                } else {
-                    nextElement = searchInput;
+        })
+        .catch(error => {
+            console.error('Error loading JSON:', error);
+            filesProcessed++;
+            if (filesProcessed === totalFiles) {
+                const firstDiv = document.querySelector('.responsive-div');
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
                 }
-            } else if (key === 'ArrowUp' && currentIndex > 0) {
-                nextElement = navItemsList[currentIndex - 1];
-            } else if (key === 'ArrowRight') {
-                const firstCard = container.querySelector('.card');
-                if (firstCard) {
-                    nextElement = firstCard;
-                }
-            }
-        } else if (activeElement.classList.contains('card')) {
-            const cards = Array.from(document.querySelectorAll('.card'));
-            const currentIndex = cards.indexOf(activeElement);
-
-            if (key === 'ArrowRight' && currentIndex < cards.length - 1) {
-                nextElement = cards[currentIndex + 1];
-            } else if (key === 'ArrowLeft' && currentIndex > 0) {
-                nextElement = cards[currentIndex - 1];
-            } else if (key === 'ArrowLeft' && currentIndex === 0) {
-                nextElement = navItems[0];
-            }
-        }
-
-        if (nextElement) {
-            setActive(nextElement);
-            e.preventDefault();
-        }
-
-        if (key === 'Enter') {
-            if (activeElement && activeElement.classList.contains('card')) {
-                const videoId = activeElement.dataset.id;
-                const videoTitle = activeElement.dataset.title;
-                const videoLogo = activeElement.dataset.logo;
-                console.log(`Memutar video dengan ID: ${videoId}`);
-                playVideo(videoId, videoLogo, videoTitle);
-            } else if (activeElement && activeElement.classList.contains('nav-item')) {
-                const targetId = activeElement.dataset.target;
-                console.log(`Membuka halaman: ${targetId}`);
-            } else if (activeElement === searchInput) {
-                searchInput.focus();
-            }
-        }
-    });
-
-    searchInput.addEventListener('input', () => {
-        const filter = searchInput.value.toLowerCase();
-        const cards = document.querySelectorAll('.card');
-        let firstVisibleCard = null;
-        cards.forEach(card => {
-            const title = card.dataset.title.toLowerCase();
-            if (title.includes(filter)) {
-                card.style.display = 'inline-block';
-                if (!firstVisibleCard) {
-                    firstVisibleCard = card;
-                }
-            } else {
-                card.style.display = 'none';
             }
         });
-        if (firstVisibleCard) {
-            setActive(firstVisibleCard);
-        }
-    });
 });
+
+function playVideo(videoFile, logoFile, textFile) {
+    sessionStorage.setItem('videoLink', videoFile);
+    sessionStorage.setItem('videoTitle', textFile);
+    sessionStorage.setItem('logoFile', logoFile);
+    window.location.href = 'ply.html';
+}
+
+function prosesMenu() {
+    var input = document.getElementById("cari");
+    var filter = input.value.toLowerCase();
+    var li = document.querySelectorAll('.responsive-div');
+    for (var i = 0; i < li.length; i++) {
+        if (li[i].innerHTML.toLowerCase().indexOf(filter) > -1) {
+            li[i].style.display = "";
+        } else {
+            li[i].style.display = "none";
+        }
+    }
+}
+
+document.getElementById("cari").addEventListener("input", prosesMenu);
