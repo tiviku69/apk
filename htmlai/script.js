@@ -37,9 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     card.dataset.title = item.ttl;
                     card.dataset.logo = item.logo;
                     
-                    // Removed tabindex="0" here to prevent default browser highlight
-                    // highlight is now controlled solely by the .active class
-                    
                     card.innerHTML = `
                         <img src="${item.logo}" alt="${item.ttl}">
                         <div class="info">${item.ttl}</div>
@@ -129,13 +126,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (key === 'Enter') {
-            if (activeElement.classList.contains('card')) {
+            if (activeElement && activeElement.classList.contains('card')) {
                 const videoId = activeElement.dataset.id;
                 const videoTitle = activeElement.dataset.title;
                 const videoLogo = activeElement.dataset.logo;
                 console.log(`Memutar video dengan ID: ${videoId}`);
                 playVideo(videoId, videoLogo, videoTitle);
-            } else if (activeElement.classList.contains('nav-item')) {
+            } else if (activeElement && activeElement.classList.contains('nav-item')) {
                 const targetId = activeElement.dataset.target;
                 console.log(`Membuka halaman: ${targetId}`);
             } else if (activeElement === searchInput) {
