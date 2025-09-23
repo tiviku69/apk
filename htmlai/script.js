@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const navItems = document.querySelectorAll('.nav-item');
-    const container = document.getElementById('container');
     const searchInput = document.getElementById('cari');
+    const container = document.getElementById('container');
+    const focusableElements = [searchInput, ...navItems, ...container.querySelectorAll('.card')];
     let activeElement = document.querySelector('.nav-item.active');
 
     function setActive(element) {
@@ -82,11 +83,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const key = e.key;
         let nextElement = null;
 
-        if (activeElement.classList.contains('nav-item')) {
+        if (activeElement === searchInput) {
+            if (key === 'ArrowUp') {
+                nextElement = navItems[0];
+            } else if (key === 'ArrowRight') {
+                const firstCard = container.querySelector('.card');
+                if (firstCard) {
+                    nextElement = firstCard;
+                }
+            }
+        } else if (activeElement.classList.contains('nav-item')) {
             const navItemsList = Array.from(navItems);
             const currentIndex = navItemsList.indexOf(activeElement);
-            if (key === 'ArrowDown' && currentIndex < navItemsList.length - 1) {
-                nextElement = navItemsList[currentIndex + 1];
+            if (key === 'ArrowDown') {
+                if (currentIndex < navItemsList.length - 1) {
+                    nextElement = navItemsList[currentIndex + 1];
+                } else {
+                    nextElement = searchInput;
+                }
             } else if (key === 'ArrowUp' && currentIndex > 0) {
                 nextElement = navItemsList[currentIndex - 1];
             } else if (key === 'ArrowRight') {
@@ -104,12 +118,17 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (key === 'ArrowLeft' && currentIndex > 0) {
                 nextElement = cards[currentIndex - 1];
             } else if (key === 'ArrowLeft' && currentIndex === 0) {
-                nextElement = navItems[0];
+                nextElement = searchInput;
             }
         }
 
         if (nextElement) {
             setActive(nextElement);
+            if (nextElement === searchInput) {
+                searchInput.focus();
+            } else {
+                searchInput.blur();
+            }
             e.preventDefault();
         }
 
@@ -123,6 +142,9 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (activeElement.classList.contains('nav-item')) {
                 const targetId = activeElement.dataset.target;
                 console.log(`Membuka halaman: ${targetId}`);
+            } else if (activeElement === searchInput) {
+                // Trigger search function if Enter is pressed on the search box
+                searchInput.focus();
             }
         }
     });
