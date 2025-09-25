@@ -1,132 +1,175 @@
 <!DOCTYPE html>
-<html lang="in">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Video Player | Plyr HLS (Remote Ready)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+    
     <style>
-        /* Gaya dasar untuk Plyr agar mengisi layar, ideal untuk TV */
-        body { 
-            background-color: #000; 
-            margin: 0; 
-            padding: 0; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+        body {
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+        
+        /* Menggunakan kelas default Plyr untuk elemen video */
+        .plyr--full-screen {
+            width: 100vw;
             height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
-        .container { 
-            width: 100%; 
-            max-width: 1280px; 
+        
+        /* Sembunyikan kontrol default Plyr. Kita akan menggunakan kontrol kustom. */
+        .plyr__controls {
+            display: none !important;
         }
-        /* PENYESUAIAN PENTING: Gaya untuk fokus (border) agar terlihat jelas di TV */
-        .plyr--full-ui button:focus, .plyr--full-ui input[type=range]:focus, .plyr--full-ui a:focus, .plyr__control:focus { 
-            outline: none; 
-            box-shadow: 0 0 0 3px #00a4ff; /* Border biru terang saat terfokus */
+        
+        /* Pastikan elemen video mengisi area */
+        .plyr {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .logo-container {
+            position: absolute;
+            top: 27px;
+            left: 20px;
+            z-index: 1001;
+        }
+        .logo-container img {
+            width: 135px;
+            height: 45px;
+            display: block;
+        }
+        .custom-controls {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 1000;
+        }
+        .progress-bar-container {
+            width: 90%;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #f00;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+        #time-display {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        #loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 0, 0, 0.3);
+            border-top: 5px solid #f00;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 1001;
+            display: none;
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        #play-pause-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1002;
+            transition: opacity 0.3s ease-in-out;
+            opacity: 1;
+        }
+        #play-pause-center svg {
+            fill: #f00;
+            width: 100%;
+            height: 100%;
+        }
+        #video-title-container {
+            position: absolute;
+            top: 100px;
+            left: 20px;
+            width: 30%;
+            z-index: 1001;
+            padding: 5px 10px;
+            font-size: 25px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 4px #000000;
+            transition: opacity 0.3s ease-in-out;
+        }
+        #digital-clock {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px #000000;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <video id="player" controls crossorigin playsinline></video>
+    <div class="logo-container">
+        <img src="https://raw.githubusercontent.com/tiviku69/apk/main/tiviku.png" alt="Logo Perusahaan Anda">
     </div>
+    <div id="video-title-container"></div>
+    <div id="digital-clock"></div>
+    <div id="play-pause-center">
+        <svg id="play-icon" viewBox="0 0 24 24" style="display: block;">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+        <svg id="pause-icon" viewBox="0 0 24 24" style="display: none;">
+            <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
+        </svg>
+    </div>
+    
+    <video id="video-player" class="plyr" playsinline controls preload="auto"></video>
 
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <div id="loading-spinner"></div>
+    <div class="custom-controls" id="player-controls">
+        <div id="time-display">0:00 / 0:00</div>
+        <div class="progress-bar-container" id="progress-bar-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+    
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const video = document.getElementById('player');
-            const videoSource = sessionStorage.getItem('videoLink'); 
-            const videoTitle = sessionStorage.getItem('videoTitle'); 
-            
-            if (videoTitle) {
-                document.title = videoTitle + ' | Plyr HLS';
-            }
-
-            if (!videoSource) {
-                video.style.display = 'none';
-                alert('Tautan video tidak ditemukan. Kembali ke halaman utama.');
-                window.location.href = 'index.html';
-                return;
-            }
-
-            const defaultOptions = {}; 
-
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(videoSource);
-                hls.attachMedia(video);
-
-                hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    const player = new Plyr(video, defaultOptions);
-                    setupAndroidTVRemote(player); 
-                    player.play(); 
-                });
-            } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-                video.src = videoSource;
-                const player = new Plyr(video, defaultOptions);
-                setupAndroidTVRemote(player);
-                player.play();
-            } else {
-                console.error('HLS tidak didukung di browser ini.');
-                video.style.display = 'none';
-                alert('HLS tidak didukung di browser Anda.');
-            }
-        });
-
-        // --- Fungsi untuk Menangani Input Remote Android TV agar tombol Plyr dapat dinavigasi ---
-        function setupAndroidTVRemote(player) {
-            // Pastikan kontainer Plyr dapat difokus
-            player.elements.container.tabIndex = 0; 
-            player.elements.container.focus(); // Berikan fokus awal
-
-            // KeyCodes standar Android TV Remote D-pad
-            const KEY_CENTER = 13;   // Enter / Center D-pad (Play/Pause/OK)
-            const KEY_LEFT = 37;     // Left D-pad (Seek Backward)
-            const KEY_RIGHT = 39;    // Right D-pad (Seek Forward)
-            const KEY_UP = 38;       // Up D-pad
-            const KEY_DOWN = 40;     // Down D-pad
-            const seekStep = 10;     // Maju/mundur 10 detik
-
-            document.addEventListener('keydown', (event) => {
-                const isDpadOrCenter = [KEY_CENTER, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN].includes(event.keyCode);
-                const isFocusedOnControl = player.elements.controls.contains(document.activeElement);
-
-                if (isDpadOrCenter) {
-                    // 1. Selalu tampilkan kontrol saat D-pad ditekan untuk memungkinkan navigasi.
-                    player.toggleControls(true); 
-                    event.preventDefault(); 
-                }
-                
-                // 2. Terapkan Play/Pause dan Seek Cepat (FF/RW) saat tombol Left/Right/Center ditekan 
-                //    DAN fokus TIDAK berada di dalam kontrol Plyr (untuk menghindari bentrok dengan navigasi).
-                if (!isFocusedOnControl) {
-                    switch (event.keyCode) {
-                        case KEY_CENTER:
-                            // Play/Pause cepat saat Center ditekan dan tidak ada tombol yang difokus
-                            if (player.playing) {
-                                player.pause();
-                            } else {
-                                player.play();
-                            }
-                            break;
-                        case KEY_LEFT:
-                            // Seek Backward
-                            player.currentTime = player.currentTime - seekStep;
-                            break;
-                        case KEY_RIGHT:
-                            // Seek Forward
-                            player.currentTime = player.currentTime + seekStep;
-                            break;
-                    }
-                }
-
-                // Untuk tombol KEY_UP/KEY_DOWN/KEY_LEFT/KEY_RIGHT, setelah kontrol muncul (langkah 1), 
-                // perilaku navigasi default D-pad (seperti tombol Tab) akan mengambil alih, 
-                // memungkinkan pengguna memindahkan fokus dari satu tombol Plyr ke tombol lainnya.
-            });
-        }
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.0/dist/hls.min.js"></script>
+    <script src="new.js"></script>
 </body>
 </html>
