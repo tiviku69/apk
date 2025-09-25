@@ -28,6 +28,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupHlsAndPlyr(url, videoEl) {
         const isHls = url && url.endsWith('.m3u8');
         let player;
+        
+        // Opsi Plyr: controls: [] untuk menghilangkan semua kontrol bawaan Plyr
+        const plyrOptions = {
+            controls: [], // DIHAPUS: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen']
+            settings: ['quality', 'speed', 'captions'],
+            autoplay: false,
+        };
 
         if (isHls && Hls.isSupported()) {
             console.log("Menggunakan hls.js untuk stream HLS.");
@@ -35,35 +42,24 @@ document.addEventListener('DOMContentLoaded', () => {
             hls.loadSource(url);
             hls.attachMedia(videoEl);
 
-            // Inisialisasi Plyr setelah hls.js melampirkan media
             hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-                player = new Plyr(videoEl, {
-                    controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
-                    settings: ['quality', 'speed', 'captions'],
-                    autoplay: false,
-                });
+                player = new Plyr(videoEl, plyrOptions);
                 setupPlayerEvents(player);
             });
-            // Tangani error hls
+            
             hls.on(Hls.Events.ERROR, (event, data) => {
                 if (data.fatal) {
                     console.error('HLS fatal error:', data);
-                    // Coba fallback ke native jika fatal
                     videoEl.src = url;
-                    player = new Plyr(videoEl, { /* options */ });
+                    player = new Plyr(videoEl, plyrOptions);
                     setupPlayerEvents(player);
                 }
             });
 
         } else {
-            // Untuk link non-HLS atau jika hls.js tidak didukung, gunakan Plyr biasa
             console.log("Menggunakan Plyr native.");
             videoEl.src = url;
-            player = new Plyr(videoEl, {
-                controls: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen'],
-                settings: ['quality', 'speed', 'captions'],
-                autoplay: false,
-            });
+            player = new Plyr(videoEl, plyrOptions);
             setupPlayerEvents(player);
         }
 
@@ -72,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- SETUP EVENT PLAYER ---
     function setupPlayerEvents(player) {
-        playerInstance = player; // Set playerInstance global
+        playerInstance = player;
         
         const handlePlay = () => {
             console.log("Video mulai diputar.");
@@ -150,34 +146,56 @@ document.addEventListener('DOMContentLoaded', () => {
         
         setupHlsAndPlyr(videoLink, videoElement);
 
-        // Play/Pause Tengah
+        // Play/Pause Tengah (diklik oleh remote, misalnya touchpad)
         playPauseCenter.addEventListener('click', () => {
             if (playerInstance) playerInstance.togglePlay();
         });
 
-        // Keydown Events (Enter/Space, ArrowRight/Left, Escape)
+        // Keydown Events untuk Remote Android TV
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
+                // Key Codes untuk Remote TV
                 switch (event.key) {
+                    // Tombol Tengah / ENTER / OK / Spacebar
                     case 'Enter':
                     case ' ':
+                    case 'MediaPlayPause': // Beberapa remote modern
                         playerInstance.togglePlay();
                         break;
+                    
+                    // Tombol Kanan (Seek Forward)
                     case 'ArrowRight':
+                    case 'MediaFastForward':
                         playerInstance.forward(10);
                         break;
+                        
+                    // Tombol Kiri (Seek Backward)
                     case 'ArrowLeft':
+                    case 'MediaRewind':
                         playerInstance.rewind(10);
                         break;
+                        
+                    // Tombol Back (Keluar dari player)
                     case 'Escape':
+                    case 'Backspace': // Beberapa implementasi remote
                         window.history.back();
                         break;
+                        
+                    // Tombol Atas/Bawah: Tidak ada fungsi di sini, tapi event tetap diserap
+                    case 'ArrowUp':
+                    case 'ArrowDown':
+                        // Bisa digunakan untuk kontrol volume jika diperlukan
+                        break;
                 }
-                resetControlsTimeout();
+                
+                // Setiap penekanan tombol navigasi akan menampilkan kontrol kustom
+                if (['Enter', ' ', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Backspace', 'Escape'].includes(event.key)) {
+                    resetControlsTimeout();
+                }
             }
         });
 
-        // Event interaksi untuk mereset timeout UI kustom
+        // Event interaksi mouse/touch untuk mereset timeout UI kustom
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);

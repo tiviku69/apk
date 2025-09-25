@@ -24,6 +24,7 @@
             left: 0;
         }
 
+        /* Penting: Sembunyikan kontrol bawaan Plyr jika JS gagal */
         .plyr--full-frame {
             position: absolute;
             top: 0;
@@ -32,6 +33,7 @@
             height: 100%;
         }
         
+        /* Desain Logo, Jam, Judul, Loading, dan Play/Pause Center Tetap */
         .logo-container {
             position: absolute;
             top: 27px;
@@ -121,7 +123,7 @@
     <div id="digital-clock"></div>
     
     <div id="player">
-        <video controls playsinline id="plyr-video"></video>
+        <video playsinline id="plyr-video"></video> 
     </div>
 
     <div id="play-pause-center">
