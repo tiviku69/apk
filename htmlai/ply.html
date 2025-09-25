@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
-    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             background-color: #000;
@@ -13,7 +13,7 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
-        #player {
+        #video-player {
             width: 100vw;
             height: 100vh;
             position: absolute;
@@ -60,7 +60,7 @@
         }
         #time-display {
             color: #fff;
-            font-size: 20px;
+            font-size: 16px;
             margin-bottom: 10px;
         }
         #loading-spinner {
@@ -116,12 +116,12 @@
         }
         #digital-clock {
             position: absolute;
-            top: 30px;
+            top: 25px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1001;
             color: white;
-            font-size: 25px;
+            font-size: 22px;
             font-weight: bold;
             text-shadow: 2px 2px 4px #000000;
         }
@@ -141,7 +141,7 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
-    <div id="player"></div>
+    <video id="video-player"></video>
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
         <div id="time-display">0:00 / 0:00</div>
