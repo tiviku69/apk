@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Opsi Plyr: controls: [] untuk menghilangkan semua kontrol bawaan Plyr
         const plyrOptions = {
-            controls: [], // DIHAPUS: ['play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings', 'fullscreen']
+            controls: [], 
             settings: ['quality', 'speed', 'captions'],
             autoplay: false,
         };
@@ -146,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         setupHlsAndPlyr(videoLink, videoElement);
 
-        // Play/Pause Tengah (diklik oleh remote, misalnya touchpad)
+        // Play/Pause Tengah
         playPauseCenter.addEventListener('click', () => {
             if (playerInstance) playerInstance.togglePlay();
         });
@@ -154,42 +154,61 @@ document.addEventListener('DOMContentLoaded', () => {
         // Keydown Events untuk Remote Android TV
         document.addEventListener('keydown', (event) => {
             if (playerInstance) {
-                // Key Codes untuk Remote TV
-                switch (event.key) {
+                // Menggunakan event.key (standar) atau event.keyCode (kompatibilitas TV/lama)
+                const key = event.key || event.keyCode; 
+                let action_key = null;
+                
+                switch (key) {
                     // Tombol Tengah / ENTER / OK / Spacebar
                     case 'Enter':
+                    case 13: // Kode Kunci ENTER/OK
                     case ' ':
-                    case 'MediaPlayPause': // Beberapa remote modern
+                    case 32: // Kode Kunci SPACEBAR
+                    case 'MediaPlayPause': 
                         playerInstance.togglePlay();
+                        action_key = 'play';
                         break;
                     
                     // Tombol Kanan (Seek Forward)
                     case 'ArrowRight':
+                    case 39: // Kode Kunci Right Arrow
+                    case 22: // Kode Kunci D-pad Right (Android TV)
                     case 'MediaFastForward':
                         playerInstance.forward(10);
+                        action_key = 'seek';
                         break;
                         
                     // Tombol Kiri (Seek Backward)
                     case 'ArrowLeft':
+                    case 37: // Kode Kunci Left Arrow
+                    case 21: // Kode Kunci D-pad Left (Android TV)
                     case 'MediaRewind':
                         playerInstance.rewind(10);
+                        action_key = 'seek';
                         break;
                         
                     // Tombol Back (Keluar dari player)
                     case 'Escape':
-                    case 'Backspace': // Beberapa implementasi remote
+                    case 4: // Kode Kunci Back (Android TV)
+                    case 'Backspace': 
                         window.history.back();
+                        action_key = 'back';
                         break;
                         
-                    // Tombol Atas/Bawah: Tidak ada fungsi di sini, tapi event tetap diserap
+                    // Tombol Atas/Bawah (untuk menampilkan kontrol)
                     case 'ArrowUp':
+                    case 38: // Kode Kunci Up Arrow
+                    case 19: // Kode Kunci D-pad Up
                     case 'ArrowDown':
-                        // Bisa digunakan untuk kontrol volume jika diperlukan
+                    case 40: // Kode Kunci Down Arrow
+                    case 20: // Kode Kunci D-pad Down
+                        action_key = 'ui';
                         break;
                 }
                 
-                // Setiap penekanan tombol navigasi akan menampilkan kontrol kustom
-                if (['Enter', ' ', 'ArrowRight', 'ArrowLeft', 'ArrowUp', 'ArrowDown', 'Backspace', 'Escape'].includes(event.key)) {
+                // Jika tombol navigasi ditekan, cegah tindakan default browser dan tampilkan UI kustom
+                if (action_key) {
+                    event.preventDefault(); 
                     resetControlsTimeout();
                 }
             }
