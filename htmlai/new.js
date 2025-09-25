@@ -1,7 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
+    const videoElement = document.getElementById('video-player');
     const playerControls = document.getElementById('player-controls');
+    const progressBarContainer = document.getElementById('progress-bar-container');
     const progressBar = document.getElementById('progress-bar');
     const loadingSpinner = document.getElementById('loading-spinner');
     const timeDisplay = document.getElementById('time-display');
@@ -10,12 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const pauseIcon = document.getElementById('pause-icon');
     const videoTitleContainer = document.getElementById('video-title-container');
     const digitalClock = document.getElementById('digital-clock');
-    const videoElement = document.getElementById('video-player');
-    
-    let playerInstance; // Instance Plyr
+    let hls;
     let controlsTimeout;
-    const SEEK_TIME = 10; // 10 seconds for seek forward/backward
 
+    // --- Fungsi Jam Digital ---
     function updateClock() {
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, '0');
@@ -23,76 +23,74 @@ document.addEventListener('DOMContentLoaded', () => {
         const seconds = String(now.getSeconds()).padStart(2, '0');
         digitalClock.textContent = `${hours}:${minutes}:${seconds}`;
     }
-
     setInterval(updateClock, 1000);
     updateClock();
 
+    // --- Fungsi Format Waktu ---
     const formatTime = (seconds) => {
-        if (!isFinite(seconds) || seconds < 0) return '0:00';
+        if (isNaN(seconds) || seconds < 0) return '0:00';
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = Math.floor(seconds % 60);
         const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
         return `${minutes}:${paddedSeconds}`;
     };
 
-    if (videoLink) {
+    // --- Inisialisasi Player ---
+    if (videoLink && videoElement) {
         if (videoTitleContainer) {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
         }
         
-        // --- HLS.js INTEGRATION LOGIC with Plyr ---
-        if (Hls.isSupported() && videoLink.toLowerCase().includes('.m3u8')) {
-            const hls = new Hls();
+        // Cek dukungan HLS
+        if (Hls.isSupported() && videoLink.endsWith('.m3u8')) {
+            hls = new Hls();
             hls.loadSource(videoLink);
             hls.attachMedia(videoElement);
             
-            hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                // Setelah manifest HLS.js selesai di-parse, inisialisasi Plyr
-                playerInstance = new Plyr(videoElement, { controls: [] }); // Inisialisasi Plyr tanpa kontrol default
-                initializePlayerEvents(playerInstance);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                console.log("HLS Manifest dimuat.");
+                videoElement.play();
             });
-
+            
+            // Penanganan error HLS
             hls.on(Hls.Events.ERROR, function (event, data) {
                 if (data.fatal) {
-                    console.error('HLS.js Fatal Error:', data.type, data.details);
-                    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) {
-                        alert('Gagal memuat streaming (Network Error).');
+                    switch(data.type) {
+                        case Hls.ErrorTypes.NETWORK_ERROR:
+                            console.error("Fatal network error detected, mencoba memuat ulang.", data);
+                            hls.startLoad();
+                            break;
+                        case Hls.ErrorTypes.MEDIA_ERROR:
+                            console.error("Fatal media error detected, mencoba memulihkan.", data);
+                            hls.recoverMediaError();
+                            break;
+                        default:
+                            console.error("Error HLS fatal lain:", data);
+                            hls.destroy();
+                            // Fallback to native video if HLS fails entirely (optional)
+                            videoElement.src = videoLink;
+                            break;
                     }
-                    hls.destroy();
                 }
             });
-
-        } else {
-            // Jika bukan HLS, inisialisasi Plyr langsung dengan link video
+        } else if (videoElement.canPlayType('application/vnd.apple.mpegurl') || videoElement.canPlayType('application/x-mpegurl') || !videoLink.endsWith('.m3u8')) {
+            // Native HLS support (iOS/Safari) atau file non-HLS (MP4)
             videoElement.src = videoLink;
-            playerInstance = new Plyr(videoElement, { controls: [] }); // Inisialisasi Plyr tanpa kontrol default
-            initializePlayerEvents(playerInstance);
+            videoElement.load();
+        } else {
+            console.error('Browser tidak mendukung HLS.');
         }
-        
-    } else {
-        console.error('Tidak ada data video ditemukan di sessionStorage.');
-        document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 3000);
-    }
-    
-    
-    // Fungsi untuk menginisialisasi event listeners Plyr
-    function initializePlayerEvents(player) {
-        
-        player.on('ready', () => {
-            console.log("Plyr is ready.");
-            if (playerControls) playerControls.style.display = 'flex';
-            resetControlsTimeout();
+
+        // Tampilkan kontrol saat player siap
+        videoElement.addEventListener('loadedmetadata', () => {
+             console.log("Metadata video dimuat.");
+             if (playerControls) playerControls.style.display = 'flex';
+             resetControlsTimeout();
         });
 
-        player.on('waiting', () => { 
-            console.log("Video sedang buffering (waiting).");
-            loadingSpinner.style.display = 'block';
-        });
-
-        player.on('playing', () => { 
+        // --- Event Video HTML5 ---
+        
+        videoElement.addEventListener('play', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
             playPauseCenter.style.opacity = '0';
@@ -102,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resetControlsTimeout();
         });
 
-        player.on('pause', () => {
+        videoElement.addEventListener('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
@@ -111,55 +109,73 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.style.opacity = '1';
         });
 
-        player.on('ended', () => { 
+        videoElement.addEventListener('ended', () => {
             console.log("Video selesai diputar.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
             videoTitleContainer.style.opacity = '1';
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
         });
 
-        player.on('timeupdate', () => { 
-            const position = player.currentTime;
-            const duration = player.duration;
-
-            if (progressBar && duration > 0 && isFinite(duration)) {
-                const progressPercentage = (position / duration) * 100;
+        videoElement.addEventListener('timeupdate', () => {
+            if (progressBar && videoElement.duration > 0 && !isNaN(videoElement.duration)) {
+                const progressPercentage = (videoElement.currentTime / videoElement.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(position);
-                const totalDuration = formatTime(duration);
+                const currentTime = formatTime(videoElement.currentTime);
+                const totalDuration = formatTime(videoElement.duration);
                 timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
             }
         });
-
-        // --- Custom Control Logic (Remote/Keyboard Functionality) ---
-
-        playPauseCenter.addEventListener('click', () => {
-            if (player.paused) {
-                player.play();
-            } else {
-                player.pause();
-            }
+        
+        // Tampilkan loading saat buffering
+        videoElement.addEventListener('waiting', () => {
+            console.log("Video sedang menunggu (buffering).");
+            loadingSpinner.style.display = 'block';
         });
 
+        videoElement.addEventListener('playing', () => {
+            console.log("Video sedang diputar.");
+            loadingSpinner.style.display = 'none';
+        });
+
+        // --- Kontrol Klik Tengah ---
+        playPauseCenter.addEventListener('click', () => {
+            if (videoElement.paused) {
+                videoElement.play();
+            } else {
+                videoElement.pause();
+            }
+        });
+        
+        // --- Kontrol Seek pada Progress Bar ---
+        progressBarContainer.addEventListener('click', (e) => {
+            const rect = progressBarContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percentage = clickX / rect.width;
+            
+            if (videoElement.duration) {
+                const newTime = videoElement.duration * percentage;
+                videoElement.currentTime = newTime;
+            }
+            resetControlsTimeout();
+        });
+
+        // --- Fungsi Kontrol Remote/Keyboard ---
         document.addEventListener('keydown', (event) => {
-            if (player && !player.destroyed) {
+            if (videoElement) {
                 switch (event.key) {
                     case 'Enter':
                     case ' ':
-                        if (player.paused) {
-                            player.play();
+                        if (videoElement.paused) {
+                            videoElement.play();
                         } else {
-                            player.pause();
+                            videoElement.pause();
                         }
                         break;
                     case 'ArrowRight':
-                        // currentTime property di Plyr adalah getter/setter
-                        player.currentTime = player.currentTime + SEEK_TIME;
+                        videoElement.currentTime += 10;
                         break;
                     case 'ArrowLeft':
-                        player.currentTime = player.currentTime - SEEK_TIME;
+                        videoElement.currentTime -= 10;
                         break;
                     case 'Escape':
                         window.history.back();
@@ -169,23 +185,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
+        // --- Fungsi Sembunyikan/Tampilkan Kontrol ---
         const hideControls = () => {
-            if (playerControls && !player.paused && !player.ended) {
-                playerControls.style.display = 'none';
+            if (playerControls && !videoElement.paused) {
+                playerControls.classList.add('hidden');
+                videoTitleContainer.style.opacity = '0';
             }
         };
 
         const resetControlsTimeout = () => {
             clearTimeout(controlsTimeout);
-            if (playerControls) playerControls.style.display = 'flex';
+            if (playerControls) {
+                playerControls.classList.remove('hidden');
+                videoTitleContainer.style.opacity = videoElement.paused ? '1' : '0';
+            }
             controlsTimeout = setTimeout(hideControls, 3000);
         };
 
-        // Event DOM untuk interaksi pengguna
+        // Event untuk memicu tampilan kontrol
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);
-        videoElement.addEventListener('mouseover', resetControlsTimeout);
-        videoElement.addEventListener('mouseout', hideControls);
+        videoElement.addEventListener('click', resetControlsTimeout);
+
+    } else {
+        console.error('Tidak ada data video ditemukan di sessionStorage.');
+        document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 3000);
     }
 });

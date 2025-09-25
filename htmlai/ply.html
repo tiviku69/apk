@@ -4,10 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
-    
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    
-    <style>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script> <style>
         body {
             background-color: #000;
             color: #fff;
@@ -15,27 +12,19 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
-        
-        /* Menggunakan kelas default Plyr untuk elemen video */
-        .plyr--full-screen {
+        #player-container { /* Kontainer baru untuk video */
             width: 100vw;
             height: 100vh;
             position: absolute;
             top: 0;
             left: 0;
         }
-        
-        /* Sembunyikan kontrol default Plyr. Kita akan menggunakan kontrol kustom. */
-        .plyr__controls {
-            display: none !important;
+        #video-player { /* Elemen video HTML5 */
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #000;
         }
-        
-        /* Pastikan elemen video mengisi area */
-        .plyr {
-            width: 100% !important;
-            height: 100% !important;
-        }
-
         .logo-container {
             position: absolute;
             top: 27px;
@@ -61,6 +50,13 @@
             flex-direction: column;
             gap: 10px;
             z-index: 1000;
+            /* Tambahkan transisi agar terlihat halus saat menghilang/muncul */
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .custom-controls.hidden {
+            opacity: 0;
+            pointer-events: none; /* Nonaktifkan interaksi saat tersembunyi */
         }
         .progress-bar-container {
             width: 90%;
@@ -158,7 +154,9 @@
         </svg>
     </div>
     
-    <video id="video-player" class="plyr" playsinline controls preload="auto"></video>
+    <div id="player-container">
+        <video id="video-player" autoplay></video>
+    </div>
 
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
@@ -167,9 +165,6 @@
             <div class="progress-bar" id="progress-bar"></div>
         </div>
     </div>
-    
-    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.0/dist/hls.min.js"></script>
     <script src="new.js"></script>
 </body>
 </html>
