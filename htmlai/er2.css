@@ -1,0 +1,182 @@
+body {
+    background-color: black;
+    padding: 0;
+    margin: 0;
+}
+
+#vidcon {
+    width: 100%;
+    height: 100vh; /* Gunakan vh agar responsif di layar TV */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+#videoPlayer {
+    position: relative;
+    width: 100%;
+    height: 100%; /* Isi seluruh wadah vidcon */
+    object-fit: contain; /* Jaga aspek rasio, tidak perlu fill */
+    padding: 0;
+    margin: 0;
+}
+
+/* --- OVERLAY (#co) --- */
+#co {
+    background-color: rgba(0, 0, 0, 0.6); /* Overlay gelap, sedikit lebih transparan */
+    width: 100%;
+    height: 100%;		
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 5; /* Pastikan di atas video */
+    display: flex; /* Gunakan flexbox untuk penempatan elemen */
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease; /* Transisi saat play/pause */
+}
+
+/* --- JUDUL & LOGO TIVIKU (Bagian Atas) --- */
+#tiviku {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    border-radius: 8px;
+    width: 100px;
+    height: 35px;
+}
+
+#clock {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    color: whitesmoke;
+    text-align: right;
+}
+
+.time {
+    font-weight: 700;
+    font-size: 24px;
+    margin: 0;
+}
+
+.date {
+    font-size: 18px;
+    margin: 0;
+}
+
+#jdl {
+    color: white;
+    font-weight: 800;
+    font-size: 32px;
+    align-self: flex-start; /* Posisikan di kiri atas (di dalam flex #co) */
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* Tambah bayangan agar jelas */
+}
+
+/* --- GAMBAR COVER (IMPLIKASI TV: Tampil di Tengah Saat Pause/Error) --- */
+#imgg {
+    width: 350px;
+    height: 200px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+    object-fit: cover;
+    display: none; /* Sembunyikan secara default saat video load */
+}
+
+/* --- KONTROL PEMUTAR (player-controls) --- */
+#controls {
+    width: 90%;
+    margin: 0 auto 50px auto; /* Margin dari bawah layar */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    transform: translateY(100px); /* Sembunyikan kontrol di bawah saat tidak aktif */
+    opacity: 0;
+    transition: all 0.4s ease-out;
+    z-index: 10;
+}
+
+/* Tampilkan Kontrol saat Overlay Aktif */
+#co.active .player-controls {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.progress-bar-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+    color: white;
+    font-size: 18px;
+}
+
+/* Progress Bar Style */
+.progress {
+    flex-grow: 1; /* Ambil semua ruang yang tersedia */
+    height: 12px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    margin: 0 15px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.progress__filled {
+    height: 100%;
+    background: #FF0000; /* Merah untuk progres yang menarik */
+    border-radius: 6px;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+/* Tombol Kontrol */
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+button {						
+    color: #FF0000;
+    background-color: rgba(255, 255, 255, 0.1);
+    font-size: 28px;
+    border: 4px transparent solid;
+    outline: none;
+    padding: 15px 30px;
+    margin: 0 15px;
+    border-radius: 10px;
+    transition: all 0.2s;
+}
+
+/* Style Fokus untuk Remote Android TV */
+button:focus,
+button.active-focus {
+    border: 4px solid #fff; /* Border putih solid saat fokus */
+    color: #fff;
+    background-color: #FF0000; /* Background merah saat fokus */
+    transform: scale(1.1); /* Efek perbesaran saat fokus */
+}
+
+.skip-btn {
+    font-size: 24px;
+}
