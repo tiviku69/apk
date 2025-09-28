@@ -1,50 +1,120 @@
 <!DOCTYPE html>
-<html lang="in">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Page title</title>
-    <style>
-        .offline-message {
-            display: none;
-            border: 1px solid #f44336;
-            padding: 0;
-            margin: 0;
-            color: #f44336;
-            background-color: #ffe5e5;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Android TV Sapiens AI</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="atas"></div>
-    <div class="offline-message" id="offlineMessage">
-        <h1>Anda Tidak Terhubung ke Internet</h1>
-        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
+    <div id="app">
+        <!-- Sidebar Menu -->
+        <aside id="sidebar" class="sidebar-closed">
+            <div class="sidebar-header">
+                <h2>Menu</h2>
+            </div>
+            <nav>
+                <ul>
+                    <li class="nav-item active" data-action="search">
+                        <img src="icons/search.svg" alt="Search Icon">
+                        <span>Search</span>
+                    </li>
+                    <li class="nav-item" data-action="home">
+                        <img src="icons/home.svg" alt="Home Icon">
+                        <span>Home</span>
+                    </li>
+                    <li class="nav-item" data-action="saved">
+                        <img src="icons/saved.svg" alt="Saved Videos Icon">
+                        <span>Saved Videos</span>
+                    </li>
+                    <li class="nav-item" data-action="settings">
+                        <img src="icons/settings.svg" alt="Settings Icon">
+                        <span>Settings</span>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main id="main-content">
+            <header>
+                <h1>Selamat Datang di Sapiens AI TV</h1>
+            </header>
+
+            <section class="content-row">
+                <h2>Film Trending</h2>
+                <div class="carousel" id="trending-movies">
+                    <!-- Film items will be loaded here by JavaScript -->
+                    <div class="movie-card" data-id="1">
+                        <img src="images/movie1.jpg" alt="Movie 1">
+                        <div class="movie-info">
+                            <h3>Judul Film 1</h3>
+                            <p>Deskripsi singkat film 1.</p>
+                        </div>
+                    </div>
+                    <div class="movie-card" data-id="2">
+                        <img src="images/movie2.jpg" alt="Movie 2">
+                        <div class="movie-info">
+                            <h3>Judul Film 2</h3>
+                            <p>Deskripsi singkat film 2.</p>
+                        </div>
+                    </div>
+                    <div class="movie-card" data-id="3">
+                        <img src="images/movie3.jpg" alt="Movie 3">
+                        <div class="movie-info">
+                            <h3>Judul Film 3</h3>
+                            <p>Deskripsi singkat film 3.</p>
+                        </div>
+                    </div>
+                    <div class="movie-card" data-id="4">
+                        <img src="images/movie4.jpg" alt="Movie 4">
+                        <div class="movie-info">
+                            <h3>Judul Film 4</h3>
+                            <p>Deskripsi singkat film 4.</p>
+                        </div>
+                    </div>
+                    <div class="movie-card" data-id="5">
+                        <img src="images/movie5.jpg" alt="Movie 5">
+                        <div class="movie-info">
+                            <h3>Judul Film 5</h3>
+                            <p>Deskripsi singkat film 5.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-row">
+                <h2>Serial TV Pilihan</h2>
+                <div class="carousel" id="tv-series">
+                    <!-- Serial TV items will be loaded here by JavaScript -->
+                    <div class="movie-card" data-id="6">
+                        <img src="images/series1.jpg" alt="Series 1">
+                        <div class="movie-info">
+                            <h3>Judul Serial 1</h3>
+                            <p>Deskripsi singkat serial 1.</p>
+                        </div>
+                    </div>
+                    <div class="movie-card" data-id="7">
+                        <img src="images/series2.jpg" alt="Series 2">
+                        <div class="movie-info">
+                            <h3>Judul Serial 2</h3>
+                            <p>Deskripsi singkat serial 2.</p>
+                        </div>
+                    </div>
+                    <div class="movie-card" data-id="8">
+                        <img src="images/series3.jpg" alt="Series 3">
+                        <div class="movie-info">
+                            <h3>Judul Serial 3</h3>
+                            <p>Deskripsi singkat serial 3.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
-    <div id="container"></div>
 
-    <script>
-        function updateOnlineStatus() {
-            const offlineMessage = document.getElementById('offlineMessage');
-            const atas = document.getElementById('atas');
-            const container = document.getElementById('container');
-            if (navigator.onLine) {
-                offlineMessage.style.display = 'none';
-                atas.style.display = 'block';
-                container.style.display = 'block';
-            } else {
-                offlineMessage.style.display = 'block';
-                atas.style.display = 'none';
-                container.style.display = 'none';
-            }
-        }
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-
-        // Set initial status
-        updateOnlineStatus();
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
+
