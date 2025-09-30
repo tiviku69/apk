@@ -1,15 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
-    
-    // MENGGANTI JWPLAYER INSTANCE DENGAN ELEMEN VIDEO
-    const videoElement = document.getElementById('video-element'); 
-    let hlsInstance; 
-    let playerInstance = videoElement; // Menggunakan videoElement sebagai playerInstance
-    
-    // MENDAPATKAN SEMUA ELEMEN KONTROL
+    const playerElement = document.getElementById('player'); // Sekarang elemen <video>
     const playerControls = document.getElementById('player-controls');
     const progressBar = document.getElementById('progress-bar');
+    const progressBarContainer = document.getElementById('progress-bar-container'); // Tambahan untuk seek
     const loadingSpinner = document.getElementById('loading-spinner');
     const timeDisplay = document.getElementById('time-display');
     const playPauseCenter = document.getElementById('play-pause-center');
@@ -18,10 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoTitleContainer = document.getElementById('video-title-container');
     const digitalClock = document.getElementById('digital-clock');
     
+    // playerInstance diganti menjadi playerElement (<video>)
     let controlsTimeout;
 
-    // --- FUNGSI UTILITY ---
-    
     function updateClock() {
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, '0');
@@ -33,113 +27,85 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
     updateClock();
 
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-        return `${minutes}:${paddedSeconds}`;
-    };
-
-    // --- FUNGSI KONTROL ---
-
-    const hideControls = () => {
-        if (playerControls && !playerInstance.paused && !playerInstance.seeking) {
-            playerControls.style.display = 'none';
-        }
-    };
-    
-    const resetControlsTimeout = () => {
-        clearTimeout(controlsTimeout);
-        if (playerControls) playerControls.style.display = 'flex';
-        controlsTimeout = setTimeout(hideControls, 3000);
-        // Pastikan judul juga terlihat saat kontrol muncul
-        videoTitleContainer.style.opacity = '1';
-    };
-
-    // --- INISIALISASI PLAYER ---
-
     if (videoLink) {
         if (videoTitleContainer) {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
         }
         
-        // --- HLS.JS SETUP ---
-        if (Hls.isSupported()) {
-            hlsInstance = new Hls();
-            hlsInstance.loadSource(videoLink);
-            hlsInstance.attachMedia(videoElement);
-            
-            hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() {
-                // Video siap, tampilkan kontrol
-                console.log("HLS Manifest Parsed. Video siap.");
-                playerControls.style.display = 'flex';
-                resetControlsTimeout();
-            });
-            
-            hlsInstance.on(Hls.Events.ERROR, function (event, data) {
-                if (data.fatal) {
-                    console.error('HLS Fatal Error:', data.details);
-                    switch(data.type) {
-                        case Hls.ErrorTypes.NETWORK_ERROR:
-                            console.error("Kesalahan jaringan, mencoba memuat ulang.");
-                            hlsInstance.startLoad();
-                            break;
-                        case Hls.ErrorTypes.MEDIA_ERROR:
-                            console.error("Kesalahan media, mencoba pemulihan.");
-                            hlsInstance.recoverMediaError();
-                            break;
-                        default:
-                            // Kesalahan fatal lainnya, hancurkan hls.js dan coba fallback ke HTML5 native
-                            hlsInstance.destroy();
-                            videoElement.src = videoLink; // Fallback
-                            console.log("Menggunakan fallback HTML5 native.");
-                            break;
-                    }
-                }
-            });
-        } else if (videoElement.canPlayType('application/vnd.apple.mpegurl') || videoElement.canPlayType('application/x-mpegurl')) {
-            // Browser native mendukung HLS (e.g., Safari di iOS/macOS)
-            videoElement.src = videoLink;
-            videoElement.addEventListener('loadedmetadata', () => {
-                 playerControls.style.display = 'flex';
-                 resetControlsTimeout();
-            });
-        } else {
-            console.error('Browser tidak mendukung HLS.');
-            document.body.innerHTML = '<h1>Browser Anda tidak mendukung streaming HLS.</h1>';
-            return; // Hentikan eksekusi script
-        }
-        
-        // --- EVENT LISTENER UNTUK ELEMEN VIDEO HTML5 ---
+        // 1. Inisialisasi Video HTML5
+        playerElement.src = videoLink;
+        // playerElement.load(); // Opsional, tetapi membantu memulai pemuatan
 
-        // Mengganti playerInstance.playToggle()
+        const formatTime = (seconds) => {
+            if (isNaN(seconds) || seconds < 0) return '0:00';
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = Math.floor(seconds % 60);
+            const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
+            return `${minutes}:${paddedSeconds}`;
+        };
+
+        // Fungsi Play/Pause Toggle
         const playToggle = () => {
-            if (playerInstance.paused || playerInstance.ended) {
-                playerInstance.play().catch(e => console.error("Error playing video:", e));
+            if (playerElement.paused) {
+                playerElement.play().catch(error => {
+                    console.error("Gagal memutar video:", error);
+                    // Menampilkan ikon Play jika gagal play (misalnya: karena kebijakan autostart browser)
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                    playPauseCenter.style.opacity = '1';
+                });
             } else {
-                playerInstance.pause();
+                playerElement.pause();
             }
         };
 
-        // EVENT: Memuat / Buffering
-        playerInstance.addEventListener('waiting', () => {
+        // Fungsi Hide/Show Controls
+        const hideControls = () => {
+            if (playerControls && !playerElement.paused) {
+                playerControls.style.display = 'none';
+                videoTitleContainer.style.opacity = '0'; // Sembunyikan judul
+            }
+        };
+
+        const resetControlsTimeout = () => {
+            clearTimeout(controlsTimeout);
+            if (playerControls) playerControls.style.display = 'flex';
+            videoTitleContainer.style.opacity = '1'; // Tampilkan judul
+            
+            // Atur ulang timer hanya jika video sedang diputar
+            if (!playerElement.paused) {
+                controlsTimeout = setTimeout(hideControls, 3000);
+            }
+        };
+
+        // 2. Event Listener HTML5
+        
+        // Event "canplay" menggantikan "ready" JW Player
+        playerElement.addEventListener('canplay', () => {
+            console.log("Video siap diputar.");
+            if (playerControls) playerControls.style.display = 'flex';
+            resetControlsTimeout();
+        });
+
+        // Event "waiting" menggantikan "buffer" JW Player
+        playerElement.addEventListener('waiting', () => {
             console.log("Video sedang buffering.");
             loadingSpinner.style.display = 'block';
         });
 
-        // EVENT: Mulai Diputar (atau sudah cukup buffer)
-        playerInstance.addEventListener('playing', () => {
+        // Event "play"
+        playerElement.addEventListener('play', () => {
             console.log("Video mulai diputar.");
             loadingSpinner.style.display = 'none';
             playPauseCenter.style.opacity = '0';
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
-            videoTitleContainer.style.opacity = '0'; // Sembunyikan judul
+            videoTitleContainer.style.opacity = '0';
             resetControlsTimeout();
         });
-        
-        // EVENT: Dijeda
-        playerInstance.addEventListener('pause', () => {
+
+        // Event "pause"
+        playerElement.addEventListener('pause', () => {
             console.log("Video dijeda.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
@@ -148,65 +114,57 @@ document.addEventListener('DOMContentLoaded', () => {
             videoTitleContainer.style.opacity = '1';
         });
 
-        // EVENT: Selesai
-        playerInstance.addEventListener('ended', () => {
+        // Event "ended" menggantikan "complete" JW Player
+        playerElement.addEventListener('ended', () => {
             console.log("Video selesai diputar.");
             clearTimeout(controlsTimeout);
             playPauseCenter.style.opacity = '1';
-            videoTitleContainer.style.opacity = '1';
-            playIcon.style.display = 'block'; // Tampilkan ikon play
+            playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
+            videoTitleContainer.style.opacity = '1';
+            playerControls.style.display = 'flex';
         });
 
-        // EVENT: Update Waktu (Time)
-        playerInstance.addEventListener('timeupdate', () => {
-            const data = {
-                position: playerInstance.currentTime,
-                duration: playerInstance.duration
-            };
-            
-            if (progressBar && data.duration && isFinite(data.duration) && data.duration > 0) {
-                const progressPercentage = (data.position / data.duration) * 100;
+        // Event "timeupdate" menggantikan "time" JW Player
+        playerElement.addEventListener('timeupdate', () => {
+            if (progressBar && !isNaN(playerElement.duration) && playerElement.duration > 0) {
+                const progressPercentage = (playerElement.currentTime / playerElement.duration) * 100;
                 progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(data.position);
-                const totalDuration = formatTime(data.duration);
+                const currentTime = formatTime(playerElement.currentTime);
+                const totalDuration = formatTime(playerElement.duration);
                 timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
             }
         });
-        
-        // --- KONTROL MANUAL DAN KEYBOARD ---
 
-        // Klik Play/Pause di tengah
+        // 3. Kontrol dan Keyboard Shortcuts
+        
         playPauseCenter.addEventListener('click', playToggle);
         
-        // Klik di Progress Bar Container (Belum diimplementasikan dari kode lama, tetapi harusnya berfungsi)
-        const progressBarContainer = document.getElementById('progress-bar-container');
-        progressBarContainer.addEventListener('click', (e) => {
+        // Logika Seek pada Progress Bar
+        progressBarContainer.addEventListener('click', (event) => {
             const rect = progressBarContainer.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            const newTime = pos * playerInstance.duration;
+            const clickPosition = event.clientX - rect.left;
+            const percentage = clickPosition / rect.width;
             
-            if (newTime >= 0 && newTime <= playerInstance.duration) {
-                playerInstance.currentTime = newTime;
-                resetControlsTimeout();
+            if (!isNaN(playerElement.duration)) {
+                playerElement.currentTime = playerElement.duration * percentage;
             }
+            resetControlsTimeout();
         });
-        
 
-        // Kontrol Keyboard
         document.addEventListener('keydown', (event) => {
-            if (playerInstance) {
+            if (playerElement) {
                 switch (event.key) {
                     case 'Enter':
                     case ' ':
-                        event.preventDefault(); // Mencegah scroll saat menekan spasi
+                        event.preventDefault(); // Mencegah scrolling saat menekan Spacebar
                         playToggle();
                         break;
                     case 'ArrowRight':
-                        playerInstance.currentTime += 10;
+                        playerElement.currentTime += 10;
                         break;
                     case 'ArrowLeft':
-                        playerInstance.currentTime -= 10;
+                        playerElement.currentTime -= 10;
                         break;
                     case 'Escape':
                         window.history.back();
@@ -216,13 +174,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Kontrol Mouse/Sentuh (untuk menampilkan/menyembunyikan kontrol)
+        // 4. Reset Controls Timeout pada Aktivitas Pengguna
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);
-        
+        // Untuk HTML5 video, kita tidak memiliki event useractive/userinactive seperti JW Player, 
+        // sehingga kita mengandalkan mousemove/mousedown/touchstart.
+
     } else {
-        // Jika tidak ada data video
         console.error('Tidak ada data video ditemukan di sessionStorage.');
         document.body.innerHTML = '<h1>Tidak ada video yang dipilih. Kembali ke halaman utama.</h1>';
         setTimeout(() => {
