@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Player</title>
-    <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
             background-color: #000;
@@ -13,12 +13,14 @@
             font-family: Arial, sans-serif;
             overflow: hidden;
         }
-        #player {
+        /* MENGGANTI #player DENGAN #video-element */
+        #video-element {
             width: 100vw;
             height: 100vh;
             position: absolute;
             top: 0;
             left: 0;
+            object-fit: cover; /* Memastikan video mengisi seluruh area player */
         }
         .logo-container {
             position: absolute;
@@ -141,7 +143,8 @@
             <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         </svg>
     </div>
-    <div id="player"></div>
+    <video id="video-element" class="video-js" preload="auto" playsinline></video>
+    
     <div id="loading-spinner"></div>
     <div class="custom-controls" id="player-controls">
         <div id="time-display">0:00 / 0:00</div>
