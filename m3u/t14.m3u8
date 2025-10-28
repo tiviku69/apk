@@ -1,13 +1,4 @@
-#EXTM3U<!DOCTYPE html>
-<html lang="in">
-<head>
-				<meta charset="UTF-8">
-				<title>Page title</title>
-</head>
-<body>
-				
-</body>
-</html>
+#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-TARGETDURATION:6
 #EXT-X-MEDIA-SEQUENCE:0
