@@ -1,7 +1,7 @@
 const atas = document.getElementById('atas');
 atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
 
-const files = [ 'json/cmpr.json','json/captain.json','json/avat.json','json/ghost.json','json/avatar.json','json/squid.json','json/journey.json','json/one.json','json/mp4.json' ];
+const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/mp4.json' ];
 
 let filesProcessed = 0;
 const totalFiles = files.length;
