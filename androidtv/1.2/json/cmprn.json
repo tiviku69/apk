@@ -8,21 +8,13 @@
   "collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/avat.json"
 },
 {
-  "ttl": "Squid Game (2021) dubbing",
-  "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
-  "dur": "Koleksi", 
-  "lnk": "koleksi", 
-  "isCollection": true,
-  "collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/squid.json"
-},
-	{
 		"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/59.jpg",
 		"lnk": "https://tiviku69.github.io/apk/m3u/t70.m3u8",
 		"ttl": "Frozen II (2019) dubbing",
 		"dur": "1:43:14",
 		"z": "z",
 		"tiviku": "apk"
-	},
+},
 	{
 		"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/58.jpg",
 		"lnk": "https://tiviku69.github.io/apk/m3u/t69.m3u8",
@@ -38,30 +30,37 @@
 		"dur": "1:40:03",
 		"tiviku": "apk"
 	},
-	{
+{
 		"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/56.jpg",
 		"lnk": "https://tiviku69.github.io/apk/m3u/t66.m3u8",
 		"ttl": "Scales_ Mermaids Are Real (2017) dubbing",
 		"dur": "1:28:40",
 		"z": "z",
 		"tiviku": "apk"
-	},
-	{
-		"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/55.jpg",
-		"lnk": "https://tiviku69.github.io/apk/m3u/t62.m3u8",
-		"ttl": "Narik Sukmo (2025)",
-		"dur": "1:35:14",
-		"z": "z",
-		"tiviku": "apk"
-	},
-  {
+},
+{
+"logo":"https://raw.githubusercontent.com/tiviku69/apk/main/gambar/55.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t62.m3u8",
+"ttl": "Narik Sukmo (2025)",
+"dur": "1:35:14",
+"tiviku": "apk"
+},
+{
+  "ttl": "Avatar: The Last Airbender (2024) dubbing",
+  "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
+  "dur": "Koleksi", 
+  "lnk": "koleksi", 
+  "isCollection": true,
+  "collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/avatar.json"
+},
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/54.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t59.m3u8",
     "ttl": "Sangkuriang (1982) suzzana",
     "dur": "1:31:09",
     "z": "z",
     "tiviku": "apk"
-   },
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/53.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t55.m3u8",
@@ -70,6 +69,14 @@
     "z": "z",
     "tiviku": "apk"
    },
+{
+"ttl": "Journey to the West (1996) dubbing",
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/4.jpg",
+"dur": "Koleksi",
+"lnk": "koleksi",
+"isCollection": true,
+"collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/journey.json"
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/52.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t42.m3u8",
@@ -110,15 +117,23 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/47.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t24.m3u8",
     "ttl": "Doraemon_ Nobita no taiyō ō densetsu (2000) dubbing",
     "dur": "1:31:24",
     "z": "z",
     "tiviku": "apk"
-   },
-  {
+},
+{
+  "ttl": "Captain Tsubasa: Road to (2002) dubbing",
+  "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/g.jpg",
+  "dur": "Koleksi", 
+  "lnk": "koleksi", 
+  "isCollection": true,
+  "collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/captain.json"
+},
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/46.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t23.m3u8",
     "ttl": "Jaka swara (1990)",
@@ -143,29 +158,44 @@
     "tiviku": "apk"
    },
 {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/43.jpg",
-    "lnk": "https://tiviku69.github.io/apk/m3u/t14.m3u8",
-    "ttl": "Abadi Nan Jaya (2025)",
-    "dur": "1:57:42",
-    "z": "z",
-    "tiviku": "apk"
-   },
-  {
+"ttl": "one piece (2023) dubbing",
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/5.jpg",
+"dur": "Koleksi",
+"lnk": "koleksi",
+"isCollection": true,
+"collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/one.json"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/43.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t14.m3u8",
+"ttl": "Abadi Nan Jaya (2025)",
+"dur": "1:57:42",
+"tiviku": "apk"
+},
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/42.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t13.m3u8",
     "ttl": "Godaan Membara (1994)",
     "dur": "1:08:24",
     "z": "z",
     "tiviku": "apk"
-   },
-  {
+},
+{
+  "ttl": "ghost at school (2000) dubbing",
+  "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/2.jpg",
+  "dur": "Koleksi", 
+  "lnk": "koleksi", 
+  "isCollection": true,
+  "collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/ghost.json"
+},
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/40.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t7.m3u8",
     "ttl": "Pengepungan di Bukit Duri (2025)",
     "dur": "1:57:51",
     "z": "z",
     "tiviku": "apk"
-   },
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/38.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/A0vtT.m3u8",
@@ -397,8 +427,8 @@
     "dur": "1:15:28",
     "z": "z",
     "tiviku": "apk"
-   },
-  {
+},
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/8.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/iyY4p.m3u8",
     "ttl": "Bolts & Blip_Battle of the Lunar League (2012) dubbing",
@@ -454,15 +484,31 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
+{
+  "ttl": "Squid Game (2021) dubbing",
+  "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/3.jpg",
+  "dur": "Koleksi", 
+  "lnk": "koleksi", 
+  "isCollection": true,
+  "collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/squid.json"
+},
+{
+  "ttl": "Squid Game 2 (2024) dubbing",
+  "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/39.jpg",
+  "dur": "Koleksi", 
+  "lnk": "koleksi", 
+  "isCollection": true,
+  "collectionUrl": "https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/squid2.json"
+},
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/6.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/k7odF.m3u8",
     "ttl": "Ford v Ferrari (2019) dubbing",
     "dur": "2:32:35",
     "z": "z",
     "tiviku": "apk"
-   },
-  {
+},
+{
     "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gute/logo/5.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/tY6d3.m3u8",
     "ttl": "Cars (2006) dubbing",
