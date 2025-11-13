@@ -4,7 +4,7 @@ atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id
 // Daftar file JSON utama yang akan dimuat di tiviku.html
 // File-file ini harus berisi item Direct Play dan/atau item Koleksi (seperti cmpr.json)
 const allFiles = [ 
-    '../json/cmprn.json','../json/mp4.json'
+    './json/cmprn.json','./json/mp4.json'
     // Tambahkan file lain yang ingin Anda tampilkan langsung di sini
 ];
 
