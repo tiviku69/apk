@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="in">
+<head>
+    <meta charset="UTF-8">
+    <title>Page title</title>
+    <style>
+        .offline-message {
+            display: none;
+            border: 1px solid #f44336;
+            padding: 0;
+            margin: 0;
+            color: #f44336;
+            background-color: #ffe5e5;
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="atas"></div>
+    <div class="offline-message" id="offlineMessage">
+        <h1>Anda Tidak Terhubung ke Internet</h1>
+        <p>Silakan periksa koneksi jaringan Anda dan coba lagi.</p>
+    </div>
+    <div id="container"></div>
+
+    <script>
+        function updateOnlineStatus() {
+            const offlineMessage = document.getElementById('offlineMessage');
+            const atas = document.getElementById('atas');
+            const container = document.getElementById('container');
+            if (navigator.onLine) {
+                offlineMessage.style.display = 'none';
+                atas.style.display = 'block';
+                container.style.display = 'block';
+            } else {
+                offlineMessage.style.display = 'block';
+                atas.style.display = 'none';
+                container.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+
+        // Set initial status
+        updateOnlineStatus();
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
