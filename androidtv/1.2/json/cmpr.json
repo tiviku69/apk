@@ -1,5 +1,12 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/68.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t89.m3u8",
+"ttl": "jackie chan_ Around the World in 80 Days (2004) dubbing",
+"dur": "1:55:08",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/61.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t82.m3u8",
 "ttl": "Doraemon_ Petualangan Nobita di Pulau Harta Karun (2018) dubbing",
@@ -30,7 +37,7 @@
 {
 "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/65.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t86.m3u8",
-"ttl": "The Young Master (1980) dubbing jackie chan",
+"ttl": "jackie chan_ The Young Master (1980) dubbing",
 "dur": "1:37:19",
 "tiviku": "apk"
 },
@@ -98,7 +105,7 @@
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/54.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t59.m3u8",
-    "ttl": "Sangkuriang (1982) suzzana",
+    "ttl": "suzzana_ Sangkuriang (1982)",
     "dur": "1:31:09",
     "z": "z",
     "tiviku": "apk"
