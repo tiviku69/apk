@@ -189,14 +189,15 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/46.jpg",
-    "lnk": "https://tiviku69.github.io/apk/m3u/t23.m3u8",
-    "ttl": "Jaka swara (1990)",
-    "dur": "1:39:11",
-    "z": "z",
-    "tiviku": "apk"
-   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/46.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t23.m3u8",
+"ttl": "Jaka swara (1990)",
+"dur": "1:39:11",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/44.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t15.m3u8",
@@ -445,14 +446,15 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/10.jpg",
-    "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/ihY70.m3u8",
-    "ttl": "Raya and the Last Dragon (2021) dubbing",
-    "dur": "1:47:28",
-    "z": "z",
-    "tiviku": "apk"
-   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/10.jpg",
+"lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/ihY70.m3u8",
+"ttl": "Raya and the Last Dragon (2021) dubbing",
+"dur": "1:47:28",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/9.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/iyY40.m3u8",
@@ -541,14 +543,15 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gute/logo/3.jpg",
-    "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/iJj6y.m3u8",
-    "ttl": "ballerina (2023) dubbing",
-    "dur": "1:33:47",
-    "z": "z",
-    "tiviku": "apk"
-   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gute/logo/3.jpg",
+"lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/iJj6y.m3u8",
+"ttl": "ballerina (2023) dubbing",
+"dur": "1:33:47",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gute/logo/2.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/KY6d3.m3u8",
