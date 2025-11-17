@@ -4,9 +4,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('container-koleksi');
     const atas = document.getElementById('atas-koleksi');
 
+    let filesLoaded = 0; 
+
     if (collectionTitle && atas) {
         const titleElement = document.createElement('h1');
         titleElement.textContent = `${collectionTitle}`;
+        // MODIFIKASI: Judul langsung ditambahkan ke #atas-koleksi (center aligned)
         atas.appendChild(titleElement); 
     }
 
@@ -37,7 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const dv = document.createElement('div');
                 dv.className = 'responsive-div';
                 dv.tabIndex = 0; 
-                dv.onclick = () => playVideoInCollection(item.lnk, item.logo, item.ttl);
+                // MODIFIKASI: Tambahkan item.crop_mode, item.crop_position, DAN item.crop_scale ke pemanggilan
+                dv.onclick = () => playVideoInCollection(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
 
                 dv.appendChild(img);
                 dv.appendChild(pp);
@@ -49,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
                  container.innerHTML = '<h1>Tidak ada konten dalam koleksi ini.</h1>';
             }
 
+            // Panggil fungsi pemulihan setelah konten selesai dimuat
             restoreFocusAndScrollKoleksi();
 
         })
@@ -59,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-// FUNGSI UNTUK MEMULIHKAN FOKUS DAN SCROLL di koleksi.html
+// FUNGSI UNTUK MEMULIHKAN FOKUS DAN SCROLL
 const restoreFocusAndScrollKoleksi = () => {
     const savedTitle = sessionStorage.getItem('lastCollectionVideoTitle');
     const savedScrollPosition = sessionStorage.getItem('collectionScrollPosition');
@@ -93,8 +98,8 @@ const restoreFocusAndScrollKoleksi = () => {
     }
 }
 
-// FUNGSI UNTUK MEMUTAR VIDEO DAN MENYIMPAN SCROLL di koleksi.html
-function playVideoInCollection(videoFile, logoFile, textFile) {
+// MODIFIKASI: FUNGSI UNTUK MEMUTAR VIDEO DAN MENYIMPAN SCROLL
+function playVideoInCollection(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) { // <--- TAMBAHKAN cropScale
     const container = document.getElementById('container-koleksi');
     if (container) {
         sessionStorage.setItem('collectionScrollPosition', container.scrollTop);
@@ -104,5 +109,11 @@ function playVideoInCollection(videoFile, logoFile, textFile) {
     sessionStorage.setItem('videoLink', videoFile);
     sessionStorage.setItem('videoTitle', textFile);
     sessionStorage.setItem('logoFile', logoFile);
+    
+    // BARU: Simpan mode dan posisi crop. Default adalah 'fill'.
+    sessionStorage.setItem('videoCropMode', cropMode || 'fill'); 
+    sessionStorage.setItem('videoCropPosition', cropPosition || '50% 50%'); 
+    sessionStorage.setItem('videoCropScale', cropScale || ''); // <--- SIMPAN NILAI SKALA
+
     window.location.href = 'ply.html';
 }

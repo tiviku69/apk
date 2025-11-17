@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const videoTitle = sessionStorage.getItem('videoTitle');
     const logoFile = sessionStorage.getItem('logoFile'); 
     
+    // START MODIFIKASI KRITIS: Ambil 3 variabel crop
+    const cropMode = sessionStorage.getItem('videoCropMode') || 'fill'; // Default 'fill'
+    const cropPosition = sessionStorage.getItem('videoCropPosition') || '50% 50%'; 
+    const cropScale = parseFloat(sessionStorage.getItem('videoCropScale')) || 1.2; // Nilai skala default 1.2
+    // END MODIFIKASI KRITIS
+    
     const playerElement = document.getElementById('player');
     const playerControls = document.getElementById('player-controls');
     const progressBar = document.getElementById('progress-bar');
@@ -64,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const hours = String(now.getHours()).padStart(2, '0');
         const minutes = String(now.getMinutes()).padStart(2, '0');
         const seconds = String(now.getSeconds()).padStart(2, '0');
-        digitalClock.textContent = `${hours}:${minutes}:${seconds}`;
+        digitalClock.textContent = `${hours}:${minutes}`;
     }
 
     setInterval(updateClock, 1000);
@@ -77,6 +83,39 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         playerElement.src = videoLink;
+
+        // **START LOGIKA PENGATURAN TAMPILAN VIDEO (KRITIS)**
+        // 1. Reset semua properti custom (penting!)
+        playerElement.style.objectFit = 'fill'; 
+        playerElement.style.objectPosition = '50% 50%';
+        playerElement.style.transform = 'none'; 
+
+        if (cropMode === 'cover') {
+            // MODE 1: Zoom/Crop Standar (Tidak ada peregangan/distorsi, potong bisa di samping)
+            playerElement.style.objectFit = 'cover'; 
+            playerElement.style.objectPosition = cropPosition; 
+            console.log("Mode Video: COVER (Zoom/Crop Standar)");
+
+        } else if (cropMode === 'stretch_crop') { 
+            // MODE 2: BARU - Potong Atas/Bawah + Meregangkan Horizontal (ADA DISTORSI)
+            playerElement.style.objectFit = 'fill'; 
+            playerElement.style.transform = `scaleY(${cropScale})`; 
+            playerElement.style.objectPosition = '50% 50%';
+            console.log(`Mode Video: STRETCH_CROP (Peregangan + Potong Vertikal, Skala: ${cropScale})`);
+
+        } else if (cropMode === 'fill_width') { 
+            // MODE 3: Potong Atas/Bawah saja, lebar terisi (TIDAK ADA DISTORSI)
+            playerElement.style.objectFit = 'contain'; 
+            playerElement.style.transform = `scaleY(${cropScale})`; 
+            playerElement.style.objectPosition = '50% 50%';
+            console.log(`Mode Video: FILL_WIDTH (Potong Vertikal, Skala: ${cropScale})`);
+
+        } else {
+            // MODE 4: Default - 'fill' (Hanya Meregang Penuh, TIDAK ADA POTONGAN)
+            playerElement.style.objectFit = 'fill'; 
+            console.log("Mode Video: FILL (Melebar/Meregang Penuh)");
+        }
+        // **END LOGIKA PENGATURAN TAMPILAN VIDEO**
 
         let resizeTimer;
         window.addEventListener('resize', () => {
@@ -96,13 +135,31 @@ document.addEventListener('DOMContentLoaded', () => {
             videoOverlayEffect.style.display = 'none'; 
         }
 
+        // START MODIFIKASI FUNGSI formatTime
         const formatTime = (seconds) => {
             if (isNaN(seconds) || seconds < 0) return '0:00';
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = Math.floor(seconds % 60);
-            const paddedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-            return `${minutes}:${paddedSeconds}`;
+            
+            let hours = Math.floor(seconds / 3600);
+            let minutes = Math.floor((seconds % 3600) / 60);
+            let remainingSeconds = Math.floor(seconds % 60);
+
+            let timeString = '';
+
+            // Jika durasi >= 1 jam, atau jika total durasi mencapai 1 jam, tampilkan jam
+            if (hours > 0 || playerElement.duration >= 3600) {
+                timeString += hours + ':';
+                minutes = String(minutes).padStart(2, '0'); // Pad minutes jika jam ditampilkan
+            }
+            
+            // Minutes (dipad 2 digit jika jam ditampilkan, 1 digit jika tidak)
+            timeString += minutes + ':';
+            
+            // Seconds (selalu dipad 2 digit)
+            timeString += String(remainingSeconds).padStart(2, '0');
+            
+            return timeString;
         };
+        // END MODIFIKASI FUNGSI formatTime
 
         const playToggle = () => {
             if (playerElement.paused) {
