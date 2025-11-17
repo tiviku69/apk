@@ -358,14 +358,15 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/6.jpg",
-    "lnk": "https://filmovie.github.io/film/urt/hu76i.m3u8",
-    "ttl": "Saur Sepuh V: Istana Atap Langit (1992)",
-    "dur": "1:16:55",
-    "z": "z",
-    "tiviku": "apk"
-   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/6.jpg",
+"lnk": "https://filmovie.github.io/film/urt/hu76i.m3u8",
+"ttl": "Saur Sepuh V: Istana Atap Langit (1992)",
+"dur": "1:16:55",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.3",
+"tiviku": "apk"
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/20.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/86Z2tt.m3u8",
