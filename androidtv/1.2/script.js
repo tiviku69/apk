@@ -1,22 +1,33 @@
 const atas = document.getElementById('atas');
-atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id=\"cari\" onkeyup=\"prosesMenu()\" placeholder=\"cari...\"> ';
+atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
 
-// Daftar file JSON utama yang akan dimuat di tiviku.html
-// File-file ini harus berisi item Direct Play dan/atau item Koleksi (seperti cmpr.json)
-const allFiles = [ 
-    './json/cmprn.json','./json/mp4.json'
-    // Tambahkan file lain yang ingin Anda tampilkan langsung di sini
+// 1. Files yang langsung ditampilkan di halaman utama
+const directFiles = [ 
+    'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json', 
+    'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
-let filesProcessed = 0;
-const totalFiles = allFiles.length;
-const container = document.getElementById('container');
+// 2. File JSON TUNGGAL untuk semua data koleksi klik
+const collectionListUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/koleksi.json';
 
-// Fungsi untuk membuat elemen film/koleksi
+const totalFiles = directFiles.length + 1;
+let filesProcessedCount = 0;
+const container = document.getElementById('container');
+let allItems = []; // Array untuk menampung semua item
+
+// FUNGSI PENGACAKAN (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// Fungsi untuk membuat elemen film
 function createFilmElement(item, clickAction, isCollection = false) {
     const img = document.createElement('img');
     img.id = 'imgv';
-    img.src = item.logo;
+    img.src = item.logo; 
 
     const pp = document.createElement('p');
     pp.className = 're';
@@ -24,7 +35,6 @@ function createFilmElement(item, clickAction, isCollection = false) {
 
     const dur = document.createElement('p');
     dur.className = 'dur';
-    // Durasi akan menunjukkan 'Koleksi (klik)' jika itu adalah tombol koleksi
     dur.innerText = isCollection ? 'Koleksi (klik)' : (item.dur || '');
 
     const dv = document.createElement('div');
@@ -38,41 +48,109 @@ function createFilmElement(item, clickAction, isCollection = false) {
     container.appendChild(dv);
 }
 
-// Memproses SEMUA FILES
-allFiles.forEach(fileUrl => {
+// --- FUNGSI BARU: MENGACAK DAN MENYIMPAN URUTAN KE SESSION STORAGE ---
+function shuffleAndSaveItems() {
+    shuffleArray(allItems);
+    try {
+        // Simpan seluruh array item yang sudah diacak untuk mempertahankan urutan
+        sessionStorage.setItem('savedItemList', JSON.stringify(allItems));
+    } catch (e) {
+        console.error("Gagal menyimpan item list ke sessionStorage.", e);
+    }
+}
+// --- END FUNGSI BARU ---
+
+
+// 1. Memproses DIRECT FILES (Mengumpulkan data ke allItems)
+directFiles.forEach(fileUrl => {
     fetch(fileUrl)
         .then(response => response.json())
         .then(data => {
             data.forEach(item => {
-                let action;
-                // Cek properti baru: isCollection dan collectionUrl
-                let isCollectionItem = item.isCollection === true && item.collectionUrl;
-
-                if (isCollectionItem) {
-                    // Item ini adalah KOLEKSI, klik akan membuka koleksi.html
-                    const jsonUrl = item.collectionUrl; 
-                    const collectionTitle = item.ttl;
-                    action = () => openCollection(jsonUrl, collectionTitle);
-                } else {
-                    // Item ini adalah FILM BIASA, klik akan memutar video
-                    action = () => playVideo(item.lnk, item.logo, item.ttl);
-                }
-                
-                createFilmElement(item, action, isCollectionItem);
+                allItems.push({...item, type: 'direct'}); 
             });
-            filesProcessed++;
-            if (filesProcessed === totalFiles) {
-                restoreFocusAndScroll();
-            }
+            filesProcessedCount++;
+            checkAndRenderItems();
         })
         .catch(error => {
-            console.error('Error loading JSON:', fileUrl, error);
-            filesProcessed++;
-            if (filesProcessed === totalFiles) {
-                restoreFocusAndScroll();
-            }
+            console.error('Error loading DIRECT JSON:', fileUrl, error);
+            filesProcessedCount++;
+            checkAndRenderItems();
         });
 });
+
+// 2. Memproses COLLECTION FILE TUNGGAL (Mengambil semua koleksi dari 1 URL)
+fetch(collectionListUrl)
+    .then(response => response.json())
+    .then(data => {
+        data.forEach(collectionItem => {
+            const displayItem = {
+                logo: collectionItem.collectionLogo,
+                ttl: collectionItem.collectionTitle,
+                url: collectionItem.url,
+                type: 'collection'
+            };
+            allItems.push(displayItem);
+        });
+        filesProcessedCount++;
+        checkAndRenderItems();
+    })
+    .catch(error => {
+        console.error('Error loading COLLECTION LIST JSON:', collectionListUrl, error);
+        filesProcessedCount++;
+        checkAndRenderItems();
+    });
+
+
+// FUNGSI UTAMA UNTUK MEMERIKSA DATA DAN MENAMPILKAN
+function checkAndRenderItems() {
+    // Tunggu hingga semua file selesai diproses
+    if (filesProcessedCount < totalFiles) {
+        return; 
+    }
+    
+    // --- START LOGIKA PERSISTENSI URUTAN ---
+    const savedItems = sessionStorage.getItem('savedItemList');
+
+    if (savedItems) {
+        // Jika ada urutan tersimpan, gunakan itu
+        try {
+            // Mengganti allItems dengan data yang tersimpan untuk mempertahankan urutan
+            allItems = JSON.parse(savedItems); 
+        } catch (e) {
+            // Fallback: Jika gagal, acak ulang dan simpan urutan baru
+            shuffleAndSaveItems();
+        }
+    } else {
+        // Pemuatan pertama: acak dan simpan urutan baru
+        shuffleAndSaveItems();
+    }
+    // --- END LOGIKA PERSISTENSI URUTAN ---
+    
+    // Kosongkan container sebelum menambahkan item
+    container.innerHTML = '';
+
+    // Render item ke DOM
+    allItems.forEach(item => {
+        let action;
+        let isCollection = false;
+
+        if (item.type === 'collection') {
+            action = () => openCollection(item.url, item.ttl);
+            isCollection = true;
+        } else { // type === 'direct'
+            // MODIFIKASI: Tambahkan item.crop_mode, item.crop_position, DAN item.crop_scale ke pemanggilan
+            action = () => playVideo(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
+            isCollection = false;
+        }
+
+        createFilmElement(item, action, isCollection);
+    });
+    
+    // Pulihkan fokus dan scroll setelah rendering selesai
+    restoreFocusAndScroll();
+}
+
 
 // Fungsi untuk memulihkan fokus dan scroll di tiviku.html
 const restoreFocusAndScroll = () => {
@@ -87,6 +165,7 @@ const restoreFocusAndScroll = () => {
         allDivs.forEach(div => {
             div.classList.remove('highlight');
             const pElement = div.querySelector('.re');
+            // Cek judul film/koleksi yang terakhir diklik
             if (pElement && pElement.innerText === savedTitle) {
                 targetElement = div;
             }
@@ -108,35 +187,36 @@ const restoreFocusAndScroll = () => {
     }
 }
 
-// Fungsi untuk membuka Koleksi (Menyimpan posisi tiviku.html sebelum navigasi)
+// Fungsi untuk membuka Koleksi (Menyimpan posisi sebelum navigasi)
 function openCollection(jsonUrl, collectionTitle) {
-    const container = document.getElementById('container');
-    if (container) {
-        sessionStorage.setItem('scrollPosition', container.scrollTop);
-    }
+    // Scroll disimpan secara otomatis oleh event listener 'scroll' (lihat di bawah)
     sessionStorage.setItem('lastVideoTitle', collectionTitle); 
-    
     sessionStorage.setItem('collectionJsonUrl', jsonUrl); 
     sessionStorage.setItem('collectionTitle', collectionTitle); 
-    
-    // Reset data scroll/fokus koleksi.html agar saat pertama kali dibuka fokus ke item pertama
     sessionStorage.removeItem('collectionScrollPosition');
     sessionStorage.removeItem('lastCollectionVideoTitle');
     
+    // PENTING: Reset mode crop saat pindah koleksi
+    sessionStorage.removeItem('videoCropMode');
+    sessionStorage.removeItem('videoCropPosition');
+    sessionStorage.removeItem('videoCropScale'); // BARU: Reset skala juga
+
     window.location.href = 'koleksi.html';
 }
 
-// Fungsi untuk memutar video (Digunakan oleh Direct Play)
-function playVideo(videoFile, logoFile, textFile) {
-    const container = document.getElementById('container');
-    if (container) {
-        sessionStorage.setItem('scrollPosition', container.scrollTop);
-    }
+// MODIFIKASI: Fungsi untuk memutar video (Digunakan oleh Direct Files)
+function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) { // <--- TAMBAHKAN cropScale
+    // Scroll disimpan secara otomatis oleh event listener 'scroll' (lihat di bawah)
     sessionStorage.setItem('lastVideoTitle', textFile);
-
     sessionStorage.setItem('videoLink', videoFile);
     sessionStorage.setItem('videoTitle', textFile);
     sessionStorage.setItem('logoFile', logoFile);
+    
+    // BARU: Simpan mode dan posisi crop. Default adalah 'fill'.
+    sessionStorage.setItem('videoCropMode', cropMode || 'fill'); 
+    sessionStorage.setItem('videoCropPosition', cropPosition || '50% 50%'); 
+    sessionStorage.setItem('videoCropScale', cropScale || ''); // <--- SIMPAN NILAI SKALA
+
     window.location.href = 'ply.html';
 }
 
@@ -146,7 +226,8 @@ function prosesMenu() {
     var filter = input.value.toLowerCase();
     var li = document.querySelectorAll('.responsive-div');
     for (var i = 0; i < li.length; i++) {
-        if (li[i].innerText.toLowerCase().indexOf(filter) > -1) {
+        var textToSearch = li[i].querySelector('.re').innerText.toLowerCase(); 
+        if (textToSearch.indexOf(filter) > -1) {
             li[i].style.display = "";
         } else {
             li[i].style.display = "none";
@@ -155,3 +236,21 @@ function prosesMenu() {
 }
 
 document.getElementById("cari").addEventListener("input", prosesMenu);
+
+// --- MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR ---
+
+const saveScrollPosition = () => {
+    const container = document.getElementById('container');
+    if (container) {
+        // Simpan posisi scroll saat pengguna menggulir di halaman tiviku.html
+        sessionStorage.setItem('scrollPosition', container.scrollTop);
+    }
+};
+
+const containerScrollElement = document.getElementById('container');
+if (containerScrollElement) {
+    // Tambahkan event listener scroll ke elemen #container
+    containerScrollElement.addEventListener('scroll', saveScrollPosition);
+}
+
+// --- END MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR ---

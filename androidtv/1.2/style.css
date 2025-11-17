@@ -112,3 +112,22 @@ h1 {
     margin: 15px;
     border: 5px solid red;
 }
+
+/* GAYA BARU UNTUK PEMBERITAHUAN OFFLINE */
+#offline-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffcccc; /* Merah muda */
+    background-color: rgba(50, 0, 0, 0.9); /* Merah gelap transparan */
+    padding: 30px 40px;
+    border-radius: 15px;
+    border: 3px solid red;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    z-index: 100;
+    text-align: center;
+    font-size: 24px;
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
+}
