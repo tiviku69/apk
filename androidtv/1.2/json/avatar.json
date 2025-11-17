@@ -15,46 +15,51 @@
     "z": "z",
     "tiviku": "apk"
    },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
-    "lnk": "https://tiviku69.github.io/apk/m3u/avtng3.m3u8",
-    "ttl": "eps3 Avatar: The Last Airbender (2024) dubbing",
-    "dur": "52:38",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
-    "lnk": "https://tiviku69.github.io/apk/m3u/av44ts.m3u8",
-    "ttl": "eps4 Avatar: The Last Airbender (2024) dubbing",
-    "dur": "55:39",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
-    "lnk": "https://tiviku69.github.io/apk/m3u/18.m3u8",
-    "ttl": "eps5 Avatar: The Last Airbender (2024) dubbing",
-    "dur": "51:41",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
-    "lnk": "https://tiviku69.github.io/apk/m3u/25.m3u8",
-    "ttl": "eps6 Avatar: The Last Airbender (2024) dubbing",
-    "dur": "56:24",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
-    "lnk": "https://tiviku69.github.io/apk/m3u/33.m3u8",
-    "ttl": "eps7 Avatar: The Last Airbender (2024) dubbing",
-    "dur": "47:07",
-    "z": "z",
-    "tiviku": "apk"
-   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/avtng3.m3u8",
+"ttl": "eps3 Avatar: The Last Airbender (2024) dubbing",
+"dur": "52:38",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/av44ts.m3u8",
+"ttl": "eps4 Avatar: The Last Airbender (2024) dubbing",
+"dur": "55:39",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/18.m3u8",
+"ttl": "eps5 Avatar: The Last Airbender (2024) dubbing",
+"dur": "51:41",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/25.m3u8",
+"ttl": "eps6 Avatar: The Last Airbender (2024) dubbing",
+"dur": "56:24",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/33.m3u8",
+"ttl": "eps7 Avatar: The Last Airbender (2024) dubbing",
+"dur": "47:07",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
    {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/2.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t3.m3u8",
