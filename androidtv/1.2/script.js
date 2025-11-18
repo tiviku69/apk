@@ -3,7 +3,7 @@ atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id
 
 // 1. Files yang langsung ditampilkan di halaman utama
 const directFiles = [
-'cmpr.json',
+'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json',
 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
