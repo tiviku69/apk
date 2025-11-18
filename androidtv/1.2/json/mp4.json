@@ -92,7 +92,8 @@
 "lnk": "https://files.dubbindo.site/upload/videos/2022/02/RalphBreakstheInternet2018Dubbing_19_Glg5uJZ95B7RaTF_video_360p_converted.mp4",
 "ttl": "Ralph Breaks the Internet (2018) dubbing",
 "dur": "1:53:04",
-"z": "z",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
 "tiviku": "apk"
 },
 {
