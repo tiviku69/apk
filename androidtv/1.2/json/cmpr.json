@@ -16,8 +16,8 @@
 "tiviku": "apk"
 },
 {
-"logo": "https://cdn.jsdelivr.net/gh/tiviku69/apk@main/gambar/72.jpg",
-"lnk": "https://cdn.jsdelivr.net/gh/tiviku69/apk@main/m3u/t93.m3u8",
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/72.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t93.m3u8",
 "ttl": "Warkop DKI Reborn: Jangkrik Boss! Part 2 (2017)",
 "dur": "1:27:27",
 "crop_mode": "stretch_crop",
@@ -336,14 +336,15 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/29.jpg",
-    "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/85rtz.m3u8",
-    "ttl": "Day Shift (2022) dubbing",
-    "dur": "1:53:20",
-    "z": "z",
-    "tiviku": "apk"
-   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/29.jpg",
+"lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/85rtz.m3u8",
+"ttl": "Day Shift (2022) dubbing",
+"dur": "1:53:20",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/28.jpg",
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/o41Ddr.m3u8",
