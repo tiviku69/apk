@@ -64,6 +64,7 @@ body {
     position: absolute;
     top: 27px;
     right: 40px; 
+    display: none; 
     z-index: 1001;
 }
 
