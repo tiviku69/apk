@@ -1,10 +1,25 @@
 const atas = document.getElementById('atas');
-atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
+// Kode Counter Visitor Online dari FreeCounterStats
+const counterHtml = `
+    <div id="visitor-counter" style="position: absolute; top: 10px; right: 15px; z-index: 10; text-align: right; line-height: 0;">
+        <a href="https://www.freecounterstat.com" target="_blank" title="free page counter">
+            <img src="https://counter1.optistats.ovh/private/freecounterstat.php?c=qygp99e2rqwwgm33bz9hqdh85js9bty4" border="0" alt="free page counter" style="height: 20px; width: auto; display: block;">
+        </a>
+    </div>
+`;
+
+// Menggunakan template literal untuk menyisipkan HTML counter
+atas.innerHTML = `
+    <h1>tiviku</h1> 
+    <b>by tiviku</b> 
+    <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari...">
+    ${counterHtml}
+`; 
 
 // 1. Files yang langsung ditampilkan di halaman utama
-const directFiles = [
-'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json',
-'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
+const directFiles = [ 
+    'cmpr.json', 
+    'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
 // 2. File JSON TUNGGAL untuk semua data koleksi klik
@@ -64,52 +79,66 @@ function shuffleAndSaveItems() {
 // 1. Memproses DIRECT FILES (Mengumpulkan data ke allItems)
 directFiles.forEach(fileUrl => {
     fetch(fileUrl)
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
-            data.forEach(item => {
-                allItems.push({...item, type: 'direct'}); 
-            });
+            // Gabungkan item ke dalam array utama
+            allItems.push(...data.map(item => ({ ...item, isCollection: false })));
             filesProcessedCount++;
-            checkAndRenderItems();
+            
+            // Periksa jika semua file selesai diproses (termasuk collectionListUrl)
+            if (filesProcessedCount === totalFiles) {
+                displayItems();
+            }
         })
         .catch(error => {
-            console.error('Error loading DIRECT JSON:', fileUrl, error);
+            console.error(`Gagal memuat file langsung ${fileUrl}:`, error);
             filesProcessedCount++;
-            checkAndRenderItems();
+            if (filesProcessedCount === totalFiles) {
+                displayItems();
+            }
         });
 });
 
-// 2. Memproses COLLECTION FILE TUNGGAL (Mengambil semua koleksi dari 1 URL)
+// 2. Memproses COLLECTION LIST FILE (Mengumpulkan data ke allItems)
 fetch(collectionListUrl)
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        data.forEach(collectionItem => {
-            const displayItem = {
-                logo: collectionItem.collectionLogo,
-                ttl: collectionItem.collectionTitle,
-                url: collectionItem.url,
-                type: 'collection'
-            };
-            allItems.push(displayItem);
-        });
+        // Gabungkan item koleksi ke dalam array utama
+        allItems.push(...data.map(item => ({ 
+            ...item, 
+            isCollection: true, 
+            logo: item.collectionLogo,
+            ttl: item.collectionTitle,
+            url: item.url
+        })));
         filesProcessedCount++;
-        checkAndRenderItems();
+        
+        if (filesProcessedCount === totalFiles) {
+            displayItems();
+        }
     })
     .catch(error => {
-        console.error('Error loading COLLECTION LIST JSON:', collectionListUrl, error);
+        console.error(`Gagal memuat file koleksi ${collectionListUrl}:`, error);
         filesProcessedCount++;
-        checkAndRenderItems();
+        if (filesProcessedCount === totalFiles) {
+            displayItems();
+        }
     });
 
-
-// FUNGSI UTAMA UNTUK MEMERIKSA DATA DAN MENAMPILKAN
-function checkAndRenderItems() {
-    // Tunggu hingga semua file selesai diproses
-    if (filesProcessedCount < totalFiles) {
-        return; 
-    }
+// --- FUNGSI BARU: MENAMPILKAN ITEM ---
+function displayItems() {
+    container.innerHTML = ''; // Bersihkan kontainer
     
-    // --- START LOGIKA PERSISTENSI URUTAN ---
     const savedItems = sessionStorage.getItem('savedItemList');
 
     if (savedItems) {
@@ -125,89 +154,102 @@ function checkAndRenderItems() {
         // Pemuatan pertama: acak dan simpan urutan baru
         shuffleAndSaveItems();
     }
-    // --- END LOGIKA PERSISTENSI URUTAN ---
     
-    // Kosongkan container sebelum menambahkan item
-    container.innerHTML = '';
+    let lastFocusTitle = sessionStorage.getItem('lastVideoTitle');
+    let lastFocusCollectionTitle = sessionStorage.getItem('lastCollectionTitle');
+    
+    // Hapus variabel fokus setelah diambil
+    sessionStorage.removeItem('lastVideoTitle');
+    sessionStorage.removeItem('lastCollectionTitle');
+    
+    let focusedElement = null;
 
-    // Render item ke DOM
     allItems.forEach(item => {
-        let action;
-        let isCollection = false;
-
-        if (item.type === 'collection') {
-            action = () => openCollection(item.url, item.ttl);
-            isCollection = true;
-        } else { // type === 'direct'
-            // MODIFIKASI: Tambahkan item.crop_mode, item.crop_position, DAN item.crop_scale ke pemanggilan
-            action = () => playVideo(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
-            isCollection = false;
+        if (item.isCollection) {
+            // Aksi untuk Koleksi
+            const clickAction = () => {
+                // Simpan URL JSON koleksi dan judulnya
+                sessionStorage.setItem('collectionJsonUrl', item.url);
+                sessionStorage.setItem('collectionTitle', item.collectionTitle);
+                // Simpan judul ini sebagai fokus kembali
+                sessionStorage.setItem('lastCollectionTitle', item.collectionTitle);
+                // Simpan posisi scroll sebelum pindah
+                saveScrollPosition();
+                window.location.href = 'koleksi.html';
+            };
+            createFilmElement(item, clickAction, true);
+        } else {
+            // Aksi untuk Video Langsung
+            const clickAction = () => {
+                playVideo(
+                    item.lnk, 
+                    item.logo, 
+                    item.ttl,
+                    item.crop_mode, // BARU
+                    item.crop_position, // BARU
+                    item.crop_scale // BARU
+                );
+                // Simpan judul ini sebagai fokus kembali
+                sessionStorage.setItem('lastVideoTitle', item.ttl); 
+                // Simpan posisi scroll sebelum pindah
+                saveScrollPosition();
+            };
+            createFilmElement(item, clickAction, false);
         }
-
-        createFilmElement(item, action, isCollection);
     });
     
-    // Pulihkan fokus dan scroll setelah rendering selesai
-    restoreFocusAndScroll();
-}
-
-
-// Fungsi untuk memulihkan fokus dan scroll di tiviku.html
-const restoreFocusAndScroll = () => {
-    const savedTitle = sessionStorage.getItem('lastVideoTitle');
-    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
-    const container = document.getElementById('container');
-    
-    let targetElement = null;
-
-    if (savedTitle) {
-        const allDivs = document.querySelectorAll('.responsive-div');
-        allDivs.forEach(div => {
-            div.classList.remove('highlight');
-            const pElement = div.querySelector('.re');
-            // Cek judul film/koleksi yang terakhir diklik
-            if (pElement && pElement.innerText === savedTitle) {
-                targetElement = div;
+    // --- FUNGSI FOKUS DAN SCROLL KRITIS ---
+    // Cari elemen yang harus difokuskan
+    if (lastFocusTitle) {
+        // Fokus ke video terakhir yang diputar
+        const elements = document.querySelectorAll('.responsive-div .re');
+        elements.forEach(p => {
+            if (p.innerText === lastFocusTitle) {
+                focusedElement = p.closest('.responsive-div');
+            }
+        });
+    } else if (lastFocusCollectionTitle) {
+        // Fokus ke koleksi terakhir yang dibuka
+        const elements = document.querySelectorAll('.responsive-div .re');
+        elements.forEach(p => {
+            if (p.innerText === lastFocusCollectionTitle) {
+                focusedElement = p.closest('.responsive-div');
             }
         });
     }
 
-    if (targetElement) {
-        targetElement.classList.add('highlight');
-        targetElement.focus();
-        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+    // Terapkan fokus, highlight, dan scroll
+    const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+    
+    // Hapus semua highlight sebelumnya
+    document.querySelectorAll('.responsive-div').forEach(div => {
+        div.classList.remove('highlight');
+    });
+
+    if (focusedElement) {
+        focusedElement.classList.add('highlight');
+        focusedElement.focus();
+        focusedElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Hapus posisi scroll yang disimpan jika berhasil fokus ke elemen
+        sessionStorage.removeItem('scrollPosition'); 
     } else if (savedScrollPosition !== null && container) {
+        // Jika tidak ada fokus spesifik, tapi ada posisi scroll tersimpan, gunakan itu
         container.scrollTop = parseInt(savedScrollPosition, 10);
     } else {
-        const firstDiv = document.querySelector('.responsive-div');
+        // Pemuatan pertama, fokus ke elemen pertama
+        const firstDiv = document.querySelector('#container .responsive-div');
         if (firstDiv) {
              firstDiv.classList.add('highlight');
              firstDiv.focus();
         }
     }
 }
+// --- END FUNGSI BARU: MENAMPILKAN ITEM ---
 
-// Fungsi untuk membuka Koleksi (Menyimpan posisi sebelum navigasi)
-function openCollection(jsonUrl, collectionTitle) {
-    // Scroll disimpan secara otomatis oleh event listener 'scroll' (lihat di bawah)
-    sessionStorage.setItem('lastVideoTitle', collectionTitle); 
-    sessionStorage.setItem('collectionJsonUrl', jsonUrl); 
-    sessionStorage.setItem('collectionTitle', collectionTitle); 
-    sessionStorage.removeItem('collectionScrollPosition');
-    sessionStorage.removeItem('lastCollectionVideoTitle');
-    
-    // PENTING: Reset mode crop saat pindah koleksi
-    sessionStorage.removeItem('videoCropMode');
-    sessionStorage.removeItem('videoCropPosition');
-    sessionStorage.removeItem('videoCropScale'); // BARU: Reset skala juga
 
-    window.location.href = 'koleksi.html';
-}
-
-// MODIFIKASI: Fungsi untuk memutar video (Digunakan oleh Direct Files)
-function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) { // <--- TAMBAHKAN cropScale
-    // Scroll disimpan secara otomatis oleh event listener 'scroll' (lihat di bawah)
-    sessionStorage.setItem('lastVideoTitle', textFile);
+// Fungsi untuk memutar video (mirip dengan koleksi.js)
+function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) {
     sessionStorage.setItem('videoLink', videoFile);
     sessionStorage.setItem('videoTitle', textFile);
     sessionStorage.setItem('logoFile', logoFile);
@@ -253,4 +295,4 @@ if (containerScrollElement) {
     containerScrollElement.addEventListener('scroll', saveScrollPosition);
 }
 
-// --- END MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR ---
+// --- END MODIFIKASI SCROLL ---
