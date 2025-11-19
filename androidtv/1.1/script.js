@@ -1,82 +1,60 @@
 const atas = document.getElementById('atas');
-atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id="cari" onkeyup="prosesMenu()" placeholder="cari..."> ';
+const container = document.getElementById('container');
 
-const files = [ 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/captain.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/avat.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/ghost.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/avatar.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/squid.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/journey.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/one.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.1/json/mp4.json' ];
+// 1. Kosongkan container (tempat konten video)
+container.innerHTML = '';
+
+// 2. Isi elemen 'atas' dengan pesan baru yang memiliki style centering
+atas.innerHTML = `
+    <div style="
+        position: fixed; 
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh; /* Pastikan tinggi menutupi viewport */
+        display: flex;
+        justify-content: center; /* Horizontal center */
+        align-items: center;    /* Vertical center */
+        text-align: center;
+        background-color: black; /* Pastikan latar belakang tetap hitam */
+    ">
+        <h1 style="color: yellowgreen; margin: 0; padding: 0;">Gabung dan download tiviku terbaru di ( https://facebook.com/groups/826118633719874/ ) </h1>
+    </div>
+`;
+
+// --- Bagian di bawah ini adalah fungsi yang tidak lagi digunakan, namun dipertahankan agar tidak error jika ada kode lain yang memanggilnya ---
+
+// Daftar file JSON (dikosongkan agar tidak ada proses fetch)
+const files = [];
 
 let filesProcessed = 0;
 const totalFiles = files.length;
 
+// Hapus logika fetching dan pembuatan elemen konten video (Dihapus/dikosongkan)
+/*
 files.forEach(file => {
-    fetch(file)
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(item => {
-                const container = document.getElementById('container');
-                const img = document.createElement('img');
-                img.id = 'imgv';
-    
-                img.src = item.logo;
-
-                const pp = document.createElement('p');
-                pp.className = 're';
-                pp.innerText = item.ttl;
-
-                const dur = document.createElement('p');
-            
-                dur.className = 'dur';
-                dur.innerText = item.dur;
-
-                const dv = document.createElement('div');
-                dv.className = 'responsive-div';
-                dv.onclick = () => playVideo(item.lnk, item.logo, item.ttl);
-
-                dv.appendChild(img);
- 
-                dv.appendChild(pp);
-                dv.appendChild(dur);
-                container.appendChild(dv);
-            });
-            filesProcessed++;
-            if (filesProcessed === totalFiles) {
-                // All files have been processed, highlight the first one
-                const firstDiv = document.querySelector('.responsive-div');
-                if (firstDiv) {
-                    firstDiv.classList.add('highlight');
-                    firstDiv.focus(); // Set focus for keyboard navigation
-                }
-            }
-        })
-        .catch(error => {
-            console.error('Error loading JSON:', error);
-            filesProcessed++;
-            if (filesProcessed === totalFiles) {
-                const firstDiv = document.querySelector('.responsive-div');
-                if (firstDiv) {
-                    firstDiv.classList.add('highlight');
-                    firstDiv.focus();
-                }
-            }
-        });
+    // ... Logika fetch dan pembuatan div dihapus
 });
+*/
 
 function playVideo(videoFile, logoFile, textFile) {
-    sessionStorage.setItem('videoLink', videoFile);
-    sessionStorage.setItem('videoTitle', textFile);
-    sessionStorage.setItem('logoFile', logoFile);
-    window.location.href = 'ply.html';
+    // Logika playVideo masih dipertahankan
+    sessionStorage.setItem('videoLink', videoFile);
+    sessionStorage.setItem('videoTitle', textFile);
+    sessionStorage.setItem('logoFile', logoFile);
+    window.location.href = 'ply.html';
 }
 
 function prosesMenu() {
-    var input = document.getElementById("cari");
-    var filter = input.value.toLowerCase();
-    var li = document.querySelectorAll('.responsive-div');
-    for (var i = 0; i < li.length; i++) {
-        if (li[i].innerHTML.toLowerCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
-        } else {
-            li[i].style.display = "none";
-        }
-    }
+    // Fungsi pencarian tidak lagi relevan
+    console.log("Fungsi prosesMenu tidak aktif karena konten utama telah dihapus.");
 }
 
-document.getElementById("cari").addEventListener("input", prosesMenu);
+// Hapus event listener untuk pencarian (karena elemen pencarian sudah tidak ada)
+// document.getElementById("cari") tidak ada lagi setelah atas.innerHTML diganti
+
+// Pastikan untuk mengabaikan atau menghapus logika highlight yang mungkin terjadi
+// Jika Anda ingin memastikan tidak ada error:
+if (totalFiles === 0) {
+    console.log("Konten berhasil dikosongkan.");
+}
