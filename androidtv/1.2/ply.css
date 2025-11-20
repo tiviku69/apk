@@ -55,16 +55,11 @@ body {
     display: block;
 }
 
-/* --- START: Gaya Baru untuk IKLAN position: absolute;
-    top: 27px;
-    right: 40px; 
-    display: none; 
-    z-index: 1001; --- */
+/* --- START: Gaya Baru untuk IKLAN --- */
 .iklan-container {
     position: absolute;
     top: 27px;
-    right: 40px; 
-    display: none; 
+    right: 20px; 
     z-index: 1001;
 }
 
