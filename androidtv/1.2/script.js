@@ -208,9 +208,9 @@ const restoreFocusAndScroll = () => {
     if (targetElement) {
         targetElement.classList.add('highlight');
         targetElement.focus();
-        // Hanya scrollIntoView jika elemen fokus tidak terlihat
+        // Gunakan 'instant' untuk perpindahan yang cepat
         if (!isElementInView(targetElement, container)) {
-             targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+             targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
         }
     } else if (savedScrollPosition !== null && container) {
         container.scrollTop = parseInt(savedScrollPosition, 10);
@@ -352,7 +352,7 @@ document.addEventListener('keydown', (e) => {
                 if (firstDiv) {
                     firstDiv.classList.add('highlight');
                     firstDiv.focus();
-                    // Scroll ke awal kontainer saat pindah dari search
+                    // Scroll ke awal kontainer (instan)
                     container.scrollTop = 0; 
                     saveScrollPosition();
                 }
@@ -402,7 +402,6 @@ document.addEventListener('keydown', (e) => {
                     // JIKA nextIndex NEGATIF (berarti sudah di baris paling atas)
                     if (nextIndex < 0) {
                         searchInput.focus();
-                        // Fokus sudah dipindahkan ke search, kita RETURN
                         return;
                     } else {
                         nextIndex = Math.max(nextIndex, 0); 
@@ -419,8 +418,8 @@ document.addEventListener('keydown', (e) => {
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
             
-            // Lakukan scrollIntoView agar elemen selalu berada di tengah
-            divs[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // PERUBAHAN KRITIS: Menggunakan 'instant' untuk pergeseran cepat
+            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
             
             saveScrollPosition();
         }

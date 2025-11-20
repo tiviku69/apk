@@ -115,9 +115,9 @@ const restoreFocusAndScrollKoleksi = () => {
     if (targetElement) {
         targetElement.classList.add('highlight');
         targetElement.focus();
-        // Hanya scrollIntoView jika elemen fokus tidak terlihat
+        // Gunakan 'instant' untuk perpindahan yang cepat
         if (!isElementInViewKoleksi(targetElement, container)) {
-            targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
         }
     } else if (savedScrollPosition !== null && container) {
         container.scrollTop = parseInt(savedScrollPosition, 10);
@@ -216,11 +216,9 @@ document.addEventListener('keydown', (e) => {
         let nextIndex = -1;
         const containerRect = container.getBoundingClientRect();
         
-        // Dapatkan nilai lebar yang lebih akurat
         const divElement = divs[0];
         const cardWidth = divElement ? divElement.offsetWidth + (parseFloat(window.getComputedStyle(divElement).marginLeft) * 2) : 300; 
         
-        // Hitung berapa card per baris
         const itemsPerRow = Math.floor(containerRect.width / cardWidth);
         const actualItemsPerRow = Math.max(1, itemsPerRow);
 
@@ -249,10 +247,9 @@ document.addEventListener('keydown', (e) => {
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
             
-            // Lakukan scrollIntoView agar elemen selalu berada di tengah
-            divs[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // PERUBAHAN KRITIS: Menggunakan 'instant' untuk pergeseran cepat
+            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
             
-            // Simpan posisi scroll setelah scrollIntoView
             saveCollectionScrollPosition();
         }
     } else if (e.key === 'Escape') {
