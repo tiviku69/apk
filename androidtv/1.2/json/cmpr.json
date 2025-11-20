@@ -1,5 +1,12 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/80.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t101.m3u8",
+"ttl": "Doraemon: Nobita's Dorabian Nights (1991) dubbing",
+"dur": "1:36:15",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/79.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t100.m3u8",
 "ttl": "Unfrosted (2024) dubbing",
@@ -644,5 +651,12 @@
     "dur": "1:33:08",
     "z": "z",
     "tiviku": "zzzzz"
-   }
+   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/62.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t81.m3u8",
+"ttl": "Misteri Dari Gunung Merapi: Penghuni Rumah Tua (1989)",
+"dur": "1:43:31",
+"tiviku": "apk"
+}
 ]
