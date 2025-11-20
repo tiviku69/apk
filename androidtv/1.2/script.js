@@ -251,9 +251,10 @@ function isElementInView(el, container) {
 
 // Helper: Dapatkan elemen pertama yang terlihat
 function getFirstVisibleElement(container) {
+    // Memastikan hanya elemen yang ditampilkan yang diperiksa
     const allDivs = document.querySelectorAll('.responsive-div');
     for (const div of allDivs) {
-        if (isElementInView(div, container)) {
+        if (div.style.display !== 'none' && isElementInView(div, container)) {
             return div;
         }
     }
@@ -348,7 +349,9 @@ document.addEventListener('keydown', (e) => {
         if (document.activeElement === searchInput) {
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
-                const firstDiv = document.querySelector('.responsive-div');
+                // FIX KRITIS: Hanya ambil div pertama yang terlihat
+                const firstDiv = document.querySelector('.responsive-div:not([style*="display: none"])');
+                
                 if (firstDiv) {
                     firstDiv.classList.add('highlight');
                     firstDiv.focus();
@@ -365,7 +368,10 @@ document.addEventListener('keydown', (e) => {
         
         e.preventDefault(); 
         const focusedElement = document.activeElement;
-        const divs = Array.from(document.querySelectorAll('.responsive-div'));
+        
+        // FIX KRITIS: HANYA gunakan div yang terlihat untuk navigasi
+        const divs = Array.from(document.querySelectorAll('.responsive-div')).filter(div => div.style.display !== 'none');
+        
         const currentIndex = divs.findIndex(div => div === focusedElement);
         
         if (divs.length === 0) return;
@@ -418,7 +424,7 @@ document.addEventListener('keydown', (e) => {
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
             
-            // PERUBAHAN KRITIS: Menggunakan 'instant' untuk pergeseran cepat
+            // Menggunakan 'instant' untuk pergeseran cepat
             divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
             
             saveScrollPosition();
