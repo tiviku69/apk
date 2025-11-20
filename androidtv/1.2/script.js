@@ -340,37 +340,52 @@ if (containerScrollElement) {
 
 // --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Halaman Utama) ---
 document.addEventListener('keydown', (e) => {
-    // Hanya tangani ArrowUp, ArrowDown, Enter, dan Escape
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Enter') { 
-        // Jangan mengganggu fungsi search/cari jika sedang aktif
-        if (document.activeElement === document.getElementById('cari')) {
-            // Biarkan navigasi panah berfungsi normal di dalam input cari jika ada.
+    const searchInput = document.getElementById('cari');
+
+    if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Enter') {
+        
+        // 1. LOGIKA UNTUK INPUT CARI
+        if (document.activeElement === searchInput) {
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const firstDiv = document.querySelector('.responsive-div');
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
+                    // Scroll ke awal kontainer saat pindah dari search
+                    container.scrollTop = 0; 
+                    saveScrollPosition();
+                }
+            }
+            // Biarkan ArrowUp/Enter berfungsi normal di dalam input cari jika sedang fokus
             return; 
         }
-
+        
+        // 2. LOGIKA NAVIGASI CARD
+        
         e.preventDefault(); 
         const focusedElement = document.activeElement;
         const divs = Array.from(document.querySelectorAll('.responsive-div'));
         const currentIndex = divs.findIndex(div => div === focusedElement);
-
+        
         if (divs.length === 0) return;
 
         let nextIndex = -1;
         const containerRect = container.getBoundingClientRect();
         
-        // Asumsi: Setiap card adalah 260px lebar + margin 15px*2 = 290px perkiraan.
-        // Dapatkan nilai lebar yang lebih akurat
         const divElement = divs[0];
+        // Menggunakan offsetWidth + margin
         const cardWidth = divElement ? divElement.offsetWidth + (parseFloat(window.getComputedStyle(divElement).marginLeft) * 2) : 300; 
         
-        // Hitung berapa card per baris
         const itemsPerRow = Math.floor(containerRect.width / cardWidth);
-        
-        // Pastikan itemsPerRow minimal 1
         const actualItemsPerRow = Math.max(1, itemsPerRow); 
 
         if (currentIndex === -1) {
-            // Jika tidak ada yang fokus, fokuskan elemen pertama
+            // Jika tidak ada yang fokus, fokuskan elemen pertama atau search jika menekan atas
+            if (e.key === 'ArrowUp') {
+                searchInput.focus();
+                return;
+            }
             nextIndex = 0;
         } else {
             // Hapus highlight dari elemen saat ini
@@ -382,8 +397,16 @@ document.addEventListener('keydown', (e) => {
                     nextIndex = Math.min(currentIndex + actualItemsPerRow, divs.length - 1);
                     break;
                 case 'ArrowUp':
-                    // Pindah ke atas satu baris
-                    nextIndex = Math.max(currentIndex - actualItemsPerRow, 0);
+                    nextIndex = currentIndex - actualItemsPerRow;
+                    
+                    // JIKA nextIndex NEGATIF (berarti sudah di baris paling atas)
+                    if (nextIndex < 0) {
+                        searchInput.focus();
+                        // Fokus sudah dipindahkan ke search, kita RETURN
+                        return;
+                    } else {
+                        nextIndex = Math.max(nextIndex, 0); 
+                    }
                     break;
                 case 'Enter':
                     // Trigger click/action pada elemen yang sedang fokus
@@ -399,11 +422,9 @@ document.addEventListener('keydown', (e) => {
             // Lakukan scrollIntoView agar elemen selalu berada di tengah
             divs[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
             
-            // Simpan posisi scroll setelah scrollIntoView
             saveScrollPosition();
         }
     } else if (e.key === 'Escape') {
-        // Kembali ke halaman sebelumnya (jika ada)
         window.history.back();
     }
     // Abaikan ArrowRight dan ArrowLeft
