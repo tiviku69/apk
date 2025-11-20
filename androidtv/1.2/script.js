@@ -23,11 +23,35 @@ function shuffleArray(array) {
     }
 }
 
+// --- FUNGSI BARU UNTUK OBSERVASI (LAZY LOADING) ---
+const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            const src = img.getAttribute('data-src');
+            if (src) {
+                img.src = src; // Pindahkan URL dari data-src ke src
+                img.removeAttribute('data-src');
+                observer.unobserve(img); // Berhenti mengamati setelah dimuat
+            }
+        }
+    });
+}, {
+    root: document.getElementById('container'), // Gunakan container sebagai root
+    rootMargin: '100px 0px', // Mulai memuat saat gambar 100px mendekati viewport
+    threshold: 0.01
+});
+
 // Fungsi untuk membuat elemen film
 function createFilmElement(item, clickAction, isCollection = false) {
     const img = document.createElement('img');
     img.id = 'imgv';
-    img.src = item.logo; 
+    
+    // PERUBAHAN KRITIS: Gunakan data-src untuk Lazy Loading
+    img.setAttribute('data-src', item.logo); 
+    img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="270" height="220" viewBox="0 0 270 220"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; // Placeholder abu-abu gelap
+    
+    img.classList.add('lazy-img'); // Tambahkan kelas untuk target observer
 
     const pp = document.createElement('p');
     pp.className = 're';
@@ -46,7 +70,11 @@ function createFilmElement(item, clickAction, isCollection = false) {
     dv.appendChild(pp);
     dv.appendChild(dur);
     container.appendChild(dv);
+    
+    // Mulai amati gambar
+    imageObserver.observe(img);
 }
+// --- END FUNGSI PENCIPTAAN ELEMEN DENGAN LAZY LOADING ---
 
 // --- FUNGSI BARU: MENGACAK DAN MENYIMPAN URUTAN KE SESSION STORAGE ---
 function shuffleAndSaveItems() {
@@ -229,6 +257,17 @@ function prosesMenu() {
         var textToSearch = li[i].querySelector('.re').innerText.toLowerCase(); 
         if (textToSearch.indexOf(filter) > -1) {
             li[i].style.display = "";
+            
+            // JIKA DICARI, PASTIKAN GAMBAR LANGSUNG DIMUAT
+            const img = li[i].querySelector('.lazy-img');
+            if (img && img.hasAttribute('data-src')) {
+                 const src = img.getAttribute('data-src');
+                 img.src = src;
+                 img.removeAttribute('data-src');
+                 // Hentikan pengamatan jika elemen ditemukan saat pencarian
+                 imageObserver.unobserve(img); 
+            }
+
         } else {
             li[i].style.display = "none";
         }

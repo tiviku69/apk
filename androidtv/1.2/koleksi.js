@@ -1,3 +1,24 @@
+// --- FUNGSI BARU UNTUK OBSERVASI (LAZY LOADING) ---
+const collectionImageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target;
+            const src = img.getAttribute('data-src');
+            if (src) {
+                img.src = src; // Pindahkan URL dari data-src ke src
+                img.removeAttribute('data-src');
+                observer.unobserve(img); // Berhenti mengamati setelah dimuat
+            }
+        }
+    });
+}, {
+    root: document.getElementById('container-koleksi'), // Gunakan container-koleksi sebagai root
+    rootMargin: '100px 0px', // Mulai memuat saat gambar 100px mendekati viewport
+    threshold: 0.01
+});
+// --- END FUNGSI OBSERVASI ---
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const jsonUrl = sessionStorage.getItem('collectionJsonUrl');
     const collectionTitle = sessionStorage.getItem('collectionTitle');
@@ -27,7 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
             data.forEach(item => {
                 const img = document.createElement('img');
                 img.id = 'imgv';
-                img.src = item.logo;
+                
+                // PERUBAHAN KRITIS: Gunakan data-src untuk Lazy Loading
+                img.setAttribute('data-src', item.logo);
+                img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="270" height="220" viewBox="0 0 270 220"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; // Placeholder abu-abu gelap
+                img.classList.add('lazy-img'); // Tambahkan kelas untuk target observer
 
                 const pp = document.createElement('p');
                 pp.className = 're';
@@ -47,6 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 dv.appendChild(pp);
                 dv.appendChild(dur);
                 container.appendChild(dv);
+                
+                // Mulai amati gambar
+                collectionImageObserver.observe(img);
             });
             
             if (data.length === 0) {
