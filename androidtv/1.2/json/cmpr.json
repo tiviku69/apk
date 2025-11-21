@@ -12,6 +12,8 @@
 "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/31.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t109.m3u8",
 "ttl": "Detective Conan: The Time Bombed Skyscraper (1997) dubbing",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.1",
 "dur": "1:34:15",
 "tiviku": "apk"
 },
