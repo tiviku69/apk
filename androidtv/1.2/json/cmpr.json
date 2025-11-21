@@ -610,14 +610,15 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/2.jpg",
-    "lnk": "https://filmovie.github.io/96/t9960i/tb4f.m3u8",
-    "ttl": "the big 4 (2022)",
-    "dur": "2:21:52",
-    "z": "z",
-    "tiviku": "apk"
-   },
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/2.jpg",
+"lnk": "https://filmovie.github.io/96/t9960i/tb4f.m3u8",
+"ttl": "the big 4 (2022)",
+"dur": "2:21:52",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gulte/logo/1.jpg",
     "lnk": "https://tiviku69.github.io/film/flm1/toysstor67/5/toysstor67.m3u8",
