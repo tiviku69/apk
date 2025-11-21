@@ -23,15 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const videoOverlayEffect = document.getElementById('video-overlay-effect');
     
-    // Hapus: const iklan2 = document.getElementById('iklan2');
-    let iklan2; // Didefinisikan sebagai variabel untuk diisi nanti
-    
+    let iklan2; 
     let adShown = false; 
     let adHideTimeout; 
 
     let controlsTimeout;
     
     const initialFontSizeVW = 2.0; 
+    
+    // BARU: Variabel untuk logika FF/RW yang lebih cepat (debounce)
+    let jumpTimeAccumulator = 0; 
+    let jumpTimeout;
+    const JUMP_STEP = 10; // Lompatan 10 detik
+    const JUMP_APPLY_DELAY = 300; // Delay (ms) sebelum menerapkan total lompatan
+    // END BARU
+    
+    // Variabel untuk melacak status kontrol
+    let controlsVisible = true;
     
     // === START: FUNGSI MEMBUAT DAN MENYISIPKAN IKLAN OLEH JS ===
     const createAdElement = () => {
@@ -103,6 +111,84 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Fungsi utility
+    function formatTime(seconds) {
+        const h = Math.floor(seconds / 3600);
+        const m = Math.floor((seconds % 3600) / 60);
+        const s = Math.floor(seconds % 60);
+
+        const parts = [m, s].map(v => String(v).padStart(2, '0'));
+
+        if (h > 0) {
+            parts.unshift(String(h).padStart(2, '0'));
+        }
+        
+        return parts.join(':');
+    }
+
+    const hideControls = () => {
+        playerControls.classList.add('hidden');
+        playerControls.style.opacity = '0';
+        videoTitleContainer.style.opacity = '0';
+        digitalClock.style.opacity = '0';
+        controlsVisible = false;
+    };
+
+    const showControls = () => {
+        playerControls.classList.remove('hidden');
+        playerControls.style.opacity = '1';
+        videoTitleContainer.style.opacity = '1';
+        digitalClock.style.opacity = '1';
+        controlsVisible = true;
+    };
+    
+    const resetControlsTimeout = () => {
+        clearTimeout(controlsTimeout);
+        showControls();
+        controlsTimeout = setTimeout(hideControls, 5000); 
+    };
+    
+    // FUNGSI BARU: Menerapkan Lompatan Waktu
+    const applyJump = () => {
+        if (jumpTimeAccumulator !== 0) {
+            let newTime = playerElement.currentTime + jumpTimeAccumulator;
+            
+            // Batasi agar tidak kurang dari 0 atau lebih dari durasi
+            newTime = Math.max(0, Math.min(newTime, playerElement.duration));
+            
+            playerElement.currentTime = newTime;
+            jumpTimeAccumulator = 0; // Reset akumulator
+            
+            // Setelah lompatan diterapkan, reset kontrol timeout
+            resetControlsTimeout(); 
+        }
+    };
+    
+    // FUNGSI BARU: Menghitung posisi progres bar sementara (saat FF/RW)
+    const updateProgressDisplay = () => {
+        const duration = playerElement.duration;
+        const currentTime = playerElement.currentTime;
+        
+        // Cek apakah sedang dalam mode lompatan (jumpTimeAccumulator != 0)
+        if (jumpTimeAccumulator !== 0) {
+            let tempTime = currentTime + jumpTimeAccumulator;
+            tempTime = Math.max(0, Math.min(tempTime, duration));
+            
+            // Update Progres Bar (visual, belum applied)
+            if (!isNaN(duration)) {
+                progressBar.style.width = (tempTime / duration) * 100 + '%';
+                // Update Time Display untuk menunjukkan posisi lompatan
+                timeDisplay.textContent = `${formatTime(tempTime)} / ${formatTime(duration)}`;
+            }
+        } else {
+            // Jika tidak ada lompatan, gunakan waktu sebenarnya (perilaku normal)
+             if (!isNaN(duration)) {
+                progressBar.style.width = (currentTime / duration) * 100 + '%';
+                timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+            }
+        }
+    };
+
     if (videoLink) {
         // Panggil fungsi untuk membuat iklan setelah DOMContentLoaded
         createAdElement(); 
@@ -121,228 +207,133 @@ document.addEventListener('DOMContentLoaded', () => {
         playerElement.style.transform = 'none'; 
 
         if (cropMode === 'cover') {
-            // MODE 1: Zoom/Crop Standar (Tidak ada peregangan/distorsi, potong bisa di samping)
             playerElement.style.objectFit = 'cover'; 
             playerElement.style.objectPosition = cropPosition; 
             console.log("Mode Video: COVER (Zoom/Crop Standar)");
 
         } else if (cropMode === 'stretch_crop') { 
-            // MODE 2: BARU - Potong Atas/Bawah + Meregangkan Horizontal (ADA DISTORSI)
             playerElement.style.objectFit = 'fill'; 
             playerElement.style.transform = `scaleY(${cropScale})`; 
             playerElement.style.objectPosition = '50% 50%';
             console.log(`Mode Video: STRETCH_CROP (Peregangan + Potong Vertikal, Skala: ${cropScale})`);
 
         } else if (cropMode === 'fill_width') { 
-            // MODE 3: Potong Atas/Bawah saja, lebar terisi (TIDAK ADA DISTORSI)
             playerElement.style.objectFit = 'contain'; 
-            playerElement.style.transform = `scaleY(${cropScale})`; 
+            playerElement.style.width = '100vw'; 
+            playerElement.style.height = '100vh'; 
             playerElement.style.objectPosition = '50% 50%';
-            console.log(`Mode Video: FILL_WIDTH (Potong Vertikal, Skala: ${cropScale})`);
+            console.log("Mode Video: FILL_WIDTH (Potong Vertikal/Contain)");
 
         } else {
-            // MODE 4: Default - 'fill' (Hanya Meregang Penuh, TIDAK ADA POTONGAN)
             playerElement.style.objectFit = 'fill'; 
-            console.log("Mode Video: FILL (Melebar/Meregang Penuh)");
+            playerElement.style.objectPosition = '50% 50%';
+            console.log("Mode Video: FILL (Peregangan Penuh/Default)");
         }
         // **END LOGIKA PENGATURAN TAMPILAN VIDEO**
 
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(adjustTitleFontSize, 100);
-        });
-        
-        if (logoFile) {
-            posterImage.src = logoFile;
-            posterImage.style.display = 'block'; 
-            posterGradientOverlay.style.display = 'block'; 
-            playerElement.style.display = 'none'; 
-            videoOverlayEffect.style.display = 'none'; 
-        } else {
-            playerElement.style.display = 'block';
-            playPauseCenter.style.opacity = '0';
-            videoOverlayEffect.style.display = 'none'; 
-        }
-
-        // START MODIFIKASI FUNGSI formatTime
-        const formatTime = (seconds) => {
-            if (isNaN(seconds) || seconds < 0) return '0:00';
-            
-            let hours = Math.floor(seconds / 3600);
-            let minutes = Math.floor((seconds % 3600) / 60);
-            let remainingSeconds = Math.floor(seconds % 60);
-
-            let timeString = '';
-
-            // Jika durasi >= 1 jam, atau jika total durasi mencapai 1 jam, tampilkan jam
-            if (hours > 0 || playerElement.duration >= 3600) {
-                timeString += hours + ':';
-                minutes = String(minutes).padStart(2, '0'); // Pad minutes jika jam ditampilkan
-            }
-            
-            // Minutes (dipad 2 digit jika jam ditampilkan, 1 digit jika tidak)
-            timeString += minutes + ':';
-            
-            // Seconds (selalu dipad 2 digit)
-            timeString += String(remainingSeconds).padStart(2, '0');
-            
-            return timeString;
-        };
-        // END MODIFIKASI FUNGSI formatTime
-
-        const playToggle = () => {
-            if (playerElement.paused) {
-                posterImage.style.display = 'none';
-                posterGradientOverlay.style.display = 'none'; 
-                playerElement.style.display = 'block';
-
-                videoOverlayEffect.style.opacity = '0';
-                setTimeout(() => { videoOverlayEffect.style.display = 'none'; }, 300); 
-                
-                playerElement.play().catch(error => {
-                    console.error("Gagal memutar video:", error);
-                    playIcon.style.display = 'block';
-                    pauseIcon.style.display = 'none';
-                    playPauseCenter.style.opacity = '1';
+        // Fungsi untuk menampilkan/menyembunyikan iklan
+        const toggleAd = (show) => {
+            if (iklan2) {
+                if (show) {
+                    iklan2.classList.add('show');
+                    adShown = true;
+                    console.log("Iklan ditampilkan.");
                     
-                    if (logoFile) {
-                        posterImage.style.display = 'block';
-                        posterGradientOverlay.style.display = 'block';
-                        playerElement.style.display = 'none';
-                    }
-                    else {
-                        videoOverlayEffect.style.display = 'block';
-                        videoOverlayEffect.style.opacity = '1';
-                    }
-                });
-            } else {
-                playerElement.pause();
+                    clearTimeout(adHideTimeout);
+                    adHideTimeout = setTimeout(() => {
+                        toggleAd(false);
+                        console.log("Iklan disembunyikan setelah 10 detik.");
+                    }, 10000); 
+                } else {
+                    iklan2.classList.remove('show');
+                    adShown = false;
+                }
             }
         };
-
-        const hideControls = () => {
-            if (playerControls && !playerElement.paused) {
-                playerControls.style.display = 'none';
-                videoTitleContainer.style.opacity = '0';
-            }
-        };
-
-        const resetControlsTimeout = () => {
-            clearTimeout(controlsTimeout);
-            if (playerControls) playerControls.style.display = 'flex';
-            videoTitleContainer.style.opacity = '1';
-            
-            if (!playerElement.paused) {
-                controlsTimeout = setTimeout(hideControls, 3000);
-            }
-        };
-
-        playerElement.addEventListener('canplay', () => {
-            console.log("Video siap diputar.");
-            if (playerControls) playerControls.style.display = 'flex';
-            resetControlsTimeout();
-        });
-
+        
+        // Panggil toggleAd(true) setelah 3 detik video mulai dimainkan
         playerElement.addEventListener('play', () => {
-            console.log("Video mulai diputar.");
-            posterImage.style.display = 'none'; 
-            posterGradientOverlay.style.display = 'none'; 
-            playerElement.style.display = 'block'; 
-
-            videoOverlayEffect.style.opacity = '0';
-            setTimeout(() => { videoOverlayEffect.style.display = 'none'; }, 300); 
-
-            playPauseCenter.style.opacity = '0';
-            playIcon.style.display = 'none';
-            pauseIcon.style.display = 'block';
-            videoTitleContainer.style.opacity = '0';
-            resetControlsTimeout();
-        });
-
-        playerElement.addEventListener('pause', () => {
-            console.log("Video dijeda.");
-            clearTimeout(controlsTimeout);
-            playPauseCenter.style.opacity = '1';
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            videoTitleContainer.style.opacity = '1';
-            
-            videoOverlayEffect.style.display = 'block';
-            setTimeout(() => { videoOverlayEffect.style.opacity = '1'; }, 10); 
-
-            posterImage.style.display = 'none';
-            posterGradientOverlay.style.display = 'none';
-            playerElement.style.display = 'block'; 
-
-            adjustTitleFontSize(); 
-        });
-
-        playerElement.addEventListener('ended', () => {
-            console.log("Video selesai diputar.");
-            clearTimeout(controlsTimeout);
-            clearTimeout(adHideTimeout); 
-            
-            playPauseCenter.style.opacity = '1';
-            playIcon.style.display = 'block';
-            pauseIcon.style.display = 'none';
-            videoTitleContainer.style.opacity = '1';
-            playerControls.style.display = 'flex';
-            
-            videoOverlayEffect.style.display = 'block';
-            setTimeout(() => { videoOverlayEffect.style.opacity = '1'; }, 10); 
-
-            if (logoFile) {
-                posterImage.style.display = 'block';
-                posterGradientOverlay.style.display = 'block';
-                playerElement.style.display = 'none'; 
-            } else {
-                playerElement.style.display = 'block'; 
+            if (!adShown) { 
+                setTimeout(() => {
+                    toggleAd(true);
+                }, 3000); 
             }
-            adShown = false; 
-            if (iklan2) { // Cek apakah iklan2 ada sebelum menggunakannya
-                 iklan2.style.visibility = 'hidden'; 
-                 iklan2.style.animation = 'none'; 
-                 iklan2.style.transform = 'translateX(100%)'; 
-            }
-            adjustTitleFontSize(); 
+        }, { once: true }); 
+        
+        
+        playerElement.addEventListener('loadedmetadata', () => {
+            updateProgressDisplay(); // Tampilkan durasi awal
         });
 
         playerElement.addEventListener('timeupdate', () => {
-            if (progressBar && !isNaN(playerElement.duration) && playerElement.duration > 0) {
-                const progressPercentage = (playerElement.currentTime / playerElement.duration) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(playerElement.currentTime);
-                const totalDuration = formatTime(playerElement.duration);
-                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
-                
-                if (!adShown && playerElement.currentTime >= 20) {
-                    adShown = true;
-                    if (iklan2) { // Cek apakah iklan2 ada sebelum menggunakannya
-                        iklan2.style.visibility = 'visible'; 
-                        iklan2.style.animation = 'slide-in-ad 1s ease-out forwards'; 
-                        console.log("Iklan 2 muncul setelah 20 detik!");
-
-                        adHideTimeout = setTimeout(() => {
-                            iklan2.style.animation = 'slide-out-ad 1s ease-out forwards'; 
-                            iklan2.addEventListener('animationend', function handler() {
-                                iklan2.style.visibility = 'hidden'; 
-                                iklan2.style.animation = 'none'; 
-                                iklan2.style.transform = 'translateX(100%)'; 
-                                iklan2.removeEventListener('animationend', handler); 
-                            });
-                            console.log("Iklan 2 menghilang setelah 10 detik.");
-                        }, 10000); 
-                    }
-                }
+            // Gunakan fungsi updateProgressDisplay untuk memproses timeupdate
+            // Ini akan memastikan progres bar tetap bergerak normal, kecuali saat ada lompatan
+            if (jumpTimeAccumulator === 0) {
+                 updateProgressDisplay();
             }
         });
 
-        playPauseCenter.addEventListener('click', playToggle);
+        playerElement.addEventListener('waiting', () => {
+            playPauseCenter.style.opacity = '1';
+            playIcon.style.display = 'none'; 
+            pauseIcon.style.display = 'none'; 
+            playPauseCenter.innerHTML = '<img src="https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/img/loading.gif" style="width: 100%; height: 100%;">';
+        });
+
+        playerElement.addEventListener('playing', () => {
+            playPauseCenter.style.opacity = '0';
+            playPauseCenter.innerHTML = '<svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><svg id="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+            pauseIcon.style.display = 'block'; 
+            playIcon.style.display = 'none';
+        });
         
-        progressBarContainer.addEventListener('click', (event) => {
+        playerElement.addEventListener('pause', () => {
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            playPauseCenter.style.opacity = '1';
+            playPauseCenter.innerHTML = '<svg id="play-icon" viewBox="0 0 24 24" style="display: block;"><path d="M8 5v14l11-7z"/></svg><svg id="pause-icon" viewBox="0 0 24 24" style="display: none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+        });
+
+        // Set poster image jika ada
+        if (logoFile) {
+            posterImage.src = logoFile;
+            posterImage.style.objectFit = playerElement.style.objectFit; 
+            posterImage.style.objectPosition = playerElement.style.objectPosition;
+            posterImage.style.transform = playerElement.style.transform;
+            
+            posterImage.style.display = 'block';
+            posterGradientOverlay.style.display = 'block';
+            playerElement.style.display = 'none'; // Sembunyikan video sampai siap diputar
+        }
+
+        playerElement.addEventListener('loadeddata', () => {
+            if (logoFile) {
+                // Sembunyikan poster saat video mulai dimainkan
+                posterImage.style.display = 'none';
+                posterGradientOverlay.style.display = 'none';
+                playerElement.style.display = 'block'; 
+            }
+            playerElement.play();
+        });
+
+        // Inisialisasi timeout
+        resetControlsTimeout();
+
+        const playToggle = () => {
+            if (playerElement.paused) {
+                playerElement.play();
+            } else {
+                playerElement.pause();
+            }
+            resetControlsTimeout();
+        };
+
+        playPauseCenter.addEventListener('click', playToggle);
+        playerElement.addEventListener('click', playToggle); // Juga klik pada video untuk play/pause
+
+        progressBarContainer.addEventListener('click', (e) => {
             const rect = progressBarContainer.getBoundingClientRect();
-            const clickPosition = event.clientX - rect.left;
+            const clickPosition = e.clientX - rect.left;
             const percentage = clickPosition / rect.width;
             
             if (!isNaN(playerElement.duration)) {
@@ -357,19 +348,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     case 'Enter':
                     case ' ':
                         event.preventDefault();
+                        // Jika sedang dalam proses lompatan, batalkan lompatan dan play/pause
+                        clearTimeout(jumpTimeout);
+                        jumpTimeAccumulator = 0;
+                        updateProgressDisplay(); // Reset tampilan progres bar
+                        
                         playToggle();
                         break;
+                        
                     case 'ArrowRight':
-                        playerElement.currentTime += 10;
-                        break;
                     case 'ArrowLeft':
-                        playerElement.currentTime -= 10;
+                        event.preventDefault();
+                        
+                        // 1. Akumulasi lompatan waktu
+                        const jumpAmount = event.key === 'ArrowRight' ? JUMP_STEP : -JUMP_STEP;
+                        
+                        // Cek batas durasi agar akumulator tidak terus bertambah
+                        let tempTime = playerElement.currentTime + jumpTimeAccumulator + jumpAmount;
+                        
+                        if (tempTime < 0 || tempTime > playerElement.duration) {
+                            // Jangan mengakumulasi jika sudah mencapai batas
+                            break; 
+                        }
+                        
+                        jumpTimeAccumulator += jumpAmount;
+                        
+                        // 2. Tampilkan/Update progres bar yang dilompati
+                        updateProgressDisplay(); 
+                        
+                        // 3. Pastikan kontrol terlihat
+                        showControls(); 
+                        clearTimeout(controlsTimeout); // JANGAN hide control saat remote ditekan
+
+                        // 4. Bersihkan timeout debounce dan atur ulang
+                        clearTimeout(jumpTimeout);
+                        jumpTimeout = setTimeout(applyJump, JUMP_APPLY_DELAY);
                         break;
+                        
                     case 'Escape':
                         window.history.back();
                         break;
+                        
+                    default:
+                        // Jika tombol lain ditekan, reset timeout kontrol
+                        resetControlsTimeout();
                 }
-                resetControlsTimeout();
             }
         });
 
