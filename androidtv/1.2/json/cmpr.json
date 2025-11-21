@@ -1,5 +1,30 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v7/img.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t110.m3u8",
+"ttl": "Kitab Sijjin & Illiyyin (2025)",
+"dur": "1:38:40",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/31.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t89.m3u8",
+"ttl": "Detective Conan: The Time Bombed Skyscraper (1997) dubbing",
+"dur": "1:34:15",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/64.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t85.m3u8",
+"ttl": "Detective Conan: The Last Wizard of the Century (1999) dubbing",
+"dur": "1:39:24",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.1",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v5/img.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t108.m3u8",
 "ttl": "Doyok & Kadir: Boleh Dong Untung Terus (1992)",
@@ -167,13 +192,6 @@
 "lnk": "https://tiviku69.github.io/apk/m3u/t87.m3u8",
 "ttl": "Sobat Ambyar (2021)",
 "dur": "1:41:25",
-"tiviku": "apk"
-},
-{
-"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/64.jpg",
-"lnk": "https://tiviku69.github.io/apk/m3u/t85.m3u8",
-"ttl": "Detective Conan: The Last Wizard of the Century (1999) dubbing",
-"dur": "1:39:24",
 "tiviku": "apk"
 },
 {
@@ -402,14 +420,6 @@
     "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/kH6y65.m3u8",
     "ttl": "toy story 2 (1999) dubbing",
     "dur": "1:32:26",
-    "z": "z",
-    "tiviku": "apk"
-   },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/31.jpg",
-    "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/kHy65.m3u8",
-    "ttl": "Detective Conan Movie 1 The Time-Bombed Skyscraper (1997) Dubbing",
-    "dur": "1:34:15",
     "z": "z",
     "tiviku": "apk"
    },
