@@ -1,5 +1,21 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v11/img.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t114.m3u8",
+"ttl": "The Mexican (2001) dubbing",
+"dur": "1:55:31",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v10/img.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t113.m3u8",
+"ttl": "Main Hoon Na (2004) dubbing",
+"dur": "2:51:00",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v9/img.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t112.m3u8",
 "ttl": "Doyok & kadir: Akal-Akalan (1991)",
