@@ -1,5 +1,12 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v8/img.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t111.m3u8",
+"ttl": "Rhoma irama: Bunga Desa (1988)",
+"dur": "1:38:36",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v7/img.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t110.m3u8",
 "ttl": "Kitab Sijjin & Illiyyin (2025)",
@@ -315,7 +322,7 @@
   {
     "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/48.jpg",
     "lnk": "https://tiviku69.github.io/apk/m3u/t25.m3u8",
-    "ttl": "Gitar Tua Oma Irama (1977)",
+    "ttl": "Rhoma irama: Gitar Tua (1977)",
     "dur": "1:49:54",
     "z": "z",
     "tiviku": "apk"
@@ -331,7 +338,7 @@
 {
 "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/46.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t23.m3u8",
-"ttl": "Jaka swara (1990)",
+"ttl": "Rhoma irama: Jaka swara (1990)",
 "dur": "1:39:11",
 "crop_mode": "stretch_crop",
 "crop_scale": "1.4",
