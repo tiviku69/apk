@@ -1,5 +1,14 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v12/img.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t115.m3u8",
+"ttl": "Fistful of Vengeance (2022) dubbing",
+"dur": "1:36:11",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.0",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv12/v11/img.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t114.m3u8",
 "ttl": "The Mexican (2001) dubbing",
@@ -27,6 +36,8 @@
 "lnk": "https://tiviku69.github.io/apk/m3u/t111.m3u8",
 "ttl": "Rhoma irama: Bunga Desa (1988)",
 "dur": "1:38:36",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.0",
 "tiviku": "apk"
 },
 {
