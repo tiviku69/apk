@@ -1,5 +1,28 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv16/zq6/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t6.m3u8",
+"ttl": "Digimon adventure: Our War Game (2000) dubbing",
+"dur": "40:44",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv16/zq4/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t4.m3u8",
+"ttl": "Pengabdi Setan (2017)",
+"dur": "1:41:48",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv16/zq5/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t5.m3u8",
+"ttl": "Legend of a Rabbit: The Martial of Fire (2015) dubbing",
+"dur": "1:36:10",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv16/zq3/img.jpg",
 "lnk": "https://tiviku69.github.io/tiviku69/load/t3.m3u8",
 "ttl": "Jackie chan: Twin Dragons (1992) dubbing",
