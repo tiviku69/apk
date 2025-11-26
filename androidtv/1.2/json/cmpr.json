@@ -1,5 +1,28 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv16/zq3/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t3.m3u8",
+"ttl": "Jackie chan: Twin Dragons (1992) dubbing",
+"dur": "1:44:42",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv16/zq1/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t1.m3u8",
+"ttl": "Detective conan: Case Closed: Countdown to Heaven (2001) dubbing",
+"dur": "1:39:39",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.1",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv16/zq2/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t2.m3u8",
+"ttl": "Jackie Chan: Rush Hour 2 (2001) dubbing",
+"dur": "1:23:23",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/tiv15/zq8/img.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t126.m3u8",
 "ttl": "The Twits - Keluarga Twit (2025) dubbing",
