@@ -279,14 +279,13 @@
 		"z": "z",
 		"tiviku": "apk"
 	},
-	{
-		"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
-		"lnk": "https://tiviku69.github.io/apk/m3u/t77.m3u8",
-		"ttl": "eps36 Avatar: The Last Airbender (2005) dubbing",
-		"dur": "24:31",
-		"z": "z",
-		"tiviku": "apk"
-	},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
+"lnk": "https://tiviku69.github.io/apk/m3u/t77.m3u8",
+"ttl": "eps36 Avatar: The Last Airbender (2005) dubbing",
+"dur": "24:31",
+"tiviku": "apk"
+},
 {
 "logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
 "lnk": "https://tiviku69.github.io/apk/m3u/t78.m3u8",
@@ -313,6 +312,41 @@
 "lnk": "https://tiviku69.github.io/apk/m3u/t81.m3u8",
 "ttl": "eps40 Avatar: The Last Airbender (2005) dubbing",
 "dur": "24:33",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t12.m3u8",
+"ttl": "eps41 Avatar: The Last Airbender (2005) dubbing",
+"dur": "24:32",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t13.m3u8",
+"ttl": "eps42 Avatar: The Last Airbender (2005) dubbing",
+"dur": "24:32",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t14.m3u8",
+"ttl": "eps43 Avatar: The Last Airbender (2005) dubbing",
+"dur": "24:33",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t15.m3u8",
+"ttl": "eps44 Avatar: The Last Airbender (2005) dubbing",
+"dur": "24:36",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/apk/main/gambar/1.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/t16.m3u8",
+"ttl": "eps45 Avatar: The Last Airbender (2005) dubbing",
+"dur": "24:34",
 "tiviku": "apk"
 }
 ]
