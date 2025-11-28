@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Kontainer Iklan 2: #iklan2 (Element yang digeser)
         iklan2 = document.createElement('div'); // Menetapkan ke variabel global iklan2
         iklan2.id = 'iklan2';
-        iklan2.textContent = 'IKLAN ANDA DI SINI'; // Isi teks iklan
+        iklan2.innerHTML = 'INFO TERBARU<br>GABUNG DI SINI<br>( https://t.me/tiviku )'; // Isi teks iklan
         
         // Membangun struktur
         iklan.appendChild(iklan2);
@@ -332,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 iklan2.removeEventListener('animationend', handler); 
                             });
                             console.log("Iklan 2 menghilang setelah 10 detik.");
-                        }, 10000); 
+                        }, 30000); 
                     }
                 }
             }
