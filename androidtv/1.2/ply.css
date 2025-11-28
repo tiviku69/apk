@@ -62,14 +62,14 @@ body {
     z-index: 1001; --- */
 .iklan-container {
     position: absolute;
-    top: 27px;
-    right: 40px; 
+    top: 30px;
+    right: 50px; 
     z-index: 1001;
 }
 
 #iklan { /* Div Iklan 1: Wadah Transparan */
-    width: 200px;
-    height: 75px;
+    width: 250px;
+    height: 90px;
     background-color: transparent; 
     border: none; 
     
@@ -83,10 +83,10 @@ body {
     display: flex; 
     justify-content: center;
     align-items: center;
-    background-color: rgba(255, 0, 0, 0.7); 
+    background-color: red; 
     color: white;
     font-weight: bold;
-    font-size: 20px;
+    font-size: 25px;
     
     position: absolute;
     top: 0;
