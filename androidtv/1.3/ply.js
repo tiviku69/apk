@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // ... (Variabel dan inisialisasi awal lainnya)
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
     const logoFile = sessionStorage.getItem('logoFile'); 
@@ -23,10 +24,14 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const videoOverlayEffect = document.getElementById('video-overlay-effect');
     
-    let iklan2; 
+    // Hapus: const iklan2 = document.getElementById('iklan2');
+    let iklan2; // Didefinisikan sebagai variabel untuk diisi nanti
+    
     let adShown = false; 
     let adHideTimeout; 
+
     let controlsTimeout;
+    
     const initialFontSizeVW = 2.0; 
     
     // === START: FUNGSI MEMBUAT DAN MENYISIPKAN IKLAN OLEH JS ===
@@ -40,9 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
         iklan.id = 'iklan';
         
         // Kontainer Iklan 2: #iklan2 (Element yang digeser)
-        iklan2 = document.createElement('div'); 
+        iklan2 = document.createElement('div'); // Menetapkan ke variabel global iklan2
         iklan2.id = 'iklan2';
-        iklan2.innerHTML = 'INFO TERBARU<br>GABUNG DI SINI<br>( https://t.me/tiviku )'; 
+        iklan2.innerHTML = 'INFO TERBARU<br>GABUNG DI SINI<br>( https://t.me/tiviku )'; // Isi teks iklan
         
         // Membangun struktur
         iklan.appendChild(iklan2);
@@ -56,9 +61,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const adjustTitleFontSize = () => {
         let currentSize = initialFontSizeVW;
+        
         const maxLinesHeight = window.innerHeight * 0.2; 
         
         videoTitleContainer.style.fontSize = `${initialFontSizeVW}vw`;
+        
         videoTitleContainer.style.maxHeight = 'none'; 
         videoTitleContainer.style.overflowY = 'visible'; 
         
@@ -97,53 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(updateClock, 1000);
     updateClock();
 
-    // START MODIFIKASI KRITIS: FUNGSI loadVideo SELALU MENGGUNAKAN HLS.JS
-    const loadVideo = (link) => {
-        if (Hls.isSupported()) {
-            // Gunakan hls.js untuk HLS stream (atau stream apa pun yang ingin kita coba)
-            // HLS.js akan mencoba memparsing stream meskipun itu MP4 biasa
-            const hls = new Hls();
-            hls.loadSource(link);
-            hls.attachMedia(playerElement);
-            console.log("Memuat video menggunakan HLS.js untuk semua tautan.");
-
-            // Tambahkan event listener untuk error HLS
-            hls.on(Hls.Events.ERROR, function (event, data) {
-                if (data.fatal) {
-                    switch(data.type) {
-                        case Hls.ErrorTypes.NETWORK_ERROR:
-                            console.error("Kesalahan Jaringan fatal, mencoba memuat ulang:", data);
-                            hls.recoverMediaError();
-                            break;
-                        case Hls.ErrorTypes.MEDIA_ERROR:
-                            console.error("Kesalahan Media fatal, mencoba memuat ulang:", data);
-                            hls.recoverMediaError();
-                            break;
-                        default:
-                            console.error("Kesalahan HLS fatal yang tidak tertangani:", data);
-                            // FALLBACK: Coba gunakan pemutar HTML5 standar
-                            playerElement.src = link;
-                            playerElement.load();
-                            console.log("Gagal dengan HLS.js, kembali ke HTML5 Video standar.");
-                            hls.destroy();
-                            break;
-                    }
-                }
-            });
-
-        } else if (playerElement.canPlayType('application/vnd.apple.mpegurl') || playerElement.canPlayType('video/mp4')) {
-            // Jika HLS.js tidak didukung, gunakan dukungan native browser
-            playerElement.src = link;
-            console.log("HLS.js tidak didukung. Memuat video menggunakan dukungan native browser.");
-        } 
-        else {
-            // Kasus terburuk: Browser tidak mendukung HLS.js maupun HLS native/MP4.
-            playerElement.src = link;
-            console.error("Browser tidak mendukung HLS.js atau video format yang disediakan.");
-        }
-    }
-    // END MODIFIKASI KRITIS
-
     if (videoLink) {
         // Panggil fungsi untuk membuat iklan setelah DOMContentLoaded
         createAdElement(); 
@@ -153,8 +113,44 @@ document.addEventListener('DOMContentLoaded', () => {
             adjustTitleFontSize(); 
         }
         
-        // Panggil fungsi baru untuk memuat video, yang sekarang selalu mencoba HLS.js
-        loadVideo(videoLink);
+        // =========================================================
+        // START MODIFIKASI KRITIS: INISIALISASI HLS.JS (Disesuaikan untuk KitKat)
+        
+        if (videoLink.endsWith('.m3u8')) {
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                console.log("HLS didukung, menggunakan hls.js (v0.8.9).");
+                const hls = new Hls({
+                     // Konfigurasi untuk kompatibilitas yang lebih luas (opsional)
+                     // maxBufferLength: 10,
+                });
+                hls.loadSource(videoLink);
+                hls.attachMedia(playerElement);
+                
+                // Menangani error hls.js
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    console.error("HLS.js error:", data.type, data.details, data.fatal);
+                    if (data.fatal) {
+                        console.warn("Error fatal, mencoba fallback ke pemutaran native.");
+                        // Coba fallback ke pemutaran standar jika error fatal
+                        playerElement.src = videoLink;
+                        // Hapus listener agar tidak terjadi loop error
+                        hls.destroy(); 
+                    }
+                });
+            } else {
+                console.warn("HLS.js tidak didukung/gagal inisialisasi. Mencoba pemutaran native (fallback KitKat).");
+                // Fallback untuk browser yang secara native mendukung HLS (Termasuk KitKat)
+                playerElement.src = videoLink;
+            }
+        }
+         else {
+            // Untuk format video standar (mp4, dll.)
+            console.log("Memuat video non-HLS.");
+            playerElement.src = videoLink;
+        }
+
+        // END MODIFIKASI KRITIS: INISIALISASI HLS.JS
+        // =========================================================
 
         // **START LOGIKA PENGATURAN TAMPILAN VIDEO (KRITIS)**
         // 1. Reset semua properti custom (penting!)
@@ -163,13 +159,13 @@ document.addEventListener('DOMContentLoaded', () => {
         playerElement.style.transform = 'none'; 
 
         if (cropMode === 'cover') {
-            // MODE 1: Zoom/Crop Standar 
+            // MODE 1: Zoom/Crop Standar (Tidak ada peregangan/distorsi, potong bisa di samping)
             playerElement.style.objectFit = 'cover'; 
             playerElement.style.objectPosition = cropPosition; 
             console.log("Mode Video: COVER (Zoom/Crop Standar)");
 
         } else if (cropMode === 'stretch_crop') { 
-            // MODE 2: Potong Atas/Bawah + Meregangkan Horizontal (ADA DISTORSI)
+            // MODE 2: BARU - Potong Atas/Bawah + Meregangkan Horizontal (ADA DISTORSI)
             playerElement.style.objectFit = 'fill'; 
             playerElement.style.transform = `scaleY(${cropScale})`; 
             playerElement.style.objectPosition = '50% 50%';
@@ -183,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log(`Mode Video: FILL_WIDTH (Potong Vertikal, Skala: ${cropScale})`);
 
         } else {
-            // MODE 4: Default - 'fill' 
+            // MODE 4: Default - 'fill' (Hanya Meregang Penuh, TIDAK ADA POTONGAN)
             playerElement.style.objectFit = 'fill'; 
             console.log("Mode Video: FILL (Melebar/Meregang Penuh)");
         }
@@ -207,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
             videoOverlayEffect.style.display = 'none'; 
         }
 
-        // FUNGSI formatTime
+        // START MODIFIKASI FUNGSI formatTime
         const formatTime = (seconds) => {
             if (isNaN(seconds) || seconds < 0) return '0:00';
             
@@ -217,16 +213,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
             let timeString = '';
 
+            // Jika durasi >= 1 jam, atau jika total durasi mencapai 1 jam, tampilkan jam
             if (hours > 0 || playerElement.duration >= 3600) {
                 timeString += hours + ':';
-                minutes = String(minutes).padStart(2, '0');
+                minutes = String(minutes).padStart(2, '0'); // Pad minutes jika jam ditampilkan
             }
             
+            // Minutes (dipad 2 digit jika jam ditampilkan, 1 digit jika tidak)
             timeString += minutes + ':';
+            
+            // Seconds (selalu dipad 2 digit)
             timeString += String(remainingSeconds).padStart(2, '0');
             
             return timeString;
         };
+        // END MODIFIKASI FUNGSI formatTime
+
+        // =========================================================
+        // START MODIFIKASI: FUNGSI BARU UNTUK MEMPERBARUI PROGRESS BAR DAN WAKTU
+        const updateTimeDisplayAndProgress = () => {
+             if (progressBar && !isNaN(playerElement.duration) && playerElement.duration > 0) {
+                const progressPercentage = (playerElement.currentTime / playerElement.duration) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                const currentTime = formatTime(playerElement.currentTime);
+                const totalDuration = formatTime(playerElement.duration);
+                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
+            }
+        }
+        // END MODIFIKASI
+        // =========================================================
 
         const playToggle = () => {
             if (playerElement.paused) {
@@ -337,7 +352,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 playerElement.style.display = 'block'; 
             }
             adShown = false; 
-            if (iklan2) { 
+            if (iklan2) { // Cek apakah iklan2 ada sebelum menggunakannya
                  iklan2.style.visibility = 'hidden'; 
                  iklan2.style.animation = 'none'; 
                  iklan2.style.transform = 'translateX(100%)'; 
@@ -346,31 +361,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         playerElement.addEventListener('timeupdate', () => {
-            if (progressBar && !isNaN(playerElement.duration) && playerElement.duration > 0) {
-                const progressPercentage = (playerElement.currentTime / playerElement.duration) * 100;
-                progressBar.style.width = `${progressPercentage}%`;
-                const currentTime = formatTime(playerElement.currentTime);
-                const totalDuration = formatTime(playerElement.duration);
-                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
-                
-                if (!adShown && playerElement.currentTime >= 20) {
-                    adShown = true;
-                    if (iklan2) { 
-                        iklan2.style.visibility = 'visible'; 
-                        iklan2.style.animation = 'slide-in-ad 1s ease-out forwards'; 
-                        console.log("Iklan 2 muncul setelah 20 detik!");
+            // MODIFIKASI: Panggil fungsi pembaruan yang baru dibuat
+            updateTimeDisplayAndProgress(); 
+            
+            // Logika Iklan (tidak berubah)
+            if (!adShown && playerElement.currentTime >= 20) {
+                adShown = true;
+                if (iklan2) { // Cek apakah iklan2 ada sebelum menggunakannya
+                    iklan2.style.visibility = 'visible'; 
+                    iklan2.style.animation = 'slide-in-ad 1s ease-out forwards'; 
+                    console.log("Iklan 2 muncul setelah 20 detik!");
 
-                        adHideTimeout = setTimeout(() => {
-                            iklan2.style.animation = 'slide-out-ad 1s ease-out forwards'; 
-                            iklan2.addEventListener('animationend', function handler() {
-                                iklan2.style.visibility = 'hidden'; 
-                                iklan2.style.animation = 'none'; 
-                                iklan2.style.transform = 'translateX(100%)'; 
-                                iklan2.removeEventListener('animationend', handler); 
-                            });
-                            console.log("Iklan 2 menghilang setelah 10 detik.");
-                        }, 30000); 
-                    }
+                    adHideTimeout = setTimeout(() => {
+                        iklan2.style.animation = 'slide-out-ad 1s ease-out forwards'; 
+                        iklan2.addEventListener('animationend', function handler() {
+                            iklan2.style.visibility = 'hidden'; 
+                            iklan2.style.animation = 'none'; 
+                            iklan2.style.transform = 'translateX(100%)'; 
+                            iklan2.removeEventListener('animationend', handler); 
+                        });
+                        console.log("Iklan 2 menghilang setelah 10 detik.");
+                    }, 30000); 
                 }
             }
         });
@@ -385,6 +396,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isNaN(playerElement.duration)) {
                 playerElement.currentTime = playerElement.duration * percentage;
             }
+            // Panggil pembaruan progres segera setelah klik pada progress bar
+            updateTimeDisplayAndProgress(); 
             resetControlsTimeout();
         });
 
@@ -398,9 +411,13 @@ document.addEventListener('DOMContentLoaded', () => {
                         break;
                     case 'ArrowRight':
                         playerElement.currentTime += 10;
+                        // MODIFIKASI KRITIS: Panggil pembaruan progres segera setelah seek
+                        updateTimeDisplayAndProgress(); 
                         break;
                     case 'ArrowLeft':
                         playerElement.currentTime -= 10;
+                        // MODIFIKASI KRITIS: Panggil pembaruan progres segera setelah seek
+                        updateTimeDisplayAndProgress(); 
                         break;
                     case 'Escape':
                         window.history.back();
