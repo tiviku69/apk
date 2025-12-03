@@ -1,25 +1,3 @@
-// --- FUNGSI BARU UNTUK OBSERVASI (LAZY LOADING) ---
-const collectionImageObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const img = entry.target.querySelector('.lazy-img'); // Cari img di dalam div
-            if (img) {
-                const src = img.getAttribute('data-src');
-                if (src) {
-                    img.src = src; // Pindahkan URL dari data-src ke src
-                    img.removeAttribute('data-src');
-                    observer.unobserve(entry.target); // Berhenti mengamati div setelah dimuat
-                }
-            }
-        }
-    });
-}, {
-    root: document.getElementById('container-koleksi'), // Gunakan container-koleksi sebagai root
-    rootMargin: '100px 0px', // Mulai memuat saat gambar 100px mendekati viewport
-    threshold: 0.01
-});
-// --- END FUNGSI OBSERVASI ---
-
 document.addEventListener('DOMContentLoaded', () => {
     const jsonUrl = sessionStorage.getItem('collectionJsonUrl');
     const collectionTitle = sessionStorage.getItem('collectionTitle');
@@ -49,11 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             data.forEach(item => {
                 const img = document.createElement('img');
                 img.id = 'imgv';
-                
-                // PERUBAHAN KRITIS: Gunakan data-src untuk Lazy Loading
-                img.setAttribute('data-src', item.logo);
-                img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="270" height="220" viewBox="0 0 270 220"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; // Placeholder abu-abu gelap
-                img.classList.add('lazy-img'); // Tambahkan kelas untuk target observer
+                img.src = item.logo;
 
                 const pp = document.createElement('p');
                 pp.className = 're';
@@ -73,9 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 dv.appendChild(pp);
                 dv.appendChild(dur);
                 container.appendChild(dv);
-                
-                // Mulai amati div, bukan hanya img
-                collectionImageObserver.observe(dv);
             });
             
             if (data.length === 0) {
@@ -115,24 +86,9 @@ const restoreFocusAndScrollKoleksi = () => {
     if (targetElement) {
         targetElement.classList.add('highlight');
         targetElement.focus();
-        // Gunakan 'instant' untuk perpindahan yang cepat
-        if (!isElementInViewKoleksi(targetElement, container)) {
-            targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (savedScrollPosition !== null && container) {
         container.scrollTop = parseInt(savedScrollPosition, 10);
-        // Tetapkan fokus ke elemen pertama yang terlihat
-        const firstVisible = getFirstVisibleElementKoleksi(container);
-        if (firstVisible) {
-             firstVisible.classList.add('highlight');
-             firstVisible.focus();
-        } else {
-            const firstDiv = document.querySelector('#container-koleksi .responsive-div');
-            if (firstDiv) {
-                 firstDiv.classList.add('highlight');
-                 firstDiv.focus();
-            }
-        }
     } else {
         const firstDiv = document.querySelector('#container-koleksi .responsive-div');
         if (firstDiv) {
@@ -140,29 +96,6 @@ const restoreFocusAndScrollKoleksi = () => {
              firstDiv.focus();
         }
     }
-}
-
-// Helper: Cek apakah elemen terlihat di dalam container (untuk Koleksi)
-function isElementInViewKoleksi(el, container) {
-    const elRect = el.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const elHeight = elRect.height; 
-    
-    return (
-        elRect.top >= containerRect.top &&
-        elRect.bottom <= containerRect.bottom + elHeight // Beri toleransi 1 tinggi elemen
-    );
-}
-
-// Helper: Dapatkan elemen pertama yang terlihat (untuk Koleksi)
-function getFirstVisibleElementKoleksi(container) {
-    const allDivs = document.querySelectorAll('#container-koleksi .responsive-div');
-    for (const div of allDivs) {
-        if (isElementInViewKoleksi(div, container)) {
-            return div;
-        }
-    }
-    return null;
 }
 
 // MODIFIKASI: FUNGSI UNTUK MEMUTAR VIDEO DAN MENYIMPAN SCROLL
@@ -184,78 +117,3 @@ function playVideoInCollection(videoFile, logoFile, textFile, cropMode, cropPosi
 
     window.location.href = 'ply.html';
 }
-
-// --- MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR ---
-
-const saveCollectionScrollPosition = () => {
-    const container = document.getElementById('container-koleksi');
-    if (container) {
-        // Simpan posisi scroll saat pengguna menggulir di halaman koleksi.html
-        sessionStorage.setItem('collectionScrollPosition', container.scrollTop);
-    }
-};
-
-const containerScrollElement = document.getElementById('container-koleksi');
-if (containerScrollElement) {
-    // Tambahkan event listener scroll ke elemen #container-koleksi
-    containerScrollElement.addEventListener('scroll', saveCollectionScrollPosition);
-}
-
-// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Halaman Koleksi) ---
-document.addEventListener('keydown', (e) => {
-    // Hanya tangani ArrowUp, ArrowDown, dan Enter
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Enter') {
-        e.preventDefault(); 
-        const focusedElement = document.activeElement;
-        const divs = Array.from(document.querySelectorAll('#container-koleksi .responsive-div'));
-        const currentIndex = divs.findIndex(div => div === focusedElement);
-        const container = document.getElementById('container-koleksi');
-
-        if (divs.length === 0) return;
-
-        let nextIndex = -1;
-        const containerRect = container.getBoundingClientRect();
-        
-        const divElement = divs[0];
-        const cardWidth = divElement ? divElement.offsetWidth + (parseFloat(window.getComputedStyle(divElement).marginLeft) * 2) : 300; 
-        
-        const itemsPerRow = Math.floor(containerRect.width / cardWidth);
-        const actualItemsPerRow = Math.max(1, itemsPerRow);
-
-        if (currentIndex === -1) {
-            // Jika tidak ada yang fokus, fokuskan elemen pertama
-            nextIndex = 0;
-        } else {
-            // Hapus highlight dari elemen saat ini
-            focusedElement.classList.remove('highlight');
-            
-            switch (e.key) {
-                case 'ArrowDown':
-                    nextIndex = Math.min(currentIndex + actualItemsPerRow, divs.length - 1);
-                    break;
-                case 'ArrowUp':
-                    nextIndex = Math.max(currentIndex - actualItemsPerRow, 0);
-                    break;
-                case 'Enter':
-                    // Trigger click/action pada elemen yang sedang fokus
-                    focusedElement.click();
-                    return; 
-            }
-        }
-
-        if (nextIndex !== -1 && divs[nextIndex]) {
-            divs[nextIndex].classList.add('highlight');
-            divs[nextIndex].focus();
-            
-            // PERUBAHAN KRITIS: Menggunakan 'instant' untuk pergeseran cepat
-            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
-            
-            saveCollectionScrollPosition();
-        }
-    } else if (e.key === 'Escape') {
-        // Kembali ke halaman sebelumnya (ke tiviku.html)
-        window.location.href = 'tiviku.html';
-    }
-    // Abaikan ArrowRight dan ArrowLeft
-});
-// --- END FUNGSI NAVIGASI KEYBOARD/REMOTE BARU ---

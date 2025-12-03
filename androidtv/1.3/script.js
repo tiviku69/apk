@@ -3,7 +3,7 @@ atas.innerHTML = '<h1>tiviku</h1> <b>by tiviku</b> <input type="text" name="" id
 
 // 1. Files yang langsung ditampilkan di halaman utama
 const directFiles = [
-'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json','tes.json',
+'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json',
 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
@@ -23,38 +23,11 @@ function shuffleArray(array) {
     }
 }
 
-// --- FUNGSI BARU UNTUK OBSERVASI (LAZY LOADING) ---
-const imageObserver = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const img = entry.target.querySelector('.lazy-img'); 
-            if (img) {
-                const src = img.getAttribute('data-src');
-                if (src) {
-                    img.src = src; // Pindahkan URL dari data-src ke src
-                    img.removeAttribute('data-src');
-                    observer.unobserve(entry.target); // Berhenti mengamati div setelah dimuat
-                }
-            }
-        }
-    });
-}, {
-    root: document.getElementById('container'), // Gunakan container sebagai root
-    rootMargin: '100px 0px', // Mulai memuat saat gambar 100px mendekati viewport
-    threshold: 0.01
-});
-// --- END FUNGSI OBSERVASI ---
-
 // Fungsi untuk membuat elemen film
 function createFilmElement(item, clickAction, isCollection = false) {
     const img = document.createElement('img');
     img.id = 'imgv';
-    
-    // PERUBAHAN KRITIS: Gunakan data-src untuk Lazy Loading
-    img.setAttribute('data-src', item.logo); 
-    img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="270" height="220" viewBox="0 0 270 220"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; // Placeholder abu-abu gelap
-    
-    img.classList.add('lazy-img'); // Tambahkan kelas untuk target observer
+    img.src = item.logo; 
 
     const pp = document.createElement('p');
     pp.className = 're';
@@ -73,13 +46,7 @@ function createFilmElement(item, clickAction, isCollection = false) {
     dv.appendChild(pp);
     dv.appendChild(dur);
     container.appendChild(dv);
-    
-    // Mulai amati div
-    imageObserver.observe(dv);
-
-    return dv; // Kembalikan elemen untuk penggunaan lain (opsional)
 }
-// --- END FUNGSI PENCIPTAAN ELEMEN DENGAN LAZY LOADING ---
 
 // --- FUNGSI BARU: MENGACAK DAN MENYIMPAN URUTAN KE SESSION STORAGE ---
 function shuffleAndSaveItems() {
@@ -208,24 +175,9 @@ const restoreFocusAndScroll = () => {
     if (targetElement) {
         targetElement.classList.add('highlight');
         targetElement.focus();
-        // Gunakan 'instant' untuk perpindahan yang cepat
-        if (!isElementInView(targetElement, container)) {
-             targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
-        }
+        targetElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
     } else if (savedScrollPosition !== null && container) {
         container.scrollTop = parseInt(savedScrollPosition, 10);
-        // Tetapkan fokus ke elemen pertama yang terlihat
-        const firstVisible = getFirstVisibleElement(container);
-        if (firstVisible) {
-             firstVisible.classList.add('highlight');
-             firstVisible.focus();
-        } else {
-             const firstDiv = document.querySelector('.responsive-div');
-             if (firstDiv) {
-                 firstDiv.classList.add('highlight');
-                 firstDiv.focus();
-             }
-        }
     } else {
         const firstDiv = document.querySelector('.responsive-div');
         if (firstDiv) {
@@ -234,33 +186,6 @@ const restoreFocusAndScroll = () => {
         }
     }
 }
-
-// Helper: Cek apakah elemen terlihat di dalam container
-function isElementInView(el, container) {
-    const elRect = el.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    
-    // Ambil tinggi elemen + margin vertikal (sekitar 210px + 15px*2 = 240px)
-    const elHeight = elRect.height; 
-    
-    return (
-        elRect.top >= containerRect.top &&
-        elRect.bottom <= containerRect.bottom + elHeight // Beri toleransi 1 tinggi elemen
-    );
-}
-
-// Helper: Dapatkan elemen pertama yang terlihat
-function getFirstVisibleElement(container) {
-    // Memastikan hanya elemen yang ditampilkan yang diperiksa
-    const allDivs = document.querySelectorAll('.responsive-div');
-    for (const div of allDivs) {
-        if (div.style.display !== 'none' && isElementInView(div, container)) {
-            return div;
-        }
-    }
-    return null;
-}
-
 
 // Fungsi untuk membuka Koleksi (Menyimpan posisi sebelum navigasi)
 function openCollection(jsonUrl, collectionTitle) {
@@ -304,17 +229,6 @@ function prosesMenu() {
         var textToSearch = li[i].querySelector('.re').innerText.toLowerCase(); 
         if (textToSearch.indexOf(filter) > -1) {
             li[i].style.display = "";
-            
-            // JIKA DICARI, PASTIKAN GAMBAR LANGSUNG DIMUAT
-            const img = li[i].querySelector('.lazy-img');
-            if (img && img.hasAttribute('data-src')) {
-                 const src = img.getAttribute('data-src');
-                 img.src = src;
-                 img.removeAttribute('data-src');
-                 // Hentikan pengamatan jika elemen ditemukan saat pencarian
-                 imageObserver.unobserve(li[i]); 
-            }
-
         } else {
             li[i].style.display = "none";
         }
@@ -339,99 +253,4 @@ if (containerScrollElement) {
     containerScrollElement.addEventListener('scroll', saveScrollPosition);
 }
 
-// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Halaman Utama) ---
-document.addEventListener('keydown', (e) => {
-    const searchInput = document.getElementById('cari');
-
-    if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'Enter') {
-        
-        // 1. LOGIKA UNTUK INPUT CARI
-        if (document.activeElement === searchInput) {
-            if (e.key === 'ArrowDown') {
-                e.preventDefault();
-                // FIX KRITIS: Hanya ambil div pertama yang terlihat
-                const firstDiv = document.querySelector('.responsive-div:not([style*="display: none"])');
-                
-                if (firstDiv) {
-                    firstDiv.classList.add('highlight');
-                    firstDiv.focus();
-                    // Scroll ke awal kontainer (instan)
-                    container.scrollTop = 0; 
-                    saveScrollPosition();
-                }
-            }
-            // Biarkan ArrowUp/Enter berfungsi normal di dalam input cari jika sedang fokus
-            return; 
-        }
-        
-        // 2. LOGIKA NAVIGASI CARD
-        
-        e.preventDefault(); 
-        const focusedElement = document.activeElement;
-        
-        // FIX KRITIS: HANYA gunakan div yang terlihat untuk navigasi
-        const divs = Array.from(document.querySelectorAll('.responsive-div')).filter(div => div.style.display !== 'none');
-        
-        const currentIndex = divs.findIndex(div => div === focusedElement);
-        
-        if (divs.length === 0) return;
-
-        let nextIndex = -1;
-        const containerRect = container.getBoundingClientRect();
-        
-        const divElement = divs[0];
-        // Menggunakan offsetWidth + margin
-        const cardWidth = divElement ? divElement.offsetWidth + (parseFloat(window.getComputedStyle(divElement).marginLeft) * 2) : 300; 
-        
-        const itemsPerRow = Math.floor(containerRect.width / cardWidth);
-        const actualItemsPerRow = Math.max(1, itemsPerRow); 
-
-        if (currentIndex === -1) {
-            // Jika tidak ada yang fokus, fokuskan elemen pertama atau search jika menekan atas
-            if (e.key === 'ArrowUp') {
-                searchInput.focus();
-                return;
-            }
-            nextIndex = 0;
-        } else {
-            // Hapus highlight dari elemen saat ini
-            focusedElement.classList.remove('highlight');
-            
-            switch (e.key) {
-                case 'ArrowDown':
-                    // Pindah ke bawah satu baris
-                    nextIndex = Math.min(currentIndex + actualItemsPerRow, divs.length - 1);
-                    break;
-                case 'ArrowUp':
-                    nextIndex = currentIndex - actualItemsPerRow;
-                    
-                    // JIKA nextIndex NEGATIF (berarti sudah di baris paling atas)
-                    if (nextIndex < 0) {
-                        searchInput.focus();
-                        return;
-                    } else {
-                        nextIndex = Math.max(nextIndex, 0); 
-                    }
-                    break;
-                case 'Enter':
-                    // Trigger click/action pada elemen yang sedang fokus
-                    focusedElement.click();
-                    return; 
-            }
-        }
-
-        if (nextIndex !== -1 && divs[nextIndex]) {
-            divs[nextIndex].classList.add('highlight');
-            divs[nextIndex].focus();
-            
-            // Menggunakan 'instant' untuk pergeseran cepat
-            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
-            
-            saveScrollPosition();
-        }
-    } else if (e.key === 'Escape') {
-        window.history.back();
-    }
-    // Abaikan ArrowRight dan ArrowLeft
-});
-// --- END FUNGSI NAVIGASI KEYBOARD/REMOTE BARU ---
+// --- END MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR ---
