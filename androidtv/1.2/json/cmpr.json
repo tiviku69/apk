@@ -1,5 +1,35 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv4/zq6/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz25.m3u8",
+"ttl": "Kuch Kuch Hota Hai (1998) dubbing",
+"dur": "3:05:03",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv4/zq4/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz23.m3u8",
+"ttl": "Jabang Mayit (2025)",
+"dur": "1:23:57",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv4/zq3/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz22.m3u8",
+"ttl": "Troll 2 (2025) dubbing",
+"dur": "1:44:50",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv4/zq2/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz21.m3u8",
+"ttl": "Wish (2023) dubbing",
+"dur": "1:34:56",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv4/zq1/img.jpg",
 "lnk": "https://tiviku69.github.io/tiviku69/load/zz20.m3u8",
 "ttl": "City Hunter (2024) dubbing",
