@@ -1,5 +1,37 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq46/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz46.m3u8",
+"ttl": "Sleazy Dizzy (1990) dubbing",
+"dur": "1:25:49",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv6/zq45/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz45.m3u8",
+"ttl": "Jumanji: The Next Level (2019) dubbing",
+"dur": "2:03:10",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv6/zq44/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz44.m3u8",
+"ttl": "Believe: Takdir Mimpi Keberanian (2025)",
+"dur": "1:51:55",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv6/zq43/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz43.m3u8",
+"ttl": "Rego Nyowo (2025)",
+"dur": "1:44:47",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv6/zq42/img.jpg",
 "lnk": "https://tiviku69.github.io/tiviku69/load/zz42.m3u8",
 "ttl": "Panggil Aku Ayah (2025)",
@@ -32,6 +64,8 @@
 "lnk": "https://tiviku69.github.io/tiviku69/load/zz35.m3u8",
 "ttl": "Comic 8 (2014)",
 "dur": "1:40:21",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.0",
 "tiviku": "apk"
 },
 {
