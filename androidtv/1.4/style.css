@@ -1,217 +1,216 @@
 body {
-    background-color: #121212; /* Dark background */
-    color: #fff;
+    background-color: #121212; /* Background gelap khas TV */
+    color: white;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', Arial, sans-serif; /* Font modern */
-    overflow: hidden; 
+    height: 100vh; /* Memastikan body mengisi seluruh viewport */
+    overflow: hidden; /* Mengelola scroll hanya di container */
 }
 
-/* --- MAIN WRAPPER (Flexbox for Sidebar + Content) --- */
-#main-wrapper {
+/* --- Layout Utama (Flexbox) --- */
+#app-wrapper {
     display: flex;
     height: 100vh;
 }
 
-/* --- SIDEBAR (Kiri) --- */
+/* --- Sidebar Navigasi Kiri --- */
 #sidebar {
-    width: 250px; 
-    background-color: #1a1a1a;
+    width: 250px;
+    background-color: #0c0c0c;
     padding: 20px 0;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    z-index: 200;
+    flex-shrink: 0;
+    border-right: 2px solid #282828;
 }
 
-.logo {
-    color: #FF4444; 
-    font-size: 2.5vw;
-    margin: 0 20px 20px 20px;
+#logo-search {
+    padding: 0 20px 20px;
     text-align: left;
 }
 
-#search-container {
-    padding: 0 20px 20px 20px;
+#logo {
+    font-size: 32px;
+    font-weight: bold;
+    color: #f0f0f0;
+    margin-bottom: 20px;
 }
 
 #cari {
     width: 100%;
-    height: 35px;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 2px solid transparent; 
-    border-radius: 18px;
+    height: 40px;
+    border-radius: 8px;
+    background: #333;
+    border: none;
     padding: 0 15px;
-    font-size: 1vw;
+    font-size: 18px;
+    color: white;
+    outline: none;
     box-sizing: border-box;
-    transition: border-color 0.2s, background-color 0.2s;
+    /* Hilangkan posisi absolut yang lama */
+    position: static;
+    transform: none;
+    margin-top: 5px;
 }
 
-#cari:focus,
-#cari.highlight {
-    background: #282828;
-    border-color: #FF4444;
-    outline: none;
-}
-
-#menu-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow-y: auto; 
-}
-
-.menu-item {
-    padding: 15px 20px;
-    cursor: pointer;
-    font-size: 1.1vw;
+#nav-menu {
     text-align: left;
-    transition: background-color 0.2s, color 0.2s;
-    border-left: 5px solid transparent;
+    margin-top: 30px;
 }
 
-.menu-item:focus,
-.menu-item.highlight {
-    background-color: #333333;
-    border-left-color: #FF4444; /* Indikator fokus merah */
-    color: #fff;
+.nav-item {
+    padding: 15px 20px;
+    font-size: 18px;
+    color: #aaa;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Style fokus untuk Android TV Remote */
+.nav-item:focus,
+.nav-item:hover {
+    background-color: #333;
+    color: white;
     outline: none;
 }
 
-/* --- CONTENT WRAPPER (Grid Area) --- */
-#content-wrapper {
+.nav-item.active {
+    color: white;
+    background-color: #e50914; /* Warna merah sebagai highlight */
+    border-left: 5px solid white;
+    padding-left: 15px;
+}
+
+/* --- Konten Utama Kanan --- */
+#main-content {
     flex-grow: 1;
-    overflow: hidden; 
+    overflow: hidden; /* Menjaga agar konten tidak meluber */
+    position: relative;
+    padding: 20px;
 }
 
 #atas {
-    padding: 20px 50px 10px 50px; 
-    text-align: left;
-    position: sticky;
-    top: 0;
-    background-color: #121212;
-    z-index: 100;
-}
-
-#atas b {
-    color: #aaa;
-    font-size: 1vw;
-    display: block;
+    height: 40px; 
+    position: relative;
+    margin-bottom: 20px;
+    /* Konten lama di script.js harus disesuaikan */
 }
 
 #container {
-    height: calc(100vh - 80px); /* Ketinggian penuh dikurangi header di content-wrapper */
-    padding: 15px 40px;
-    overflow-y: scroll;
+    height: calc(100vh - 80px); /* Total tinggi - padding atas bawah - tinggi #atas */
+    padding: 0;
+    overflow-y: auto; /* Kontainer film dapat di-scroll vertikal */
     overflow-x: hidden;
-    position: relative;
-    text-align: left;
-    
-    /* Scrollbar Custom */
-    scrollbar-width: thin;
-    scrollbar-color: #FF4444 #121212;
+    display: flex;
+    flex-wrap: wrap; /* Memungkinkan item turun ke baris baru */
+    gap: 30px 20px; /* Jarak antar kartu */
+    align-content: flex-start; /* Memastikan item menempel di atas */
 }
 
-/* --- ITEM GRID (Modern Look) --- */
-.responsive-div {
-    width: 20vw; 
-    max-width: 300px; 
-    height: 12vw; 
-    max-height: 170px;
+/* --- Desain Kartu Film (Potret) --- */
 
-    display: inline-block;
-    vertical-align: top;
-    
-    border-radius: 8px;
+.responsive-div {
+    width: 170px; /* Lebar lebih kecil untuk potret */
+    height: 250px; /* Tinggi potret */
+    display: flex; /* Ganti dari inline-block ke flex untuk layout konten kartu */
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    border-radius: 13px;
     overflow: hidden;
     position: relative;
-    margin: 15px;
-    
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-    
-    border: 3px solid transparent; 
+    padding: 0;
+    margin: 0; /* Margin diatur di gap #container */
+    border: 0px solid transparent; /* Hilangkan border default */
+    background-color: #1e1e1e; /* Warna latar belakang kartu */
 }
 
-/* Efek saat Fokus/Hover */
+/* Fokus/Highlight untuk Remote */
 .responsive-div:focus,
 .responsive-div.highlight {
-    border-color: #FF4444;
-    transform: scale(1.08); 
-    box-shadow: 0 0 15px rgba(255, 68, 68, 0.5); 
-    z-index: 10;
+    border: 5px solid #fff;
+    border-radius: 13px;
+    transform: scale(1.05); /* Efek zoom saat fokus */
+    transition: transform 0.2s, border 0.2s;
     outline: none;
 }
 
-/* --- GAMBAR (THUMBNAIL) --- */
+.responsive-div:not(:focus) {
+    transition: transform 0.2s;
+}
+
+/* Gambar dalam Kartu */
 #imgv {                
-    border-radius: 8px;
-    width: 100%;
-    height: 100%;
+    border-radius: 8px; /* Sudut sedikit lebih kecil dari div */
+    width: 100%; /* Gambar mengisi seluruh lebar div */
+    height: 100%; /* Gambar mengisi seluruh tinggi div */
     position: absolute;
     top: 0;
     left: 0;
-    object-fit: cover; 
-    transition: filter 0.2s;
+    transform: none; /* Hilangkan transform lama */
+    object-fit: cover; /* Pastikan gambar menutupi area tanpa distorsi bentuk div */
 }
 
-.responsive-div:focus #imgv,
-.responsive-div.highlight #imgv {
-    filter: brightness(0.8);
-}
-
-
-/* --- TULISAN DI ATAS GAMBAR (TITLE & DURASI) --- */
-.re { 
-    position: absolute; 
+/* Judul Film */
+.re {
+    position: absolute;
     bottom: 0;
+    width: 100%;
     left: 0;
-    right: 0;
-    
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
-    color: white;
-    font-weight: 500;
-    font-size: 1.1vw;
-    padding: 20px 10px 5px 10px;
-    text-align: left;
-    height: auto;
-    
-    transition: font-size 0.2s, background 0.2s;
-    z-index: 1;
+    transform: none;
+    padding: 8px 5px;
+    font-size: 14px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang judul di bawah */
+    z-index: 2;
+    font-weight: normal;
+    font-style: normal;
+    letter-spacing: normal;
+    box-sizing: border-box;
 }
 
 .responsive-div:focus .re,
-.responsive-div.highlight .re {
-    font-size: 1.2vw;
-    color: #f0f0f0;
+.responsive-div:hover .re {
+    font-size: 16px;
+    color: yellow;
+    background-color: rgba(0, 0, 0, 0.9);
 }
 
-.dur { 
+/* Durasi */
+.dur {
     position: absolute;
-    top: 8px;
-    right: 8px;
-    
-    background-color: #FF4444; 
+    top: 5px;
+    right: 5px;
+    bottom: auto; /* Hilangkan bottom lama */
+    padding: 5px 8px;
+    background-color: rgba(0, 0, 0, 0.7);
     color: white;
-    font-weight: 700;
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.8vw;
+    font-size: 14px;
+    border-radius: 5px;
     z-index: 2;
+    font-weight: bold;
 }
 
-/* --- OFFLINE MESSAGE --- */
+/* Hapus h1 lama yang digunakan di #atas */
+h1 {
+    display: none;
+}
+
+/* --- Pemberitahuan Offline --- */
 #offline-message {
-    position: absolute;
+    /* (Tetap sama) */
+    position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    padding: 20px;
-    background-color: rgba(255, 68, 68, 0.2);
-    border: 1px solid #FF4444;
-    border-radius: 8px;
-    color: #FFCCCC;
-    font-size: 1.5vw;
+    color: #ffcccc;
+    background-color: rgba(50, 0, 0, 0.9);
+    padding: 30px 40px;
+    border-radius: 15px;
+    border: 3px solid red;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    z-index: 100;
     text-align: center;
+    font-size: 24px;
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
 }
