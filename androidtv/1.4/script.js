@@ -3,12 +3,12 @@ const atas = document.getElementById('atas');
 
 // 1. Files yang langsung ditampilkan di halaman utama
 const directFiles = [
-'cmpr.json','tes.json',
+'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json','tes.json',
 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
 // 2. File JSON TUNGGAL untuk semua data koleksi klik
-const collectionListUrl = 'koleksi.json';
+const collectionListUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/koleksi.json';
 
 const totalFiles = directFiles.length + 1;
 let filesProcessedCount = 0;
