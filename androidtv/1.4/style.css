@@ -1,41 +1,157 @@
+/* --- GAYA ASLI FILM CARD & UTAMA (Reverted) --- */
 body {
-    background-color: #121212; /* Background gelap khas TV */
-    color: white;
-    font-family: Arial, sans-serif;
+    background-color: black;
+    text-align: center;
     margin: 0;
     padding: 0;
-    height: 100vh; /* Memastikan body mengisi seluruh viewport */
-    overflow: hidden; /* Mengelola scroll hanya di container */
+    height: 100vh; 
+    overflow: hidden; 
+    font-family: Arial, sans-serif;
 }
 
-/* --- Layout Utama (Flexbox) --- */
+/* Sembunyikan h1/b global yang lama */
+h1 {
+    display: none; 
+}
+b {
+    display: none;
+}
+
+.re {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    font-weight: 1000;
+    font-style: italic;
+    position: relative;
+    letter-spacing: 1px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 5px;
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.dur {
+    color: white;
+    font-weight: 900;
+    font-style: italic;
+    position: absolute;
+    border-radius: 3px;
+    bottom: 180px;
+    padding: 3px;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 15px;
+    z-index: 1;
+}
+
+.responsive-div:focus .re,
+.responsive-div:hover .re {
+    font-size: 19px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.responsive-div:focus {
+    border: 5px solid #fff;
+    border-radius: 13px;
+    outline: none; 
+}
+
+.responsive-div:hover {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+.highlight {
+    border: 5px solid #fff;
+    border-radius: 13px;
+    outline: none;
+}
+
+#imgv {                
+    border-radius: 11px;
+    width: 270px;
+    height: 220px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#atas {                
+    position: relative;
+    height: 80px; /* Pertahankan tinggi untuk menjaga posisi #container */
+}
+
+#container {
+    height: calc(100vh - 100px); 
+    position: relative;
+    top: 15px;
+    padding: 0px;
+    overflow: auto; 
+}
+
+/* Hapus gaya #cari global (yang absolut) agar tidak mengganggu film list */
+#cari {
+    /* Gaya lama dihapus */
+}
+
+.responsive-div {
+    width: 260px;
+    height: 210px;
+    display: inline-block; 
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 13px;
+    overflow: hidden;
+    position: relative;
+    padding: 8px 8px;
+    margin: 15px;
+    border: 5px solid red;
+}
+
+
+/* --- LAYOUT DUA KOLOM (SIDEBAR) & GAYA TIVIKU/SEARCH BARU --- */
 #app-wrapper {
     display: flex;
     height: 100vh;
+    background-color: black;
 }
 
-/* --- Sidebar Navigasi Kiri --- */
 #sidebar {
     width: 250px;
     background-color: #0c0c0c;
     padding: 20px 0;
     flex-shrink: 0;
     border-right: 2px solid #282828;
+    text-align: left;
 }
 
 #logo-search {
     padding: 0 20px 20px;
-    text-align: left;
 }
 
-#logo {
+/* Gaya untuk h1 dan b yang dipindahkan ke sidebar */
+#sidebar-h1 { 
+    color: yellowgreen; 
     font-size: 32px;
-    font-weight: bold;
-    color: #f0f0f0;
-    margin-bottom: 20px;
+    margin: 0;
+    font-family: inherit;
+    font-weight: 700;
 }
 
-#cari {
+#sidebar-b { 
+    color: white;
+    display: block;
+    margin-top: 0px;
+    font-size: 14px;
+}
+
+/* Gaya untuk search bar yang dipindahkan ke sidebar */
+#sidebar #cari {
     width: 100%;
     height: 40px;
     border-radius: 8px;
@@ -46,14 +162,13 @@ body {
     color: white;
     outline: none;
     box-sizing: border-box;
-    /* Hilangkan posisi absolut yang lama */
-    position: static;
+    margin-top: 15px; 
+    position: relative; 
     transform: none;
-    margin-top: 5px;
 }
 
+
 #nav-menu {
-    text-align: left;
     margin-top: 30px;
 }
 
@@ -65,7 +180,7 @@ body {
     transition: background-color 0.2s, color 0.2s;
 }
 
-/* Style fokus untuk Android TV Remote */
+/* Style fokus/highlight sidebar */
 .nav-item:focus,
 .nav-item:hover {
     background-color: #333;
@@ -75,135 +190,25 @@ body {
 
 .nav-item.active {
     color: white;
-    background-color: #e50914; /* Warna merah sebagai highlight */
+    background-color: #e50914; 
     border-left: 5px solid white;
     padding-left: 15px;
 }
 
-/* --- Konten Utama Kanan --- */
 #main-content {
     flex-grow: 1;
-    overflow: hidden; /* Menjaga agar konten tidak meluber */
+    overflow: hidden; 
     position: relative;
-    padding: 20px;
-}
-
-#atas {
-    height: 40px; 
-    position: relative;
-    margin-bottom: 20px;
-    /* Konten lama di script.js harus disesuaikan */
-}
-
-#container {
-    height: calc(100vh - 80px); /* Total tinggi - padding atas bawah - tinggi #atas */
-    padding: 0;
-    overflow-y: auto; /* Kontainer film dapat di-scroll vertikal */
-    overflow-x: hidden;
-    display: flex;
-    flex-wrap: wrap; /* Memungkinkan item turun ke baris baru */
-    /* PENYESUAIAN SPASI: Gap vertikal 40px, Gap horizontal 30px */
-    gap: 40px 30px; 
-    align-content: flex-start; /* Memastikan item menempel di atas */
-}
-
-/* --- Desain Kartu Film (Potret) --- */
-
-.responsive-div {
-    width: 170px; /* Lebar potret */
-    height: 250px; /* Tinggi potret */
-    display: flex; /* Ganti dari inline-block ke flex untuk layout konten kartu */
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: center;
-    border-radius: 13px;
-    overflow: hidden;
-    position: relative;
-    padding: 0;
-    margin: 0; /* Margin diatur di gap #container */
-    border: 0px solid transparent; /* Hilangkan border default */
-    background-color: #1e1e1e; /* Warna latar belakang kartu */
-}
-
-/* Fokus/Highlight untuk Remote */
-.responsive-div:focus,
-.responsive-div.highlight {
-    border: 5px solid #fff;
-    border-radius: 13px;
-    transform: scale(1.05); /* Efek zoom saat fokus */
-    transition: transform 0.2s, border 0.2s;
-    outline: none;
-}
-
-.responsive-div:not(:focus) {
-    transition: transform 0.2s;
-}
-
-/* Gambar dalam Kartu */
-#imgv {                
-    border-radius: 8px; /* Sudut sedikit lebih kecil dari div */
-    width: 100%; /* Gambar mengisi seluruh lebar div */
-    height: 100%; /* Gambar mengisi seluruh tinggi div */
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: none; /* Hilangkan transform lama */
-    object-fit: cover; /* Pastikan gambar menutupi area tanpa distorsi bentuk div */
-}
-
-/* Judul Film */
-.re {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    left: 0;
-    transform: none;
-    padding: 8px 5px;
-    font-size: 14px;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.7); /* Latar belakang judul di bawah */
-    z-index: 2;
-    font-weight: normal;
-    font-style: normal;
-    letter-spacing: normal;
-    box-sizing: border-box;
-}
-
-.responsive-div:focus .re,
-.responsive-div:hover .re {
-    font-size: 16px;
-    color: yellow;
-    background-color: rgba(0, 0, 0, 0.9);
-}
-
-/* Durasi */
-.dur {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    bottom: auto; /* Hilangkan bottom lama */
-    padding: 5px 8px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: white;
-    font-size: 14px;
-    border-radius: 5px;
-    z-index: 2;
-    font-weight: bold;
-}
-
-/* Hapus h1 lama yang digunakan di #atas */
-h1 {
-    display: none;
+    padding: 0 20px; 
 }
 
 /* --- Pemberitahuan Offline --- */
 #offline-message {
-    /* (Tetap sama) */
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    color: #ffcccc;
+    color: #ffcccc; 
     background-color: rgba(50, 0, 0, 0.9);
     padding: 30px 40px;
     border-radius: 15px;

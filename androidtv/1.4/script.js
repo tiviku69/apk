@@ -1,6 +1,6 @@
 const atas = document.getElementById('atas');
-// Menghapus elemen h1 dan input cari dari #atas, hanya menyisakan "by tiviku"
-atas.innerHTML = '<div style="color:white; position:absolute; right:10px; top:10px; font-size:12px;">by tiviku</div>'; 
+// MENGHAPUS kode injeksi logo/search ke #atas karena sudah dipindah ke tiviku.html
+atas.innerHTML = ''; 
 
 // 1. Files yang langsung ditampilkan di halaman utama
 const directFiles = [
@@ -41,7 +41,7 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
     });
 }, {
     root: document.getElementById('container'), // Gunakan container sebagai root
-    rootMargin: '200px 0px', // Mulai memuat saat gambar 200px mendekati viewport
+    rootMargin: '100px 0px', // Mulai memuat saat gambar 100px mendekati viewport
     threshold: 0.01
 });
 // --- END FUNGSI OBSERVASI ---
@@ -53,8 +53,8 @@ function createFilmElement(item, clickAction, isCollection = false) {
     
     // PERUBAHAN KRITIS: Gunakan data-src untuk Lazy Loading
     img.setAttribute('data-src', item.logo); 
-    // Placeholder Potret 170x250
-    img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="170" height="250" viewBox="0 0 170 250"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; 
+    // Placeholder abu-abu gelap (sesuai dimensi asli 270x220)
+    img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="270" height="220" viewBox="0 0 270 220"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; 
     
     img.classList.add('lazy-img'); // Tambahkan kelas untuk target observer
 
@@ -72,8 +72,8 @@ function createFilmElement(item, clickAction, isCollection = false) {
     dv.onclick = clickAction;
 
     dv.appendChild(img);
-    dv.appendChild(dur); // Durasi di atas gambar
-    dv.appendChild(pp);  // Judul di bawah gambar
+    dv.appendChild(pp);
+    dv.appendChild(dur);
     container.appendChild(dv);
     
     // Mulai amati div
@@ -229,10 +229,10 @@ const restoreFocusAndScroll = () => {
              }
         }
     } else {
-        // Jika tidak ada data tersimpan, fokuskan item menu pertama (Beranda)
-        const firstNavItem = document.querySelector('.nav-item');
-        if (firstNavItem) {
-            firstNavItem.focus();
+        // Jika tidak ada data tersimpan, fokuskan Search Input
+        const searchInput = document.getElementById('cari');
+        if (searchInput) {
+            searchInput.focus();
         } else {
              const firstDiv = document.querySelector('.responsive-div');
              if (firstDiv) {
@@ -248,7 +248,7 @@ function isElementInView(el, container) {
     const elRect = el.getBoundingClientRect();
     const containerRect = container.getBoundingClientRect();
     
-    // Ambil tinggi elemen + margin vertikal
+    // Ambil tinggi elemen + margin vertikal (sekitar 210px + 15px*2 = 240px)
     const elHeight = elRect.height; 
     
     return (
@@ -262,7 +262,6 @@ function getFirstVisibleElement(container) {
     // Memastikan hanya elemen yang ditampilkan yang diperiksa
     const allDivs = document.querySelectorAll('.responsive-div');
     for (const div of allDivs) {
-        // Hanya elemen yang ditampilkan di DOM dan terlihat di container yang valid
         if (getComputedStyle(div).display !== 'none' && isElementInView(div, container)) {
             return div;
         }
@@ -348,29 +347,24 @@ if (containerScrollElement) {
     containerScrollElement.addEventListener('scroll', saveScrollPosition);
 }
 
-// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Halaman Utama) ---
+// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Integrasi Sidebar) ---
 document.addEventListener('keydown', (e) => {
     const searchInput = document.getElementById('cari');
     const focusedElement = document.activeElement;
     
-    // Navigasi ArrowRight/ArrowLeft hanya untuk card
-    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-        if (!focusedElement.classList.contains('responsive-div')) {
-            // Jika fokus di menu atau search, biarkan logika di bawah yang menangani perpindahan ke card
-            return;
-        }
-    }
-
+    // 1. Logika Navigasi Umum
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'Enter') {
         
         e.preventDefault(); 
         
-        // 1. LOGIKA NAVIGASI SIDEBAR
+        // 2. LOGIKA NAVIGASI SIDEBAR
         if (focusedElement.classList.contains('nav-item')) {
             const navItems = Array.from(document.querySelectorAll('.nav-item'));
             const currentIndex = navItems.findIndex(item => item === focusedElement);
             
-            focusedElement.classList.remove('active'); // Hapus highlight yang lama
+            // Hapus highlight dari semua item sebelum fokus baru
+            navItems.forEach(item => item.classList.remove('active'));
+            focusedElement.classList.add('active'); // Pastikan yang aktif tetap aktif
 
             if (e.key === 'ArrowDown') {
                 const nextIndex = Math.min(currentIndex + 1, navItems.length - 1);
@@ -393,101 +387,93 @@ document.addEventListener('keydown', (e) => {
                     firstDiv.focus();
                 }
             } else if (e.key === 'Enter') {
-                // Trigger action/link jika ada, saat ini hanya perubahan highlight
-                // Lakukan klik untuk simulasi
                 focusedElement.click(); 
             }
             return;
         }
 
-        // 2. LOGIKA UNTUK INPUT CARI
+        // 3. LOGIKA UNTUK INPUT CARI
         if (focusedElement === searchInput) {
             if (e.key === 'ArrowDown') {
-                // Pindah ke Item Menu Pertama
+                // Pindah ke Item Menu Pertama di sidebar
                 const firstNavItem = document.querySelector('.nav-item');
                 if (firstNavItem) {
                     firstNavItem.classList.add('active');
                     firstNavItem.focus();
                 }
+            } else if (e.key === 'ArrowRight') {
+                // Pindah dari Search Input ke Card Film Pertama
+                const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
+                }
             }
-            // Biarkan ArrowLeft/Right/Enter berfungsi normal di dalam input cari jika sedang fokus
+            // Biarkan ArrowLeft/Up/Enter berfungsi normal di dalam input cari jika sedang fokus
             return; 
         }
         
-        // 3. LOGIKA NAVIGASI CARD FILM
+        // 4. LOGIKA NAVIGASI CARD FILM (Revert ke grid asli, ditambah L/R)
         
-        // FIX KRITIS: HANYA gunakan div yang terlihat untuk navigasi
+        // HANYA gunakan div yang terlihat untuk navigasi
         const divs = Array.from(document.querySelectorAll('.responsive-div')).filter(div => getComputedStyle(div).display !== 'none');
         
         const currentIndex = divs.findIndex(div => div === focusedElement);
         
-        if (divs.length === 0) return;
+        if (divs.length === 0 || currentIndex === -1) return;
 
         let nextIndex = -1;
-        const containerRect = container.getBoundingClientRect();
         
         const divElement = divs[0];
-        // Menggunakan offsetWidth + gap (gap container: 30px) <-- DIEDIT DARI 20px
-        const cardWidth = divElement ? divElement.offsetWidth + 30 : 200; // 170 + 30
+        // Perhitungan Lebar Kartu ASLI: 260px + margin 15px*2 = 290px
+        const cardWidth = divElement ? divElement.offsetWidth + 30 : 300; 
         
-        const itemsPerRow = Math.floor(container.offsetWidth / cardWidth);
+        const containerWidth = container.offsetWidth;
+        const itemsPerRow = Math.floor(containerWidth / cardWidth);
         const actualItemsPerRow = Math.max(1, itemsPerRow); 
-
-        if (currentIndex === -1) {
-            // Jika tidak ada yang fokus (misalnya, baru datang dari sidebar), fokuskan elemen pertama
-            if (e.key === 'ArrowLeft') {
-                // Pindah ke Sidebar jika menekan kiri dari non-card
-                const currentNavItem = document.querySelector('.nav-item.active') || document.querySelector('.nav-item');
-                if (currentNavItem) {
-                    currentNavItem.focus();
-                } else {
-                    searchInput.focus();
-                }
-                return;
-            }
-            nextIndex = 0;
-        } else {
-            // Hapus highlight dari elemen saat ini
-            focusedElement.classList.remove('highlight');
+        
+        // Hapus highlight dari elemen saat ini
+        focusedElement.classList.remove('highlight');
             
-            switch (e.key) {
-                case 'ArrowDown':
-                    // Pindah ke bawah satu baris
-                    nextIndex = Math.min(currentIndex + actualItemsPerRow, divs.length - 1);
-                    break;
-                case 'ArrowUp':
-                    nextIndex = currentIndex - actualItemsPerRow;
-                    
-                    // JIKA nextIndex NEGATIF (berarti sudah di baris paling atas)
-                    if (nextIndex < 0) {
-                        // Tidak ada perpindahan, biarkan tetap fokus di baris paling atas
-                        nextIndex = currentIndex;
-                    } 
-                    break;
-                case 'ArrowRight':
-                    // Pindah ke kanan satu kolom
-                    nextIndex = Math.min(currentIndex + 1, divs.length - 1);
-                    break;
-                case 'ArrowLeft':
-                    // Pindah ke kiri satu kolom
-                    nextIndex = currentIndex - 1;
-                    
-                    if (nextIndex < 0 || (currentIndex % actualItemsPerRow === 0)) {
-                        // Jika di kolom pertama, pindah ke sidebar
-                        const currentNavItem = document.querySelector('.nav-item.active') || document.querySelector('.nav-item');
-                        if (currentNavItem) {
-                            currentNavItem.focus();
-                        } else {
-                            searchInput.focus();
-                        }
-                        return;
+        switch (e.key) {
+            case 'ArrowDown':
+                // Pindah ke bawah satu baris (ASLI)
+                nextIndex = Math.min(currentIndex + actualItemsPerRow, divs.length - 1);
+                break;
+            case 'ArrowUp':
+                nextIndex = currentIndex - actualItemsPerRow;
+                
+                // JIKA nextIndex NEGATIF (berarti sudah di baris paling atas)
+                if (nextIndex < 0) {
+                    searchInput.focus(); // Pindah ke searchInput di sidebar
+                    return;
+                }
+                break;
+            case 'ArrowRight':
+                // Pindah ke kanan satu kolom
+                nextIndex = Math.min(currentIndex + 1, divs.length - 1);
+                break;
+            case 'ArrowLeft':
+                // Pindah ke kiri satu kolom
+                nextIndex = currentIndex - 1;
+                
+                if (nextIndex < 0 || (currentIndex % actualItemsPerRow === 0)) {
+                    // Jika di kolom pertama, pindah ke sidebar
+                    const currentNavItem = document.querySelector('.nav-item.active') || document.querySelector('.nav-item');
+                    if (currentNavItem) {
+                        currentNavItem.focus();
+                        currentNavItem.classList.add('active');
+                    } else {
+                        // Fallback ke search
+                        searchInput.focus(); 
                     }
-                    break;
-                case 'Enter':
-                    // Trigger click/action pada elemen yang sedang fokus
-                    focusedElement.click();
-                    return; 
-            }
+                    return;
+                }
+                break;
+            case 'Enter':
+                // Trigger click/action pada elemen yang sedang fokus
+                focusedElement.click();
+                return; 
         }
 
         if (nextIndex !== -1 && divs[nextIndex]) {
@@ -502,6 +488,5 @@ document.addEventListener('keydown', (e) => {
     } else if (e.key === 'Escape') {
         window.history.back();
     }
-    // Abaikan key lain
 });
-// --- END FUNGSI NAVIGASI KEYBOARD/REMOTE BARU ---
+// --- END FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Integrasi Sidebar) ---
