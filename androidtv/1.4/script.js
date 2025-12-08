@@ -162,10 +162,28 @@ function checkAndRenderItems() {
     }
     // --- END LOGIKA PERSISTENSI URUTAN ---
     
-    // Kosongkan container sebelum menambahkan item
-    container.innerHTML = '';
+    // Panggil fungsi untuk mengatur event listener menu setelah data dimuat
+    setupMenuListeners();
+    
+    // **MODIFIKASI:** Pastikan Beranda aktif dan film dirender dengan pemulihan fokus/scroll saat load awal.
+    const berandaMenu = document.querySelector('.nav-item[data-page="beranda"]');
+    if (berandaMenu) {
+        // Hapus kelas 'active' dari semua menu (memastikan)
+        document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+        
+        // Set menu 'beranda' sebagai aktif
+        berandaMenu.classList.add('active'); 
+        
+        // Render film dan pulihkan fokus/scroll (true)
+        renderAllFilms(true); 
+    }
+}
 
-    // Render item ke DOM
+
+// --- FUNGSI BARU: RENDER SEMUA ITEM FILM/KOLEKSI KE CONTAINER ---
+function renderAllFilms(restore = true) {
+    container.innerHTML = '';
+    
     allItems.forEach(item => {
         let action;
         let isCollection = false;
@@ -182,8 +200,10 @@ function checkAndRenderItems() {
         createFilmElement(item, action, isCollection);
     });
     
-    // Pulihkan fokus dan scroll setelah rendering selesai
-    restoreFocusAndScroll();
+    if (restore) {
+        // Pulihkan fokus dan scroll
+        restoreFocusAndScroll();
+    }
 }
 
 
@@ -347,6 +367,43 @@ if (containerScrollElement) {
     containerScrollElement.addEventListener('scroll', saveScrollPosition);
 }
 
+// --- FUNGSI BARU: EVENT LISTENER UNTUK SIDEBAR ---
+function setupMenuListeners() {
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const page = this.getAttribute('data-page');
+            
+            // Hapus kelas 'active' dari semua menu
+            navItems.forEach(nav => nav.classList.remove('active'));
+            
+            // Tambahkan kelas 'active' ke menu yang baru diklik
+            this.classList.add('active');
+
+            // Kosongkan container dan lakukan tindakan spesifik
+            container.innerHTML = '';
+            
+            if (page === 'beranda') {
+                renderAllFilms(); // Panggil fungsi render film (restore=true)
+            } else if (page === 'populer') {
+                container.innerHTML = '<h2>🎬 Film Populer: Sedang dikembangkan...</h2>';
+            } else if (page === 'aksi') {
+                container.innerHTML = '<h2>💥 Genre Aksi: Sedang dikembangkan...</h2>';
+            } else if (page === 'live') {
+                container.innerHTML = '<h2>📺 TV Live: Sedang dikembangkan...</h2>';
+            } else if (page === 'pengaturan') {
+                container.innerHTML = '<h2>⚙️ Pengaturan: Sedang dikembangkan...</h2>';
+            }
+            
+            // Reset posisi scroll container saat pindah menu
+            container.scrollTop = 0;
+            sessionStorage.removeItem('scrollPosition');
+        });
+    });
+}
+// --- END FUNGSI BARU: EVENT LISTENER UNTUK SIDEBAR ---
+
+
 // --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Integrasi Sidebar) ---
 document.addEventListener('keydown', (e) => {
     const searchInput = document.getElementById('cari');
@@ -362,9 +419,6 @@ document.addEventListener('keydown', (e) => {
             const navItems = Array.from(document.querySelectorAll('.nav-item'));
             const currentIndex = navItems.findIndex(item => item === focusedElement);
             
-            // HAPUS: navItems.forEach(item => item.classList.remove('active')); 
-            // HAPUS: focusedElement.classList.add('active'); 
-
             if (e.key === 'ArrowDown') {
                 const nextIndex = Math.min(currentIndex + 1, navItems.length - 1);
                 navItems[nextIndex].focus();
@@ -378,14 +432,16 @@ document.addEventListener('keydown', (e) => {
                 navItems[nextIndex].focus();
             } else if (e.key === 'ArrowRight') {
                 // Pindah dari Sidebar ke Card Film Pertama
-                const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
-                if (firstDiv) {
-                    firstDiv.classList.add('highlight');
-                    firstDiv.focus();
+                // Hanya lakukan jika konten saat ini adalah film (yaitu, menu 'beranda' aktif)
+                if (focusedElement.getAttribute('data-page') === 'beranda' && document.querySelector('.responsive-div')) {
+                    const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
+                    if (firstDiv) {
+                        firstDiv.classList.add('highlight');
+                        firstDiv.focus();
+                    }
                 }
             } else if (e.key === 'Enter') {
                 // Trigger click/action pada elemen yang sedang fokus
-                // TIDAK ADA LAGI PERUBAHAN CLASS .active DI SINI
                 focusedElement.click(); 
             }
             return;
@@ -459,8 +515,13 @@ document.addEventListener('keydown', (e) => {
                     // Jika di kolom pertama, pindah ke sidebar
                     const firstNavItem = document.querySelector('.nav-item');
                     if (firstNavItem) {
-                        // Fokuskan item menu pertama
-                        firstNavItem.focus();
+                        // Fokuskan item menu 'beranda'
+                        const berandaItem = document.querySelector('.nav-item[data-page="beranda"]');
+                        if (berandaItem) {
+                             berandaItem.focus();
+                        } else {
+                             firstNavItem.focus();
+                        }
                     } else {
                         // Fallback ke search
                         searchInput.focus(); 

@@ -178,6 +178,8 @@ b {
     color: #aaa;
     cursor: pointer;
     transition: background-color 0.2s, color 0.2s;
+    /* Tambahan untuk ikon/emoji film */
+    white-space: nowrap; 
 }
 
 /* Style fokus/highlight sidebar (Gray/Darker - Fokus sementara) */
@@ -188,7 +190,12 @@ b {
     outline: none;
 }
 
-/* BLOK .nav-item.active DIHAPUS, SEHINGGA TIDAK ADA HIGHLIGHT MERAH */
+/* BARU: Style untuk menu yang sedang aktif */
+.nav-item.active {
+    background-color: #f7b733; /* Contoh warna cerah */
+    color: #0c0c0c;
+    font-weight: bold;
+}
 
 
 #main-content {
