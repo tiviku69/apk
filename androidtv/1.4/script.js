@@ -288,7 +288,7 @@ function openCollection(jsonUrl, collectionTitle) {
 }
 
 // MODIFIKASI: Fungsi untuk memutar video (Digunakan oleh Direct Files)
-function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) { // <--- TAMBAHKAN cropScale
+function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) { // <--- TAMBAKKAN cropScale
     // Scroll disimpan secara otomatis oleh event listener 'scroll' (lihat di bawah)
     sessionStorage.setItem('lastVideoTitle', textFile);
     sessionStorage.setItem('videoLink', videoFile);
@@ -362,14 +362,13 @@ document.addEventListener('keydown', (e) => {
             const navItems = Array.from(document.querySelectorAll('.nav-item'));
             const currentIndex = navItems.findIndex(item => item === focusedElement);
             
-            // Hapus highlight dari semua item sebelum fokus baru
-            navItems.forEach(item => item.classList.remove('active'));
-            focusedElement.classList.add('active'); // Pastikan yang aktif tetap aktif
-
+            // Hapus .active class dari SEMUA item hanya saat ENTER ditekan, 
+            // atau saat berpindah ke Film Cards (ArrowRight) sudah diatur di tempat lain
+            
             if (e.key === 'ArrowDown') {
                 const nextIndex = Math.min(currentIndex + 1, navItems.length - 1);
                 navItems[nextIndex].focus();
-                navItems[nextIndex].classList.add('active');
+                // HAPUS: navItems[nextIndex].classList.add('active'); <-- Ini penyebab double highlight
             } else if (e.key === 'ArrowUp') {
                 if (currentIndex === 0) {
                      // Pindah ke Input Cari
@@ -378,7 +377,7 @@ document.addEventListener('keydown', (e) => {
                 }
                 const nextIndex = Math.max(currentIndex - 1, 0);
                 navItems[nextIndex].focus();
-                navItems[nextIndex].classList.add('active');
+                // HAPUS: navItems[nextIndex].classList.add('active'); <-- Ini penyebab double highlight
             } else if (e.key === 'ArrowRight') {
                 // Pindah dari Sidebar ke Card Film Pertama
                 const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
@@ -387,6 +386,9 @@ document.addEventListener('keydown', (e) => {
                     firstDiv.focus();
                 }
             } else if (e.key === 'Enter') {
+                // Trigger page change (set new active page)
+                navItems.forEach(item => item.classList.remove('active'));
+                focusedElement.classList.add('active');
                 focusedElement.click(); 
             }
             return;
@@ -398,7 +400,7 @@ document.addEventListener('keydown', (e) => {
                 // Pindah ke Item Menu Pertama di sidebar
                 const firstNavItem = document.querySelector('.nav-item');
                 if (firstNavItem) {
-                    firstNavItem.classList.add('active');
+                    // Hanya pindahkan fokus. Biarkan .active tetap pada item yang terakhir diklik.
                     firstNavItem.focus();
                 }
             } else if (e.key === 'ArrowRight') {
@@ -461,8 +463,8 @@ document.addEventListener('keydown', (e) => {
                     // Jika di kolom pertama, pindah ke sidebar
                     const currentNavItem = document.querySelector('.nav-item.active') || document.querySelector('.nav-item');
                     if (currentNavItem) {
+                        // Fokuskan item menu aktif (atau item menu pertama)
                         currentNavItem.focus();
-                        currentNavItem.classList.add('active');
                     } else {
                         // Fallback ke search
                         searchInput.focus(); 
