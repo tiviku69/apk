@@ -427,8 +427,8 @@ document.addEventListener('keydown', (e) => {
         const containerRect = container.getBoundingClientRect();
         
         const divElement = divs[0];
-        // Menggunakan offsetWidth + gap (gap container: 20px)
-        const cardWidth = divElement ? divElement.offsetWidth + 20 : 190; // 170 + 20
+        // Menggunakan offsetWidth + gap (gap container: 30px) <-- DIEDIT DARI 20px
+        const cardWidth = divElement ? divElement.offsetWidth + 30 : 200; // 170 + 30
         
         const itemsPerRow = Math.floor(container.offsetWidth / cardWidth);
         const actualItemsPerRow = Math.max(1, itemsPerRow); 

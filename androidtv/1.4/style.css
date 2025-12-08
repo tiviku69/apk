@@ -102,14 +102,15 @@ body {
     overflow-x: hidden;
     display: flex;
     flex-wrap: wrap; /* Memungkinkan item turun ke baris baru */
-    gap: 30px 20px; /* Jarak antar kartu */
+    /* PENYESUAIAN SPASI: Gap vertikal 40px, Gap horizontal 30px */
+    gap: 40px 30px; 
     align-content: flex-start; /* Memastikan item menempel di atas */
 }
 
 /* --- Desain Kartu Film (Potret) --- */
 
 .responsive-div {
-    width: 170px; /* Lebar lebih kecil untuk potret */
+    width: 170px; /* Lebar potret */
     height: 250px; /* Tinggi potret */
     display: flex; /* Ganti dari inline-block ke flex untuk layout konten kartu */
     flex-direction: column;
