@@ -82,7 +82,7 @@ b {
 
 #atas {                
     position: relative;
-    height: 80px; /* Pertahankan tinggi untuk menjaga posisi #container */
+    height: 80px; 
 }
 
 #container {
@@ -180,7 +180,7 @@ b {
     transition: background-color 0.2s, color 0.2s;
 }
 
-/* Style fokus/highlight sidebar */
+/* Style fokus/highlight sidebar (Gray/Darker - Fokus sementara) */
 .nav-item:focus,
 .nav-item:hover {
     background-color: #333;
@@ -188,12 +188,8 @@ b {
     outline: none;
 }
 
-.nav-item.active {
-    color: white;
-    background-color: #e50914; 
-    border-left: 5px solid white;
-    padding-left: 15px;
-}
+/* BLOK .nav-item.active DIHAPUS, SEHINGGA TIDAK ADA HIGHLIGHT MERAH */
+
 
 #main-content {
     flex-grow: 1;
