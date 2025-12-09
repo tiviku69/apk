@@ -1,5 +1,42 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq53/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz53.m3u8",
+"ttl": "Warkop DKI Kartun (2025)",
+"dur": "1:18:38",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq52/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz52.m3u8",
+"ttl": "Rumah Dara (2009)",
+"dur": "1:34:09",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq51/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz51.m3u8",
+"ttl": "Comic 8: Casino Kings - Part 1 (2015)",
+"dur": "1:41:20",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq48/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz48.m3u8",
+"ttl": "Lift (2024) dubbing",
+"dur": "1:46:63",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4l",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq47/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz47.m3u8",
+"ttl": "Bad Influence (2025) dubbing",
+"dur": "1:48:07",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq46/img.jpg",
 "lnk": "https://tiviku69.github.io/tiviku69/load/zz46.m3u8",
 "ttl": "Sleazy Dizzy (1990) dubbing",
@@ -1099,12 +1136,12 @@
     "z": "z",
     "tiviku": "apk"
    },
-  {
-    "logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gute/logo/1.jpg",
-    "lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/Kc6p3.m3u8",
-    "ttl": "Crayon Shin-chan: Very Tasty! B-class Gourmet Survival!! (2013) dubbing",
-    "dur": "1:33:08",
-    "z": "z",
-    "tiviku": "zzzzz"
-   }
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/fk/refs/heads/gute/logo/1.jpg",
+"lnk": "https://filmovie.github.io/oq90jy/i85FtikK9rZ/Kc6p3.m3u8",
+"ttl": "Crayon Shin-chan: Very Tasty! B-class Gourmet Survival!! (2013) dubbing",
+"dur": "1:33:08",
+"z": "z",
+"tiviku": "zzzzz"
+}
 ]
