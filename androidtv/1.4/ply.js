@@ -1,119 +1,97 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Pastikan JW Player Library sudah dimuat sebelum ini
-    if (typeof jwplayer === 'undefined') {
-        console.error("JW Player library tidak ditemukan. Pastikan Anda telah memasukkan script JW Player yang valid di ply.html.");
-        document.body.innerHTML = '<h1>Gagal memuat player. Library JW Player tidak ditemukan.</h1>';
-        return;
-    }
-
+    // ... (Variabel dan inisialisasi awal lainnya)
     const videoLink = sessionStorage.getItem('videoLink');
     const videoTitle = sessionStorage.getItem('videoTitle');
     const logoFile = sessionStorage.getItem('logoFile'); 
     
     // START MODIFIKASI KRITIS: Ambil 3 variabel crop
     const cropMode = sessionStorage.getItem('videoCropMode') || 'fill'; // Default 'fill'
-    // const cropPosition = sessionStorage.getItem('videoCropPosition') || '50% 50%'; // TIDAK DIGUNAKAN
-    // const cropScale = parseFloat(sessionStorage.getItem('videoCropScale')) || 1.2; // TIDAK DIGUNAKAN
+    const cropPosition = sessionStorage.getItem('videoCropPosition') || '50% 50%'; 
+    const cropScale = parseFloat(sessionStorage.getItem('videoCropScale')) || 1.2; // Nilai skala default 1.2
     // END MODIFIKASI KRITIS
     
+    const playerElement = document.getElementById('player');
+    const playerControls = document.getElementById('player-controls');
+    const progressBar = document.getElementById('progress-bar');
+    const progressBarContainer = document.getElementById('progress-bar-container');
+    const timeDisplay = document.getElementById('time-display');
+    const playPauseCenter = document.getElementById('play-pause-center');
+    const playIcon = document.getElementById('play-icon');
+    const pauseIcon = document.getElementById('pause-icon');
     const videoTitleContainer = document.getElementById('video-title-container');
     const digitalClock = document.getElementById('digital-clock');
+    const posterGradientOverlay = document.getElementById('poster-gradient-overlay'); 
     
-    let jwPlayerInstance; // Variabel untuk menyimpan instance JW Player
-    let iklan2; // Variabel untuk elemen iklan 2
+    const videoOverlayEffect = document.getElementById('video-overlay-effect');
     
-    // --- JW PLAYER STRETCHING MAPPING (Menggantikan fungsi crop/objectFit lama) ---
-    let jwStretching = 'exactfit'; // Default: Meregang Penuh (Mirip 'fill' Anda)
+    // Hapus: const iklan2 = document.getElementById('iklan2');
+    let iklan2; // Didefinisikan sebagai variabel untuk diisi nanti
     
-    if (cropMode === 'cover') {
-        // Mode cover/zoom (mempertahankan rasio aspek, memotong, tidak ada bar hitam)
-        jwStretching = 'fill'; 
-        console.log("JW Player Stretching: FILL (Cover/Crop)");
-    } else if (cropMode === 'fill_width' || cropMode === 'stretch_crop') { 
-        // Mode uniform: mempertahankan rasio, menampilkan seluruh video (termasuk letterbox/pillarbox)
-        // Ini adalah kompromi terbaik karena JW Player tidak memiliki mode 'stretch_crop' vertikal kustom.
-        jwStretching = 'uniform';
-        console.log("JW Player Stretching: UNIFORM (Maintain Aspect Ratio)");
-    } else { 
-        // Default: 'fill' Anda (Meregangkan penuh, mengabaikan rasio aspek)
-        jwStretching = 'exactfit';
-        console.log("JW Player Stretching: EXACTFIT (Stretch Penuh)");
-    }
-    // ------------------------------------
+    let adShown = false; 
+    let adHideTimeout; 
 
+    let controlsTimeout;
+    
+    const initialFontSizeVW = 2.0; 
+    
     // === START: FUNGSI MEMBUAT DAN MENYISIPKAN IKLAN OLEH JS ===
     const createAdElement = () => {
+        // Kontainer terluar: .iklan-container
         const iklanContainer = document.createElement('div');
         iklanContainer.className = 'iklan-container';
         
+        // Kontainer Iklan 1: #iklan
         const iklan = document.createElement('div');
         iklan.id = 'iklan';
         
+        // Kontainer Iklan 2: #iklan2 (Element yang digeser)
         iklan2 = document.createElement('div'); // Menetapkan ke variabel global iklan2
         iklan2.id = 'iklan2';
-        iklan2.innerHTML = 'INFO TERBARU<br>GABUNG DI SINI<br>( https://t.me/tiviku )'; 
+        iklan2.innerHTML = 'INFO TERBARU<br>GABUNG DI SINI<br>( https://t.me/tiviku )'; // Isi teks iklan
         
+        // Membangun struktur
         iklan.appendChild(iklan2);
         iklanContainer.appendChild(iklan);
         
+        // Menyisipkan ke dalam body
         document.body.appendChild(iklanContainer);
         console.log("Elemen iklan berhasil dibuat dan disisipkan.");
-
-        let adShown = false; 
-        let adHideTimeout; 
-
-        if (jwPlayerInstance) {
-             // Menggunakan event 'time' JW Player
-             jwPlayerInstance.on('time', (event) => {
-                if (!adShown && event.position >= 20) {
-                    adShown = true;
-                    if (iklan2) {
-                        iklan2.style.visibility = 'visible'; 
-                        iklan2.style.animation = 'slide-in-ad 1s ease-out forwards'; 
-                        console.log("Iklan 2 muncul setelah 20 detik!");
-
-                        adHideTimeout = setTimeout(() => {
-                            iklan2.style.animation = 'slide-out-ad 1s ease-out forwards'; 
-                            iklan2.addEventListener('animationend', function handler() {
-                                iklan2.style.visibility = 'hidden'; 
-                                iklan2.style.animation = 'none'; 
-                                iklan2.style.transform = 'translateX(100%)'; 
-                                iklan2.removeEventListener('animationend', handler); 
-                            }, { once: true });
-                            console.log("Iklan 2 menghilang setelah 30 detik.");
-                        }, 30000); 
-                    }
-                }
-            });
-
-            // Menggunakan event 'complete' JW Player
-            jwPlayerInstance.on('complete', () => {
-                clearTimeout(adHideTimeout); 
-                adShown = false; 
-                if (iklan2) {
-                    iklan2.style.visibility = 'hidden'; 
-                    iklan2.style.animation = 'none'; 
-                    iklan2.style.transform = 'translateX(100%)'; 
-                }
-            });
-        }
     };
     // === END: FUNGSI MEMBUAT DAN MENYISIPKAN IKLAN OLEH JS ===
 
     const adjustTitleFontSize = () => {
-        let currentSize = 2.0;
+        let currentSize = initialFontSizeVW;
+        
         const maxLinesHeight = window.innerHeight * 0.2; 
-        videoTitleContainer.style.fontSize = `${2.0}vw`;
+        
+        videoTitleContainer.style.fontSize = `${initialFontSizeVW}vw`;
+        
         videoTitleContainer.style.maxHeight = 'none'; 
         videoTitleContainer.style.overflowY = 'visible'; 
+        
         while (videoTitleContainer.offsetHeight > maxLinesHeight && currentSize > 1.0) {
             currentSize -= 0.1; 
             videoTitleContainer.style.fontSize = `${currentSize}vw`;
             if (currentSize <= 1.0) break; 
         }
+        
         videoTitleContainer.style.maxHeight = `${maxLinesHeight}px`;
         videoTitleContainer.style.overflowY = 'hidden'; 
     };
+
+    const posterImage = document.createElement('img');
+    posterImage.id = 'video-poster';
+    posterImage.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        object-fit: fill; 
+        z-index: 1000; 
+        display: none; 
+    `;
+    document.body.insertBefore(posterImage, playerElement); 
 
     function updateClock() {
         const now = new Date();
@@ -127,65 +105,319 @@ document.addEventListener('DOMContentLoaded', () => {
     updateClock();
 
     if (videoLink) {
+        // Panggil fungsi untuk membuat iklan setelah DOMContentLoaded
+        createAdElement(); 
+        
         if (videoTitleContainer) {
             videoTitleContainer.textContent = videoTitle || "Sedang Memutar Film";
             adjustTitleFontSize(); 
         }
+        
+        // =========================================================
+        // START MODIFIKASI KRITIS: INISIALISASI HLS.JS (Disesuaikan untuk KitKat)
+        
+        if (videoLink.endsWith('.m3u8')) {
+            if (typeof Hls !== 'undefined' && Hls.isSupported()) {
+                console.log("HLS didukung, menggunakan hls.js (v0.8.9).");
+                const hls = new Hls({
+                     // Konfigurasi untuk kompatibilitas yang lebih luas (opsional)
+                     // maxBufferLength: 10,
+                });
+                hls.loadSource(videoLink);
+                hls.attachMedia(playerElement);
+                
+                // Menangani error hls.js
+                hls.on(Hls.Events.ERROR, function (event, data) {
+                    console.error("HLS.js error:", data.type, data.details, data.fatal);
+                    if (data.fatal) {
+                        console.warn("Error fatal, mencoba fallback ke pemutaran native.");
+                        // Coba fallback ke pemutaran standar jika error fatal
+                        playerElement.src = videoLink;
+                        // Hapus listener agar tidak terjadi loop error
+                        hls.destroy(); 
+                    }
+                });
+            } else {
+                console.warn("HLS.js tidak didukung/gagal inisialisasi. Mencoba pemutaran native (fallback KitKat).");
+                // Fallback untuk browser yang secara native mendukung HLS (Termasuk KitKat)
+                playerElement.src = videoLink;
+            }
+        }
+         else {
+            // Untuk format video standar (mp4, dll.)
+            console.log("Memuat video non-HLS.");
+            playerElement.src = videoLink;
+        }
 
-        // --- INISIALISASI JW PLAYER ---
-        jwPlayerInstance = jwplayer('player').setup({
-            file: videoLink,
-            stretching: jwStretching, // Menerapkan logika crop/fill
-            width: '100%', 
-            height: '100%',
-            autostart: false,
-            controls: true, // Biarkan JW Player yang mengontrol interface
-            // Hapus semua properti video HTML5/HLS.js yang lama
+        // END MODIFIKASI KRITIS: INISIALISASI HLS.JS
+        // =========================================================
+
+        // **START LOGIKA PENGATURAN TAMPILAN VIDEO (KRITIS)**
+        // 1. Reset semua properti custom (penting!)
+        playerElement.style.objectFit = 'fill'; 
+        playerElement.style.objectPosition = '50% 50%';
+        playerElement.style.transform = 'none'; 
+
+        if (cropMode === 'cover') {
+            // MODE 1: Zoom/Crop Standar (Tidak ada peregangan/distorsi, potong bisa di samping)
+            playerElement.style.objectFit = 'cover'; 
+            playerElement.style.objectPosition = cropPosition; 
+            console.log("Mode Video: COVER (Zoom/Crop Standar)");
+
+        } else if (cropMode === 'stretch_crop') { 
+            // MODE 2: BARU - Potong Atas/Bawah + Meregangkan Horizontal (ADA DISTORSI)
+            playerElement.style.objectFit = 'fill'; 
+            playerElement.style.transform = `scaleY(${cropScale})`; 
+            playerElement.style.objectPosition = '50% 50%';
+            console.log(`Mode Video: STRETCH_CROP (Peregangan + Potong Vertikal, Skala: ${cropScale})`);
+
+        } else if (cropMode === 'fill_width') { 
+            // MODE 3: Potong Atas/Bawah saja, lebar terisi (TIDAK ADA DISTORSI)
+            playerElement.style.objectFit = 'contain'; 
+            playerElement.style.transform = `scaleY(${cropScale})`; 
+            playerElement.style.objectPosition = '50% 50%';
+            console.log(`Mode Video: FILL_WIDTH (Potong Vertikal, Skala: ${cropScale})`);
+
+        } else {
+            // MODE 4: Default - 'fill' (Hanya Meregang Penuh, TIDAK ADA POTONGAN)
+            playerElement.style.objectFit = 'fill'; 
+            console.log("Mode Video: FILL (Melebar/Meregang Penuh)");
+        }
+        // **END LOGIKA PENGATURAN TAMPILAN VIDEO**
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(adjustTitleFontSize, 100);
         });
         
-        createAdElement(); // Panggil untuk membuat elemen iklan dan mengaktifkan event listener
+        if (logoFile) {
+            posterImage.src = logoFile;
+            posterImage.style.display = 'block'; 
+            posterGradientOverlay.style.display = 'block'; 
+            playerElement.style.display = 'none'; 
+            videoOverlayEffect.style.display = 'none'; 
+        } else {
+            playerElement.style.display = 'block';
+            playPauseCenter.style.opacity = '0';
+            videoOverlayEffect.style.display = 'none'; 
+        }
 
-        // Handle Judul: Sembunyikan saat play, tampilkan saat pause
-        jwPlayerInstance.on('play', () => {
-             videoTitleContainer.style.opacity = '0';
-        });
+        // START MODIFIKASI FUNGSI formatTime
+        const formatTime = (seconds) => {
+            if (isNaN(seconds) || seconds < 0) return '0:00';
+            
+            let hours = Math.floor(seconds / 3600);
+            let minutes = Math.floor((seconds % 3600) / 60);
+            let remainingSeconds = Math.floor(seconds % 60);
 
-        jwPlayerInstance.on('pause', () => {
-             videoTitleContainer.style.opacity = '1';
-        });
+            let timeString = '';
 
-        // Logika kontrol judul saat ada interaksi (mouse/keyboard)
-        const resetControlsTimeout = () => {
-            // Tampilkan judul saat ada interaksi
-            videoTitleContainer.style.opacity = '1';
+            // Jika durasi >= 1 jam, atau jika total durasi mencapai 1 jam, tampilkan jam
+            if (hours > 0 || playerElement.duration >= 3600) {
+                timeString += hours + ':';
+                minutes = String(minutes).padStart(2, '0'); // Pad minutes jika jam ditampilkan
+            }
+            
+            // Minutes (dipad 2 digit jika jam ditampilkan, 1 digit jika tidak)
+            timeString += minutes + ':';
+            
+            // Seconds (selalu dipad 2 digit)
+            timeString += String(remainingSeconds).padStart(2, '0');
+            
+            return timeString;
+        };
+        // END MODIFIKASI FUNGSI formatTime
 
-            // Sembunyikan judul setelah 3 detik jika player sedang play
-            setTimeout(() => {
-                if (jwPlayerInstance && jwPlayerInstance.getState() === 'playing') {
-                    videoTitleContainer.style.opacity = '0';
-                }
-            }, 3000); 
+        // =========================================================
+        // START MODIFIKASI: FUNGSI BARU UNTUK MEMPERBARUI PROGRESS BAR DAN WAKTU
+        const updateTimeDisplayAndProgress = () => {
+             if (progressBar && !isNaN(playerElement.duration) && playerElement.duration > 0) {
+                const progressPercentage = (playerElement.currentTime / playerElement.duration) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                const currentTime = formatTime(playerElement.currentTime);
+                const totalDuration = formatTime(playerElement.duration);
+                timeDisplay.innerHTML = `${currentTime} / ${totalDuration}`;
+            }
+        }
+        // END MODIFIKASI
+        // =========================================================
+
+        const playToggle = () => {
+            if (playerElement.paused) {
+                posterImage.style.display = 'none';
+                posterGradientOverlay.style.display = 'none'; 
+                playerElement.style.display = 'block';
+
+                videoOverlayEffect.style.opacity = '0';
+                setTimeout(() => { videoOverlayEffect.style.display = 'none'; }, 300); 
+                
+                playerElement.play().catch(error => {
+                    console.error("Gagal memutar video:", error);
+                    playIcon.style.display = 'block';
+                    pauseIcon.style.display = 'none';
+                    playPauseCenter.style.opacity = '1';
+                    
+                    if (logoFile) {
+                        posterImage.style.display = 'block';
+                        posterGradientOverlay.style.display = 'block';
+                        playerElement.style.display = 'none';
+                    }
+                    else {
+                        videoOverlayEffect.style.display = 'block';
+                        videoOverlayEffect.style.opacity = '1';
+                    }
+                });
+            } else {
+                playerElement.pause();
+            }
         };
 
-        // Event listener untuk interaksi global
-        document.addEventListener('mousemove', resetControlsTimeout);
-        document.addEventListener('mousedown', resetControlsTimeout);
-        document.addEventListener('touchstart', resetControlsTimeout);
+        const hideControls = () => {
+            if (playerControls && !playerElement.paused) {
+                playerControls.style.display = 'none';
+                videoTitleContainer.style.opacity = '0';
+            }
+        };
+
+        const resetControlsTimeout = () => {
+            clearTimeout(controlsTimeout);
+            if (playerControls) playerControls.style.display = 'flex';
+            videoTitleContainer.style.opacity = '1';
+            
+            if (!playerElement.paused) {
+                controlsTimeout = setTimeout(hideControls, 3000);
+            }
+        };
+
+        playerElement.addEventListener('canplay', () => {
+            console.log("Video siap diputar.");
+            if (playerControls) playerControls.style.display = 'flex';
+            resetControlsTimeout();
+        });
+
+        playerElement.addEventListener('play', () => {
+            console.log("Video mulai diputar.");
+            posterImage.style.display = 'none'; 
+            posterGradientOverlay.style.display = 'none'; 
+            playerElement.style.display = 'block'; 
+
+            videoOverlayEffect.style.opacity = '0';
+            setTimeout(() => { videoOverlayEffect.style.display = 'none'; }, 300); 
+
+            playPauseCenter.style.opacity = '0';
+            playIcon.style.display = 'none';
+            pauseIcon.style.display = 'block';
+            videoTitleContainer.style.opacity = '0';
+            resetControlsTimeout();
+        });
+
+        playerElement.addEventListener('pause', () => {
+            console.log("Video dijeda.");
+            clearTimeout(controlsTimeout);
+            playPauseCenter.style.opacity = '1';
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            videoTitleContainer.style.opacity = '1';
+            
+            videoOverlayEffect.style.display = 'block';
+            setTimeout(() => { videoOverlayEffect.style.opacity = '1'; }, 10); 
+
+            posterImage.style.display = 'none';
+            posterGradientOverlay.style.display = 'none';
+            playerElement.style.display = 'block'; 
+
+            adjustTitleFontSize(); 
+        });
+
+        playerElement.addEventListener('ended', () => {
+            console.log("Video selesai diputar.");
+            clearTimeout(controlsTimeout);
+            clearTimeout(adHideTimeout); 
+            
+            playPauseCenter.style.opacity = '1';
+            playIcon.style.display = 'block';
+            pauseIcon.style.display = 'none';
+            videoTitleContainer.style.opacity = '1';
+            playerControls.style.display = 'flex';
+            
+            videoOverlayEffect.style.display = 'block';
+            setTimeout(() => { videoOverlayEffect.style.opacity = '1'; }, 10); 
+
+            if (logoFile) {
+                posterImage.style.display = 'block';
+                posterGradientOverlay.style.display = 'block';
+                playerElement.style.display = 'none'; 
+            } else {
+                playerElement.style.display = 'block'; 
+            }
+            adShown = false; 
+            if (iklan2) { // Cek apakah iklan2 ada sebelum menggunakannya
+                 iklan2.style.visibility = 'hidden'; 
+                 iklan2.style.animation = 'none'; 
+                 iklan2.style.transform = 'translateX(100%)'; 
+            }
+            adjustTitleFontSize(); 
+        });
+
+        playerElement.addEventListener('timeupdate', () => {
+            // MODIFIKASI: Panggil fungsi pembaruan yang baru dibuat
+            updateTimeDisplayAndProgress(); 
+            
+            // Logika Iklan (tidak berubah)
+            if (!adShown && playerElement.currentTime >= 20) {
+                adShown = true;
+                if (iklan2) { // Cek apakah iklan2 ada sebelum menggunakannya
+                    iklan2.style.visibility = 'visible'; 
+                    iklan2.style.animation = 'slide-in-ad 1s ease-out forwards'; 
+                    console.log("Iklan 2 muncul setelah 20 detik!");
+
+                    adHideTimeout = setTimeout(() => {
+                        iklan2.style.animation = 'slide-out-ad 1s ease-out forwards'; 
+                        iklan2.addEventListener('animationend', function handler() {
+                            iklan2.style.visibility = 'hidden'; 
+                            iklan2.style.animation = 'none'; 
+                            iklan2.style.transform = 'translateX(100%)'; 
+                            iklan2.removeEventListener('animationend', handler); 
+                        });
+                        console.log("Iklan 2 menghilang setelah 10 detik.");
+                    }, 30000); 
+                }
+            }
+        });
+
+        playPauseCenter.addEventListener('click', playToggle);
         
-        // Event listener untuk tombol keyboard
+        progressBarContainer.addEventListener('click', (event) => {
+            const rect = progressBarContainer.getBoundingClientRect();
+            const clickPosition = event.clientX - rect.left;
+            const percentage = clickPosition / rect.width;
+            
+            if (!isNaN(playerElement.duration)) {
+                playerElement.currentTime = playerElement.duration * percentage;
+            }
+            // Panggil pembaruan progres segera setelah klik pada progress bar
+            updateTimeDisplayAndProgress(); 
+            resetControlsTimeout();
+        });
+
         document.addEventListener('keydown', (event) => {
-             if (jwPlayerInstance) {
+            if (playerElement) {
                 switch (event.key) {
                     case 'Enter':
                     case ' ':
                         event.preventDefault();
-                        jwPlayerInstance.play(); // Gunakan API play/pause JW Player
+                        playToggle();
                         break;
                     case 'ArrowRight':
-                        jwPlayerInstance.seek(jwPlayerInstance.getPosition() + 10);
+                        playerElement.currentTime += 10;
+                        // MODIFIKASI KRITIS: Panggil pembaruan progres segera setelah seek
+                        updateTimeDisplayAndProgress(); 
                         break;
                     case 'ArrowLeft':
-                        jwPlayerInstance.seek(jwPlayerInstance.getPosition() - 10);
+                        playerElement.currentTime -= 10;
+                        // MODIFIKASI KRITIS: Panggil pembaruan progres segera setelah seek
+                        updateTimeDisplayAndProgress(); 
                         break;
                     case 'Escape':
                         window.history.back();
@@ -195,12 +427,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // Sesuaikan ukuran font judul saat resize
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(adjustTitleFontSize, 100);
-        });
+        document.addEventListener('mousemove', resetControlsTimeout);
+        document.addEventListener('mousedown', resetControlsTimeout);
+        document.addEventListener('touchstart', resetControlsTimeout);
 
     } else {
         console.error('Tidak ada data video ditemukan di sessionStorage.');
