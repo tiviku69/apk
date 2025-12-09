@@ -398,6 +398,27 @@ if (containerScrollElement) {
     containerScrollElement.addEventListener('scroll', saveScrollPosition);
 }
 
+// --- FUNGSI BARU: JAM DIGITAL ---
+function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    // const seconds = String(now.getSeconds()).padStart(2, '0'); // Opsional jika ingin detik
+    
+    const timeString = `${hours}:${minutes}`; // atau `${hours}:${minutes}:${seconds}`
+    
+    const clockElement = document.getElementById('digital-clock');
+    if (clockElement) {
+        clockElement.innerText = timeString;
+    }
+}
+
+// Panggil fungsi sekali saat memuat dan kemudian setiap detik
+updateClock(); 
+setInterval(updateClock, 1000); 
+// --- END FUNGSI BARU: JAM DIGITAL ---
+
+
 // --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Integrasi Sidebar) ---
 document.addEventListener('keydown', (e) => {
     const searchInput = document.getElementById('cari');

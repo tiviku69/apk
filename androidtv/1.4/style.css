@@ -134,7 +134,7 @@ b {
     padding: 0 20px 20px;
 }
 
-/* Gaya untuk h1 dan b yang dipindahkan ke sidebar */
+/* Gaya untuk h1 yang dipindahkan ke sidebar */
 #sidebar-h1 { 
     color: yellowgreen; 
     font-size: 32px;
@@ -143,11 +143,13 @@ b {
     font-weight: 700;
 }
 
+/* MODIFIKASI: Ubah warna & ukuran font untuk dijadikan logo sekunder */
 #sidebar-b { 
-    color: white;
+    color: yellowgreen; /* Hijau agak gelap */
     display: block;
     margin-top: 0px;
-    font-size: 14px;
+    font-size: 25px; /* Perbesar sedikit */
+    font-weight: bold; /* Tambahkan sedikit bobot agar lebih menonjol */
 }
 
 /* Gaya untuk search bar yang dipindahkan ke sidebar */
@@ -197,6 +199,22 @@ b {
     position: relative;
     padding: 0 20px; 
 }
+
+/* --- GAYA BARU: JAM DIGITAL --- */
+#digital-clock {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7); /* Putih awan agak transparan */
+    z-index: 50;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+/* --- END GAYA BARU: JAM DIGITAL --- */
+
 
 /* --- Pemberitahuan Offline --- */
 #offline-message {
