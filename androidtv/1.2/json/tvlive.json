@@ -5,5 +5,12 @@
 "ttl": "Banyumas tv",
 "dur": "live",
 "tiviku": "apk"
+},
+{
+"logo": "https://filmovie.github.io/oq90jy/fmlogo/rodja_tv.jpg",
+"lnk": "https://rodjatv.com/rodjatv/live_480p1128kbs/index.m3u8",
+"ttl": "Rodja tv",
+"dur": "live",
+"tiviku": "apk"
 }
 ]
