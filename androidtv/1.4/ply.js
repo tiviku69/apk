@@ -116,9 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
         // =========================================================
         // START MODIFIKASI KRITIS: INISIALISASI HLS.JS (Disesuaikan untuk KitKat)
         
-        // Tambahan: Pastikan atribut preload='auto' diterapkan di JS juga
-        playerElement.setAttribute('preload', 'auto'); 
-
         if (videoLink.endsWith('.m3u8')) {
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                 console.log("HLS didukung, menggunakan hls.js (v0.8.9).");
