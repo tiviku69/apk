@@ -1,0 +1,236 @@
+/* --- GAYA ASLI FILM CARD & UTAMA (Reverted) --- */
+body {
+    background-color: black;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    height: 100vh; 
+    overflow: hidden; 
+    font-family: Arial, sans-serif;
+}
+
+/* Sembunyikan h1/b global yang lama */
+h1 {
+    display: none; 
+}
+b {
+    display: none;
+}
+
+.re {
+    color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+    font-weight: 1000;
+    font-style: italic;
+    position: relative;
+    letter-spacing: 1px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    padding: 5px;
+    font-size: 15px;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+
+.dur {
+    color: white;
+    font-weight: 900;
+    font-style: italic;
+    position: absolute;
+    border-radius: 3px;
+    bottom: 180px;
+    padding: 3px;
+    background-color: rgba(0, 0, 0, 0.6);
+    font-size: 15px;
+    z-index: 1;
+}
+
+.responsive-div:focus .re,
+.responsive-div:hover .re {
+    font-size: 19px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.responsive-div:focus {
+    border: 5px solid #fff;
+    border-radius: 13px;
+    outline: none; 
+}
+
+.responsive-div:hover {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
+.highlight {
+    border: 5px solid #fff;
+    border-radius: 13px;
+    outline: none;
+}
+
+#imgv {                
+    border-radius: 11px;
+    width: 270px;
+    height: 220px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
+
+#atas {                
+    position: relative;
+    height: 80px; 
+}
+
+#container {
+    height: calc(100vh - 100px); 
+    position: relative;
+    top: 15px;
+    padding: 0px;
+    overflow: auto; 
+}
+
+/* Hapus gaya #cari global (yang absolut) agar tidak mengganggu film list */
+#cari {
+    /* Gaya lama dihapus */
+}
+
+.responsive-div {
+    width: 260px;
+    height: 210px;
+    display: inline-block; 
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 13px;
+    overflow: hidden;
+    position: relative;
+    padding: 8px 8px;
+    margin: 15px;
+    border: 5px solid red;
+}
+
+
+/* --- LAYOUT DUA KOLOM (SIDEBAR) & GAYA TIVIKU/SEARCH BARU --- */
+#app-wrapper {
+    display: flex;
+    height: 100vh;
+    background-color: black;
+}
+
+#sidebar {
+    width: 250px;
+    background-color: #0c0c0c;
+    padding: 20px 0;
+    flex-shrink: 0;
+    border-right: 2px solid #282828;
+    text-align: left;
+}
+
+#logo-search {
+    padding: 0 20px 20px;
+}
+
+/* Gaya untuk h1 yang dipindahkan ke sidebar */
+#sidebar-h1 { 
+    color: yellowgreen; 
+    font-size: 32px;
+    margin: 0;
+    font-family: inherit;
+    font-weight: 700;
+}
+
+/* MODIFIKASI: Ubah warna & ukuran font untuk dijadikan logo sekunder */
+#sidebar-b { 
+    color: yellowgreen; /* Hijau agak gelap */
+    display: block;
+    margin-top: 0px;
+    font-size: 30px; /* Perbesar sedikit */
+    font-weight: bold; /* Tambahkan sedikit bobot agar lebih menonjol */
+}
+
+/* Gaya untuk search bar yang dipindahkan ke sidebar */
+#sidebar #cari {
+    width: 100%;
+    height: 40px;
+    border-radius: 8px;
+    background: #333;
+    border: none;
+    padding: 0 15px;
+    font-size: 18px;
+    color: white;
+    outline: none;
+    box-sizing: border-box;
+    margin-top: 15px; 
+    position: relative; 
+    transform: none;
+}
+
+
+#nav-menu {
+    margin-top: 30px;
+}
+
+.nav-item {
+    padding: 15px 20px;
+    font-size: 18px;
+    color: #aaa;
+    cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+/* Style fokus/highlight sidebar (Gray/Darker - Fokus sementara) */
+.nav-item:focus,
+.nav-item:hover {
+    background-color: #333;
+    color: white;
+    outline: none;
+}
+
+/* BLOK .nav-item.active DIHAPUS, SEHINGGA TIDAK ADA HIGHLIGHT MERAH */
+
+
+#main-content {
+    flex-grow: 1;
+    overflow: hidden; 
+    position: relative;
+    padding: 0 20px; 
+}
+
+/* --- GAYA BARU: JAM DIGITAL --- */
+#digital-clock {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    font-size: 20px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 0.7); /* Putih awan agak transparan */
+    z-index: 50;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+/* --- END GAYA BARU: JAM DIGITAL --- */
+
+
+/* --- Pemberitahuan Offline --- */
+#offline-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffcccc; 
+    background-color: rgba(50, 0, 0, 0.9);
+    padding: 30px 40px;
+    border-radius: 15px;
+    border: 3px solid red;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    z-index: 100;
+    text-align: center;
+    font-size: 24px;
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
+}
