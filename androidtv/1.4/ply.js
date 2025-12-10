@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.log("HLS didukung, menggunakan hls.js (v0.8.9).");
                 const hls = new Hls({
                      // Konfigurasi untuk kompatibilitas yang lebih luas (opsional)
-                     // maxBufferLength: 10,
+                     // maxBufferLength: 30,
                 });
                 hls.loadSource(videoLink);
                 hls.attachMedia(playerElement);
