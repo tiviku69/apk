@@ -238,11 +238,12 @@ function checkAndRenderItems() {
 
 // FUNGSI BARU: Memulihkan fokus konten yang sedang dimuat (Universal)
 const restoreFocusOnContent = () => {
-    const savedTitle = sessionStorage.getItem('lastVideoTitle');
+    const savedTitle = sessionStorage.getItem('lastVideoTitle'); // Dari kembali setelah Play
+    const lastFocusedTitle = sessionStorage.getItem('lastFocusedCardTitle'); // Dari Navigasi Sticky
+    
     const container = document.getElementById('container');
     const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
     
-    // PERBAIKAN: Deklarasi flag untuk melacak fokus kartu (Mencegah sidebar mencuri fokus)
     let focusRestoredToCard = false; 
 
     // Bersihkan highlight yang mungkin tersisa
@@ -250,7 +251,7 @@ const restoreFocusOnContent = () => {
     
     let targetElement = null;
     
-    // 1. Cari item terakhir yang diklik berdasarkan judul (berlaku untuk Beranda & Live TV)
+    // 1. PRIORITAS 1: Cari item terakhir yang diklik (Kembali dari Player)
     if (savedTitle) {
         const allDivs = document.querySelectorAll('.responsive-div');
         allDivs.forEach(div => {
@@ -259,9 +260,26 @@ const restoreFocusOnContent = () => {
                 targetElement = div;
             }
         });
-    }
+        
+        // Jika ditemukan, hapus savedTitle agar hanya dipulihkan sekali dari player
+        if(targetElement) {
+             sessionStorage.removeItem('lastVideoTitle'); 
+        }
+    } 
     
-    // 2. Terapkan fokus dan scroll jika item ditemukan
+    // 2. PRIORITAS 2: Jika tidak ditemukan dari Player, cari dari fokus terakhir (Sticky Focus)
+    if (!targetElement && lastFocusedTitle) {
+        const allDivs = document.querySelectorAll('.responsive-div');
+        allDivs.forEach(div => {
+            const pElement = div.querySelector('.re');
+            if (pElement && pElement.innerText === lastFocusedTitle) {
+                targetElement = div;
+            }
+        });
+        // Catatan: lastFocusedCardTitle TIDAK dihapus di sini, agar "sticky"
+    }
+
+    // 3. Terapkan fokus dan scroll jika item ditemukan (dari Prioritas 1 atau 2)
     if (targetElement) {
         targetElement.classList.add('highlight');
         targetElement.focus();
@@ -272,12 +290,10 @@ const restoreFocusOnContent = () => {
         }
         
         focusRestoredToCard = true; 
-        // Hapus judul setelah fokus dipulihkan agar fokus tidak dipertahankan saat navigasi menu manual
-        sessionStorage.removeItem('lastVideoTitle'); 
     } 
     
-    // 3. Handle scroll position (Hanya untuk Beranda/Live, jika tidak ada target spesifik)
-    if ((activePage === 'beranda' || activePage === 'live') && !targetElement) {
+    // 4. PRIORITAS 3: Handle scroll position (Jika tidak ada target spesifik, coba dari scroll)
+    if (!focusRestoredToCard && (activePage === 'beranda' || activePage === 'live')) { 
         const savedScrollPosition = sessionStorage.getItem('scrollPosition');
         if (savedScrollPosition !== null && container) {
             container.scrollTop = parseInt(savedScrollPosition, 10);
@@ -292,17 +308,7 @@ const restoreFocusOnContent = () => {
         }
     }
     
-    // 4. Fallback jika tidak ada fokus yang berhasil diterapkan ke kartu
-    if (!focusRestoredToCard) {
-        const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
-        if (firstDiv) {
-             firstDiv.classList.add('highlight');
-             firstDiv.focus();
-             focusRestoredToCard = true;
-        }
-    }
-    
-    // 5. Pastikan menu navigasi yang benar fokus HANYA JIKA TIDAK ADA KARTU YANG FOKUS.
+    // 5. Fallback: Jika TIDAK ADA fokus kartu yang berhasil, fokuskan Sidebar
     if (!focusRestoredToCard) {
         const activeNav = document.querySelector(`.nav-item[data-page="${activePage}"]`);
         if (activeNav) {
@@ -467,13 +473,28 @@ document.addEventListener('keydown', (e) => {
                 const nextIndex = Math.max(currentIndex - 1, 0);
                 navItems[nextIndex].focus();
             } else if (e.key === 'ArrowRight') {
-                // Pindah dari Sidebar ke Card Film Pertama (Hanya jika konten sudah dimuat)
-                if (currentItems.length > 0) {
-                    const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
-                    if (firstDiv) {
-                        firstDiv.classList.add('highlight');
-                        firstDiv.focus();
-                    }
+                // Pindah dari Sidebar ke fokus kartu terakhir (Sticky Focus)
+                const lastFocusedTitle = sessionStorage.getItem('lastFocusedCardTitle');
+                let targetDiv = null;
+                
+                if (lastFocusedTitle) {
+                    // Cari kartu yang terakhir difokuskan
+                    const allDivs = document.querySelectorAll('.responsive-div');
+                    allDivs.forEach(div => {
+                         const pElement = div.querySelector('.re');
+                         if (pElement && pElement.innerText === lastFocusedTitle && getComputedStyle(div).display !== 'none') {
+                             targetDiv = div;
+                         }
+                    });
+                }
+                
+                // Jika ditemukan kartu fokus terakhir ATAU kartu pertama yang terlihat
+                const firstDiv = targetDiv || getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
+                
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
+                    firstDiv.scrollIntoView({ behavior: 'instant', block: 'center' }); // Pastikan terlihat
                 }
             } else if (e.key === 'Enter') {
                 const page = focusedElement.getAttribute('data-page');
@@ -483,7 +504,8 @@ document.addEventListener('keydown', (e) => {
                 
                 // Reset scroll position saat pindah menu (kecuali Beranda ke Beranda)
                 sessionStorage.removeItem('scrollPosition');
-                sessionStorage.removeItem('lastVideoTitle'); // Pastikan tidak ada fokus lama dari halaman lain
+                sessionStorage.removeItem('lastVideoTitle'); 
+                sessionStorage.removeItem('lastFocusedCardTitle'); // Hapus sticky focus saat pindah menu
                 
                 if (page === 'beranda') {
                     loadAndRenderHomeContent(); 
@@ -507,12 +529,25 @@ document.addEventListener('keydown', (e) => {
                     firstNavItem.focus();
                 }
             } else if (e.key === 'ArrowRight') {
-                if (currentItems.length > 0) {
-                    const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
-                    if (firstDiv) {
-                        firstDiv.classList.add('highlight');
-                        firstDiv.focus();
-                    }
+                // Pindah dari Search ke fokus kartu terakhir (Sticky Focus)
+                const lastFocusedTitle = sessionStorage.getItem('lastFocusedCardTitle');
+                let targetDiv = null;
+                
+                if (lastFocusedTitle) {
+                    const allDivs = document.querySelectorAll('.responsive-div');
+                    allDivs.forEach(div => {
+                         const pElement = div.querySelector('.re');
+                         if (pElement && pElement.innerText === lastFocusedTitle && getComputedStyle(div).display !== 'none') {
+                             targetDiv = div;
+                         }
+                    });
+                }
+                
+                const firstDiv = targetDiv || getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
+                
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
                 }
             }
             return; 
@@ -527,15 +562,10 @@ document.addEventListener('keydown', (e) => {
 
         let nextIndex = -1;
         
-        // Coba hitung itemsPerRow secara dinamis (lebih akurat)
         const containerRect = container.getBoundingClientRect();
-        // Ambil elemen pertama yang terlihat untuk mengukur lebar kartu
         const firstVisibleDiv = getFirstVisibleElement(container);
-        
-        // Default lebar jika tidak ada kartu yang terlihat
         const cardWidthWithMargin = firstVisibleDiv ? firstVisibleDiv.offsetWidth + 30 : 300; 
         
-        // Hitung berapa banyak kartu yang muat di lebar container
         const itemsPerRow = Math.floor(containerRect.width / cardWidthWithMargin);
         const actualItemsPerRow = Math.max(1, itemsPerRow); 
         
@@ -549,7 +579,6 @@ document.addEventListener('keydown', (e) => {
                 nextIndex = currentIndex - actualItemsPerRow;
                 
                 if (nextIndex < 0) {
-                    // Jika pindah ke atas dari baris pertama, fokus ke input cari
                     searchInput.focus(); 
                     return;
                 }
@@ -560,7 +589,6 @@ document.addEventListener('keydown', (e) => {
             case 'ArrowLeft':
                 nextIndex = currentIndex - 1;
                 
-                // Jika pindah ke kiri dari kolom pertama, fokus ke sidebar
                 if (nextIndex < 0 || (currentIndex % actualItemsPerRow === 0)) {
                     const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
                     const activeNav = document.querySelector(`.nav-item[data-page="${activePage}"]`);
@@ -582,7 +610,10 @@ document.addEventListener('keydown', (e) => {
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
             
-            // Gunakan scrollIntoView untuk membawa elemen ke tengah (block: 'center')
+            // <<< PERUBAHAN KRITIS: Simpan posisi fokus setiap kali berpindah >>>
+            const focusedTitle = divs[nextIndex].querySelector('.re').innerText;
+            sessionStorage.setItem('lastFocusedCardTitle', focusedTitle); 
+            
             divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
             
             saveScrollPosition();
