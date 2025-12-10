@@ -12,7 +12,7 @@ const directFiles = [
 const collectionListUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/koleksi.json';
 
 // 3. FILE BARU UNTUK LIVE TV
-const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/tvlive.json'; 
+const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json'; 
 // 4. FILE BARU UNTUK FILM SUBTITLE
 const filmSubUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/sub.json'; // URL baru untuk film subtitle
 
