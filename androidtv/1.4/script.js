@@ -87,18 +87,28 @@ function createFilmElement(item, clickAction, isCollection = false) {
 }
 // --- END FUNGSI PENCIPTAAN ELEMEN DENGAN LAZY LOADING ---
 
-// --- FUNGSI MENGACAK DAN MENYIMPAN URUTAN KE SESSION STORAGE ---
+// --- FUNGSI MENGACAK DAN MENYIMPAN URUTAN BERANDA KE SESSION STORAGE ---
 function shuffleAndSaveItems() {
     shuffleArray(allItems);
     try {
         sessionStorage.setItem('savedItemList', JSON.stringify(allItems));
     } catch (e) {
-        console.error("Gagal menyimpan item list ke sessionStorage.", e);
+        console.error("Gagal menyimpan item list Beranda ke sessionStorage.", e);
+    }
+}
+
+// --- FUNGSI BARU: MENGACAK DAN MENYIMPAN URUTAN LIVE TV KE SESSION STORAGE ---
+function shuffleAndSaveLiveTVItems(items) {
+    shuffleArray(items);
+    try {
+        sessionStorage.setItem('savedLiveTVList', JSON.stringify(items));
+    } catch (e) {
+        console.error("Gagal menyimpan Live TV list ke sessionStorage.", e);
     }
 }
 
 
-// --- FUNGSI UTAMA PEMUATAN DATA BERANDA ---
+// --- FUNGSI UTAMA PEMUATAN DATA BERANDA (TIDAK ADA PERUBAHAN) ---
 function loadAndRenderHomeContent() {
     // Hanya muat jika belum pernah dimuat
     if (filesProcessedCount === 0) {
@@ -151,8 +161,27 @@ function loadAndRenderHomeContent() {
 }
 
 
-// FUNGSI BARU UNTUK MEMUAT KONTEN LIVE TV
+// FUNGSI BARU UNTUK MEMUAT KONTEN LIVE TV (MODIFIKASI KRITIS)
 function loadAndRenderLiveTVContent() {
+    const savedLiveTVList = sessionStorage.getItem('savedLiveTVList');
+
+    if (savedLiveTVList) {
+        try {
+            // 1. Jika data sudah ada di sessionStorage, gunakan itu (Persistensi)
+            currentItems = JSON.parse(savedLiveTVList);
+            // Pastikan type-nya adalah 'live' untuk aksi klik yang benar
+            currentItems = currentItems.map(item => ({...item, type: 'live'})); 
+            
+            container.innerHTML = '<h2>Memuat Channel Live TV dari memori...</h2>';
+            renderCurrentItems();
+            return; // Hentikan eksekusi selanjutnya
+        } catch (e) {
+            console.error("Gagal parsing savedLiveTVList, melakukan fetch ulang.", e);
+            sessionStorage.removeItem('savedLiveTVList'); // Hapus yang rusak
+        }
+    }
+
+    // 2. Jika tidak ada di cache (pemuatan pertama atau gagal parsing), lakukan fetch
     container.innerHTML = '<h2>Memuat Channel Live TV...</h2>';
     currentItems = []; 
 
@@ -164,14 +193,15 @@ function loadAndRenderLiveTVContent() {
             return response.json();
         })
         .then(data => {
+            let liveItems = [];
             data.forEach(item => {
-                currentItems.push({...item, type: 'live'}); 
+                liveItems.push({...item, type: 'live'}); 
             });
             
-            // --- MODIFIKASI: Acak daftar Live TV ---
-            shuffleArray(currentItems); 
-            // ----------------------------------------
+            // Lakukan pengacakan HANYA pada pemuatan pertama, lalu simpan.
+            shuffleAndSaveLiveTVItems(liveItems);
             
+            currentItems = liveItems;
             renderCurrentItems(); 
         })
         .catch(error => {
@@ -181,7 +211,7 @@ function loadAndRenderLiveTVContent() {
 }
 
 
-// FUNGSI UMUM: MERENDER currentItems ke DOM
+// FUNGSI UMUM: MERENDER currentItems ke DOM (TIDAK ADA PERUBAHAN)
 function renderCurrentItems() {
     container.innerHTML = ''; 
 
@@ -209,7 +239,7 @@ function renderCurrentItems() {
 }
 
 
-// FUNGSI UTAMA UNTUK MEMERIKSA DATA BERANDA DAN MENAMPILKAN
+// FUNGSI UTAMA UNTUK MEMERIKSA DATA BERANDA DAN MENAMPILKAN (TIDAK ADA PERUBAHAN)
 function checkAndRenderItems() {
     // Tunggu hingga semua file selesai diproses
     if (filesProcessedCount < totalFiles) {
@@ -225,7 +255,9 @@ function checkAndRenderItems() {
         } catch (e) {
             shuffleAndSaveItems();
         }
-    } else {
+    }
+    // Jika tidak ada savedItems (pertama kali), shuffle dan simpan
+    else {
         shuffleAndSaveItems();
     }
     
@@ -348,7 +380,7 @@ function getFirstVisibleElement(container) {
 }
 
 
-// Fungsi untuk membuka Koleksi
+// Fungsi untuk membuka Koleksi (TIDAK ADA PERUBAHAN)
 function openCollection(jsonUrl, collectionTitle) {
     // Simpan judul terakhir untuk pemulihan fokus di page koleksi
     sessionStorage.setItem('lastCollectionVideoTitle', collectionTitle); 
@@ -367,7 +399,7 @@ function openCollection(jsonUrl, collectionTitle) {
     window.location.href = 'koleksi.html';
 }
 
-// Fungsi untuk memutar video
+// Fungsi untuk memutar video (TIDAK ADA PERUBAHAN)
 function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) { 
     // Simpan judul terakhir
     sessionStorage.setItem('lastVideoTitle', textFile);
@@ -383,7 +415,7 @@ function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropSc
     window.location.href = 'ply.html';
 }
 
-// Fungsi untuk mencari
+// Fungsi untuk mencari (TIDAK ADA PERUBAHAN)
 function prosesMenu() {
     var input = document.getElementById("cari");
     var filter = input.value.toLowerCase();
@@ -409,7 +441,7 @@ function prosesMenu() {
 
 document.getElementById("cari").addEventListener("input", prosesMenu);
 
-// --- MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR ---
+// --- MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR (TIDAK ADA PERUBAHAN) ---
 
 const saveScrollPosition = () => {
     const container = document.getElementById('container');
@@ -426,7 +458,7 @@ if (containerScrollElement) {
     containerScrollElement.addEventListener('scroll', saveScrollPosition);
 }
 
-// --- FUNGSI BARU: JAM DIGITAL ---
+// --- FUNGSI BARU: JAM DIGITAL (TIDAK ADA PERUBAHAN) ---
 function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
@@ -447,7 +479,7 @@ setInterval(updateClock, 1000);
 // --- END FUNGSI BARU: JAM DIGITAL ---
 
 
-// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Integrasi Sidebar) ---
+// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (TIDAK ADA PERUBAHAN) ---
 document.addEventListener('keydown', (e) => {
     const searchInput = document.getElementById('cari');
     const focusedElement = document.activeElement;
@@ -505,7 +537,7 @@ document.addEventListener('keydown', (e) => {
                 // Reset scroll position saat pindah menu (kecuali Beranda ke Beranda)
                 sessionStorage.removeItem('scrollPosition');
                 sessionStorage.removeItem('lastVideoTitle'); 
-                sessionStorage.removeItem('lastFocusedCardTitle'); // Hapus sticky focus saat pindah menu
+                sessionStorage.removeItem('lastFocusedCardTitle'); // Clear sticky focus when switching menus
                 
                 if (page === 'beranda') {
                     loadAndRenderHomeContent(); 
@@ -610,7 +642,7 @@ document.addEventListener('keydown', (e) => {
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
             
-            // <<< PERUBAHAN KRITIS: Simpan posisi fokus setiap kali berpindah >>>
+            // Simpan posisi fokus setiap kali berpindah
             const focusedTitle = divs[nextIndex].querySelector('.re').innerText;
             sessionStorage.setItem('lastFocusedCardTitle', focusedTitle); 
             
@@ -622,10 +654,10 @@ document.addEventListener('keydown', (e) => {
         window.history.back();
     }
 });
-// --- END FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Integrasi Sidebar) ---
+// --- END FUNGSI NAVIGASI KEYBOARD/REMOTE BARU ---
 
 
-// --- FUNGSI INTI UNTUK MENGATUR NAVIGASI DAN PEMUATAN AWAL ---
+// --- FUNGSI INTI UNTUK MENGATUR NAVIGASI DAN PEMUATAN AWAL (TIDAK ADA PERUBAHAN) ---
 function initNavigation() {
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => {
@@ -648,7 +680,7 @@ function initNavigation() {
             } else {
                 filesProcessedCount = 0; 
                 currentItems = []; 
-                container.innerHTML = `<h2>Konten untuk ${item.innerText} belum tersedia.</h2>`;
+                container.innerHTML = `<h2>Konten untuk ${focusedElement.innerText} belum tersedia.</h2>`;
                 restoreFocusOnContent();
             }
         });
