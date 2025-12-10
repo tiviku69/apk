@@ -193,7 +193,7 @@ function renderCurrentItems() {
             action = () => openCollection(item.url, item.ttl);
             isCollection = true;
         } else { // type === 'live' atau 'direct'
-            // <<< PERUBAHAN BARU >>> Simpan data page sebelum playVideo
+            // Simpan data page sebelum playVideo untuk memastikan kembali ke menu yang benar
             action = () => {
                 sessionStorage.setItem('lastActiveMenuPage', item.type === 'live' ? 'live' : 'beranda');
                 playVideo(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
@@ -238,12 +238,14 @@ function checkAndRenderItems() {
 
 // FUNGSI BARU: Memulihkan fokus konten yang sedang dimuat (Universal)
 const restoreFocusOnContent = () => {
-    // <<< PERUBAHAN BARU >>> Hapus item lastVideoTitle saat fungsi ini dimulai untuk memastikan penemuan elemen yang tepat.
     const savedTitle = sessionStorage.getItem('lastVideoTitle');
     const container = document.getElementById('container');
     const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
     
-    // <<< PERUBAHAN BARU >>> Bersihkan highlight yang mungkin tersisa dari navigasi sebelumnya
+    // PERBAIKAN: Deklarasi flag untuk melacak fokus kartu (Mencegah sidebar mencuri fokus)
+    let focusRestoredToCard = false; 
+
+    // Bersihkan highlight yang mungkin tersisa
     document.querySelectorAll('.responsive-div').forEach(div => div.classList.remove('highlight'));
     
     let targetElement = null;
@@ -269,14 +271,13 @@ const restoreFocusOnContent = () => {
              targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
         }
         
-        // <<< PERUBAHAN BARU >>> Hapus item lastVideoTitle setelah berhasil memulihkan fokus.
-        // Ini memastikan fokus hanya dipulihkan sekali saat kembali dari ply.html.
-        sessionStorage.removeItem('lastVideoTitle');
-        
+        focusRestoredToCard = true; 
+        // Hapus judul setelah fokus dipulihkan agar fokus tidak dipertahankan saat navigasi menu manual
+        sessionStorage.removeItem('lastVideoTitle'); 
     } 
     
-    // 3. Handle scroll position (Hanya untuk Beranda, jika tidak ada target spesifik yang ditemukan)
-    if (activePage === 'beranda' && !targetElement) {
+    // 3. Handle scroll position (Hanya untuk Beranda/Live, jika tidak ada target spesifik)
+    if ((activePage === 'beranda' || activePage === 'live') && !targetElement) {
         const savedScrollPosition = sessionStorage.getItem('scrollPosition');
         if (savedScrollPosition !== null && container) {
             container.scrollTop = parseInt(savedScrollPosition, 10);
@@ -286,27 +287,31 @@ const restoreFocusOnContent = () => {
             if (firstVisible) {
                  firstVisible.classList.add('highlight');
                  firstVisible.focus();
+                 focusRestoredToCard = true;
             }
         }
     }
     
-    // 4. Fallback (Fokus ke elemen pertama yang terlihat jika tidak ada state yang disimpan DAN tidak ada target spesifik)
-    if (!targetElement && !document.activeElement.classList.contains('nav-item') && !document.activeElement.id === 'cari') {
+    // 4. Fallback jika tidak ada fokus yang berhasil diterapkan ke kartu
+    if (!focusRestoredToCard) {
         const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
         if (firstDiv) {
              firstDiv.classList.add('highlight');
              firstDiv.focus();
-        } else {
-             // Fallback ke Search Input
-             const searchInput = document.getElementById('cari');
-             if (searchInput) searchInput.focus();
+             focusRestoredToCard = true;
         }
     }
     
-    // 5. Pastikan menu navigasi yang benar juga fokus
-    const activeNav = document.querySelector(`.nav-item[data-page="${activePage}"]`);
-    if (activeNav) {
-        activeNav.focus();
+    // 5. Pastikan menu navigasi yang benar fokus HANYA JIKA TIDAK ADA KARTU YANG FOKUS.
+    if (!focusRestoredToCard) {
+        const activeNav = document.querySelector(`.nav-item[data-page="${activePage}"]`);
+        if (activeNav) {
+            activeNav.focus();
+        } else {
+             // Fallback ke Search Input jika navigasi juga gagal
+             const searchInput = document.getElementById('cari');
+             if (searchInput) searchInput.focus();
+        }
     }
 }
 
@@ -342,7 +347,7 @@ function openCollection(jsonUrl, collectionTitle) {
     // Simpan judul terakhir untuk pemulihan fokus di page koleksi
     sessionStorage.setItem('lastCollectionVideoTitle', collectionTitle); 
     
-    // <<< PERUBAHAN BARU >>> Simpan judul koleksi juga sebagai lastVideoTitle
+    // Simpan judul koleksi juga sebagai lastVideoTitle
     sessionStorage.setItem('lastVideoTitle', collectionTitle); 
 
     sessionStorage.setItem('collectionJsonUrl', jsonUrl); 
@@ -476,7 +481,7 @@ document.addEventListener('keydown', (e) => {
                 // Simpan status menu sebelum klik
                 sessionStorage.setItem('lastActiveMenuPage', page);
                 
-                // <<< PERUBAHAN BARU >>> Reset scroll position saat pindah menu (kecuali Beranda ke Beranda)
+                // Reset scroll position saat pindah menu (kecuali Beranda ke Beranda)
                 sessionStorage.removeItem('scrollPosition');
                 sessionStorage.removeItem('lastVideoTitle'); // Pastikan tidak ada fokus lama dari halaman lain
                 
@@ -524,8 +529,11 @@ document.addEventListener('keydown', (e) => {
         
         // Coba hitung itemsPerRow secara dinamis (lebih akurat)
         const containerRect = container.getBoundingClientRect();
-        const firstCardRect = divs[0].getBoundingClientRect();
-        const cardWidthWithMargin = firstCardRect.width + 30; // 30px margin
+        // Ambil elemen pertama yang terlihat untuk mengukur lebar kartu
+        const firstVisibleDiv = getFirstVisibleElement(container);
+        
+        // Default lebar jika tidak ada kartu yang terlihat
+        const cardWidthWithMargin = firstVisibleDiv ? firstVisibleDiv.offsetWidth + 30 : 300; 
         
         // Hitung berapa banyak kartu yang muat di lebar container
         const itemsPerRow = Math.floor(containerRect.width / cardWidthWithMargin);
