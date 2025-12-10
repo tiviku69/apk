@@ -12,7 +12,7 @@ const directFiles = [
 const collectionListUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/koleksi.json';
 
 // 3. FILE BARU UNTUK LIVE TV
-const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json'; // Asumsi live.json berada di direktori yang sama.
+const liveTVUrl = 'tvlive.json'; // Asumsi live.json berada di direktori yang sama.
 
 const totalFiles = directFiles.length + 1; // Variabel ini hanya berlaku untuk Beranda
 let filesProcessedCount = 0; 
@@ -193,7 +193,11 @@ function renderCurrentItems() {
             action = () => openCollection(item.url, item.ttl);
             isCollection = true;
         } else { // type === 'live' atau 'direct'
-            action = () => playVideo(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
+            // <<< PERUBAHAN BARU >>> Simpan data page sebelum playVideo
+            action = () => {
+                sessionStorage.setItem('lastActiveMenuPage', item.type === 'live' ? 'live' : 'beranda');
+                playVideo(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
+            };
             isCollection = false;
         }
 
@@ -234,9 +238,13 @@ function checkAndRenderItems() {
 
 // FUNGSI BARU: Memulihkan fokus konten yang sedang dimuat (Universal)
 const restoreFocusOnContent = () => {
+    // <<< PERUBAHAN BARU >>> Hapus item lastVideoTitle saat fungsi ini dimulai untuk memastikan penemuan elemen yang tepat.
     const savedTitle = sessionStorage.getItem('lastVideoTitle');
     const container = document.getElementById('container');
     const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
+    
+    // <<< PERUBAHAN BARU >>> Bersihkan highlight yang mungkin tersisa dari navigasi sebelumnya
+    document.querySelectorAll('.responsive-div').forEach(div => div.classList.remove('highlight'));
     
     let targetElement = null;
     
@@ -244,7 +252,6 @@ const restoreFocusOnContent = () => {
     if (savedTitle) {
         const allDivs = document.querySelectorAll('.responsive-div');
         allDivs.forEach(div => {
-            div.classList.remove('highlight');
             const pElement = div.querySelector('.re');
             if (pElement && pElement.innerText === savedTitle) {
                 targetElement = div;
@@ -261,13 +268,20 @@ const restoreFocusOnContent = () => {
         if (!isElementInView(targetElement, container)) {
              targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
         }
+        
+        // <<< PERUBAHAN BARU >>> Hapus item lastVideoTitle setelah berhasil memulihkan fokus.
+        // Ini memastikan fokus hanya dipulihkan sekali saat kembali dari ply.html.
+        sessionStorage.removeItem('lastVideoTitle');
+        
     } 
     
-    // 3. Handle scroll position (Hanya untuk Beranda, jika tidak ada target spesifik)
+    // 3. Handle scroll position (Hanya untuk Beranda, jika tidak ada target spesifik yang ditemukan)
     if (activePage === 'beranda' && !targetElement) {
         const savedScrollPosition = sessionStorage.getItem('scrollPosition');
         if (savedScrollPosition !== null && container) {
             container.scrollTop = parseInt(savedScrollPosition, 10);
+            
+            // Fokus ke elemen pertama yang terlihat setelah scroll
             const firstVisible = getFirstVisibleElement(container);
             if (firstVisible) {
                  firstVisible.classList.add('highlight');
@@ -276,8 +290,8 @@ const restoreFocusOnContent = () => {
         }
     }
     
-    // 4. Fallback (Fokus ke elemen pertama yang terlihat jika tidak ada state yang disimpan)
-    if (!targetElement) {
+    // 4. Fallback (Fokus ke elemen pertama yang terlihat jika tidak ada state yang disimpan DAN tidak ada target spesifik)
+    if (!targetElement && !document.activeElement.classList.contains('nav-item') && !document.activeElement.id === 'cari') {
         const firstDiv = getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
         if (firstDiv) {
              firstDiv.classList.add('highlight');
@@ -306,7 +320,7 @@ function isElementInView(el, container) {
     
     return (
         elRect.top >= containerRect.top &&
-        elRect.bottom <= containerRect.bottom + elHeight 
+        elRect.bottom <= containerRect.bottom + elRect.height
     );
 }
 
@@ -318,19 +332,22 @@ function getFirstVisibleElement(container) {
             return div;
         }
     }
-    return null;
+    // Jika tidak ada yang terlihat, kembalikan elemen pertama yang tidak disembunyikan
+    return document.querySelector('.responsive-div:not([style*="display: none"])');
 }
 
 
 // Fungsi untuk membuka Koleksi
 function openCollection(jsonUrl, collectionTitle) {
-    // Simpan judul terakhir
-    sessionStorage.setItem('lastVideoTitle', collectionTitle); 
+    // Simpan judul terakhir untuk pemulihan fokus di page koleksi
+    sessionStorage.setItem('lastCollectionVideoTitle', collectionTitle); 
     
+    // <<< PERUBAHAN BARU >>> Simpan judul koleksi juga sebagai lastVideoTitle
+    sessionStorage.setItem('lastVideoTitle', collectionTitle); 
+
     sessionStorage.setItem('collectionJsonUrl', jsonUrl); 
     sessionStorage.setItem('collectionTitle', collectionTitle); 
     sessionStorage.removeItem('collectionScrollPosition');
-    sessionStorage.removeItem('lastCollectionVideoTitle');
     
     sessionStorage.removeItem('videoCropMode');
     sessionStorage.removeItem('videoCropPosition');
@@ -387,8 +404,8 @@ const saveScrollPosition = () => {
     const container = document.getElementById('container');
     const activePage = sessionStorage.getItem('lastActiveMenuPage');
     
-    // Hanya simpan posisi scroll jika sedang di menu Beranda
-    if (container && activePage === 'beranda') { 
+    // Hanya simpan posisi scroll jika sedang di menu Beranda atau Live TV
+    if (container && (activePage === 'beranda' || activePage === 'live')) { 
         sessionStorage.setItem('scrollPosition', container.scrollTop);
     }
 };
@@ -459,12 +476,19 @@ document.addEventListener('keydown', (e) => {
                 // Simpan status menu sebelum klik
                 sessionStorage.setItem('lastActiveMenuPage', page);
                 
+                // <<< PERUBAHAN BARU >>> Reset scroll position saat pindah menu (kecuali Beranda ke Beranda)
+                sessionStorage.removeItem('scrollPosition');
+                sessionStorage.removeItem('lastVideoTitle'); // Pastikan tidak ada fokus lama dari halaman lain
+                
                 if (page === 'beranda') {
                     loadAndRenderHomeContent(); 
                 } else if (page === 'live') {
                     loadAndRenderLiveTVContent();
                 } else {
-                    focusedElement.click(); 
+                    filesProcessedCount = 0; 
+                    currentItems = []; 
+                    container.innerHTML = `<h2>Konten untuk ${focusedElement.innerText} belum tersedia.</h2>`;
+                    restoreFocusOnContent();
                 }
             }
             return;
@@ -498,11 +522,13 @@ document.addEventListener('keydown', (e) => {
 
         let nextIndex = -1;
         
-        const divElement = divs[0];
-        const cardWidth = divElement ? divElement.offsetWidth + 30 : 300; 
+        // Coba hitung itemsPerRow secara dinamis (lebih akurat)
+        const containerRect = container.getBoundingClientRect();
+        const firstCardRect = divs[0].getBoundingClientRect();
+        const cardWidthWithMargin = firstCardRect.width + 30; // 30px margin
         
-        const containerWidth = container.offsetWidth;
-        const itemsPerRow = Math.floor(containerWidth / cardWidth);
+        // Hitung berapa banyak kartu yang muat di lebar container
+        const itemsPerRow = Math.floor(containerRect.width / cardWidthWithMargin);
         const actualItemsPerRow = Math.max(1, itemsPerRow); 
         
         focusedElement.classList.remove('highlight');
@@ -515,6 +541,7 @@ document.addEventListener('keydown', (e) => {
                 nextIndex = currentIndex - actualItemsPerRow;
                 
                 if (nextIndex < 0) {
+                    // Jika pindah ke atas dari baris pertama, fokus ke input cari
                     searchInput.focus(); 
                     return;
                 }
@@ -525,10 +552,13 @@ document.addEventListener('keydown', (e) => {
             case 'ArrowLeft':
                 nextIndex = currentIndex - 1;
                 
+                // Jika pindah ke kiri dari kolom pertama, fokus ke sidebar
                 if (nextIndex < 0 || (currentIndex % actualItemsPerRow === 0)) {
-                    const firstNavItem = document.querySelector('.nav-item');
-                    if (firstNavItem) {
-                        firstNavItem.focus();
+                    const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
+                    const activeNav = document.querySelector(`.nav-item[data-page="${activePage}"]`);
+                    
+                    if (activeNav) {
+                        activeNav.focus();
                     } else {
                         searchInput.focus(); 
                     }
@@ -544,6 +574,7 @@ document.addEventListener('keydown', (e) => {
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
             
+            // Gunakan scrollIntoView untuk membawa elemen ke tengah (block: 'center')
             divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
             
             saveScrollPosition();
@@ -579,6 +610,7 @@ function initNavigation() {
                 filesProcessedCount = 0; 
                 currentItems = []; 
                 container.innerHTML = `<h2>Konten untuk ${item.innerText} belum tersedia.</h2>`;
+                restoreFocusOnContent();
             }
         });
     });
