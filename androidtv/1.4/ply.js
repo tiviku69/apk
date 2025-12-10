@@ -200,9 +200,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             playerElement.style.display = 'block';
             playPauseCenter.style.opacity = '0';
-            // Tampilkan kontrol dan judul saat pembukaan
-            if (playerControls) playerControls.style.display = 'flex';
-            videoTitleContainer.style.opacity = '1';
+            videoOverlayEffect.style.display = 'none'; 
         }
 
         // START MODIFIKASI FUNGSI formatTime
@@ -284,11 +282,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const resetControlsTimeout = () => {
             clearTimeout(controlsTimeout);
-            // Hanya tampilkan kontrol/judul jika video sedang diputar atau dijeda
             if (playerControls) playerControls.style.display = 'flex';
             videoTitleContainer.style.opacity = '1';
             
-            // Sembunyikan setelah 3 detik hanya jika video sedang dimainkan
             if (!playerElement.paused) {
                 controlsTimeout = setTimeout(hideControls, 3000);
             }
@@ -296,10 +292,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         playerElement.addEventListener('canplay', () => {
             console.log("Video siap diputar.");
-            // Tampilkan kontrol saat siap diputar untuk interaksi awal
             if (playerControls) playerControls.style.display = 'flex';
-            videoTitleContainer.style.opacity = '1';
-            resetControlsTimeout(); 
+            resetControlsTimeout();
         });
 
         playerElement.addEventListener('play', () => {
@@ -314,10 +308,8 @@ document.addEventListener('DOMContentLoaded', () => {
             playPauseCenter.style.opacity = '0';
             playIcon.style.display = 'none';
             pauseIcon.style.display = 'block';
-            // Sembunyikan kontrol dan judul 
-            if (playerControls) playerControls.style.display = 'none';
             videoTitleContainer.style.opacity = '0';
-            resetControlsTimeout(); // Set timeout untuk menyembunyikan
+            resetControlsTimeout();
         });
 
         playerElement.addEventListener('pause', () => {
@@ -326,9 +318,7 @@ document.addEventListener('DOMContentLoaded', () => {
             playPauseCenter.style.opacity = '1';
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
-            // Tampilkan kontrol dan judul saat pause
             videoTitleContainer.style.opacity = '1';
-            if (playerControls) playerControls.style.display = 'flex';
             
             videoOverlayEffect.style.display = 'block';
             setTimeout(() => { videoOverlayEffect.style.opacity = '1'; }, 10); 
@@ -348,7 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
             playPauseCenter.style.opacity = '1';
             playIcon.style.display = 'block';
             pauseIcon.style.display = 'none';
-            // Tampilkan kontrol dan judul saat selesai
             videoTitleContainer.style.opacity = '1';
             playerControls.style.display = 'flex';
             
@@ -395,9 +384,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 30000); 
                 }
             }
-            
-            // *** PENTING: Menghapus resetControlsTimeout() dari timeupdate ***
-            // Ini mencegah kontrol muncul saat video tersendat/buffering.
         });
 
         playPauseCenter.addEventListener('click', playToggle);
@@ -427,27 +413,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         playerElement.currentTime += 10;
                         // MODIFIKASI KRITIS: Panggil pembaruan progres segera setelah seek
                         updateTimeDisplayAndProgress(); 
-                        resetControlsTimeout(); // Tampilkan kontrol saat tombol remote ditekan
                         break;
                     case 'ArrowLeft':
                         playerElement.currentTime -= 10;
                         // MODIFIKASI KRITIS: Panggil pembaruan progres segera setelah seek
                         updateTimeDisplayAndProgress(); 
-                        resetControlsTimeout(); // Tampilkan kontrol saat tombol remote ditekan
-                        break;
-                    case 'ArrowUp':
-                    case 'ArrowDown':
-                        // Tampilkan kontrol saat tombol remote atas/bawah ditekan
-                        resetControlsTimeout(); 
                         break;
                     case 'Escape':
                         window.history.back();
                         break;
                 }
+                resetControlsTimeout();
             }
         });
 
-        // Event ini sekarang yang MURNI memicu kemunculan kontrol saat interaksi mouse/sentuh
         document.addEventListener('mousemove', resetControlsTimeout);
         document.addEventListener('mousedown', resetControlsTimeout);
         document.addEventListener('touchstart', resetControlsTimeout);

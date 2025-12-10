@@ -4,7 +4,7 @@ atas.innerHTML = '';
 
 // 1. Files yang langsung ditampilkan di halaman utama (BERANDA)
 const directFiles = [
-'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json',
+'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json','tes.json',
 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
@@ -12,16 +12,14 @@ const directFiles = [
 const collectionListUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/koleksi.json';
 
 // 3. FILE BARU UNTUK LIVE TV
-const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json'; 
-// 4. FILE BARU UNTUK FILM SUBTITLE
-const filmSubUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/sub.json'; // URL baru untuk film subtitle
+const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json'; // Asumsi live.json berada di direktori yang sama.
 
-const totalFiles = directFiles.length + 1; 
+const totalFiles = directFiles.length + 1; // Variabel ini hanya berlaku untuk Beranda
 let filesProcessedCount = 0; 
 const container = document.getElementById('container');
 
-let allItems = []; 
-let currentItems = []; 
+let allItems = []; // Array untuk menampung semua item Beranda (persisten)
+let currentItems = []; // Array untuk menampung item yang sedang ditampilkan (Beranda atau Live TV)
 
 
 // FUNGSI PENGACAKAN (Fisher-Yates Shuffle)
@@ -40,7 +38,7 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
             if (img) {
                 const src = img.getAttribute('data-src');
                 if (src) {
-                    img.src = src; 
+                    img.src = src; // Pindahkan URL dari data-src ke src
                     img.removeAttribute('data-src');
                     observer.unobserve(entry.target); 
                 }
@@ -100,11 +98,11 @@ function shuffleAndSaveItems() {
 }
 
 
-// --- FUNGSI UTAMA PEMUATAN DATA FILMDUBB (BERANDA LAMA) ---
+// --- FUNGSI UTAMA PEMUATAN DATA BERANDA ---
 function loadAndRenderHomeContent() {
     // Hanya muat jika belum pernah dimuat
     if (filesProcessedCount === 0) {
-        container.innerHTML = '<h2>Memuat Konten Film Dubbing...</h2>'; 
+        container.innerHTML = '<h2>Memuat Konten Beranda...</h2>';
         allItems = []; 
         
         // 1. Memproses DIRECT FILES
@@ -153,35 +151,6 @@ function loadAndRenderHomeContent() {
 }
 
 
-// FUNGSI BARU UNTUK MEMUAT KONTEN FILM SUBTITLE
-function loadAndRenderFilmSubContent() {
-    container.innerHTML = '<h2>Memuat Daftar Film Subtitle...</h2>';
-    currentItems = []; 
-
-    fetch(filmSubUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Gagal memuat' + response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            data.forEach(item => {
-                // Semua item dari sub.json dianggap 'direct' film
-                currentItems.push({...item, type: 'direct'}); 
-            });
-            
-            shuffleArray(currentItems); 
-            
-            renderCurrentItems(); 
-        })
-        .catch(error => {
-            console.error('Error loading Film Sub JSON:', filmSubUrl, error);
-            container.innerHTML = '<h2>❌ Gagal memuat Daftar Film Subtitle</h2>';
-        });
-}
-
-
 // FUNGSI BARU UNTUK MEMUAT KONTEN LIVE TV
 function loadAndRenderLiveTVContent() {
     container.innerHTML = '<h2>Memuat Channel Live TV...</h2>';
@@ -190,7 +159,7 @@ function loadAndRenderLiveTVContent() {
     fetch(liveTVUrl)
         .then(response => {
             if (!response.ok) {
-                throw new Error('Gagal memuat' + response.statusText);
+                throw new Error('Gagal memuat live.json: ' + response.statusText);
             }
             return response.json();
         })
@@ -207,7 +176,7 @@ function loadAndRenderLiveTVContent() {
         })
         .catch(error => {
             console.error('Error loading Live TV JSON:', liveTVUrl, error);
-            container.innerHTML = '<h2>❌ Gagal memuat Live TV</h2>';
+            container.innerHTML = '<h2>❌ Gagal memuat Live TV: Pastikan file live.json ada.</h2>';
         });
 }
 
@@ -267,11 +236,11 @@ function checkAndRenderItems() {
 const restoreFocusOnContent = () => {
     const savedTitle = sessionStorage.getItem('lastVideoTitle');
     const container = document.getElementById('container');
-    const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'FilmDubb'; 
+    const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
     
     let targetElement = null;
     
-    // 1. Cari item terakhir yang diklik berdasarkan judul (berlaku untuk FilmDubb & Live TV & Filmsub)
+    // 1. Cari item terakhir yang diklik berdasarkan judul (berlaku untuk Beranda & Live TV)
     if (savedTitle) {
         const allDivs = document.querySelectorAll('.responsive-div');
         allDivs.forEach(div => {
@@ -294,8 +263,8 @@ const restoreFocusOnContent = () => {
         }
     } 
     
-    // 3. Handle scroll position (Hanya untuk FilmDubb/Filmsub, jika tidak ada target spesifik)
-    if ((activePage === 'FilmDubb' || activePage === 'Filmsub') && !targetElement) { 
+    // 3. Handle scroll position (Hanya untuk Beranda, jika tidak ada target spesifik)
+    if (activePage === 'beranda' && !targetElement) {
         const savedScrollPosition = sessionStorage.getItem('scrollPosition');
         if (savedScrollPosition !== null && container) {
             container.scrollTop = parseInt(savedScrollPosition, 10);
@@ -418,8 +387,8 @@ const saveScrollPosition = () => {
     const container = document.getElementById('container');
     const activePage = sessionStorage.getItem('lastActiveMenuPage');
     
-    // Hanya simpan posisi scroll jika sedang di menu FilmDubb atau Filmsub
-    if (container && (activePage === 'FilmDubb' || activePage === 'Filmsub')) { 
+    // Hanya simpan posisi scroll jika sedang di menu Beranda
+    if (container && activePage === 'beranda') { 
         sessionStorage.setItem('scrollPosition', container.scrollTop);
     }
 };
@@ -434,9 +403,9 @@ function updateClock() {
     const now = new Date();
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
-    // const seconds = String(now.getSeconds()).padStart(2, '0'); 
+    // const seconds = String(now.getSeconds()).padStart(2, '0'); // Opsional jika ingin detik
     
-    const timeString = `${hours}:${minutes}`; 
+    const timeString = `${hours}:${minutes}`; // atau `${hours}:${minutes}:${seconds}`
     
     const clockElement = document.getElementById('digital-clock');
     if (clockElement) {
@@ -490,10 +459,8 @@ document.addEventListener('keydown', (e) => {
                 // Simpan status menu sebelum klik
                 sessionStorage.setItem('lastActiveMenuPage', page);
                 
-                if (page === 'FilmDubb') { 
+                if (page === 'beranda') {
                     loadAndRenderHomeContent(); 
-                } else if (page === 'Filmsub') { 
-                    loadAndRenderFilmSubContent();
                 } else if (page === 'live') {
                     loadAndRenderLiveTVContent();
                 } else {
@@ -604,10 +571,8 @@ function initNavigation() {
             // Hapus semua konten dari container utama
             container.innerHTML = ''; 
             
-            if (page === 'FilmDubb') { 
+            if (page === 'beranda') {
                 loadAndRenderHomeContent();
-            } else if (page === 'Filmsub') { 
-                loadAndRenderFilmSubContent();
             } else if (page === 'live') {
                 loadAndRenderLiveTVContent();
             } else {
@@ -619,15 +584,15 @@ function initNavigation() {
     });
     
     // Pemicu Awal: Klik menu terakhir yang disimpan secara otomatis
-    const lastPage = sessionStorage.getItem('lastActiveMenuPage') || 'FilmDubb'; 
+    const lastPage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
     const initialNav = document.querySelector(`.nav-item[data-page="${lastPage}"]`);
 
     if (initialNav) {
         // Trigger the click event to load content and save the state
         initialNav.click();
     } else {
-        // Fallback ke FilmDubb
-        const homeNav = document.querySelector('.nav-item[data-page="FilmDubb"]'); 
+        // Fallback ke Beranda
+        const homeNav = document.querySelector('.nav-item[data-page="beranda"]');
         if (homeNav) homeNav.click();
     }
 }
