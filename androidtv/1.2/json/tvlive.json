@@ -3,14 +3,42 @@
 "logo": "https://filmovie.github.io/oq90jy/fmlogo/banyumas_tv.jpg",
 "lnk": "https://filmovie.github.io/oq90jy/fmtvonytq996/banyumas_tv.m3u8",
 "ttl": "Banyumas tv",
-"dur": "live 🔴",
+"dur": "🔴 live",
 "tiviku": "apk"
 },
 {
-"logo": "https://filmovie.github.io/oq90jy/fmlogo/rodja_tv.jpg",
-"lnk": "https://rodjatv.com/rodjatv/live_480p1128kbs/index.m3u8",
-"ttl": "Rodja tv",
-"dur": "live",
+"logo": "https://i.imgur.com/VEqQfTu.png",
+"lnk": "https://filmovie.github.io/oq90jy/fmtvonytq996/jitv.m3u8",
+"ttl": "Jogja Istimewa tv",
+"dur": "🔴 live",
+"tiviku": "apk"
+},
+{
+"logo": "https://lingkartv.com/assets/img/logo-square.png",
+"lnk": "https://filmovie.github.io/oq90jy/fmtvonytq996/lingkar_tv.m3u8",
+"ttl": "Lingkar tv",
+"dur": "🔴 live",
+"tiviku": "apk"
+},
+{
+"logo": "https://i.imgur.com/tbtF40p.png",
+"lnk": "https://filmovie.github.io/oq90jy/fmtvonytq996/banten_tv.m3u8",
+"ttl": "Banten tv",
+"dur": "🔴 live",
+"tiviku": "apk"
+},
+{
+"logo": "https://i.imgur.com/B4JW54M.png",
+"lnk": "https://filmovie.github.io/oq90jy/fmtvonytq996/duta_tv.m3u8",
+"ttl": "Duta tv",
+"dur": "🔴 live",
+"tiviku": "apk"
+},
+{
+"logo": "https://filmovie.github.io/oq90jy/fmlogo/tvku.jpg",
+"lnk": "https://filmovie.github.io/oq90jy/fmtvonytq996/tvku.m3u8",
+"ttl": "Tvku tv",
+"dur": "🔴 live",
 "tiviku": "apk"
 }
 ]
