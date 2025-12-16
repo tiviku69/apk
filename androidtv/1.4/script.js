@@ -26,42 +26,36 @@ const pengaturanMenu = document.getElementById('pengaturan-menu');
 let allItems = []; 
 let currentItems = []; 
 
-// --- FUNGSI BARU: MANAJEMEN COOKIE ---
+// --- MODIFIKASI: FUNGSI BARU: MANAJEMEN LOCALSTORAGE (SOLUSI TEMA PERSISTEN) ---
 /**
- * Menyimpan pasangan key-value sebagai cookie dengan masa kedaluwarsa.
+ * Menyimpan pasangan key-value sebagai LocalStorage.
  */
-function setCookie(name, value, days) {
-    let expires = "";
-    if (days) {
-        const date = new Date();
-        // Atur masa kedaluwarsa 1 tahun
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toUTCString();
+function setLocalStorage(name, value) {
+    try {
+        localStorage.setItem(name, value);
+    } catch (e) {
+        console.error("Gagal menyimpan ke LocalStorage:", e);
     }
-    // Set cookie untuk seluruh path aplikasi (path=/)
-    document.cookie = name + "=" + (value || "")  + expires + "; path=/; SameSite=Lax";
 }
 
 /**
- * Mengambil nilai cookie berdasarkan namanya.
+ * Mengambil nilai dari LocalStorage berdasarkan namanya.
  */
-function getCookie(name) {
-    const nameEQ = name + "=";
-    const ca = document.cookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+function getLocalStorage(name) {
+    try {
+        return localStorage.getItem(name);
+    } catch (e) {
+        console.warn("Gagal membaca dari LocalStorage:", e);
+        return null;
     }
-    return null;
 }
-// --- END FUNGSI MANAJEMEN COOKIE ---
+// --- END FUNGSI MANAJEMEN LOCALSTORAGE ---
 
 
-// --- MODIFIKASI: FUNGSI TEMA ---
+// --- MODIFIKASI: FUNGSI TEMA (Menggunakan LocalStorage) ---
 
 /**
- * Menerapkan tema ke seluruh aplikasi dan menyimpannya di Cookie.
+ * Menerapkan tema ke seluruh aplikasi dan menyimpannya di LocalStorage.
  * @param {string} themeName - Nama tema ('default', 'blue-dark', 'red-dark').
  */
 function applyTheme(themeName) {
@@ -79,11 +73,11 @@ function applyTheme(themeName) {
         appWrapper.classList.add(themeClass);
     }
     
-    // PERUBAHAN KRITIS: Simpan tema ke cookie (persisten selama 1 tahun)
+    // PERUBAHAN KRITIS: Simpan tema ke LocalStorage
     try {
-        setCookie('currentTheme', themeName, 365);
+        setLocalStorage('currentTheme', themeName);
     } catch (e) {
-        console.error("Gagal menyimpan tema ke Cookie. Aplikasi mungkin tidak mengizinkan penyimpanan:", e);
+        console.error("Gagal menyimpan tema ke LocalStorage. Aplikasi mungkin tidak mengizinkan penyimpanan:", e);
     }
 }
 
@@ -103,20 +97,20 @@ function setupThemeButtons() {
 }
 
 /**
- * Memuat tema dari Cookie saat aplikasi dimulai.
+ * Memuat tema dari LocalStorage saat aplikasi dimulai.
  */
 function loadInitialTheme() {
     let savedTheme = 'default';
     try {
-        // PERUBAHAN KRITIS: Ambil tema dari cookie
-        savedTheme = getCookie('currentTheme') || 'default';
+        // PERUBAHAN KRITIS: Ambil tema dari LocalStorage
+        savedTheme = getLocalStorage('currentTheme') || 'default';
     } catch (e) {
-        console.warn("Gagal membaca tema dari Cookie, menggunakan default:", e);
+        console.warn("Gagal membaca tema dari LocalStorage, menggunakan default:", e);
     }
     
     applyTheme(savedTheme);
 }
-// --- END FUNGSI TEMA ---
+// --- END MODIFIKASI FUNGSI TEMA ---
 
 // FUNGSI PENGACAKAN (Fisher-Yates Shuffle)
 function shuffleArray(array) {
