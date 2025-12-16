@@ -26,37 +26,42 @@ const pengaturanMenu = document.getElementById('pengaturan-menu');
 let allItems = []; 
 let currentItems = []; 
 
-// --- MODIFIKASI: FUNGSI MANAJEMEN LOCALSTORAGE (MENGGANTIKAN COOKIE) ---
+// --- FUNGSI BARU: MANAJEMEN COOKIE ---
 /**
- * Menyimpan tema ke LocalStorage.
+ * Menyimpan pasangan key-value sebagai cookie dengan masa kedaluwarsa.
  */
-function setLocalStorageTheme(themeName) {
-    try {
-        localStorage.setItem('currentTheme', themeName);
-    } catch (e) {
-        console.error("Gagal menyimpan tema ke LocalStorage:", e);
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        // Atur masa kedaluwarsa 1 tahun
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
     }
+    // Set cookie untuk seluruh path aplikasi (path=/)
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/; SameSite=Lax";
 }
 
 /**
- * Mengambil tema dari LocalStorage.
+ * Mengambil nilai cookie berdasarkan namanya.
  */
-function getLocalStorageTheme() {
-    try {
-        // PERUBAHAN KRITIS: Ambil tema dari LocalStorage, default ke 'default'
-        return localStorage.getItem('currentTheme') || 'default';
-    } catch (e) {
-        console.warn("Gagal membaca tema dari LocalStorage, menggunakan default:", e);
-        return 'default';
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
     }
+    return null;
 }
-// --- END FUNGSI MANAJEMEN LOCALSTORAGE ---
+// --- END FUNGSI MANAJEMEN COOKIE ---
 
 
 // --- MODIFIKASI: FUNGSI TEMA ---
 
 /**
- * Menerapkan tema ke seluruh aplikasi dan menyimpannya di LocalStorage.
+ * Menerapkan tema ke seluruh aplikasi dan menyimpannya di Cookie.
  * @param {string} themeName - Nama tema ('default', 'blue-dark', 'red-dark').
  */
 function applyTheme(themeName) {
@@ -74,8 +79,12 @@ function applyTheme(themeName) {
         appWrapper.classList.add(themeClass);
     }
     
-    // PERUBAHAN KRITIS: Simpan tema ke LocalStorage
-    setLocalStorageTheme(themeName);
+    // PERUBAHAN KRITIS: Simpan tema ke cookie (persisten selama 1 tahun)
+    try {
+        setCookie('currentTheme', themeName, 365);
+    } catch (e) {
+        console.error("Gagal menyimpan tema ke Cookie. Aplikasi mungkin tidak mengizinkan penyimpanan:", e);
+    }
 }
 
 /**
@@ -94,11 +103,17 @@ function setupThemeButtons() {
 }
 
 /**
- * Memuat tema dari LocalStorage saat aplikasi dimulai.
+ * Memuat tema dari Cookie saat aplikasi dimulai.
  */
 function loadInitialTheme() {
-    // PERUBAHAN KRITIS: Ambil tema dari LocalStorage
-    const savedTheme = getLocalStorageTheme();
+    let savedTheme = 'default';
+    try {
+        // PERUBAHAN KRITIS: Ambil tema dari cookie
+        savedTheme = getCookie('currentTheme') || 'default';
+    } catch (e) {
+        console.warn("Gagal membaca tema dari Cookie, menggunakan default:", e);
+    }
+    
     applyTheme(savedTheme);
 }
 // --- END FUNGSI TEMA ---
