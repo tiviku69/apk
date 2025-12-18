@@ -1,25 +1,35 @@
-var atas = document.getElementById('atas');
+const atas = document.getElementById('atas');
+// MENGHAPUS kode injeksi logo/search ke #atas karena sudah dipindah ke tiviku.html
 atas.innerHTML = ''; 
 
-var APP_VERSION = 'v1.2.0'; 
+// BARU: Konstanta Versi Aplikasi
+const APP_VERSION = 'v1.2.0'; 
 
-var directFiles = [
-    'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json',
-    'tes.json',
-    'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
+// 1. Files yang langsung ditampilkan di halaman utama (BERANDA)
+const directFiles = [
+'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json','tes.json',
+'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
-var collectionListUrl = 'koleksi.json';
-var liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json';
+// 2. File JSON TUNGGAL untuk semua data koleksi klik (BERANDA)
+const collectionListUrl = 'koleksi.json';
 
-var totalFiles = directFiles.length + 1; 
-var filesProcessedCount = 0; 
-var container = document.getElementById('container');
-var pengaturanMenu = document.getElementById('pengaturan-menu'); 
+// 3. FILE BARU UNTUK LIVE TV
+const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json'; // Asumsi live.json berada di direktori yang sama.
 
-var allItems = []; 
-var currentItems = []; 
+const totalFiles = directFiles.length + 1; // Variabel ini hanya berlaku untuk Beranda
+let filesProcessedCount = 0; 
+const container = document.getElementById('container');
+// MODIFIKASI: Ambil elemen pengaturan
+const pengaturanMenu = document.getElementById('pengaturan-menu'); 
 
+let allItems = []; 
+let currentItems = []; 
+
+// --- MODIFIKASI: FUNGSI BARU: MANAJEMEN LOCALSTORAGE (SOLUSI TEMA PERSISTEN) ---
+/**
+ * Menyimpan pasangan key-value sebagai LocalStorage.
+ */
 function setLocalStorage(name, value) {
     try {
         localStorage.setItem(name, value);
@@ -28,6 +38,9 @@ function setLocalStorage(name, value) {
     }
 }
 
+/**
+ * Mengambil nilai dari LocalStorage berdasarkan namanya.
+ */
 function getLocalStorage(name) {
     try {
         return localStorage.getItem(name);
@@ -36,94 +49,118 @@ function getLocalStorage(name) {
         return null;
     }
 }
+// --- END FUNGSI MANAJEMEN LOCALSTORAGE ---
 
+
+// --- MODIFIKASI: FUNGSI TEMA (Menggunakan LocalStorage) ---
+
+/**
+ * Menerapkan tema ke seluruh aplikasi dan menyimpannya di LocalStorage.
+ * @param {string} themeName - Nama tema ('default', 'blue-dark', 'red-dark').
+ */
 function applyTheme(themeName) {
-    var appWrapper = document.getElementById('app-wrapper');
-    var body = document.body;
+    const appWrapper = document.getElementById('app-wrapper');
+    const body = document.body;
     
+    // Hapus semua kelas tema yang ada
     body.classList.remove('theme-blue-dark', 'theme-red-dark');
     appWrapper.classList.remove('theme-blue-dark', 'theme-red-dark'); 
 
+    // Terapkan kelas tema yang baru
     if (themeName !== 'default') {
-        var themeClass = 'theme-' + themeName;
+        const themeClass = `theme-${themeName}`;
         body.classList.add(themeClass);
         appWrapper.classList.add(themeClass);
     }
     
+    // PERUBAHAN KRITIS: Simpan tema ke LocalStorage
     try {
         setLocalStorage('currentTheme', themeName);
     } catch (e) {
-        console.error("Gagal menyimpan tema:", e);
+        console.error("Gagal menyimpan tema ke LocalStorage. Aplikasi mungkin tidak mengizinkan penyimpanan:", e);
     }
 }
 
+/**
+ * Menyiapkan event listener untuk tombol-tombol tema.
+ */
 function setupThemeButtons() {
-    var themeButtons = document.querySelectorAll('.theme-button');
-    for (var i = 0; i < themeButtons.length; i++) {
-        (function(button) {
-            button.onclick = function() {
-                var theme = button.getAttribute('data-theme');
-                applyTheme(theme);
-                button.focus(); 
-            };
-        })(themeButtons[i]);
-    }
-}
-
-function loadInitialTheme() {
-    var savedTheme = getLocalStorage('currentTheme') || 'default';
-    applyTheme(savedTheme);
-}
-
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-}
-
-// Fallback untuk IntersectionObserver (KitKat tidak support)
-var imageObserver;
-if (window.IntersectionObserver) {
-    imageObserver = new IntersectionObserver(function(entries, observer) {
-        entries.forEach(function(entry) {
-            if (entry.isIntersecting) {
-                var img = entry.target.querySelector('.lazy-img'); 
-                if (img) {
-                    var src = img.getAttribute('data-src');
-                    if (src) {
-                        img.src = src; 
-                        img.removeAttribute('data-src');
-                        observer.unobserve(entry.target); 
-                    }
-                }
-            }
-        });
-    }, {
-        root: document.getElementById('container'), 
-        rootMargin: '100px 0px', 
-        threshold: 0.01
+    const themeButtons = document.querySelectorAll('.theme-button');
+    themeButtons.forEach(button => {
+        button.onclick = () => {
+            const theme = button.getAttribute('data-theme');
+            applyTheme(theme);
+            // Fokuskan kembali pada tombol yang baru diklik
+            button.focus(); 
+        };
     });
 }
 
-function createFilmElement(item, clickAction, isCollection) {
-    var img = document.createElement('img');
+/**
+ * Memuat tema dari LocalStorage saat aplikasi dimulai.
+ */
+function loadInitialTheme() {
+    let savedTheme = 'default';
+    try {
+        // PERUBAHAN KRITIS: Ambil tema dari LocalStorage
+        savedTheme = getLocalStorage('currentTheme') || 'default';
+    } catch (e) {
+        console.warn("Gagal membaca tema dari LocalStorage, menggunakan default:", e);
+    }
+    
+    applyTheme(savedTheme);
+}
+// --- END MODIFIKASI FUNGSI TEMA ---
+
+// FUNGSI PENGACAKAN (Fisher-Yates Shuffle)
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+// --- FUNGSI BARU UNTUK OBSERVASI (LAZY LOADING) ---
+const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target.querySelector('.lazy-img'); 
+            if (img) {
+                const src = img.getAttribute('data-src');
+                if (src) {
+                    img.src = src; 
+                    img.removeAttribute('data-src');
+                    observer.unobserve(entry.target); 
+                }
+            }
+        }
+    });
+}, {
+    root: document.getElementById('container'), 
+    rootMargin: '100px 0px', 
+    threshold: 0.01
+});
+// --- END FUNGSI OBSERVASI ---
+
+// Fungsi untuk membuat elemen film
+function createFilmElement(item, clickAction, isCollection = false) {
+    const img = document.createElement('img');
     img.id = 'imgv';
+    
     img.setAttribute('data-src', item.logo); 
     img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="270" height="220" viewBox="0 0 270 220"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; 
+    
     img.classList.add('lazy-img'); 
 
-    var pp = document.createElement('p');
+    const pp = document.createElement('p');
     pp.className = 're';
     pp.innerText = item.ttl;
 
-    var dur = document.createElement('p');
+    const dur = document.createElement('p');
     dur.className = 'dur';
     dur.innerText = isCollection ? 'Koleksi (klik)' : (item.dur || '');
 
-    var dv = document.createElement('div');
+    const dv = document.createElement('div');
     dv.className = 'responsive-div';
     dv.tabIndex = 0; 
     dv.onclick = clickAction;
@@ -133,74 +170,76 @@ function createFilmElement(item, clickAction, isCollection) {
     dv.appendChild(dur);
     container.appendChild(dv);
     
-    // Jika observer ada gunakan observer, jika tidak langsung load (KitKat)
-    if (imageObserver) {
-        imageObserver.observe(dv);
-    } else {
-        img.src = item.logo;
-    }
+    imageObserver.observe(dv);
 
     return dv; 
 }
 
+
+// --- FUNGSI MENGACAK DAN MENYIMPAN URUTAN BERANDA KE SESSION STORAGE (TETAP SESS) ---
 function shuffleAndSaveItems() {
     shuffleArray(allItems);
     try {
         sessionStorage.setItem('savedItemList', JSON.stringify(allItems));
     } catch (e) {
-        console.error("Gagal simpan sessionStorage:", e);
+        console.error("Gagal menyimpan item list Beranda ke sessionStorage.", e);
     }
 }
 
+// --- FUNGSI BARU: MENGACAK DAN MENYIMPAN URUTAN LIVE TV KE SESSION STORAGE (TETAP SESS) ---
 function shuffleAndSaveLiveTVItems(items) {
     shuffleArray(items);
     try {
         sessionStorage.setItem('savedLiveTVList', JSON.stringify(items));
     } catch (e) {
-        console.error("Gagal simpan sessionStorage LiveTV:", e);
+        console.error("Gagal menyimpan Live TV list ke sessionStorage.", e);
     }
 }
 
+
+// --- FUNGSI UTAMA PEMUATAN DATA BERANDA (TIDAK ADA PERUBAHAN) ---
 function loadAndRenderHomeContent() {
-    container.style.display = 'block';
-    pengaturanMenu.style.display = 'none';
+    container.style.display = 'block'; // Tampilkan konten film
+    pengaturanMenu.style.display = 'none'; // Sembunyikan pengaturan
     
     if (filesProcessedCount === 0) {
         container.innerHTML = '<h2>Memuat Konten Beranda...</h2>';
         allItems = []; 
         
-        directFiles.forEach(function(fileUrl) {
+        directFiles.forEach(fileUrl => {
             fetch(fileUrl)
-                .then(function(response) { return response.json(); })
-                .then(function(data) {
-                    data.forEach(function(item) {
-                        item.type = 'direct';
-                        allItems.push(item); 
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        allItems.push({...item, type: 'direct'}); 
                     });
                     filesProcessedCount++;
                     checkAndRenderItems();
                 })
-                .catch(function(error) {
+                .catch(error => {
+                    console.error('Error loading DIRECT JSON:', fileUrl, error);
                     filesProcessedCount++;
                     checkAndRenderItems();
                 });
         });
 
         fetch(collectionListUrl)
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                data.forEach(function(collectionItem) {
-                    allItems.push({
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(collectionItem => {
+                    const displayItem = {
                         logo: collectionItem.collectionLogo,
                         ttl: collectionItem.collectionTitle,
                         url: collectionItem.url,
                         type: 'collection'
-                    });
+                    };
+                    allItems.push(displayItem);
                 });
                 filesProcessedCount++;
                 checkAndRenderItems();
             })
-            .catch(function(error) {
+            .catch(error => {
+                console.error('Error loading COLLECTION LIST JSON:', collectionListUrl, error);
                 filesProcessedCount++;
                 checkAndRenderItems();
             });
@@ -209,168 +248,283 @@ function loadAndRenderHomeContent() {
     }
 }
 
+
+// FUNGSI BARU UNTUK MEMUAT KONTEN LIVE TV (MODIFIKASI KRITIS)
 function loadAndRenderLiveTVContent() {
-    container.style.display = 'block';
-    pengaturanMenu.style.display = 'none';
+    container.style.display = 'block'; // Tampilkan konten film
+    pengaturanMenu.style.display = 'none'; // Sembunyikan pengaturan
     
-    var savedLiveTVList = sessionStorage.getItem('savedLiveTVList');
+    const savedLiveTVList = sessionStorage.getItem('savedLiveTVList');
 
     if (savedLiveTVList) {
         try {
             currentItems = JSON.parse(savedLiveTVList);
-            currentItems = currentItems.map(function(item) { 
-                item.type = 'live'; 
-                return item; 
-            }); 
-            container.innerHTML = '<h2>Memuat Channel Live TV...</h2>';
+            currentItems = currentItems.map(item => ({...item, type: 'live'})); 
+            
+            container.innerHTML = '<h2>Memuat Channel Live TV dari memori...</h2>';
             renderCurrentItems();
             return; 
         } catch (e) {
+            console.error("Gagal parsing savedLiveTVList, melakukan fetch ulang.", e);
             sessionStorage.removeItem('savedLiveTVList'); 
         }
     }
 
     container.innerHTML = '<h2>Memuat Channel Live TV...</h2>';
+    currentItems = []; 
+
     fetch(liveTVUrl)
-        .then(function(response) { return response.json(); })
-        .then(function(data) {
-            var liveItems = data.map(function(item) {
-                item.type = 'live';
-                return item;
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Gagal memuat live.json: ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            let liveItems = [];
+            data.forEach(item => {
+                liveItems.push({...item, type: 'live'}); 
             });
+            
             shuffleAndSaveLiveTVItems(liveItems);
+            
             currentItems = liveItems;
             renderCurrentItems(); 
         })
-        .catch(function(error) {
-            container.innerHTML = '<h2>❌ Gagal memuat Live TV</h2>';
+        .catch(error => {
+            console.error('Error loading Live TV JSON:', liveTVUrl, error);
+            container.innerHTML = '<h2>❌ Gagal memuat Live TV: Pastikan file live.json ada.</h2>';
         });
 }
 
+// MODIFIKASI: FUNGSI BARU UNTUK MENU PENGATURAN (TAMBAH INFORMASI VERSI)
 function showPengaturanMenu() {
-    container.style.display = 'none';
-    pengaturanMenu.style.display = 'flex'; 
-    var versionInfo = document.getElementById('app-version-info');
+    container.style.display = 'none'; // Sembunyikan konten film
+    pengaturanMenu.style.display = 'flex'; // Tampilkan pengaturan
+    
+    // BARU: Tampilkan Informasi Versi Aplikasi
+    const versionInfo = document.getElementById('app-version-info');
     if (versionInfo) {
-        versionInfo.innerHTML = 'Versi Aplikasi: <b>' + APP_VERSION + '</b>';
+        versionInfo.innerHTML = `Versi Aplikasi: <b>${APP_VERSION}</b>`;
     }
+    
+    // Hapus fokus terakhir pada kartu film
     sessionStorage.removeItem('lastFocusedCardTitle');
-    var firstThemeButton = document.querySelector('.theme-button');
-    if (firstThemeButton) firstThemeButton.focus();
+    
+    // Fokuskan pada tombol tema pertama saat menu Pengaturan dibuka
+    const firstThemeButton = document.querySelector('.theme-button');
+    if (firstThemeButton) {
+        firstThemeButton.focus();
+    }
 }
+// END MODIFIKASI PENGATURAN
 
+// FUNGSI UMUM: MERENDER currentItems ke DOM (TIDAK ADA PERUBAHAN)
 function renderCurrentItems() {
     container.innerHTML = ''; 
-    currentItems.forEach(function(item) {
-        var action;
-        var isCollection = false;
+
+    currentItems.forEach(item => {
+        let action;
+        let isCollection = false;
+
         if (item.type === 'collection') {
-            action = function() { openCollection(item.url, item.ttl); };
+            action = () => openCollection(item.url, item.ttl);
             isCollection = true;
-        } else {
-            action = function() {
+        } else { // type === 'live' atau 'direct'
+            action = () => {
                 sessionStorage.setItem('lastActiveMenuPage', item.type === 'live' ? 'live' : 'beranda');
                 playVideo(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
             };
+            isCollection = false;
         }
+
         createFilmElement(item, action, isCollection);
     });
+    
     restoreFocusOnContent(); 
 }
 
+
+// FUNGSI UTAMA UNTUK MEMERIKSA DATA BERANDA DAN MENAMPILKAN (TIDAK ADA PERUBAHAN)
 function checkAndRenderItems() {
-    if (filesProcessedCount < totalFiles) return; 
-    var savedItems = sessionStorage.getItem('savedItemList');
+    if (filesProcessedCount < totalFiles) {
+        return; 
+    }
+    
+    const savedItems = sessionStorage.getItem('savedItemList');
+
     if (savedItems) {
-        try { allItems = JSON.parse(savedItems); } catch (e) { shuffleAndSaveItems(); }
-    } else {
+        try {
+            allItems = JSON.parse(savedItems); 
+        } catch (e) {
+            shuffleAndSaveItems();
+        }
+    }
+    else {
         shuffleAndSaveItems();
     }
+    
     currentItems = allItems;
+    
     renderCurrentItems(); 
 }
 
-var restoreFocusOnContent = function() {
-    var savedTitle = sessionStorage.getItem('lastVideoTitle'); 
-    var lastFocusedTitle = sessionStorage.getItem('lastFocusedCardTitle'); 
-    var activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
-    var focusRestoredToCard = false; 
-    var targetElement = null;
 
-    var allDivs = document.querySelectorAll('.responsive-div');
-    allDivs.forEach(function(div) { div.classList.remove('highlight'); });
+// FUNGSI BARU: Memulihkan fokus konten yang sedang dimuat (Universal) (Penambahan Logika Pengaturan)
+const restoreFocusOnContent = () => {
+    const savedTitle = sessionStorage.getItem('lastVideoTitle'); 
+    const lastFocusedTitle = sessionStorage.getItem('lastFocusedCardTitle'); 
+    const container = document.getElementById('container');
+    const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
     
-    if (savedTitle || lastFocusedTitle) {
-        var queryTitle = savedTitle || lastFocusedTitle;
-        for (var i = 0; i < allDivs.length; i++) {
-            var p = allDivs[i].querySelector('.re');
-            if (p && p.innerText === queryTitle) {
-                targetElement = allDivs[i];
-                break;
+    let focusRestoredToCard = false; 
+
+    document.querySelectorAll('.responsive-div').forEach(div => div.classList.remove('highlight'));
+    
+    let targetElement = null;
+    
+    if (savedTitle) {
+        const allDivs = document.querySelectorAll('.responsive-div');
+        allDivs.forEach(div => {
+            const pElement = div.querySelector('.re');
+            if (pElement && pElement.innerText === savedTitle) {
+                targetElement = div;
             }
+        });
+        
+        if(targetElement) {
+             sessionStorage.removeItem('lastVideoTitle'); 
         }
+    } 
+    
+    if (!targetElement && lastFocusedTitle) {
+        const allDivs = document.querySelectorAll('.responsive-div');
+        allDivs.forEach(div => {
+            const pElement = div.querySelector('.re');
+            if (pElement && pElement.innerText === lastFocusedTitle) {
+                targetElement = div;
+            }
+        });
     }
 
     if (targetElement) {
         targetElement.classList.add('highlight');
         targetElement.focus();
-        targetElement.scrollIntoView(false);
+        
+        if (!isElementInView(targetElement, container)) {
+             targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+        }
+        
         focusRestoredToCard = true; 
-        if(savedTitle) sessionStorage.removeItem('lastVideoTitle');
     } 
     
-    if (!focusRestoredToCard && activePage === 'pengaturan') {
-        showPengaturanMenu();
-        focusRestoredToCard = true;
+    if (!focusRestoredToCard && (activePage === 'beranda' || activePage === 'live')) { 
+        const savedScrollPosition = sessionStorage.getItem('scrollPosition');
+        if (savedScrollPosition !== null && container) {
+            container.scrollTop = parseInt(savedScrollPosition, 10);
+            
+            const firstVisible = getFirstVisibleElement(container);
+            if (firstVisible) {
+                 firstVisible.classList.add('highlight');
+                 firstVisible.focus();
+                 focusRestoredToCard = true;
+            }
+        }
     }
     
-    if (!focusRestoredToCard) {
-        var activeNav = document.querySelector('.nav-item[data-page="' + activePage + '"]');
-        if (activeNav) activeNav.focus();
+    // MODIFIKASI: Fallback jika Pengaturan sedang aktif
+    if (activePage === 'pengaturan') {
+        showPengaturanMenu();
+        const firstThemeButton = document.querySelector('.theme-button');
+        if (firstThemeButton) {
+             firstThemeButton.focus();
+             focusRestoredToCard = true; // Anggap fokus dipulihkan
+        }
     }
-};
-
-function isElementInView(el, container) {
-    var elRect = el.getBoundingClientRect();
-    var containerRect = container.getBoundingClientRect();
-    return (elRect.top >= containerRect.top && elRect.bottom <= containerRect.bottom + elRect.height);
+    
+    // 5. Fallback: Jika TIDAK ADA fokus kartu yang berhasil, fokuskan Sidebar
+    if (!focusRestoredToCard && activePage !== 'pengaturan') {
+        const activeNav = document.querySelector(`.nav-item[data-page="${activePage}"]`);
+        if (activeNav) {
+            activeNav.focus();
+        } else {
+             const searchInput = document.getElementById('cari');
+             if (searchInput) searchInput.focus();
+        }
+    }
 }
 
+
+// Helper: Cek apakah elemen terlihat di dalam container (TIDAK ADA PERUBAHAN)
+function isElementInView(el, container) {
+    const elRect = el.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    
+    const elHeight = elRect.height; 
+    
+    return (
+        elRect.top >= containerRect.top &&
+        elRect.bottom <= containerRect.bottom + elRect.height
+    );
+}
+
+// Helper: Dapatkan elemen pertama yang terlihat (TIDAK ADA PERUBAHAN)
 function getFirstVisibleElement(container) {
-    var allDivs = document.querySelectorAll('.responsive-div');
-    for (var i = 0; i < allDivs.length; i++) {
-        if (getComputedStyle(allDivs[i]).display !== 'none' && isElementInView(allDivs[i], container)) {
-            return allDivs[i];
+    const allDivs = document.querySelectorAll('.responsive-div');
+    for (const div of allDivs) {
+        if (getComputedStyle(div).display !== 'none' && isElementInView(div, container)) {
+            return div;
         }
     }
     return document.querySelector('.responsive-div:not([style*="display: none"])');
 }
 
+
+// Fungsi untuk membuka Koleksi (TIDAK ADA PERUBAHAN)
 function openCollection(jsonUrl, collectionTitle) {
+    sessionStorage.setItem('lastCollectionVideoTitle', collectionTitle); 
     sessionStorage.setItem('lastVideoTitle', collectionTitle); 
     sessionStorage.setItem('collectionJsonUrl', jsonUrl); 
     sessionStorage.setItem('collectionTitle', collectionTitle); 
+    sessionStorage.removeItem('collectionScrollPosition');
+    sessionStorage.removeItem('videoCropMode');
+    sessionStorage.removeItem('videoCropPosition');
+    sessionStorage.removeItem('videoCropScale'); 
+
     window.location.href = 'koleksi.html';
 }
 
-function playVideo(v, l, t, cm, cp, cs) { 
-    sessionStorage.setItem('lastVideoTitle', t);
-    sessionStorage.setItem('videoLink', v);
-    sessionStorage.setItem('videoTitle', t);
-    sessionStorage.setItem('logoFile', l);
-    sessionStorage.setItem('videoCropMode', cm || 'fill'); 
-    sessionStorage.setItem('videoCropPosition', cp || '50% 50%'); 
-    sessionStorage.setItem('videoCropScale', cs || ''); 
+// Fungsi untuk memutar video (TIDAK ADA PERUBAHAN)
+function playVideo(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) { 
+    sessionStorage.setItem('lastVideoTitle', textFile);
+    sessionStorage.setItem('videoLink', videoFile);
+    sessionStorage.setItem('videoTitle', textFile);
+    sessionStorage.setItem('logoFile', logoFile);
+    sessionStorage.setItem('videoCropMode', cropMode || 'fill'); 
+    sessionStorage.setItem('videoCropPosition', cropPosition || '50% 50%'); 
+    sessionStorage.setItem('videoCropScale', cropScale || ''); 
+
     window.location.href = 'ply.html';
 }
 
+// Fungsi untuk mencari (TIDAK ADA PERUBAHAN)
 function prosesMenu() {
-    var filter = document.getElementById("cari").value.toLowerCase();
+    var input = document.getElementById("cari");
+    var filter = input.value.toLowerCase();
     var li = document.querySelectorAll('.responsive-div');
     for (var i = 0; i < li.length; i++) {
-        var txt = li[i].querySelector('.re').innerText.toLowerCase(); 
-        if (txt.indexOf(filter) > -1) {
+        var textToSearch = li[i].querySelector('.re').innerText.toLowerCase(); 
+        if (textToSearch.indexOf(filter) > -1) {
             li[i].style.display = "";
+            
+            const img = li[i].querySelector('.lazy-img');
+            if (img && img.hasAttribute('data-src')) {
+                 const src = img.getAttribute('data-src');
+                 img.src = src;
+                 img.removeAttribute('data-src');
+                 imageObserver.unobserve(li[i]); 
+            }
+
         } else {
             li[i].style.display = "none";
         }
@@ -379,120 +533,292 @@ function prosesMenu() {
 
 document.getElementById("cari").addEventListener("input", prosesMenu);
 
-var saveScrollPosition = function() {
-    var activePage = sessionStorage.getItem('lastActiveMenuPage');
+
+// --- MODIFIKASI UNTUK MENYIMPAN SCROLL SAAT BERGULIR (TIDAK ADA PERUBAHAN) ---
+
+const saveScrollPosition = () => {
+    const container = document.getElementById('container');
+    const activePage = sessionStorage.getItem('lastActiveMenuPage');
+    
     if (container && (activePage === 'beranda' || activePage === 'live')) { 
         sessionStorage.setItem('scrollPosition', container.scrollTop);
     }
 };
 
-if (container) container.addEventListener('scroll', saveScrollPosition);
-
-function updateClock() {
-    var now = new Date();
-    var h = String(now.getHours());
-    var m = String(now.getMinutes());
-    if(h.length < 2) h = '0' + h;
-    if(m.length < 2) m = '0' + m;
-    var clock = document.getElementById('digital-clock');
-    if (clock) clock.innerText = h + ':' + m;
+const containerScrollElement = document.getElementById('container');
+if (containerScrollElement) {
+    containerScrollElement.addEventListener('scroll', saveScrollPosition);
 }
+
+// --- FUNGSI BARU: JAM DIGITAL (TIDAK ADA PERUBAHAN) ---
+function updateClock() {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    
+    const timeString = `${hours}:${minutes}`;
+    
+    const clockElement = document.getElementById('digital-clock');
+    if (clockElement) {
+        clockElement.innerText = timeString;
+    }
+}
+
+updateClock(); 
 setInterval(updateClock, 1000); 
 
-document.addEventListener('keydown', function(e) {
-    var searchInput = document.getElementById('cari');
-    var focused = document.activeElement;
+
+// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Hanya fokus pada Beranda, Live, Pengaturan) ---
+document.addEventListener('keydown', (e) => {
+    const searchInput = document.getElementById('cari');
+    const focusedElement = document.activeElement;
     
     if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'Enter') {
+        
         e.preventDefault(); 
-
-        if (focused.classList.contains('theme-button')) {
-            var btn = Array.prototype.slice.call(document.querySelectorAll('.theme-button'));
-            var idx = btn.indexOf(focused);
-            if (e.key === 'ArrowRight') btn[Math.min(idx+1, btn.length-1)].focus();
-            else if (e.key === 'ArrowLeft') btn[Math.max(idx-1, 0)].focus();
-            else if (e.key === 'ArrowUp') document.querySelector('.nav-item[data-page="pengaturan"]').focus();
-            else if (e.key === 'Enter') focused.click();
+        
+        // 1. LOGIKA NAVIGASI PENGATURAN
+        if (focusedElement.classList.contains('theme-button')) {
+            const themeButtons = Array.from(document.querySelectorAll('.theme-button'));
+            const currentIndex = themeButtons.findIndex(item => item === focusedElement);
+            
+            if (e.key === 'ArrowRight') {
+                const nextIndex = Math.min(currentIndex + 1, themeButtons.length - 1);
+                themeButtons[nextIndex].focus();
+            } else if (e.key === 'ArrowLeft') {
+                const nextIndex = Math.max(currentIndex - 1, 0);
+                themeButtons[nextIndex].focus();
+            } else if (e.key === 'ArrowUp') {
+                // Pindah kembali ke sidebar (ke item Pengaturan)
+                const settingNav = document.querySelector('.nav-item[data-page="pengaturan"]');
+                if (settingNav) settingNav.focus();
+            } else if (e.key === 'Enter') {
+                focusedElement.click(); // Menerapkan tema
+            }
             return;
         }
 
-        if (focused.classList.contains('nav-item')) {
-            var navs = Array.prototype.slice.call(document.querySelectorAll('.nav-item'));
-            var nIdx = navs.indexOf(focused);
-            if (e.key === 'ArrowDown') navs[Math.min(nIdx+1, navs.length-1)].focus();
-            else if (e.key === 'ArrowUp') {
-                if(nIdx === 0) searchInput.focus();
-                else navs[nIdx-1].focus();
-            }
-            else if (e.key === 'ArrowRight') {
-                if (focused.getAttribute('data-page') === 'pengaturan') {
-                    var fBtn = document.querySelector('.theme-button');
-                    if (fBtn) fBtn.focus();
-                } else {
-                    var fDiv = getFirstVisibleElement(container);
-                    if (fDiv) { fDiv.focus(); fDiv.classList.add('highlight'); }
+        // 2. LOGIKA NAVIGASI SIDEBAR
+        if (focusedElement.classList.contains('nav-item')) {
+            const navItems = Array.from(document.querySelectorAll('.nav-item'));
+            const currentIndex = navItems.findIndex(item => item === focusedElement);
+            
+            if (e.key === 'ArrowDown') {
+                const nextIndex = Math.min(currentIndex + 1, navItems.length - 1);
+                navItems[nextIndex].focus();
+            } else if (e.key === 'ArrowUp') {
+                if (currentIndex === 0) {
+                     searchInput.focus();
+                     return;
+                }
+                const nextIndex = Math.max(currentIndex - 1, 0);
+                navItems[nextIndex].focus();
+            } else if (e.key === 'ArrowRight') {
+                const page = focusedElement.getAttribute('data-page');
+                
+                if (page === 'pengaturan') {
+                    // Pindah dari Pengaturan Sidebar ke tombol tema pertama
+                    const firstThemeButton = document.querySelector('.theme-button');
+                    if (firstThemeButton) firstThemeButton.focus();
+                    return;
+                }
+                
+                // Pindah dari Sidebar (non-Pengaturan) ke fokus kartu terakhir
+                const lastFocusedTitle = sessionStorage.getItem('lastFocusedCardTitle');
+                let targetDiv = null;
+                
+                if (lastFocusedTitle) {
+                    const allDivs = document.querySelectorAll('.responsive-div');
+                    allDivs.forEach(div => {
+                         const pElement = div.querySelector('.re');
+                         if (pElement && pElement.innerText === lastFocusedTitle && getComputedStyle(div).display !== 'none') {
+                             targetDiv = div;
+                         }
+                    });
+                }
+                
+                const firstDiv = targetDiv || getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
+                
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
+                    firstDiv.scrollIntoView({ behavior: 'instant', block: 'center' }); 
                 }
             } else if (e.key === 'Enter') {
-                focused.click();
+                const page = focusedElement.getAttribute('data-page');
+                sessionStorage.setItem('lastActiveMenuPage', page);
+                sessionStorage.removeItem('scrollPosition');
+                sessionStorage.removeItem('lastVideoTitle'); 
+                sessionStorage.removeItem('lastFocusedCardTitle'); 
+                
+                if (page === 'beranda') {
+                    loadAndRenderHomeContent(); 
+                } else if (page === 'live') {
+                    loadAndRenderLiveTVContent();
+                } else if (page === 'pengaturan') { // Handle Pengaturan
+                    showPengaturanMenu();
+                }
             }
             return;
         }
 
-        if (focused === searchInput) {
-            if (e.key === 'ArrowDown') document.querySelector('.nav-item').focus();
-            return;
-        }
-
-        var divs = Array.prototype.slice.call(document.querySelectorAll('.responsive-div')).filter(function(d){
-            return getComputedStyle(d).display !== 'none';
-        });
-        var cIdx = divs.indexOf(focused);
-        if (cIdx === -1) return;
-
-        focused.classList.remove('highlight');
-        var rowItems = 3; // Estimasi untuk STB
-        var next;
-
-        if (e.key === 'ArrowDown') next = Math.min(cIdx + rowItems, divs.length - 1);
-        else if (e.key === 'ArrowUp') {
-            next = cIdx - rowItems;
-            if (next < 0) { searchInput.focus(); return; }
-        }
-        else if (e.key === 'ArrowRight') next = Math.min(cIdx + 1, divs.length - 1);
-        else if (e.key === 'ArrowLeft') {
-            next = cIdx - 1;
-            if (next < 0 || cIdx % rowItems === 0) {
-                document.querySelector('.nav-item[data-page="' + (sessionStorage.getItem('lastActiveMenuPage') || 'beranda') + '"]').focus();
-                return;
+        // 3. LOGIKA UNTUK INPUT CARI (TIDAK ADA PERUBAHAN)
+        if (focusedElement === searchInput) {
+            if (e.key === 'ArrowDown') {
+                const firstNavItem = document.querySelector('.nav-item');
+                if (firstNavItem) {
+                    firstNavItem.focus();
+                }
+            } else if (e.key === 'ArrowRight') {
+                const lastFocusedTitle = sessionStorage.getItem('lastFocusedCardTitle');
+                let targetDiv = null;
+                
+                if (lastFocusedTitle) {
+                    const allDivs = document.querySelectorAll('.responsive-div');
+                    allDivs.forEach(div => {
+                         const pElement = div.querySelector('.re');
+                         if (pElement && pElement.innerText === lastFocusedTitle && getComputedStyle(div).display !== 'none') {
+                             targetDiv = div;
+                         }
+                    });
+                }
+                
+                const firstDiv = targetDiv || getFirstVisibleElement(container) || document.querySelector('.responsive-div:not([style*="display: none"])');
+                
+                if (firstDiv) {
+                    firstDiv.classList.add('highlight');
+                    firstDiv.focus();
+                }
             }
+            return; 
         }
-        else if (e.key === 'Enter') { focused.click(); return; }
+        
+        // 4. LOGIKA NAVIGASI CARD FILM (TIDAK ADA PERUBAHAN)
+        const divs = Array.from(document.querySelectorAll('.responsive-div')).filter(div => getComputedStyle(div).display !== 'none');
+        
+        const currentIndex = divs.findIndex(div => div === focusedElement);
+        
+        if (divs.length === 0 || currentIndex === -1) return;
 
-        if (divs[next]) {
-            divs[next].focus();
-            divs[next].classList.add('highlight');
-            divs[next].scrollIntoView(false);
-            sessionStorage.setItem('lastFocusedCardTitle', divs[next].querySelector('.re').innerText);
+        let nextIndex = -1;
+        
+        const containerRect = container.getBoundingClientRect();
+        const firstVisibleDiv = getFirstVisibleElement(container);
+        const cardWidthWithMargin = firstVisibleDiv ? firstVisibleDiv.offsetWidth + 30 : 300; 
+        
+        const itemsPerRow = Math.floor(containerRect.width / cardWidthWithMargin);
+        const actualItemsPerRow = Math.max(1, itemsPerRow); 
+        
+        focusedElement.classList.remove('highlight');
+            
+        switch (e.key) {
+            case 'ArrowDown':
+                nextIndex = Math.min(currentIndex + actualItemsPerRow, divs.length - 1);
+                break;
+            case 'ArrowUp':
+                nextIndex = currentIndex - actualItemsPerRow;
+                
+                if (nextIndex < 0) {
+                    searchInput.focus(); 
+                    return;
+                }
+                break;
+            case 'ArrowRight':
+                nextIndex = Math.min(currentIndex + 1, divs.length - 1);
+                break;
+            case 'ArrowLeft':
+                nextIndex = currentIndex - 1;
+                
+                if (nextIndex < 0 || (currentIndex % actualItemsPerRow === 0)) {
+                    const activePage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
+                    const activeNav = document.querySelector(`.nav-item[data-page="${activePage}"]`);
+                    
+                    if (activeNav) {
+                        activeNav.focus();
+                    } else {
+                        searchInput.focus(); 
+                    }
+                    return;
+                }
+                break;
+            case 'Enter':
+                focusedElement.click();
+                return; 
         }
+
+        if (nextIndex !== -1 && divs[nextIndex]) {
+            divs[nextIndex].classList.add('highlight');
+            divs[nextIndex].focus();
+            
+            const focusedTitle = divs[nextIndex].querySelector('.re').innerText;
+            sessionStorage.setItem('lastFocusedCardTitle', focusedTitle); 
+            
+            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
+            
+            saveScrollPosition();
+        }
+    } else if (e.key === 'Escape') {
+        window.history.back();
     }
 });
 
+
+// --- FUNGSI INTI UNTUK MENGATUR NAVIGASI DAN PEMUATAN AWAL (MODIFIKASI) ---
 function initNavigation() {
+    // 1. Muat tema awal (PENTING)
     loadInitialTheme();
+    
+    // 2. Setup tombol tema
     setupThemeButtons();
-    var navs = document.querySelectorAll('.nav-item');
-    for (var i = 0; i < navs.length; i++) {
-        navs[i].addEventListener('click', function() {
-            var page = this.getAttribute('data-page');
-            sessionStorage.setItem('lastActiveMenuPage', page);
-            if (page === 'beranda') loadAndRenderHomeContent();
-            else if (page === 'live') loadAndRenderLiveTVContent();
-            else if (page === 'pengaturan') showPengaturanMenu();
+
+    // 3. Setup navigasi menu
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Reset highlight pada film saat pindah menu
+            document.querySelectorAll('.responsive-div').forEach(div => div.classList.remove('highlight'));
+            
+            const page = item.getAttribute('data-page');
+            
+            sessionStorage.setItem('lastActiveMenuPage', page); 
+            container.innerHTML = ''; 
+            
+            // Logika untuk menampilkan konten/menu yang sesuai
+            if (page === 'beranda') {
+                loadAndRenderHomeContent();
+            } else if (page === 'live') {
+                loadAndRenderLiveTVContent();
+            } else if (page === 'pengaturan') {
+                showPengaturanMenu();
+            }
+            else {
+                // Fallback jika ada nav-item lain yang tidak terdefinisi
+                filesProcessedCount = 0; 
+                currentItems = []; 
+                container.style.display = 'block';
+                pengaturanMenu.style.display = 'none';
+                container.innerHTML = `<h2>Konten untuk ${item.innerText} belum tersedia.</h2>`; 
+                restoreFocusOnContent();
+            }
         });
+    });
+    
+    // Pemicu Awal: Klik menu terakhir yang disimpan secara otomatis
+    const lastPage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
+    
+    // Jika terakhir kali di halaman yang sudah dihapus, paksa ke beranda
+    const validPages = ['beranda', 'live', 'pengaturan'];
+    const initialPage = validPages.includes(lastPage) ? lastPage : 'beranda';
+    
+    const initialNav = document.querySelector(`.nav-item[data-page="${initialPage}"]`);
+
+    if (initialNav) {
+        initialNav.click();
+    } else {
+        const homeNav = document.querySelector('.nav-item[data-page="beranda"]');
+        if (homeNav) homeNav.click();
     }
-    var last = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
-    var initNav = document.querySelector('.nav-item[data-page="' + last + '"]') || document.querySelector('.nav-item');
-    if (initNav) initNav.click();
 }
 
+// Jalankan inisialisasi setelah script dimuat
 initNavigation();
