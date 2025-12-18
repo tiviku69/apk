@@ -1,5 +1,101 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq71/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/tiviku69/master/load1/zz71.m3u8",
+"ttl": "Underground Monster (2023) dubbing",
+"dur": "1:07:55",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq70/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz70.m3u8",
+"ttl": "Sunshine (2007) dubbing",
+"dur": "1:47:28",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq69/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz69.m3u8",
+"ttl": "Annabelle: Creation (2017) dubbing",
+"dur": "1:49:42",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq67/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz67.m3u8",
+"ttl": "LEGO Marvel Avengers: Code Red (2023) dubbing",
+"dur": "43:33",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq66/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz66.m3u8",
+"ttl": "The Nun II (2023) dubbing",
+"dur": "1:45:10",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq65/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz65.m3u8",
+"ttl": "The Nun (2018) dubbing",
+"dur": "1:36:34",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq64/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz64.m3u8",
+"ttl": "Sixty Minutes (2024) dubbing",
+"dur": "1:29:55",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq63/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz63.m3u8",
+"ttl": "Kampung Jabang Mayit: Ritual Maut (2025)",
+"dur": "1:31:18",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq62/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load1/zz62.m3u8",
+"ttl": "Yowis Ben Finale (2021)",
+"dur": "1:31:55",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq56/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz56.m3u8",
+"ttl": "Comic 8: Casino Kings - Part 2 (2016)",
+"dur": "1:32:36",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.1",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq55/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz55.m3u8",
+"ttl": "Alice in Wonderland (2010) dubbing",
+"dur": "1:48:33",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq54/img.jpg",
+"lnk": "https://tiviku69.github.io/tiviku69/load/zz54.m3u8",
+"ttl": "Urban Legend Sumiati: Teror Angkot Makassar (2025)",
+"dur": "1:18:39",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq53/img.jpg",
 "lnk": "https://tiviku69.github.io/tiviku69/load/zz53.m3u8",
 "ttl": "Warkop DKI Kartun (2025)",
