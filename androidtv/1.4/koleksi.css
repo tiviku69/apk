@@ -1,13 +1,36 @@
+/* --- DEFINISI TEMA KOLEKSI --- */
+
+/* Tema Biru Tua */
+.theme-blue-dark { background-color: #121c29 !important; }
+.theme-blue-dark h1 { color: #4a90e2 !important; }
+.theme-blue-dark #atas-koleksi { background-color: #121c29 !important; }
+.theme-blue-dark .responsive-div { border: 5px solid #4a90e2 !important; }
+.theme-blue-dark .highlight, .theme-blue-dark .responsive-div:focus { 
+    border: 5px solid white !important; 
+    box-shadow: 0 0 15px #4a90e2; 
+}
+
+/* Tema Merah Gelap */
+.theme-red-dark { background-color: #1f0505 !important; }
+.theme-red-dark h1 { color: #ff4d4d !important; }
+.theme-red-dark #atas-koleksi { background-color: #1f0505 !important; }
+.theme-red-dark .responsive-div { border: 5px solid #ff4d4d !important; }
+.theme-red-dark .highlight, .theme-red-dark .responsive-div:focus { 
+    border: 5px solid white !important; 
+    box-shadow: 0 0 15px #ff4d4d; 
+}
+
+/* --- STYLE DASAR --- */
 body {
     background-color: black;
     text-align: center;
     margin: 0;
     padding: 0;
+    transition: background-color 0.3s;
+    overflow: hidden;
 }
 
-h1 {
-    color: yellowgreen;
-}
+h1 { color: yellowgreen; margin: 0; }
 
 .re {
     color: rgba(255, 255, 255, 0.8);
@@ -15,7 +38,6 @@ h1 {
     font-weight: 1000;
     font-style: italic;
     position: relative;
-    letter-spacing: 1px;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
@@ -28,9 +50,7 @@ h1 {
 .dur {
     color: white;
     font-weight: 900;
-    font-style: italic;
     position: absolute;
-    border-radius: 3px;
     bottom: 180px;
     padding: 3px;
     background-color: rgba(0, 0, 0, 0.6);
@@ -38,26 +58,23 @@ h1 {
     z-index: 1;
 }
 
-.responsive-div:focus .re,
-.responsive-div:hover .re {
-    font-size: 19px;
-    color: white;
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.responsive-div:focus {
-    border: 5px solid #fff;
+.responsive-div {
+    width: 260px;
+    height: 210px;
+    display: inline-block;
     border-radius: 13px;
-}
-
-.responsive-div:hover {
-    border: 5px solid #fff;
-    border-radius: 13px;
+    overflow: hidden;
+    position: relative;
+    padding: 8px;
+    margin: 15px;
+    border: 5px solid yellowgreen;
+    outline: none;
+    transition: transform 0.2s;
 }
 
 .highlight {
-    border: 5px solid #fff;
-    border-radius: 13px;
+    border: 5px solid #fff !important;
+    transform: scale(1.05);
 }
 
 #imgv {                
@@ -68,66 +85,5 @@ h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-}
-
-#atas {                
-    position: relative;
-}
-
-#container {
-    height: 530px;
-    position: relative;
-    top: 15px;
-    padding: 0px;
-    overflow: auto;
-}
-
-#cari {
-    border-radius: 8px;
-    height: 25px;
-    background: whitesmoke;
-    margin: 0px;
-    padding: 0px;
-    font-size: 20px;
-    top: 60px;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    position: absolute;
-}
-#search {
-    padding: 0px;
-}
-
-.responsive-div {
-    width: 260px;
-    height: 210px;
-    display: inline-block;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-radius: 13px;
-    overflow: hidden;
-    position: relative;
-    padding: 8px 8px;
-    margin: 15px;
-    border: 5px solid red;
-}
-
-/* GAYA BARU UNTUK PEMBERITAHUAN OFFLINE */
-#offline-message {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: #ffcccc; /* Merah muda */
-    background-color: rgba(50, 0, 0, 0.9); /* Merah gelap transparan */
-    padding: 30px 40px;
-    border-radius: 15px;
-    border: 3px solid red;
-    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-    z-index: 100;
-    text-align: center;
-    font-size: 24px;
-    line-height: 1.5;
-    font-family: Arial, sans-serif;
+    object-fit: cover;
 }

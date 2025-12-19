@@ -319,7 +319,7 @@ b {
 }
 .theme-blue-dark #sidebar-h1,
 .theme-blue-dark #sidebar-b {
-    color: yellowgreen;
+    color: #4a90e2 !important; /* Warna aksen biru */
 }
 .theme-blue-dark #sidebar #cari {
     background: #1e2a39 !important;
@@ -343,7 +343,7 @@ b {
 }
 .theme-red-dark #sidebar-h1,
 .theme-red-dark #sidebar-b {
-    color: yellowgreen;
+    color: #ff4d4d !important; /* Warna aksen merah */
 }
 .theme-red-dark #sidebar #cari {
     background: #330000 !important;
