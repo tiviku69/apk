@@ -73,8 +73,8 @@ h1 { color: yellowgreen; margin: 0; }
 }
 
 .highlight {
-    border: 5px solid #fff !important;
-    transform: scale(1.05);
+    border: 5px solid #fff;
+    border-radius: 13px;
 }
 
 #imgv {                

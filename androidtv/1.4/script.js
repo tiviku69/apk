@@ -305,7 +305,7 @@ function showPengaturanMenu() {
     // BARU: Tampilkan Informasi Versi Aplikasi
     const versionInfo = document.getElementById('app-version-info');
     if (versionInfo) {
-        versionInfo.innerHTML = `Versi Aplikasi: <b>${APP_VERSION}</b>`;
+        versionInfo.innerHTML = `Versi Aplikasi: 2.0<b>${APP_VERSION}</b>`;
     }
     
     // Hapus fokus terakhir pada kartu film
