@@ -1,4 +1,4 @@
-// --- FUNGSI TEMA (DITAMBAHKAN) ---
+// --- FUNGSI TEMA ---
 function loadAndApplyTheme() {
     try {
         const savedTheme = localStorage.getItem('currentTheme') || 'default';
@@ -19,7 +19,7 @@ function loadAndApplyTheme() {
 // Jalankan fungsi tema segera
 loadAndApplyTheme();
 
-// --- FUNGSI LAZY LOADING (DIBAWAH INI TETAP SAMA) ---
+// --- FUNGSI LAZY LOADING ---
 const collectionImageObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -111,6 +111,10 @@ const restoreFocusAndScrollKoleksi = () => {
         });
     }
 
+    // Bersihkan highlight lama sebelum memberikan yang baru
+    const allDivs = document.querySelectorAll('#container-koleksi .responsive-div');
+    allDivs.forEach(div => div.classList.remove('highlight'));
+
     if (targetElement) {
         targetElement.classList.add('highlight');
         targetElement.focus();
@@ -137,29 +141,39 @@ function playVideoInCollection(videoFile, logoFile, textFile, cropMode, cropPosi
     window.location.href = 'ply.html';
 }
 
+// --- SISTEM NAVIGASI DIPERBAIKI ---
 document.addEventListener('keydown', (e) => {
-    const focusedElement = document.activeElement;
     const divs = Array.from(document.querySelectorAll('#container-koleksi .responsive-div'));
-    const currentIndex = divs.findIndex(div => div === focusedElement);
+    const currentIndex = divs.findIndex(div => div === document.activeElement);
     const container = document.getElementById('container-koleksi');
+    const itemsPerRow = Math.floor(container.offsetWidth / 300) || 1;
 
-    if (['ArrowUp', 'ArrowDown', 'Enter'].includes(e.key)) {
+    let nextIndex = -1;
+
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter'].includes(e.key)) {
         e.preventDefault();
-        let nextIndex = -1;
-        const itemsPerRow = Math.floor(container.offsetWidth / 300) || 1;
 
-        if (currentIndex === -1) nextIndex = 0;
-        else {
-            focusedElement.classList.remove('highlight');
+        if (currentIndex === -1) {
+            nextIndex = 0;
+        } else {
             if (e.key === 'ArrowDown') nextIndex = Math.min(currentIndex + itemsPerRow, divs.length - 1);
             else if (e.key === 'ArrowUp') nextIndex = Math.max(currentIndex - itemsPerRow, 0);
-            else if (e.key === 'Enter') { focusedElement.click(); return; }
+            else if (e.key === 'ArrowRight') nextIndex = Math.min(currentIndex + 1, divs.length - 1);
+            else if (e.key === 'ArrowLeft') nextIndex = Math.max(currentIndex - 1, 0);
+            else if (e.key === 'Enter') { 
+                divs[currentIndex].click(); 
+                return; 
+            }
         }
 
         if (divs[nextIndex]) {
+            // Hapus highlight dari semua elemen agar tidak ganda
+            divs.forEach(div => div.classList.remove('highlight'));
+            
+            // Tambahkan highlight pada elemen baru
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
-            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
+            divs[nextIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
     } else if (e.key === 'Escape') {
         window.location.href = 'tiviku.html';
