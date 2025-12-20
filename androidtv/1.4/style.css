@@ -266,6 +266,7 @@ b {
     color: white;
     font-weight: bold;
     transition: border-color 0.2s, background-color 0.2s, transform 0.2s;
+margin: 5px;
 }
 
 .theme-button:focus,
@@ -319,7 +320,7 @@ b {
 }
 .theme-blue-dark #sidebar-h1,
 .theme-blue-dark #sidebar-b {
-    color: #4a90e2 !important; /* Warna aksen biru */
+    color: yellowgreen; /* Warna aksen biru */
 }
 .theme-blue-dark #sidebar #cari {
     background: #1e2a39 !important;
@@ -343,7 +344,7 @@ b {
 }
 .theme-red-dark #sidebar-h1,
 .theme-red-dark #sidebar-b {
-    color: #ff4d4d !important; /* Warna aksen merah */
+    color: yellowgreen; /* Warna aksen merah */
 }
 .theme-red-dark #sidebar #cari {
     background: #330000 !important;
