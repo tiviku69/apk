@@ -70,6 +70,7 @@ b {
     border: 5px solid #fff;
     border-radius: 13px;
     outline: none;
+transform: scale(1.05);
 }
 /* END MODIFIKASI DEFAULT HIGHLIGHT */
 
