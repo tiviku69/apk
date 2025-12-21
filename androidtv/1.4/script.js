@@ -15,7 +15,7 @@ const directFiles = [
 const collectionListUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/koleksi.json';
 
 // 3. FILE BARU UNTUK LIVE TV
-const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json'; // Asumsi live.json berada di direktori yang sama.
+const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json';
 
 const totalFiles = directFiles.length + 1; // Variabel ini hanya berlaku untuk Beranda
 let filesProcessedCount = 0; 
@@ -305,7 +305,7 @@ function showPengaturanMenu() {
     // BARU: Tampilkan Informasi Versi Aplikasi
     const versionInfo = document.getElementById('app-version-info');
     if (versionInfo) {
-        versionInfo.innerHTML = `Versi Aplikasi: <b>${APP_VERSION}</b>`;
+        versionInfo.innerHTML = `Versi Aplikasi: 2.0<b>${APP_VERSION}</b>`;
     }
     
     // Hapus fokus terakhir pada kartu film
