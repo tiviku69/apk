@@ -1,4 +1,4 @@
-/* --- GAYA ASLI FILM CARD & UTAMA --- */
+/* --- GAYA ASLI FILM CARD & UTAMA (Reverted) --- */
 body {
     background-color: black;
     text-align: center;
@@ -10,8 +10,11 @@ body {
 }
 
 /* Sembunyikan h1/b global yang lama */
-h1, b {
+h1 {
     display: none; 
+}
+b {
+    display: none;
 }
 
 /* MODIFIKASI: WARNA TEKS RE DEFAULT */
@@ -29,7 +32,6 @@ h1, b {
     font-size: 15px;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 1;
-    transition: font-size 0.2s, color 0.2s; /* Transisi halus pada teks */
 }
 
 .dur {
@@ -45,7 +47,6 @@ h1, b {
     z-index: 1;
 }
 
-/* EFEK HOVER/FOCUS PADA KONTEN DALAM CARD */
 .responsive-div:focus .re,
 .responsive-div:hover .re {
     font-size: 19px;
@@ -53,16 +54,24 @@ h1, b {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* MODIFIKASI: DEFAULT HIGHLIGHT */
-.responsive-div:focus,
-.responsive-div:hover,
+/* MODIFIKASI: DEFAULT HIGHLIGHT (Beranda/Live TV) */
+.responsive-div:focus {
+    border: 5px solid #fff; /* Warna putih default */
+    border-radius: 13px;
+    outline: none; 
+}
+
+.responsive-div:hover {
+    border: 5px solid #fff;
+    border-radius: 13px;
+}
+
 .highlight {
-    border: 5px solid #fff !important;
+    border: 5px solid #fff;
     border-radius: 13px;
     outline: none;
-    transform: scale(1.05); /* Efek Zoom */
-    z-index: 10;
 }
+/* END MODIFIKASI DEFAULT HIGHLIGHT */
 
 #imgv {                
     border-radius: 11px;
@@ -74,6 +83,11 @@ h1, b {
     transform: translate(-50%,-50%);
 }
 
+#atas {                
+    position: relative;
+    height: 80px; 
+}
+
 #container {
     height: calc(100vh - 100px); 
     position: relative;
@@ -82,27 +96,34 @@ h1, b {
     overflow: auto; 
 }
 
+#cari {
+    /* Gaya lama dihapus */
+}
+
 .responsive-div {
     width: 260px;
     height: 210px;
     display: inline-block; 
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     border-radius: 13px;
     overflow: hidden;
     position: relative;
     padding: 8px 8px;
     margin: 15px;
+    /* MODIFIKASI: DEFAULT BORDER CARD */
     border: 5px solid #6c7c13; 
-    background-color: #1a1a1a;
-    /* PERBAIKAN: Transisi Smooth & Performa */
-    transition: transform 0.2s ease-in-out, border 0.2s, box-shadow 0.2s;
-    will-change: transform; 
+    /* END MODIFIKASI */
 }
 
-/* --- LAYOUT SIDEBAR --- */
+
+/* --- LAYOUT DUA KOLOM (SIDEBAR) & GAYA TIVIKU/SEARCH BARU --- */
 #app-wrapper {
     display: flex;
     height: 100vh;
     background-color: black;
+    /* MODIFIKASI: Theme Class */
     transition: background-color 0.3s;
 }
 
@@ -113,6 +134,7 @@ h1, b {
     flex-shrink: 0;
     border-right: 2px solid #282828;
     text-align: left;
+    /* MODIFIKASI: Theme Class */
     transition: background-color 0.3s;
 }
 
@@ -120,18 +142,23 @@ h1, b {
     padding: 0 20px 20px;
 }
 
+/* MODIFIKASI: DEFAULT WARNA HIJAU */
 #sidebar-h1 { 
     color: yellowgreen; 
     font-size: 32px;
     margin: 0;
+    font-family: inherit;
     font-weight: 700;
+    transition: color 0.3s;
 }
 
 #sidebar-b { 
     color: yellowgreen; 
     display: block;
+    margin-top: 0px;
     font-size: 30px; 
     font-weight: bold; 
+    transition: color 0.3s;
 }
 
 #sidebar #cari {
@@ -146,16 +173,22 @@ h1, b {
     outline: none;
     box-sizing: border-box;
     margin-top: 15px; 
-    transition: background-color 0.2s;
+    position: relative; 
+    transform: none;
+    transition: background-color 0.3s;
 }
 
-/* NAVIGASI - Dipercepat durasinya agar tidak telat */
+
+#nav-menu {
+    margin-top: 30px;
+}
+
 .nav-item {
     padding: 15px 20px;
     font-size: 18px;
     color: #aaa;
     cursor: pointer;
-    transition: background-color 0.1s, color 0.1s; /* Lebih cepat (0.1s) */
+    transition: background-color 0.2s, color 0.2s;
 }
 
 .nav-item:focus,
@@ -172,7 +205,7 @@ h1, b {
     padding: 0 20px; 
 }
 
-/* JAM DIGITAL */
+/* --- GAYA BARU: JAM DIGITAL --- */
 #digital-clock {
     position: absolute;
     top: 25px;
@@ -185,45 +218,142 @@ h1, b {
     padding: 5px 10px;
     border-radius: 5px;
 }
+/* --- END GAYA BARU: JAM DIGITAL --- */
 
-/* --- TEMA CLASSES --- */
 
-/* TEMA BIRU TUA */
-.theme-blue-dark { background-color: #121c29 !important; }
-.theme-blue-dark #sidebar { background-color: #0b141d !important; }
-.theme-blue-dark .responsive-div { border-color: #4a90e2 !important; }
-.theme-blue-dark .highlight, 
-.theme-blue-dark .responsive-div:focus { 
-    box-shadow: 0 0 15px #4a90e2; 
+/* --- Pemberitahuan Offline --- */
+#offline-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #ffcccc; 
+    background-color: rgba(50, 0, 0, 0.9);
+    padding: 30px 40px;
+    border-radius: 15px;
+    border: 3px solid red;
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+    z-index: 100;
+    text-align: center;
+    font-size: 24px;
+    line-height: 1.5;
+    font-family: Arial, sans-serif;
 }
 
-/* TEMA MERAH GELAP */
-.theme-red-dark { background-color: #1f0505 !important; }
-.theme-red-dark #sidebar { background-color: #150000 !important; }
-.theme-red-dark .responsive-div { border-color: #ff4d4d !important; }
-.theme-red-dark .highlight, 
-.theme-red-dark .responsive-div:focus { 
-    box-shadow: 0 0 15px #ff4d4d; 
+/* --- MODIFIKASI: GAYA PENGATURAN TEMA --- */
+#pengaturan-menu {
+    height: calc(100vh - 100px); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
 }
 
-/* --- PENGATURAN MENU --- */
 #theme-options {
     display: flex;
-    gap: 20px;
-    justify-content: center;
+    gap: 30px;
     margin-top: 40px;
 }
 
 .theme-button {
-    padding: 12px 25px;
-    font-size: 16px;
+    padding: 15px 30px;
+    font-size: 18px;
+    border: 3px solid transparent;
     border-radius: 10px;
     cursor: pointer;
-    border: 3px solid transparent;
-    transition: transform 0.2s;
+    color: white;
+    font-weight: bold;
+    transition: border-color 0.2s, background-color 0.2s, transform 0.2s;
+margin: 5px;
 }
 
-.theme-button:focus {
-    transform: scale(1.1);
+.theme-button:focus,
+.theme-button:hover {
+    outline: none;
+    transform: scale(1.05);
+}
+
+/* GAYA KHUSUS TOMBOL TEMA */
+
+/* Default (Hitam/Hijau) */
+.theme-button[data-theme="default"] {
+    background-color: #2c2c2c;
+    border-color: yellowgreen;
+}
+.theme-button[data-theme="default"]:focus {
     border-color: white;
+    box-shadow: 0 0 15px yellowgreen;
+}
+
+
+/* Biru Tua */
+.theme-button[data-theme="blue-dark"] {
+    background-color: #0d1a2c;
+    border-color: #4a90e2; /* Biru terang */
+}
+.theme-button[data-theme="blue-dark"]:focus {
+    border-color: white;
+    box-shadow: 0 0 15px #4a90e2;
+}
+
+
+/* Merah Gelap */
+.theme-button[data-theme="red-dark"] {
+    background-color: #3d0a0a;
+    border-color: #ff4d4d; /* Merah terang */
+}
+.theme-button[data-theme="red-dark"]:focus {
+    border-color: white;
+    box-shadow: 0 0 15px #ff4d4d;
+}
+
+/* GAYA TEMA (APPLIED CLASSES) */
+/* --- TEMA BIRU TUA --- */
+.theme-blue-dark {
+    background-color: #121c29 !important; /* Latar utama lebih gelap */
+}
+.theme-blue-dark #sidebar {
+    background-color: #0b141d !important;
+    border-right-color: #1e2a39 !important;
+}
+.theme-blue-dark #sidebar-h1,
+.theme-blue-dark #sidebar-b {
+    color: yellowgreen; /* Warna aksen biru */
+}
+.theme-blue-dark #sidebar #cari {
+    background: #1e2a39 !important;
+}
+.theme-blue-dark .responsive-div {
+    border: 5px solid #4a90e2 !important; /* Border card biru */
+}
+.theme-blue-dark .responsive-div:focus,
+.theme-blue-dark .highlight {
+    border: 5px solid white !important; 
+    box-shadow: 0 0 15px #4a90e2;
+}
+
+/* --- TEMA MERAH GELAP --- */
+.theme-red-dark {
+    background-color: #1f0505 !important;
+}
+.theme-red-dark #sidebar {
+    background-color: #150000 !important;
+    border-right-color: #330000 !important;
+}
+.theme-red-dark #sidebar-h1,
+.theme-red-dark #sidebar-b {
+    color: yellowgreen; /* Warna aksen merah */
+}
+.theme-red-dark #sidebar #cari {
+    background: #330000 !important;
+}
+.theme-red-dark .responsive-div {
+    border: 5px solid #ff4d4d !important; /* Border card merah */
+}
+.theme-red-dark .responsive-div:focus,
+.theme-red-dark .highlight {
+    border: 5px solid white !important;
+    box-shadow: 0 0 15px #ff4d4d;
 }
