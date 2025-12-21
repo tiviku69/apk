@@ -58,7 +58,8 @@ b {
 .responsive-div:focus {
     border: 5px solid #fff; /* Warna putih default */
     border-radius: 13px;
-    outline: none; 
+    outline: none;
+ transition: transform 0.2s;
 }
 
 .responsive-div:hover {
