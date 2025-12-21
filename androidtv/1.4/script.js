@@ -2,6 +2,9 @@ const atas = document.getElementById('atas');
 // MENGHAPUS kode injeksi logo/search ke #atas karena sudah dipindah ke tiviku.html
 atas.innerHTML = ''; 
 
+// BARU: Konstanta Versi Aplikasi
+const APP_VERSION = 'v1.2.0'; 
+
 // 1. Files yang langsung ditampilkan di halaman utama (BERANDA)
 const directFiles = [
 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json',
@@ -12,7 +15,7 @@ const directFiles = [
 const collectionListUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/koleksi.json';
 
 // 3. FILE BARU UNTUK LIVE TV
-const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json'; // Asumsi live.json berada di direktori yang sama.
+const liveTVUrl = 'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/tvlive.json';
 
 const totalFiles = directFiles.length + 1; // Variabel ini hanya berlaku untuk Beranda
 let filesProcessedCount = 0; 
@@ -23,10 +26,36 @@ const pengaturanMenu = document.getElementById('pengaturan-menu');
 let allItems = []; 
 let currentItems = []; 
 
-// --- MODIFIKASI: FUNGSI TEMA ---
+// --- MODIFIKASI: FUNGSI BARU: MANAJEMEN LOCALSTORAGE (SOLUSI TEMA PERSISTEN) ---
+/**
+ * Menyimpan pasangan key-value sebagai LocalStorage.
+ */
+function setLocalStorage(name, value) {
+    try {
+        localStorage.setItem(name, value);
+    } catch (e) {
+        console.error("Gagal menyimpan ke LocalStorage:", e);
+    }
+}
 
 /**
- * Menerapkan tema ke seluruh aplikasi dan menyimpannya di sessionStorage.
+ * Mengambil nilai dari LocalStorage berdasarkan namanya.
+ */
+function getLocalStorage(name) {
+    try {
+        return localStorage.getItem(name);
+    } catch (e) {
+        console.warn("Gagal membaca dari LocalStorage:", e);
+        return null;
+    }
+}
+// --- END FUNGSI MANAJEMEN LOCALSTORAGE ---
+
+
+// --- MODIFIKASI: FUNGSI TEMA (Menggunakan LocalStorage) ---
+
+/**
+ * Menerapkan tema ke seluruh aplikasi dan menyimpannya di LocalStorage.
  * @param {string} themeName - Nama tema ('default', 'blue-dark', 'red-dark').
  */
 function applyTheme(themeName) {
@@ -44,8 +73,12 @@ function applyTheme(themeName) {
         appWrapper.classList.add(themeClass);
     }
     
-    // Simpan tema yang dipilih ke sessionStorage
-    sessionStorage.setItem('currentTheme', themeName);
+    // PERUBAHAN KRITIS: Simpan tema ke LocalStorage
+    try {
+        setLocalStorage('currentTheme', themeName);
+    } catch (e) {
+        console.error("Gagal menyimpan tema ke LocalStorage. Aplikasi mungkin tidak mengizinkan penyimpanan:", e);
+    }
 }
 
 /**
@@ -64,13 +97,20 @@ function setupThemeButtons() {
 }
 
 /**
- * Memuat tema dari sessionStorage saat aplikasi dimulai.
+ * Memuat tema dari LocalStorage saat aplikasi dimulai.
  */
 function loadInitialTheme() {
-    const savedTheme = sessionStorage.getItem('currentTheme') || 'default';
+    let savedTheme = 'default';
+    try {
+        // PERUBAHAN KRITIS: Ambil tema dari LocalStorage
+        savedTheme = getLocalStorage('currentTheme') || 'default';
+    } catch (e) {
+        console.warn("Gagal membaca tema dari LocalStorage, menggunakan default:", e);
+    }
+    
     applyTheme(savedTheme);
 }
-// --- END FUNGSI TEMA ---
+// --- END MODIFIKASI FUNGSI TEMA ---
 
 // FUNGSI PENGACAKAN (Fisher-Yates Shuffle)
 function shuffleArray(array) {
@@ -136,7 +176,7 @@ function createFilmElement(item, clickAction, isCollection = false) {
 }
 
 
-// --- FUNGSI MENGACAK DAN MENYIMPAN URUTAN BERANDA KE SESSION STORAGE ---
+// --- FUNGSI MENGACAK DAN MENYIMPAN URUTAN BERANDA KE SESSION STORAGE (TETAP SESS) ---
 function shuffleAndSaveItems() {
     shuffleArray(allItems);
     try {
@@ -146,7 +186,7 @@ function shuffleAndSaveItems() {
     }
 }
 
-// --- FUNGSI BARU: MENGACAK DAN MENYIMPAN URUTAN LIVE TV KE SESSION STORAGE ---
+// --- FUNGSI BARU: MENGACAK DAN MENYIMPAN URUTAN LIVE TV KE SESSION STORAGE (TETAP SESS) ---
 function shuffleAndSaveLiveTVItems(items) {
     shuffleArray(items);
     try {
@@ -257,10 +297,16 @@ function loadAndRenderLiveTVContent() {
         });
 }
 
-// MODIFIKASI: FUNGSI BARU UNTUK MENU PENGATURAN
+// MODIFIKASI: FUNGSI BARU UNTUK MENU PENGATURAN (TAMBAH INFORMASI VERSI)
 function showPengaturanMenu() {
     container.style.display = 'none'; // Sembunyikan konten film
     pengaturanMenu.style.display = 'flex'; // Tampilkan pengaturan
+    
+    // BARU: Tampilkan Informasi Versi Aplikasi
+    const versionInfo = document.getElementById('app-version-info');
+    if (versionInfo) {
+        versionInfo.innerHTML = `Versi Aplikasi: 2.0<b>${APP_VERSION}</b>`;
+    }
     
     // Hapus fokus terakhir pada kartu film
     sessionStorage.removeItem('lastFocusedCardTitle');
@@ -522,7 +568,7 @@ updateClock();
 setInterval(updateClock, 1000); 
 
 
-// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Penambahan Logika Navigasi Pengaturan) ---
+// --- FUNGSI NAVIGASI KEYBOARD/REMOTE BARU (Hanya fokus pada Beranda, Live, Pengaturan) ---
 document.addEventListener('keydown', (e) => {
     const searchInput = document.getElementById('cari');
     const focusedElement = document.activeElement;
@@ -611,12 +657,6 @@ document.addEventListener('keydown', (e) => {
                     loadAndRenderLiveTVContent();
                 } else if (page === 'pengaturan') { // Handle Pengaturan
                     showPengaturanMenu();
-                }
-                else {
-                    filesProcessedCount = 0; 
-                    currentItems = []; 
-                    container.innerHTML = `<h2>Konten untuk ${focusedElement.innerText} belum tersedia.</h2>`;
-                    restoreFocusOnContent();
                 }
             }
             return;
@@ -752,11 +792,12 @@ function initNavigation() {
                 showPengaturanMenu();
             }
             else {
+                // Fallback jika ada nav-item lain yang tidak terdefinisi
                 filesProcessedCount = 0; 
                 currentItems = []; 
                 container.style.display = 'block';
                 pengaturanMenu.style.display = 'none';
-                container.innerHTML = `<h2>Konten untuk ${item.innerText} belum tersedia.</h2>`;
+                container.innerHTML = `<h2>Konten untuk ${item.innerText} belum tersedia.</h2>`; 
                 restoreFocusOnContent();
             }
         });
@@ -764,7 +805,12 @@ function initNavigation() {
     
     // Pemicu Awal: Klik menu terakhir yang disimpan secara otomatis
     const lastPage = sessionStorage.getItem('lastActiveMenuPage') || 'beranda';
-    const initialNav = document.querySelector(`.nav-item[data-page="${lastPage}"]`);
+    
+    // Jika terakhir kali di halaman yang sudah dihapus, paksa ke beranda
+    const validPages = ['beranda', 'live', 'pengaturan'];
+    const initialPage = validPages.includes(lastPage) ? lastPage : 'beranda';
+    
+    const initialNav = document.querySelector(`.nav-item[data-page="${initialPage}"]`);
 
     if (initialNav) {
         initialNav.click();
