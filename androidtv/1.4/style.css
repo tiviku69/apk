@@ -58,7 +58,7 @@ b {
 .responsive-div:focus {
     border: 5px solid #fff; /* Warna putih default */
     border-radius: 13px;
-    outline: none; 
+    outline: none;
 }
 
 .responsive-div:hover {
@@ -277,7 +277,7 @@ margin: 5px;
 
 /* GAYA KHUSUS TOMBOL TEMA */
 
-/* Default (Hitam/Hijau) */
+/* Default */
 .theme-button[data-theme="default"] {
     background-color: #2c2c2c;
     border-color: yellowgreen;
