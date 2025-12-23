@@ -205,23 +205,36 @@ function renderItems(items) {
         container.appendChild(div);
     });
     
-    // Jalankan Lazy Loading
-    initLazyLoading();
-}
+    // --- MODIFIKASI OBSERVER UNTUK BLUR-UP ---
+const imageObserver = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            const img = entry.target.querySelector('.lazy-img'); 
+            if (img) {
+                const src = img.getAttribute('data-src');
+                if (src) {
+                    // 1. Tambahkan class loading sebelum ganti src
+                    img.classList.add('loading');
+                    img.src = src; 
+                    
+                    // 2. Deteksi saat gambar selesai diunduh sepenuhnya
+                    img.onload = () => {
+                        img.classList.remove('loading');
+                        img.classList.add('loaded');
+                    };
 
-function initLazyLoading() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target.querySelector('.lazy-img');
-                if (img && img.dataset.src) {
-                    img.src = img.dataset.src;
                     img.removeAttribute('data-src');
-                    observer.unobserve(entry.target);
+                    observer.unobserve(entry.target); 
                 }
             }
-        });
-    }, { root: container, rootMargin: '200px' });
+        }
+    });
+}, {
+    root: document.getElementById('container'), 
+    rootMargin: '200px 0px', // Memuat lebih awal sebelum muncul di layar
+    threshold: 0.01
+});
+
 
     document.querySelectorAll('.responsive-div').forEach(div => observer.observe(div));
 }
