@@ -19,7 +19,7 @@ function loadAndApplyTheme() {
 // Jalankan fungsi tema segera
 loadAndApplyTheme();
 
-// --- FUNGSI LAZY LOADING ---
+// --- MODIFIKASI OBSERVER KOLEKSI UNTUK BLUR-UP ---
 const collectionImageObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -27,7 +27,14 @@ const collectionImageObserver = new IntersectionObserver((entries, observer) => 
             if (img) {
                 const src = img.getAttribute('data-src');
                 if (src) {
+                    img.classList.add('loading');
                     img.src = src; 
+
+                    img.onload = () => {
+                        img.classList.remove('loading');
+                        img.classList.add('loaded');
+                    };
+
                     img.removeAttribute('data-src');
                     observer.unobserve(entry.target); 
                 }
@@ -36,9 +43,10 @@ const collectionImageObserver = new IntersectionObserver((entries, observer) => 
     });
 }, {
     root: document.getElementById('container-koleksi'),
-    rootMargin: '100px 0px',
+    rootMargin: '200px 0px',
     threshold: 0.01
 });
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const jsonUrl = sessionStorage.getItem('collectionJsonUrl');

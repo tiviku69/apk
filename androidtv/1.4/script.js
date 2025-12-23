@@ -120,7 +120,7 @@ function shuffleArray(array) {
     }
 }
 
-// --- FUNGSI BARU UNTUK OBSERVASI (LAZY LOADING) ---
+// --- MODIFIKASI OBSERVER UNTUK BLUR-UP ---
 const imageObserver = new IntersectionObserver((entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -128,7 +128,16 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
             if (img) {
                 const src = img.getAttribute('data-src');
                 if (src) {
+                    // 1. Tambahkan class loading sebelum ganti src
+                    img.classList.add('loading');
                     img.src = src; 
+                    
+                    // 2. Deteksi saat gambar selesai diunduh sepenuhnya
+                    img.onload = () => {
+                        img.classList.remove('loading');
+                        img.classList.add('loaded');
+                    };
+
                     img.removeAttribute('data-src');
                     observer.unobserve(entry.target); 
                 }
@@ -137,9 +146,10 @@ const imageObserver = new IntersectionObserver((entries, observer) => {
     });
 }, {
     root: document.getElementById('container'), 
-    rootMargin: '100px 0px', 
+    rootMargin: '200px 0px', // Memuat lebih awal sebelum muncul di layar
     threshold: 0.01
 });
+
 // --- END FUNGSI OBSERVASI ---
 
 // Fungsi untuk membuat elemen film

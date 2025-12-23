@@ -97,3 +97,20 @@ h1 { color: yellowgreen; margin: 0; }
     left: 50%;
     transform: translate(-50%,-50%);
 }
+
+/* --- FITUR BLUR-UP --- */
+#imgv {
+    transition: filter 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+/* Gambar saat dalam proses loading (Blur) */
+.lazy-img.loading {
+    filter: blur(15px);
+    opacity: 0.7;
+}
+
+/* Gambar setelah selesai dimuat (Tajam) */
+.lazy-img.loaded {
+    filter: blur(0);
+    opacity: 1;
+}
