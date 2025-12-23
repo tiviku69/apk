@@ -2,7 +2,7 @@
 
 /* Tema Biru Tua */
 .theme-blue-dark { background-color: #121c29 !important; }
-.theme-blue-dark h1 { color: #4a90e2 !important; }
+.theme-blue-dark h1 { color: yellowgreen; margin: 0; }
 .theme-blue-dark #atas-koleksi { background-color: #121c29 !important; }
 .theme-blue-dark .responsive-div { border: 5px solid #4a90e2 !important; }
 .theme-blue-dark .highlight, .theme-blue-dark .responsive-div:focus { 
@@ -12,7 +12,7 @@
 
 /* Tema Merah Gelap */
 .theme-red-dark { background-color: #1f0505 !important; }
-.theme-red-dark h1 { color: #ff4d4d !important; }
+.theme-red-dark h1 { color: yellowgreen; margin: 0; }
 .theme-red-dark #atas-koleksi { background-color: #1f0505 !important; }
 .theme-red-dark .responsive-div { border: 5px solid #ff4d4d !important; }
 .theme-red-dark .highlight, .theme-red-dark .responsive-div:focus { 
@@ -38,6 +38,7 @@ h1 { color: yellowgreen; margin: 0; }
     font-weight: 1000;
     font-style: italic;
     position: relative;
+    letter-spacing: 1px;
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
