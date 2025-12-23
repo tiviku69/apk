@@ -47,6 +47,13 @@ h1 { color: yellowgreen; margin: 0; }
     z-index: 1;
 }
 
+.responsive-div:focus .re,
+.responsive-div:hover .re {
+    font-size: 19px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
 .dur {
     color: white;
     font-weight: 900;
