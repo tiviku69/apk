@@ -58,7 +58,9 @@ h1 { color: yellowgreen; margin: 0; }
 .dur {
     color: white;
     font-weight: 900;
+    font-style: italic;
     position: absolute;
+    border-radius: 3px;
     bottom: 180px;
     padding: 3px;
     background-color: rgba(0, 0, 0, 0.6);
@@ -83,6 +85,7 @@ h1 { color: yellowgreen; margin: 0; }
 .highlight {
     border: 5px solid #fff;
     border-radius: 13px;
+    outline: none;
 }
 
 #imgv {                
@@ -93,5 +96,4 @@ h1 { color: yellowgreen; margin: 0; }
     top: 50%;
     left: 50%;
     transform: translate(-50%,-50%);
-    object-fit: cover;
 }
