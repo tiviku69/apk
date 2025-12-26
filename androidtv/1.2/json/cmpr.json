@@ -1,5 +1,30 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv10/zq78/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/tiviku69/master/load1/zz78.m3u8",
+"ttl": "Trigger Warning (2024) dubbing",
+"dur": "1:44:48",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.4",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv10/zq77/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/tiviku69/master/load1/zz77.m3u8",
+"ttl": "The Great Flood (2025) dubbing",
+"dur": "1:48:52",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.1",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv9/zq72/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/tiviku69/master/load1/zz72.m3u8",
+"ttl": "The Spiderwick Chronicles (2008) dubbing",
+"dur": "1:31:47",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv8/zq71/img.jpg",
 "lnk": "https://raw.githubusercontent.com/tiviku69/tiviku69/master/load1/zz71.m3u8",
 "ttl": "Underground Monster (2023) dubbing",
