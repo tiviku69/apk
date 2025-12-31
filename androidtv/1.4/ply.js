@@ -120,9 +120,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (typeof Hls !== 'undefined' && Hls.isSupported()) {
                 console.log("HLS didukung, menggunakan hls.js (v0.8.9).");
                 const hls = new Hls({
-                     // Konfigurasi untuk kompatibilitas yang lebih luas (opsional)
-                     // maxBufferLength: 10,
-                });
+     maxBufferLength: 6,      // Kurangi buffer agar RAM STB tidak sesak
+     maxMaxBufferLength: 10,
+     enableWorker: false      // Kitkat sering crash jika menggunakan Web Worker
+});
+
                 hls.loadSource(videoLink);
                 hls.attachMedia(playerElement);
                 
