@@ -4,8 +4,10 @@ function loadAndApplyTheme() {
         const savedTheme = localStorage.getItem('currentTheme') || 'default';
         const body = document.body;
         
+        // Bersihkan tema lama
         body.classList.remove('theme-blue-dark', 'theme-red-dark');
         
+        // Terapkan tema jika bukan default
         if (savedTheme !== 'default') {
             body.classList.add(`theme-${savedTheme}`);
         }
@@ -14,6 +16,7 @@ function loadAndApplyTheme() {
     }
 }
 
+// Jalankan fungsi tema segera
 loadAndApplyTheme();
 
 // --- FUNGSI LAZY LOADING ---
@@ -41,42 +44,53 @@ document.addEventListener('DOMContentLoaded', () => {
     const jsonUrl = sessionStorage.getItem('collectionJsonUrl');
     const collectionTitle = sessionStorage.getItem('collectionTitle');
     const container = document.getElementById('container-koleksi');
-    const header = document.getElementById('atas-koleksi');
+    const atas = document.getElementById('atas-koleksi');
 
-    if (collectionTitle) {
-        header.innerHTML = `<h1 style="display:block; margin:0;">${collectionTitle}</h1>`;
+    if (collectionTitle && atas) {
+        const titleElement = document.createElement('h1');
+        titleElement.textContent = `${collectionTitle}`;
+        atas.appendChild(titleElement); 
     }
 
     if (!jsonUrl) {
-        container.innerHTML = '<h1>Data tidak ditemukan.</h1>';
+        container.innerHTML = '<h1>URL Koleksi tidak ditemukan.</h1>';
+        setTimeout(() => window.location.href = 'tiviku.html', 2000);
         return;
     }
+
+    container.innerHTML = ''; 
 
     fetch(jsonUrl)
         .then(response => response.json())
         .then(data => {
-            container.innerHTML = ''; 
             data.forEach(item => {
+                const img = document.createElement('img');
+                img.id = 'imgv';
+                img.setAttribute('data-src', item.logo);
+                img.src = 'data:image/svg+xml;charset=utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="270" height="220" viewBox="0 0 270 220"%3E%3Crect width="100%25" height="100%25" fill="%231a1a1a"%3E%3C/rect%3E%3C/svg%3E'; 
+                img.classList.add('lazy-img');
+
+                const pp = document.createElement('p');
+                pp.className = 're';
+                pp.innerText = item.ttl;
+
+                const dur = document.createElement('p');
+                dur.className = 'dur';
+                dur.innerText = item.dur;
+
                 const dv = document.createElement('div');
                 dv.className = 'responsive-div';
                 dv.tabIndex = 0; 
+                dv.onclick = () => playVideoInCollection(item.lnk, item.logo, item.ttl, item.crop_mode, item.crop_position, item.crop_scale);
 
-                dv.innerHTML = `
-                    <img class="lazy-img" data-src="${item.img}" src="placeholder.jpg" alt="${item.ttl}">
-                    <div class="re">${item.ttl}</div>
-                    <div class="dur">${item.dur || ''}</div>
-                `;
-
-                dv.onclick = () => playVideoInCollection(item.vid, item.ttl);
-                
+                dv.appendChild(img);
+                dv.appendChild(pp);
+                dv.appendChild(dur);
                 container.appendChild(dv);
+                
                 collectionImageObserver.observe(dv);
             });
-
-            // PERBAIKAN: Berikan sedikit jeda agar elemen benar-benar siap di DOM
-            setTimeout(() => {
-                restoreFocusAndScrollKoleksi();
-            }, 100); 
+            restoreFocusAndScrollKoleksi();
         })
         .catch(error => {
             console.error('Error:', error);
@@ -84,60 +98,55 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-function playVideoInCollection(url, title) {
-    // Simpan judul terakhir yang diklik
-    sessionStorage.setItem('lastCollectionVideoTitle', title);
-    window.location.href = url;
-}
+const restoreFocusAndScrollKoleksi = () => {
+    const savedTitle = sessionStorage.getItem('lastCollectionVideoTitle');
+    const container = document.getElementById('container-koleksi');
+    let targetElement = null;
 
-function restoreFocusAndScrollKoleksi() {
-    const lastTitle = sessionStorage.getItem('lastCollectionVideoTitle');
-    if (!lastTitle) {
-        // Jika tidak ada data terakhir, fokus ke elemen pertama
-        const firstDiv = document.querySelector('.responsive-div');
+    const allDivs = document.querySelectorAll('#container-koleksi .responsive-div');
+    allDivs.forEach(div => {
+        div.classList.remove('highlight'); // Bersihkan highlight lama
+        const pElement = div.querySelector('.re');
+        if (savedTitle && pElement && pElement.innerText === savedTitle) targetElement = div;
+    });
+
+    if (targetElement) {
+        targetElement.classList.add('highlight');
+        targetElement.focus();
+        targetElement.scrollIntoView({ behavior: 'instant', block: 'center' });
+    } else {
+        const firstDiv = document.querySelector('#container-koleksi .responsive-div');
         if (firstDiv) {
             firstDiv.classList.add('highlight');
             firstDiv.focus();
         }
-        return;
-    }
-
-    const divs = document.querySelectorAll('.responsive-div');
-    let targetElement = null;
-
-    divs.forEach(div => {
-        const titleEl = div.querySelector('.re');
-        if (titleEl && titleEl.innerText === lastTitle) {
-            targetElement = div;
-        }
-    });
-
-    if (targetElement) {
-        // Hapus highlight lama
-        divs.forEach(d => d.classList.remove('highlight'));
-        
-        // Terapkan fokus dan highlight
-        targetElement.classList.add('highlight');
-        targetElement.focus();
-        
-        // PERBAIKAN: Gunakan 'nearest' agar elemen bawah tidak melompat ke awal
-        targetElement.scrollIntoView({ behavior: 'instant', block: 'nearest' });
     }
 }
 
-// Navigasi Remote / Keyboard
+function playVideoInCollection(videoFile, logoFile, textFile, cropMode, cropPosition, cropScale) {
+    const container = document.getElementById('container-koleksi');
+    if (container) sessionStorage.setItem('collectionScrollPosition', container.scrollTop);
+    sessionStorage.setItem('lastCollectionVideoTitle', textFile);
+    sessionStorage.setItem('videoLink', videoFile);
+    sessionStorage.setItem('videoTitle', textFile);
+    sessionStorage.setItem('logoFile', logoFile);
+    sessionStorage.setItem('videoCropMode', cropMode || 'fill'); 
+    sessionStorage.setItem('videoCropPosition', cropPosition || '50% 50%'); 
+    sessionStorage.setItem('videoCropScale', cropScale || ''); 
+    window.location.href = 'ply.html';
+}
+
+// --- SISTEM NAVIGASI (OPTIMAL & CEPAT) ---
 document.addEventListener('keydown', (e) => {
-    const divs = document.querySelectorAll('.responsive-div');
+    const divs = Array.from(document.querySelectorAll('#container-koleksi .responsive-div'));
     const focusedElement = document.activeElement;
-    const currentIndex = Array.from(divs).indexOf(focusedElement);
+    const currentIndex = divs.findIndex(div => div === focusedElement);
     const container = document.getElementById('container-koleksi');
 
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Enter'].includes(e.key)) {
         e.preventDefault();
         let nextIndex = -1;
-        
-        // Deteksi jumlah kolom secara dinamis
-        const itemsPerRow = Math.floor(container.offsetWidth / 280) || 1; 
+        const itemsPerRow = Math.floor(container.offsetWidth / 290) || 1; // Penyesuaian deteksi jumlah kolom
 
         if (currentIndex === -1) {
             nextIndex = 0;
@@ -150,12 +159,17 @@ document.addEventListener('keydown', (e) => {
         }
 
         if (divs[nextIndex]) {
+            // Hapus highlight dari semua div agar tidak menumpuk
             divs.forEach(div => div.classList.remove('highlight'));
+            
+            // Fokus ke elemen baru secara instan
             divs[nextIndex].classList.add('highlight');
             divs[nextIndex].focus();
             
-            // Menggunakan 'nearest' agar scroll lebih stabil untuk baris bawah
-            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'nearest' });
+            // behavior: 'instant' membuat pergeseran langsung tanpa animasi lambat
+            divs[nextIndex].scrollIntoView({ behavior: 'instant', block: 'center' });
         }
+    } else if (e.key === 'Escape') {
+        window.location.href = 'tiviku.html';
     }
 });
