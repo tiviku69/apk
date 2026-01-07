@@ -1,5 +1,48 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/3/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/3/tiviku69.m3u8",
+"ttl": "Tinggal Meninggal (2025)",
+"dur": "2:00:02",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.03",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/5/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/5/tiviku69.m3u8",
+"ttl": "Zootopia (2016) dubbing",
+"dur": "1:48:30",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.33",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/4/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/4/tiviku69.m3u8",
+"ttl": "Game of Death (2011) dubbing",
+"dur": "1:37:48",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.32",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/1/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/1/tiviku69.m3u8",
+"ttl": "Keramat (2009)",
+"dur": "1:23:12",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.07",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/2/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv12/2/tiviku69.m3u8",
+"ttl": "Selepas Tahlil (2025)",
+"dur": "1:35:55",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv11/19/img.jpg",
 "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv11/19/tiviku69.m3u8",
 "ttl": "Pamali: Tumbal (2025)",
@@ -47,7 +90,7 @@
 "ttl": "Detective Conan: Strategy Above the Depths (2005) dubbing",
 "dur": "1:47:55",
 "crop_mode": "stretch_crop",
-"crop_scale": "1.1",
+"crop_scale": "1.03",
 "tiviku": "apk"
 },
 {
@@ -56,7 +99,7 @@
 "ttl": "Detective Conan: Magician of the Silver Sky (2004) dubbing",
 "dur": "1:48:13",
 "crop_mode": "stretch_crop",
-"crop_scale": "1.1",
+"crop_scale": "1.03",
 "tiviku": "apk"
 },
 {
@@ -65,7 +108,7 @@
 "ttl": "Detective Conan: Crossroad in the Ancient Capital (2003) dubbing",
 "dur": "1:47:56",
 "crop_mode": "stretch_crop",
-"crop_scale": "1.1",
+"crop_scale": "1.03",
 "tiviku": "apk"
 },
 {
