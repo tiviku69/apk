@@ -7,8 +7,7 @@ const APP_VERSION = 'v1.2.0';
 
 // 1. Files yang langsung ditampilkan di halaman utama (BERANDA)
 const directFiles = [
-'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json',
-'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
+'https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/hardsub.json','https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json'
 ];
 
 // 2. File JSON TUNGGAL untuk semua data koleksi klik (BERANDA)
