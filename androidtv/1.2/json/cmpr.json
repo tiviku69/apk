@@ -1,5 +1,21 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq56/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/tiviku69/master/load/zz56.m3u8",
+"ttl": "Comic 8: Casino Kings - Part 2 (2016)",
+"dur": "1:32:36",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.10",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/14/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/14/master.m3u8",
+"ttl": "Aladdin (2019) dubbing",
+"dur": "2:07:58",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv14/13/img.jpg",
 "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv14/13/master.m3u8",
 "ttl": "Crayon Shin-chan: Fast Asleep! Dreaming World Big Assault! (2016) dubbing",
@@ -242,15 +258,6 @@
 "dur": "1:31:55",
 "crop_mode": "stretch_crop",
 "crop_scale": "1.4",
-"tiviku": "apk"
-},
-{
-"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv7/zq56/img.jpg",
-"lnk": "https://raw.githubusercontent.com/tiviku69/tiviku69/master/load/zz56.m3u8",
-"ttl": "Comic 8: Casino Kings - Part 2 (2016)",
-"dur": "1:32:36",
-"crop_mode": "stretch_crop",
-"crop_scale": "1.1",
 "tiviku": "apk"
 },
 {
