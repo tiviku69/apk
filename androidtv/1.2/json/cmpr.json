@@ -1,5 +1,28 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/19/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/19/master.m3u8",
+"ttl": "Carry-On (2024) dubbing",
+"dur": "1:59:40",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/18/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/18/master.m3u8",
+"ttl": "Labinak: Mereka Ada di Sini (2025)",
+"dur": "1:39:55",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/17/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/17/master.m3u8",
+"ttl": "Plankton: The Movie (2025) dubbing",
+"dur": "1:27:43",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.03",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/7/img.jpg",
 "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/7/master.m3u8",
 "ttl": "Bajaj Bajuri: The Movie (2014)",
