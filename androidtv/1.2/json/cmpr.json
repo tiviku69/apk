@@ -1,5 +1,35 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv16/2/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv16/2/master.m3u8",
+"ttl": "Trah 7 (2022)",
+"dur": "1:25:17",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/22/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/22/master.m3u8",
+"ttl": "Flightplan (2005) dubbing",
+"dur": "1:38:01",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.30",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/21/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/21/master.m3u8",
+"ttl": "Wallace [ Gromit: Vengeance Most Fowl (2024) dubbing",
+"dur": "1:22:26",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/20/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/20/master.m3u8",
+"ttl": "Kromoleo (2024)",
+"dur": "1:20:23",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/19/img.jpg",
 "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv15/19/master.m3u8",
 "ttl": "Carry-On (2024) dubbing",
