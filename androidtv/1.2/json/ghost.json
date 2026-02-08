@@ -77,76 +77,67 @@
 "dur": "23:46",
 "tiviku": "apk"
 },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img2.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/main/flm1/ghost12/2/ghost12.m3u8",
-    "ttl": "eps12 ghost at school (2000) dubbing",
-    "dur": "23:49",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img3.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/main/flm1/ghost13/3/ghost13.m3u8",
-    "ttl": "eps13 ghost at school (2000) dubbing",
-    "dur": "23:47",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img4.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/main/flm1/ghost14/4/ghost14.m3u8",
-    "ttl": "eps14 ghost at school (2000) dubbing",
-    "dur": "23:46",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img5.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/39.m3u8",
-    "ttl": "eps15 ghost at school (2000) dubbing",
-    "dur": "23:47",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/2.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/38.m3u8",
-    "ttl": "eps16 ghost at school (2000) dubbing",
-    "dur": "23:42",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/2.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost17.m3u8",
-    "ttl": "eps17 ghost at school (2000) dubbing",
-    "dur": "23:50",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/2.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost18.m3u8",
-    "ttl": "eps18 ghost at school (2000) dubbing",
-    "dur": "23:48",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/2.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost19.m3u8",
-    "ttl": "eps19 ghost at school (2000) dubbing",
-    "dur": "23:48",
-    "z": "z",
-    "tiviku": "apk"
-   },
-   {
-    "logo": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/2.jpg",
-    "lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost20.m3u8",
-    "ttl": "eps20 ghost at school (2000) end dubbing",
-    "dur": "23:27",
-    "z": "z",
-    "tiviku": "apk"
-   }
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img2.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/main/flm1/ghost12/2/ghost12.m3u8",
+"ttl": "eps12 ghost at school (2000) dubbing",
+"dur": "23:49",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img3.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/main/flm1/ghost13/3/ghost13.m3u8",
+"ttl": "eps13 ghost at school (2000) dubbing",
+"dur": "23:47",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img4.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/main/flm1/ghost14/4/ghost14.m3u8",
+"ttl": "eps14 ghost at school (2000) dubbing",
+"dur": "23:46",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/4/img5.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/39.m3u8",
+"ttl": "eps15 ghost at school (2000) dubbing",
+"dur": "23:47",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/7/img1.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/38.m3u8",
+"ttl": "eps16 ghost at school (2000) dubbing",
+"dur": "23:42",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/7/img2.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost17.m3u8",
+"ttl": "eps17 ghost at school (2000) dubbing",
+"dur": "23:50",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/8/img1.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost18.m3u8",
+"ttl": "eps18 ghost at school (2000) dubbing",
+"dur": "23:48",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/8/img2.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost19.m3u8",
+"ttl": "eps19 ghost at school (2000) dubbing",
+"dur": "23:48",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/8/img3.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/apk/refs/heads/main/m3u/ghost20.m3u8",
+"ttl": "eps20 ghost at school (2000) end dubbing",
+"dur": "23:27",
+"tiviku": "apk"
+}
 ]
