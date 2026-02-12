@@ -1,5 +1,19 @@
 [
 {
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/16/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/16/master.m3u8",
+"ttl": "Doraemon: Nobita di dalam labirin raksasa dubbing",
+"dur": "10:41",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/15/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/15/master.m3u8",
+"ttl": "Doraemon: Pin pencerita dimusim panas yang panas dubbing",
+"dur": "10:49",
+"tiviku": "apk"
+},
+{
 "logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv16/18/img.jpg",
 "lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv16/18/master.m3u8",
 "ttl": "Doraemon: Semangat bermain basebal dubbing",
