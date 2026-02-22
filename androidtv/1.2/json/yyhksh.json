@@ -1,0 +1,41 @@
+[
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/39/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/39/master.m3u8",
+"ttl": "eps1 Yu Yu Hakusho (2023) dubbing",
+"dur": "55:40",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/40/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/40/master.m3u8",
+"ttl": "eps2 Yu Yu Hakusho (2023) dubbing",
+"dur": "44:33",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/41/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv17/41/master.m3u8",
+"ttl": "eps3 Yu Yu Hakusho (2023) dubbing",
+"dur": "48:55",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv18/43/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv18/43/master.m3u8",
+"ttl": "eps4 Yu Yu Hakusho (2023) dubbing",
+"dur": "48:01",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+},
+{
+"logo": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv18/44/img.jpg",
+"lnk": "https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiv18/44/master.m3u8",
+"ttl": "eps5 Yu Yu Hakusho (2023) end dubbing",
+"dur": "54:04",
+"crop_mode": "stretch_crop",
+"crop_scale": "1.2",
+"tiviku": "apk"
+}
+]
