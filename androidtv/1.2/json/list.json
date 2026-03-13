@@ -1,8 +1,9 @@
 [
-"https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/yyhksh.json",
-"https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/cmpr.json",
-"https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/doraemon.json",
-"https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/ghost.json",
-"https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/letsgo.json",
-"https://raw.githubusercontent.com/tiviku69/apk/main/androidtv/1.2/json/mp4.json"
+"https://cdn.jsdelivr.net/gh/tiviku69/apk@main/androidtv/1.2/json/yyhksh.json",
+"https://cdn.jsdelivr.net/gh/tiviku69/apk@main/androidtv/1.2/json/cmpr.json",
+"https://raw.githubusercontent.com/tiviku69/film/refs/heads/tiviku/doraemon.json",
+"https://cdn.jsdelivr.net/gh/tiviku69/apk@main/androidtv/1.2/json/ghost.json",
+"https://cdn.jsdelivr.net/gh/tiviku69/apk@main/androidtv/1.2/json/letsgo.json",
+"https://cdn.jsdelivr.net/gh/tiviku69/apk@main/androidtv/1.2/json/mp4.json",
+"https://cdn.jsdelivr.net/gh/tiviku69/apk@main/androidtv/1.2/json/hardsub.json"
 ]
